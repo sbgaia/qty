@@ -187,10 +187,10 @@ impl<T: Number> crate::UnitOf<ElectricCapacitance<T>> for ElectricCapacitanceUni
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricCapacitanceUnit::Farad => value,
-            ElectricCapacitanceUnit::Picofarad => value / T::from_f64(1e12),
-            ElectricCapacitanceUnit::Nanofarad => value / T::from_f64(1e9),
-            ElectricCapacitanceUnit::Microfarad => value / T::from_f64(1000000.0),
-            ElectricCapacitanceUnit::Millifarad => value / T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Picofarad => T::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricCapacitanceUnit::Nanofarad => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricCapacitanceUnit::Microfarad => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricCapacitanceUnit::Millifarad => T::div_ratio(value, 1000.0, 1.0),
             ElectricCapacitanceUnit::Kilofarad => value * T::from_f64(1000.0),
             ElectricCapacitanceUnit::Megafarad => value * T::from_f64(1000000.0),
         }
@@ -204,8 +204,8 @@ impl<T: Number> crate::UnitOf<ElectricCapacitance<T>> for ElectricCapacitanceUni
             ElectricCapacitanceUnit::Nanofarad => value * T::from_f64(1e9),
             ElectricCapacitanceUnit::Microfarad => value * T::from_f64(1000000.0),
             ElectricCapacitanceUnit::Millifarad => value * T::from_f64(1000.0),
-            ElectricCapacitanceUnit::Kilofarad => value / T::from_f64(1000.0),
-            ElectricCapacitanceUnit::Megafarad => value / T::from_f64(1000000.0),
+            ElectricCapacitanceUnit::Kilofarad => T::div_ratio(value, 1000.0, 1.0),
+            ElectricCapacitanceUnit::Megafarad => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -245,7 +245,7 @@ impl<T: Number> ElectricCapacitance<T> {
     /// A [`ElectricCapacitance`] from a value in `pF`.
     #[inline]
     pub fn from_picofarads(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pF`.
@@ -257,7 +257,7 @@ impl<T: Number> ElectricCapacitance<T> {
     /// A [`ElectricCapacitance`] from a value in `nF`.
     #[inline]
     pub fn from_nanofarads(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nF`.
@@ -269,7 +269,7 @@ impl<T: Number> ElectricCapacitance<T> {
     /// A [`ElectricCapacitance`] from a value in `µF`.
     #[inline]
     pub fn from_microfarads(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µF`.
@@ -281,7 +281,7 @@ impl<T: Number> ElectricCapacitance<T> {
     /// A [`ElectricCapacitance`] from a value in `mF`.
     #[inline]
     pub fn from_millifarads(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mF`.
@@ -299,7 +299,7 @@ impl<T: Number> ElectricCapacitance<T> {
     /// The value in `kF`.
     #[inline]
     pub fn as_kilofarads(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricCapacitance`] from a value in `MF`.
@@ -311,7 +311,7 @@ impl<T: Number> ElectricCapacitance<T> {
     /// The value in `MF`.
     #[inline]
     pub fn as_megafarads(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 
@@ -322,10 +322,12 @@ impl ElectricCapacitance<f64> {
     pub const fn const_new(value: f64, unit: ElectricCapacitanceUnit) -> Self {
         Self(match unit {
             ElectricCapacitanceUnit::Farad => value,
-            ElectricCapacitanceUnit::Picofarad => value / 1e12,
-            ElectricCapacitanceUnit::Nanofarad => value / 1e9,
-            ElectricCapacitanceUnit::Microfarad => value / 1000000.0,
-            ElectricCapacitanceUnit::Millifarad => value / 1000.0,
+            ElectricCapacitanceUnit::Picofarad => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            ElectricCapacitanceUnit::Nanofarad => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricCapacitanceUnit::Microfarad => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricCapacitanceUnit::Millifarad => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricCapacitanceUnit::Kilofarad => value * 1000.0,
             ElectricCapacitanceUnit::Megafarad => value * 1000000.0,
         })

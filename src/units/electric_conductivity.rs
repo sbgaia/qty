@@ -170,8 +170,10 @@ impl<T: Number> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityU
             ElectricConductivityUnit::SiemensPerInch => T::mul_ratio(value, 5000.0, 127.0),
             ElectricConductivityUnit::SiemensPerFoot => T::mul_ratio(value, 1250.0, 381.0),
             ElectricConductivityUnit::SiemensPerCentimeter => value * T::from_f64(100.0),
-            ElectricConductivityUnit::MicrosiemensPerCentimeter => value / T::from_f64(10000.0),
-            ElectricConductivityUnit::MillisiemensPerCentimeter => value / T::from_f64(10.0),
+            ElectricConductivityUnit::MicrosiemensPerCentimeter => {
+                T::div_ratio(value, 10000.0, 1.0)
+            }
+            ElectricConductivityUnit::MillisiemensPerCentimeter => T::div_ratio(value, 10.0, 1.0),
         }
     }
 
@@ -181,7 +183,7 @@ impl<T: Number> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityU
             ElectricConductivityUnit::SiemensPerMeter => value,
             ElectricConductivityUnit::SiemensPerInch => T::div_ratio(value, 5000.0, 127.0),
             ElectricConductivityUnit::SiemensPerFoot => T::div_ratio(value, 1250.0, 381.0),
-            ElectricConductivityUnit::SiemensPerCentimeter => value / T::from_f64(100.0),
+            ElectricConductivityUnit::SiemensPerCentimeter => T::div_ratio(value, 100.0, 1.0),
             ElectricConductivityUnit::MicrosiemensPerCentimeter => value * T::from_f64(10000.0),
             ElectricConductivityUnit::MillisiemensPerCentimeter => value * T::from_f64(10.0),
         }
@@ -244,13 +246,13 @@ impl<T: Number> ElectricConductivity<T> {
     /// The value in `S/cm`.
     #[inline]
     pub fn as_siemens_per_centimeter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`ElectricConductivity`] from a value in `µS/cm`.
     #[inline]
     pub fn from_microsiemens_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `µS/cm`.
@@ -262,7 +264,7 @@ impl<T: Number> ElectricConductivity<T> {
     /// A [`ElectricConductivity`] from a value in `mS/cm`.
     #[inline]
     pub fn from_millisiemens_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `mS/cm`.
@@ -279,11 +281,19 @@ impl ElectricConductivity<f64> {
     pub const fn const_new(value: f64, unit: ElectricConductivityUnit) -> Self {
         Self(match unit {
             ElectricConductivityUnit::SiemensPerMeter => value,
-            ElectricConductivityUnit::SiemensPerInch => value * 39.37007874015748,
-            ElectricConductivityUnit::SiemensPerFoot => value * 3.2808398950131235,
+            ElectricConductivityUnit::SiemensPerInch => {
+                crate::conv::mul_ratio(value, 5000.0, 127.0)
+            }
+            ElectricConductivityUnit::SiemensPerFoot => {
+                crate::conv::mul_ratio(value, 1250.0, 381.0)
+            }
             ElectricConductivityUnit::SiemensPerCentimeter => value * 100.0,
-            ElectricConductivityUnit::MicrosiemensPerCentimeter => value / 10000.0,
-            ElectricConductivityUnit::MillisiemensPerCentimeter => value / 10.0,
+            ElectricConductivityUnit::MicrosiemensPerCentimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            ElectricConductivityUnit::MillisiemensPerCentimeter => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
         })
     }
 }

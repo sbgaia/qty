@@ -833,10 +833,10 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::KilogramPerCubicMillimeter => value * T::from_f64(1e9),
             DensityUnit::GramPerCubicCentimeter => value * T::from_f64(1000.0),
             DensityUnit::KilogramPerCubicCentimeter => value * T::from_f64(1000000.0),
-            DensityUnit::GramPerCubicMeter => value / T::from_f64(1000.0),
+            DensityUnit::GramPerCubicMeter => T::div_ratio(value, 1000.0, 1.0),
             DensityUnit::KilogramPerCubicMeter => value,
-            DensityUnit::MilligramPerCubicMeter => value / T::from_f64(1000000.0),
-            DensityUnit::MicrogramPerCubicMeter => value / T::from_f64(1e9),
+            DensityUnit::MilligramPerCubicMeter => T::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::MicrogramPerCubicMeter => T::div_ratio(value, 1000000000.0, 1.0),
             DensityUnit::PoundPerCubicInch => T::mul_ratio(value, 56699046250.0, 2048383.0),
             DensityUnit::KilopoundPerCubicInch => T::mul_ratio(value, 56699046250000.0, 2048383.0),
             DensityUnit::PoundPerCubicFoot => T::mul_ratio(value, 28349523125.0, 1769802912.0),
@@ -852,26 +852,26 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
                 T::mul_ratio(value, 5560277019075625.0, 10788718551552.0)
             }
             DensityUnit::GramPerLiter => value,
-            DensityUnit::FemtogramPerLiter => value / T::from_f64(1e15),
-            DensityUnit::PicogramPerLiter => value / T::from_f64(1e12),
-            DensityUnit::NanogramPerLiter => value / T::from_f64(1e9),
-            DensityUnit::MicrogramPerLiter => value / T::from_f64(1000000.0),
-            DensityUnit::MilligramPerLiter => value / T::from_f64(1000.0),
-            DensityUnit::CentigramPerLiter => value / T::from_f64(100.0),
-            DensityUnit::DecigramPerLiter => value / T::from_f64(10.0),
+            DensityUnit::FemtogramPerLiter => T::div_ratio(value, 1000000000000000.0, 1.0),
+            DensityUnit::PicogramPerLiter => T::div_ratio(value, 1000000000000.0, 1.0),
+            DensityUnit::NanogramPerLiter => T::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::MicrogramPerLiter => T::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::MilligramPerLiter => T::div_ratio(value, 1000.0, 1.0),
+            DensityUnit::CentigramPerLiter => T::div_ratio(value, 100.0, 1.0),
+            DensityUnit::DecigramPerLiter => T::div_ratio(value, 10.0, 1.0),
             DensityUnit::GramPerDeciliter => value * T::from_f64(10.0),
-            DensityUnit::FemtogramPerDeciliter => value / T::from_f64(1e14),
-            DensityUnit::PicogramPerDeciliter => value / T::from_f64(1e11),
-            DensityUnit::NanogramPerDeciliter => value / T::from_f64(1e8),
-            DensityUnit::MicrogramPerDeciliter => value / T::from_f64(100000.0),
-            DensityUnit::MilligramPerDeciliter => value / T::from_f64(100.0),
-            DensityUnit::CentigramPerDeciliter => value / T::from_f64(10.0),
+            DensityUnit::FemtogramPerDeciliter => T::div_ratio(value, 100000000000000.0, 1.0),
+            DensityUnit::PicogramPerDeciliter => T::div_ratio(value, 100000000000.0, 1.0),
+            DensityUnit::NanogramPerDeciliter => T::div_ratio(value, 100000000.0, 1.0),
+            DensityUnit::MicrogramPerDeciliter => T::div_ratio(value, 100000.0, 1.0),
+            DensityUnit::MilligramPerDeciliter => T::div_ratio(value, 100.0, 1.0),
+            DensityUnit::CentigramPerDeciliter => T::div_ratio(value, 10.0, 1.0),
             DensityUnit::DecigramPerDeciliter => value,
             DensityUnit::GramPerMilliliter => value * T::from_f64(1000.0),
-            DensityUnit::FemtogramPerMilliliter => value / T::from_f64(1e12),
-            DensityUnit::PicogramPerMilliliter => value / T::from_f64(1e9),
-            DensityUnit::NanogramPerMilliliter => value / T::from_f64(1000000.0),
-            DensityUnit::MicrogramPerMilliliter => value / T::from_f64(1000.0),
+            DensityUnit::FemtogramPerMilliliter => T::div_ratio(value, 1000000000000.0, 1.0),
+            DensityUnit::PicogramPerMilliliter => T::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::NanogramPerMilliliter => T::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::MicrogramPerMilliliter => T::div_ratio(value, 1000.0, 1.0),
             DensityUnit::MilligramPerMilliliter => value,
             DensityUnit::CentigramPerMilliliter => value * T::from_f64(10.0),
             DensityUnit::DecigramPerMilliliter => value * T::from_f64(100.0),
@@ -882,8 +882,8 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::TonnePerCubicInch => T::mul_ratio(value, 125000000000000.0, 2048383.0),
             DensityUnit::GramPerCubicFoot => T::mul_ratio(value, 1953125.0, 55306341.0),
             DensityUnit::GramPerCubicInch => T::mul_ratio(value, 125000000.0, 2048383.0),
-            DensityUnit::PoundPerCubicMeter => value * T::from_f64(0.45359237),
-            DensityUnit::PoundPerCubicCentimeter => value * T::from_f64(453592.37),
+            DensityUnit::PoundPerCubicMeter => T::mul_ratio(value, 45359237.0, 100000000.0),
+            DensityUnit::PoundPerCubicCentimeter => T::mul_ratio(value, 45359237.0, 100.0),
             DensityUnit::PoundPerCubicMillimeter => value * T::from_f64(4.5359237e8),
             DensityUnit::SlugPerCubicMeter => T::mul_ratio(value, 8896443230521.0, 609600000000.0),
             DensityUnit::SlugPerCubicCentimeter => T::mul_ratio(value, 8896443230521.0, 609600.0),
@@ -895,10 +895,10 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            DensityUnit::GramPerCubicMillimeter => value / T::from_f64(1000000.0),
-            DensityUnit::KilogramPerCubicMillimeter => value / T::from_f64(1e9),
-            DensityUnit::GramPerCubicCentimeter => value / T::from_f64(1000.0),
-            DensityUnit::KilogramPerCubicCentimeter => value / T::from_f64(1000000.0),
+            DensityUnit::GramPerCubicMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::KilogramPerCubicMillimeter => T::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::GramPerCubicCentimeter => T::div_ratio(value, 1000.0, 1.0),
+            DensityUnit::KilogramPerCubicCentimeter => T::div_ratio(value, 1000000.0, 1.0),
             DensityUnit::GramPerCubicMeter => value * T::from_f64(1000.0),
             DensityUnit::KilogramPerCubicMeter => value,
             DensityUnit::MilligramPerCubicMeter => value * T::from_f64(1000000.0),
@@ -911,9 +911,9 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::KilopoundPerCubicYard => {
                 T::div_ratio(value, 3543690390625.0, 5973084828.0)
             }
-            DensityUnit::TonnePerCubicMillimeter => value / T::from_f64(1e12),
-            DensityUnit::TonnePerCubicCentimeter => value / T::from_f64(1e9),
-            DensityUnit::TonnePerCubicMeter => value / T::from_f64(1000.0),
+            DensityUnit::TonnePerCubicMillimeter => T::div_ratio(value, 1000000000000.0, 1.0),
+            DensityUnit::TonnePerCubicCentimeter => T::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::TonnePerCubicMeter => T::div_ratio(value, 1000.0, 1.0),
             DensityUnit::SlugPerCubicFoot => {
                 T::div_ratio(value, 5560277019075625.0, 10788718551552.0)
             }
@@ -925,7 +925,7 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::MilligramPerLiter => value * T::from_f64(1000.0),
             DensityUnit::CentigramPerLiter => value * T::from_f64(100.0),
             DensityUnit::DecigramPerLiter => value * T::from_f64(10.0),
-            DensityUnit::GramPerDeciliter => value / T::from_f64(10.0),
+            DensityUnit::GramPerDeciliter => T::div_ratio(value, 10.0, 1.0),
             DensityUnit::FemtogramPerDeciliter => value * T::from_f64(1e14),
             DensityUnit::PicogramPerDeciliter => value * T::from_f64(1e11),
             DensityUnit::NanogramPerDeciliter => value * T::from_f64(1e8),
@@ -933,24 +933,24 @@ impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::MilligramPerDeciliter => value * T::from_f64(100.0),
             DensityUnit::CentigramPerDeciliter => value * T::from_f64(10.0),
             DensityUnit::DecigramPerDeciliter => value,
-            DensityUnit::GramPerMilliliter => value / T::from_f64(1000.0),
+            DensityUnit::GramPerMilliliter => T::div_ratio(value, 1000.0, 1.0),
             DensityUnit::FemtogramPerMilliliter => value * T::from_f64(1e12),
             DensityUnit::PicogramPerMilliliter => value * T::from_f64(1e9),
             DensityUnit::NanogramPerMilliliter => value * T::from_f64(1000000.0),
             DensityUnit::MicrogramPerMilliliter => value * T::from_f64(1000.0),
             DensityUnit::MilligramPerMilliliter => value,
-            DensityUnit::CentigramPerMilliliter => value / T::from_f64(10.0),
-            DensityUnit::DecigramPerMilliliter => value / T::from_f64(100.0),
+            DensityUnit::CentigramPerMilliliter => T::div_ratio(value, 10.0, 1.0),
+            DensityUnit::DecigramPerMilliliter => T::div_ratio(value, 100.0, 1.0),
             DensityUnit::PoundPerUSGallon => T::div_ratio(value, 736351250.0, 6145149.0),
             DensityUnit::PoundPerImperialGallon => T::div_ratio(value, 45359237.0, 454609.0),
-            DensityUnit::KilogramPerLiter => value / T::from_f64(1000.0),
+            DensityUnit::KilogramPerLiter => T::div_ratio(value, 1000.0, 1.0),
             DensityUnit::TonnePerCubicFoot => T::div_ratio(value, 1953125000000.0, 55306341.0),
             DensityUnit::TonnePerCubicInch => T::div_ratio(value, 125000000000000.0, 2048383.0),
             DensityUnit::GramPerCubicFoot => T::div_ratio(value, 1953125.0, 55306341.0),
             DensityUnit::GramPerCubicInch => T::div_ratio(value, 125000000.0, 2048383.0),
-            DensityUnit::PoundPerCubicMeter => value / T::from_f64(0.45359237),
-            DensityUnit::PoundPerCubicCentimeter => value / T::from_f64(453592.37),
-            DensityUnit::PoundPerCubicMillimeter => value / T::from_f64(4.5359237e8),
+            DensityUnit::PoundPerCubicMeter => T::div_ratio(value, 45359237.0, 100000000.0),
+            DensityUnit::PoundPerCubicCentimeter => T::div_ratio(value, 45359237.0, 100.0),
+            DensityUnit::PoundPerCubicMillimeter => T::div_ratio(value, 453592370.0, 1.0),
             DensityUnit::SlugPerCubicMeter => T::div_ratio(value, 8896443230521.0, 609600000000.0),
             DensityUnit::SlugPerCubicCentimeter => T::div_ratio(value, 8896443230521.0, 609600.0),
             DensityUnit::SlugPerCubicMillimeter => T::div_ratio(value, 44482216152605.0, 3048.0),
@@ -985,7 +985,7 @@ impl<T: Number> Density<T> {
     /// The value in `g/mm³`.
     #[inline]
     pub fn as_grams_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `kg/mm³`.
@@ -997,7 +997,7 @@ impl<T: Number> Density<T> {
     /// The value in `kg/mm³`.
     #[inline]
     pub fn as_kilograms_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `g/cm³`.
@@ -1009,7 +1009,7 @@ impl<T: Number> Density<T> {
     /// The value in `g/cm³`.
     #[inline]
     pub fn as_grams_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `kg/cm³`.
@@ -1021,13 +1021,13 @@ impl<T: Number> Density<T> {
     /// The value in `kg/cm³`.
     #[inline]
     pub fn as_kilograms_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `g/m³`.
     #[inline]
     pub fn from_grams_per_cubic_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g/m³`.
@@ -1051,7 +1051,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `mg/m³`.
     #[inline]
     pub fn from_milligrams_per_cubic_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg/m³`.
@@ -1063,7 +1063,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `µg/m³`.
     #[inline]
     pub fn from_micrograms_per_cubic_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µg/m³`.
@@ -1153,7 +1153,7 @@ impl<T: Number> Density<T> {
     /// The value in `t/mm³`.
     #[inline]
     pub fn as_tonnes_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `t/cm³`.
@@ -1165,7 +1165,7 @@ impl<T: Number> Density<T> {
     /// The value in `t/cm³`.
     #[inline]
     pub fn as_tonnes_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `t/m³`.
@@ -1177,7 +1177,7 @@ impl<T: Number> Density<T> {
     /// The value in `t/m³`.
     #[inline]
     pub fn as_tonnes_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `slug/ft³`.
@@ -1207,7 +1207,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `fg/l`.
     #[inline]
     pub fn from_femtograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fg/l`.
@@ -1219,7 +1219,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `pg/l`.
     #[inline]
     pub fn from_picograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pg/l`.
@@ -1231,7 +1231,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `ng/l`.
     #[inline]
     pub fn from_nanograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ng/l`.
@@ -1243,7 +1243,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `µg/l`.
     #[inline]
     pub fn from_micrograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µg/l`.
@@ -1255,7 +1255,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `mg/l`.
     #[inline]
     pub fn from_milligrams_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mg/l`.
@@ -1267,7 +1267,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `cg/l`.
     #[inline]
     pub fn from_centigrams_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cg/l`.
@@ -1279,7 +1279,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `dg/l`.
     #[inline]
     pub fn from_decigrams_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dg/l`.
@@ -1297,13 +1297,13 @@ impl<T: Number> Density<T> {
     /// The value in `g/dl`.
     #[inline]
     pub fn as_grams_per_deciliter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Density`] from a value in `fg/dl`.
     #[inline]
     pub fn from_femtograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(1e14))
+        Self(T::div_ratio(value, 100000000000000.0, 1.0))
     }
 
     /// The value in `fg/dl`.
@@ -1315,7 +1315,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `pg/dl`.
     #[inline]
     pub fn from_picograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(1e11))
+        Self(T::div_ratio(value, 100000000000.0, 1.0))
     }
 
     /// The value in `pg/dl`.
@@ -1327,7 +1327,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `ng/dl`.
     #[inline]
     pub fn from_nanograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `ng/dl`.
@@ -1339,7 +1339,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `µg/dl`.
     #[inline]
     pub fn from_micrograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `µg/dl`.
@@ -1351,7 +1351,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `mg/dl`.
     #[inline]
     pub fn from_milligrams_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `mg/dl`.
@@ -1363,7 +1363,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `cg/dl`.
     #[inline]
     pub fn from_centigrams_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `cg/dl`.
@@ -1393,13 +1393,13 @@ impl<T: Number> Density<T> {
     /// The value in `g/ml`.
     #[inline]
     pub fn as_grams_per_milliliter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `fg/ml`.
     #[inline]
     pub fn from_femtograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `fg/ml`.
@@ -1411,7 +1411,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `pg/ml`.
     #[inline]
     pub fn from_picograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `pg/ml`.
@@ -1423,7 +1423,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `ng/ml`.
     #[inline]
     pub fn from_nanograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ng/ml`.
@@ -1435,7 +1435,7 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `µg/ml`.
     #[inline]
     pub fn from_micrograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `µg/ml`.
@@ -1465,7 +1465,7 @@ impl<T: Number> Density<T> {
     /// The value in `cg/ml`.
     #[inline]
     pub fn as_centigrams_per_milliliter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Density`] from a value in `dg/ml`.
@@ -1477,7 +1477,7 @@ impl<T: Number> Density<T> {
     /// The value in `dg/ml`.
     #[inline]
     pub fn as_decigrams_per_milliliter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`Density`] from a value in `ppg (U.S.)`.
@@ -1513,7 +1513,7 @@ impl<T: Number> Density<T> {
     /// The value in `kg/l`.
     #[inline]
     pub fn as_kilograms_per_liter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Density`] from a value in `t/ft³`.
@@ -1567,25 +1567,25 @@ impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `lb/m³`.
     #[inline]
     pub fn from_pounds_per_cubic_meter(value: T) -> Self {
-        Self(value * T::from_f64(0.45359237))
+        Self(T::mul_ratio(value, 45359237.0, 100000000.0))
     }
 
     /// The value in `lb/m³`.
     #[inline]
     pub fn as_pounds_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(0.45359237)
+        T::div_ratio(self.0, 45359237.0, 100000000.0)
     }
 
     /// A [`Density`] from a value in `lb/cm³`.
     #[inline]
     pub fn from_pounds_per_cubic_centimeter(value: T) -> Self {
-        Self(value * T::from_f64(453592.37))
+        Self(T::mul_ratio(value, 45359237.0, 100.0))
     }
 
     /// The value in `lb/cm³`.
     #[inline]
     pub fn as_pounds_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(453592.37)
+        T::div_ratio(self.0, 45359237.0, 100.0)
     }
 
     /// A [`Density`] from a value in `lb/mm³`.
@@ -1597,7 +1597,7 @@ impl<T: Number> Density<T> {
     /// The value in `lb/mm³`.
     #[inline]
     pub fn as_pounds_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(4.5359237e8)
+        T::div_ratio(self.0, 453592370.0, 1.0)
     }
 
     /// A [`Density`] from a value in `slug/m³`.
@@ -1659,58 +1659,96 @@ impl Density<f64> {
             DensityUnit::KilogramPerCubicMillimeter => value * 1e9,
             DensityUnit::GramPerCubicCentimeter => value * 1000.0,
             DensityUnit::KilogramPerCubicCentimeter => value * 1000000.0,
-            DensityUnit::GramPerCubicMeter => value / 1000.0,
+            DensityUnit::GramPerCubicMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             DensityUnit::KilogramPerCubicMeter => value,
-            DensityUnit::MilligramPerCubicMeter => value / 1000000.0,
-            DensityUnit::MicrogramPerCubicMeter => value / 1e9,
-            DensityUnit::PoundPerCubicInch => value * 27679.90471020312,
-            DensityUnit::KilopoundPerCubicInch => value * 2.7679904710203122e7,
-            DensityUnit::PoundPerCubicFoot => value * 16.018463373960138,
-            DensityUnit::KilopoundPerCubicFoot => value * 16018.46337396014,
-            DensityUnit::PoundPerCubicYard => value * 0.5932764212577829,
-            DensityUnit::KilopoundPerCubicYard => value * 593.276421257783,
+            DensityUnit::MilligramPerCubicMeter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::MicrogramPerCubicMeter => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::PoundPerCubicInch => {
+                crate::conv::mul_ratio(value, 56699046250.0, 2048383.0)
+            }
+            DensityUnit::KilopoundPerCubicInch => {
+                crate::conv::mul_ratio(value, 56699046250000.0, 2048383.0)
+            }
+            DensityUnit::PoundPerCubicFoot => {
+                crate::conv::mul_ratio(value, 28349523125.0, 1769802912.0)
+            }
+            DensityUnit::KilopoundPerCubicFoot => {
+                crate::conv::mul_ratio(value, 3543690390625.0, 221225364.0)
+            }
+            DensityUnit::PoundPerCubicYard => {
+                crate::conv::mul_ratio(value, 28349523125.0, 47784678624.0)
+            }
+            DensityUnit::KilopoundPerCubicYard => {
+                crate::conv::mul_ratio(value, 3543690390625.0, 5973084828.0)
+            }
             DensityUnit::TonnePerCubicMillimeter => value * 1e12,
             DensityUnit::TonnePerCubicCentimeter => value * 1e9,
             DensityUnit::TonnePerCubicMeter => value * 1000.0,
-            DensityUnit::SlugPerCubicFoot => value * 515.3788183931962,
+            DensityUnit::SlugPerCubicFoot => {
+                crate::conv::mul_ratio(value, 5560277019075625.0, 10788718551552.0)
+            }
             DensityUnit::GramPerLiter => value,
-            DensityUnit::FemtogramPerLiter => value / 1e15,
-            DensityUnit::PicogramPerLiter => value / 1e12,
-            DensityUnit::NanogramPerLiter => value / 1e9,
-            DensityUnit::MicrogramPerLiter => value / 1000000.0,
-            DensityUnit::MilligramPerLiter => value / 1000.0,
-            DensityUnit::CentigramPerLiter => value / 100.0,
-            DensityUnit::DecigramPerLiter => value / 10.0,
+            DensityUnit::FemtogramPerLiter => {
+                crate::conv::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            DensityUnit::PicogramPerLiter => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            DensityUnit::NanogramPerLiter => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::MicrogramPerLiter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::MilligramPerLiter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            DensityUnit::CentigramPerLiter => crate::conv::div_ratio(value, 100.0, 1.0),
+            DensityUnit::DecigramPerLiter => crate::conv::div_ratio(value, 10.0, 1.0),
             DensityUnit::GramPerDeciliter => value * 10.0,
-            DensityUnit::FemtogramPerDeciliter => value / 1e14,
-            DensityUnit::PicogramPerDeciliter => value / 1e11,
-            DensityUnit::NanogramPerDeciliter => value / 1e8,
-            DensityUnit::MicrogramPerDeciliter => value / 100000.0,
-            DensityUnit::MilligramPerDeciliter => value / 100.0,
-            DensityUnit::CentigramPerDeciliter => value / 10.0,
+            DensityUnit::FemtogramPerDeciliter => {
+                crate::conv::div_ratio(value, 100000000000000.0, 1.0)
+            }
+            DensityUnit::PicogramPerDeciliter => crate::conv::div_ratio(value, 100000000000.0, 1.0),
+            DensityUnit::NanogramPerDeciliter => crate::conv::div_ratio(value, 100000000.0, 1.0),
+            DensityUnit::MicrogramPerDeciliter => crate::conv::div_ratio(value, 100000.0, 1.0),
+            DensityUnit::MilligramPerDeciliter => crate::conv::div_ratio(value, 100.0, 1.0),
+            DensityUnit::CentigramPerDeciliter => crate::conv::div_ratio(value, 10.0, 1.0),
             DensityUnit::DecigramPerDeciliter => value,
             DensityUnit::GramPerMilliliter => value * 1000.0,
-            DensityUnit::FemtogramPerMilliliter => value / 1e12,
-            DensityUnit::PicogramPerMilliliter => value / 1e9,
-            DensityUnit::NanogramPerMilliliter => value / 1000000.0,
-            DensityUnit::MicrogramPerMilliliter => value / 1000.0,
+            DensityUnit::FemtogramPerMilliliter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            DensityUnit::PicogramPerMilliliter => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            DensityUnit::NanogramPerMilliliter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            DensityUnit::MicrogramPerMilliliter => crate::conv::div_ratio(value, 1000.0, 1.0),
             DensityUnit::MilligramPerMilliliter => value,
             DensityUnit::CentigramPerMilliliter => value * 10.0,
             DensityUnit::DecigramPerMilliliter => value * 100.0,
-            DensityUnit::PoundPerUSGallon => value * 119.82642731689663,
-            DensityUnit::PoundPerImperialGallon => value * 99.7763726631017,
+            DensityUnit::PoundPerUSGallon => crate::conv::mul_ratio(value, 736351250.0, 6145149.0),
+            DensityUnit::PoundPerImperialGallon => {
+                crate::conv::mul_ratio(value, 45359237.0, 454609.0)
+            }
             DensityUnit::KilogramPerLiter => value * 1000.0,
-            DensityUnit::TonnePerCubicFoot => value * 35314.66672148859,
-            DensityUnit::TonnePerCubicInch => value * 6.1023744094732285e7,
-            DensityUnit::GramPerCubicFoot => value * 0.03531466672148859,
-            DensityUnit::GramPerCubicInch => value * 61.02374409473229,
-            DensityUnit::PoundPerCubicMeter => value * 0.45359237,
-            DensityUnit::PoundPerCubicCentimeter => value * 453592.37,
+            DensityUnit::TonnePerCubicFoot => {
+                crate::conv::mul_ratio(value, 1953125000000.0, 55306341.0)
+            }
+            DensityUnit::TonnePerCubicInch => {
+                crate::conv::mul_ratio(value, 125000000000000.0, 2048383.0)
+            }
+            DensityUnit::GramPerCubicFoot => crate::conv::mul_ratio(value, 1953125.0, 55306341.0),
+            DensityUnit::GramPerCubicInch => crate::conv::mul_ratio(value, 125000000.0, 2048383.0),
+            DensityUnit::PoundPerCubicMeter => {
+                crate::conv::mul_ratio(value, 45359237.0, 100000000.0)
+            }
+            DensityUnit::PoundPerCubicCentimeter => {
+                crate::conv::mul_ratio(value, 45359237.0, 100.0)
+            }
             DensityUnit::PoundPerCubicMillimeter => value * 4.5359237e8,
-            DensityUnit::SlugPerCubicMeter => value * 14.593902937206364,
-            DensityUnit::SlugPerCubicCentimeter => value * 1.4593902937206365e7,
-            DensityUnit::SlugPerCubicMillimeter => value * 1.4593902937206366e10,
-            DensityUnit::SlugPerCubicInch => value * 890574.5981834431,
+            DensityUnit::SlugPerCubicMeter => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 609600000000.0)
+            }
+            DensityUnit::SlugPerCubicCentimeter => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 609600.0)
+            }
+            DensityUnit::SlugPerCubicMillimeter => {
+                crate::conv::mul_ratio(value, 44482216152605.0, 3048.0)
+            }
+            DensityUnit::SlugPerCubicInch => {
+                crate::conv::mul_ratio(value, 5560277019075625.0, 6243471384.0)
+            }
         })
     }
 }

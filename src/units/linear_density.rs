@@ -329,22 +329,22 @@ impl<T: Number> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             LinearDensityUnit::GramPerMillimeter => value,
-            LinearDensityUnit::MicrogramPerMillimeter => value / T::from_f64(1000000.0),
-            LinearDensityUnit::MilligramPerMillimeter => value / T::from_f64(1000.0),
+            LinearDensityUnit::MicrogramPerMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            LinearDensityUnit::MilligramPerMillimeter => T::div_ratio(value, 1000.0, 1.0),
             LinearDensityUnit::KilogramPerMillimeter => value * T::from_f64(1000.0),
-            LinearDensityUnit::GramPerCentimeter => value / T::from_f64(10.0),
-            LinearDensityUnit::MicrogramPerCentimeter => value / T::from_f64(1e7),
-            LinearDensityUnit::MilligramPerCentimeter => value / T::from_f64(10000.0),
+            LinearDensityUnit::GramPerCentimeter => T::div_ratio(value, 10.0, 1.0),
+            LinearDensityUnit::MicrogramPerCentimeter => T::div_ratio(value, 10000000.0, 1.0),
+            LinearDensityUnit::MilligramPerCentimeter => T::div_ratio(value, 10000.0, 1.0),
             LinearDensityUnit::KilogramPerCentimeter => value * T::from_f64(100.0),
-            LinearDensityUnit::GramPerMeter => value / T::from_f64(1000.0),
-            LinearDensityUnit::MicrogramPerMeter => value / T::from_f64(1e9),
-            LinearDensityUnit::MilligramPerMeter => value / T::from_f64(1000000.0),
+            LinearDensityUnit::GramPerMeter => T::div_ratio(value, 1000.0, 1.0),
+            LinearDensityUnit::MicrogramPerMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            LinearDensityUnit::MilligramPerMeter => T::div_ratio(value, 1000000.0, 1.0),
             LinearDensityUnit::KilogramPerMeter => value,
             LinearDensityUnit::PoundPerInch => T::mul_ratio(value, 45359237.0, 2540000.0),
             LinearDensityUnit::PoundPerFoot => T::mul_ratio(value, 45359237.0, 30480000.0),
             LinearDensityUnit::GramPerFoot => T::mul_ratio(value, 5.0, 1524.0),
-            LinearDensityUnit::MicrogramPerFoot => value / T::from_f64(3.048e8),
-            LinearDensityUnit::MilligramPerFoot => value / T::from_f64(304800.0),
+            LinearDensityUnit::MicrogramPerFoot => T::div_ratio(value, 304800000.0, 1.0),
+            LinearDensityUnit::MilligramPerFoot => T::div_ratio(value, 304800.0, 1.0),
             LinearDensityUnit::KilogramPerFoot => T::mul_ratio(value, 1250.0, 381.0),
         }
     }
@@ -355,11 +355,11 @@ impl<T: Number> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
             LinearDensityUnit::GramPerMillimeter => value,
             LinearDensityUnit::MicrogramPerMillimeter => value * T::from_f64(1000000.0),
             LinearDensityUnit::MilligramPerMillimeter => value * T::from_f64(1000.0),
-            LinearDensityUnit::KilogramPerMillimeter => value / T::from_f64(1000.0),
+            LinearDensityUnit::KilogramPerMillimeter => T::div_ratio(value, 1000.0, 1.0),
             LinearDensityUnit::GramPerCentimeter => value * T::from_f64(10.0),
             LinearDensityUnit::MicrogramPerCentimeter => value * T::from_f64(1e7),
             LinearDensityUnit::MilligramPerCentimeter => value * T::from_f64(10000.0),
-            LinearDensityUnit::KilogramPerCentimeter => value / T::from_f64(100.0),
+            LinearDensityUnit::KilogramPerCentimeter => T::div_ratio(value, 100.0, 1.0),
             LinearDensityUnit::GramPerMeter => value * T::from_f64(1000.0),
             LinearDensityUnit::MicrogramPerMeter => value * T::from_f64(1e9),
             LinearDensityUnit::MilligramPerMeter => value * T::from_f64(1000000.0),
@@ -406,7 +406,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `µg/mm`.
     #[inline]
     pub fn from_micrograms_per_millimeter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µg/mm`.
@@ -418,7 +418,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `mg/mm`.
     #[inline]
     pub fn from_milligrams_per_millimeter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mg/mm`.
@@ -436,13 +436,13 @@ impl<T: Number> LinearDensity<T> {
     /// The value in `kg/mm`.
     #[inline]
     pub fn as_kilograms_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`LinearDensity`] from a value in `g/cm`.
     #[inline]
     pub fn from_grams_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `g/cm`.
@@ -454,7 +454,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `µg/cm`.
     #[inline]
     pub fn from_micrograms_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `µg/cm`.
@@ -466,7 +466,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `mg/cm`.
     #[inline]
     pub fn from_milligrams_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `mg/cm`.
@@ -484,13 +484,13 @@ impl<T: Number> LinearDensity<T> {
     /// The value in `kg/cm`.
     #[inline]
     pub fn as_kilograms_per_centimeter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`LinearDensity`] from a value in `g/m`.
     #[inline]
     pub fn from_grams_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g/m`.
@@ -502,7 +502,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `µg/m`.
     #[inline]
     pub fn from_micrograms_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µg/m`.
@@ -514,7 +514,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `mg/m`.
     #[inline]
     pub fn from_milligrams_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg/m`.
@@ -574,7 +574,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `µg/ft`.
     #[inline]
     pub fn from_micrograms_per_foot(value: T) -> Self {
-        Self(value / T::from_f64(3.048e8))
+        Self(T::div_ratio(value, 304800000.0, 1.0))
     }
 
     /// The value in `µg/ft`.
@@ -586,7 +586,7 @@ impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `mg/ft`.
     #[inline]
     pub fn from_milligrams_per_foot(value: T) -> Self {
-        Self(value / T::from_f64(304800.0))
+        Self(T::div_ratio(value, 304800.0, 1.0))
     }
 
     /// The value in `mg/ft`.
@@ -615,23 +615,33 @@ impl LinearDensity<f64> {
     pub const fn const_new(value: f64, unit: LinearDensityUnit) -> Self {
         Self(match unit {
             LinearDensityUnit::GramPerMillimeter => value,
-            LinearDensityUnit::MicrogramPerMillimeter => value / 1000000.0,
-            LinearDensityUnit::MilligramPerMillimeter => value / 1000.0,
+            LinearDensityUnit::MicrogramPerMillimeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            LinearDensityUnit::MilligramPerMillimeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             LinearDensityUnit::KilogramPerMillimeter => value * 1000.0,
-            LinearDensityUnit::GramPerCentimeter => value / 10.0,
-            LinearDensityUnit::MicrogramPerCentimeter => value / 1e7,
-            LinearDensityUnit::MilligramPerCentimeter => value / 10000.0,
+            LinearDensityUnit::GramPerCentimeter => crate::conv::div_ratio(value, 10.0, 1.0),
+            LinearDensityUnit::MicrogramPerCentimeter => {
+                crate::conv::div_ratio(value, 10000000.0, 1.0)
+            }
+            LinearDensityUnit::MilligramPerCentimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
             LinearDensityUnit::KilogramPerCentimeter => value * 100.0,
-            LinearDensityUnit::GramPerMeter => value / 1000.0,
-            LinearDensityUnit::MicrogramPerMeter => value / 1e9,
-            LinearDensityUnit::MilligramPerMeter => value / 1000000.0,
+            LinearDensityUnit::GramPerMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            LinearDensityUnit::MicrogramPerMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            LinearDensityUnit::MilligramPerMeter => crate::conv::div_ratio(value, 1000000.0, 1.0),
             LinearDensityUnit::KilogramPerMeter => value,
-            LinearDensityUnit::PoundPerInch => value * 17.857967322834646,
-            LinearDensityUnit::PoundPerFoot => value * 1.4881639435695537,
-            LinearDensityUnit::GramPerFoot => value * 0.0032808398950131233,
-            LinearDensityUnit::MicrogramPerFoot => value / 3.048e8,
-            LinearDensityUnit::MilligramPerFoot => value / 304800.0,
-            LinearDensityUnit::KilogramPerFoot => value * 3.2808398950131235,
+            LinearDensityUnit::PoundPerInch => crate::conv::mul_ratio(value, 45359237.0, 2540000.0),
+            LinearDensityUnit::PoundPerFoot => {
+                crate::conv::mul_ratio(value, 45359237.0, 30480000.0)
+            }
+            LinearDensityUnit::GramPerFoot => crate::conv::mul_ratio(value, 5.0, 1524.0),
+            LinearDensityUnit::MicrogramPerFoot => crate::conv::div_ratio(value, 304800000.0, 1.0),
+            LinearDensityUnit::MilligramPerFoot => crate::conv::div_ratio(value, 304800.0, 1.0),
+            LinearDensityUnit::KilogramPerFoot => crate::conv::mul_ratio(value, 1250.0, 381.0),
         })
     }
 }

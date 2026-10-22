@@ -358,16 +358,16 @@ impl HeatTransferCoefficient<f64> {
             HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => value,
             HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => value,
             HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
-                value * 5.678263341113488
+                crate::conv::mul_ratio(value, 52752792631.0, 9290304000.0)
             }
             HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit => {
-                value * 2943611.716033232
+                crate::conv::mul_ratio(value, 474775133679.0, 161290.0)
             }
             HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius => {
-                value * 0.0011622222222222223
+                crate::conv::mul_ratio(value, 523.0, 450000.0)
             }
             HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
-                value * 1.1622222222222223
+                crate::conv::mul_ratio(value, 523.0, 450.0)
             }
         })
     }

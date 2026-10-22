@@ -213,12 +213,14 @@ impl<T: Number> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             VolumePerLengthUnit::CubicMeterPerMeter => value,
-            VolumePerLengthUnit::LiterPerMeter => value / T::from_f64(1000.0),
-            VolumePerLengthUnit::LiterPerKilometer => value / T::from_f64(1000000.0),
+            VolumePerLengthUnit::LiterPerMeter => T::div_ratio(value, 1000.0, 1.0),
+            VolumePerLengthUnit::LiterPerKilometer => T::div_ratio(value, 1000000.0, 1.0),
             VolumePerLengthUnit::LiterPerMillimeter => value,
-            VolumePerLengthUnit::OilBarrelPerFoot => value * T::from_f64(0.52161186),
-            VolumePerLengthUnit::CubicYardPerFoot => value * T::from_f64(2.50838208),
-            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value * T::from_f64(2.50837706323584),
+            VolumePerLengthUnit::OilBarrelPerFoot => T::mul_ratio(value, 26080593.0, 50000000.0),
+            VolumePerLengthUnit::CubicYardPerFoot => T::mul_ratio(value, 3919347.0, 1562500.0),
+            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => {
+                T::mul_ratio(value, 1959669580653.0, 781250000000.0)
+            }
             VolumePerLengthUnit::UsGallonPerMile => T::mul_ratio(value, 112903.0, 48000000000.0),
             VolumePerLengthUnit::ImperialGallonPerMile => {
                 T::mul_ratio(value, 454609.0, 160934400000.0)
@@ -233,9 +235,11 @@ impl<T: Number> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
             VolumePerLengthUnit::LiterPerMeter => value * T::from_f64(1000.0),
             VolumePerLengthUnit::LiterPerKilometer => value * T::from_f64(1000000.0),
             VolumePerLengthUnit::LiterPerMillimeter => value,
-            VolumePerLengthUnit::OilBarrelPerFoot => value / T::from_f64(0.52161186),
-            VolumePerLengthUnit::CubicYardPerFoot => value / T::from_f64(2.50838208),
-            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value / T::from_f64(2.50837706323584),
+            VolumePerLengthUnit::OilBarrelPerFoot => T::div_ratio(value, 26080593.0, 50000000.0),
+            VolumePerLengthUnit::CubicYardPerFoot => T::div_ratio(value, 3919347.0, 1562500.0),
+            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => {
+                T::div_ratio(value, 1959669580653.0, 781250000000.0)
+            }
             VolumePerLengthUnit::UsGallonPerMile => T::div_ratio(value, 112903.0, 48000000000.0),
             VolumePerLengthUnit::ImperialGallonPerMile => {
                 T::div_ratio(value, 454609.0, 160934400000.0)
@@ -270,7 +274,7 @@ impl<T: Number> VolumePerLength<T> {
     /// A [`VolumePerLength`] from a value in `l/m`.
     #[inline]
     pub fn from_liters_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `l/m`.
@@ -282,7 +286,7 @@ impl<T: Number> VolumePerLength<T> {
     /// A [`VolumePerLength`] from a value in `l/km`.
     #[inline]
     pub fn from_liters_per_kilometer(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `l/km`.
@@ -306,37 +310,37 @@ impl<T: Number> VolumePerLength<T> {
     /// A [`VolumePerLength`] from a value in `bbl/ft`.
     #[inline]
     pub fn from_oil_barrels_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.52161186))
+        Self(T::mul_ratio(value, 26080593.0, 50000000.0))
     }
 
     /// The value in `bbl/ft`.
     #[inline]
     pub fn as_oil_barrels_per_foot(self) -> T {
-        self.0 / T::from_f64(0.52161186)
+        T::div_ratio(self.0, 26080593.0, 50000000.0)
     }
 
     /// A [`VolumePerLength`] from a value in `yd³/ft`.
     #[inline]
     pub fn from_cubic_yards_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(2.50838208))
+        Self(T::mul_ratio(value, 3919347.0, 1562500.0))
     }
 
     /// The value in `yd³/ft`.
     #[inline]
     pub fn as_cubic_yards_per_foot(self) -> T {
-        self.0 / T::from_f64(2.50838208)
+        T::div_ratio(self.0, 3919347.0, 1562500.0)
     }
 
     /// A [`VolumePerLength`] from a value in `yd³/ftUS`.
     #[inline]
     pub fn from_cubic_yards_per_us_survey_foot(value: T) -> Self {
-        Self(value * T::from_f64(2.50837706323584))
+        Self(T::mul_ratio(value, 1959669580653.0, 781250000000.0))
     }
 
     /// The value in `yd³/ftUS`.
     #[inline]
     pub fn as_cubic_yards_per_us_survey_foot(self) -> T {
-        self.0 / T::from_f64(2.50837706323584)
+        T::div_ratio(self.0, 1959669580653.0, 781250000000.0)
     }
 
     /// A [`VolumePerLength`] from a value in `gal (U.S.)/mi`.
@@ -371,14 +375,24 @@ impl VolumePerLength<f64> {
     pub const fn const_new(value: f64, unit: VolumePerLengthUnit) -> Self {
         Self(match unit {
             VolumePerLengthUnit::CubicMeterPerMeter => value,
-            VolumePerLengthUnit::LiterPerMeter => value / 1000.0,
-            VolumePerLengthUnit::LiterPerKilometer => value / 1000000.0,
+            VolumePerLengthUnit::LiterPerMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            VolumePerLengthUnit::LiterPerKilometer => crate::conv::div_ratio(value, 1000000.0, 1.0),
             VolumePerLengthUnit::LiterPerMillimeter => value,
-            VolumePerLengthUnit::OilBarrelPerFoot => value * 0.52161186,
-            VolumePerLengthUnit::CubicYardPerFoot => value * 2.50838208,
-            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value * 2.50837706323584,
-            VolumePerLengthUnit::UsGallonPerMile => value * 2.3521458333333333e-6,
-            VolumePerLengthUnit::ImperialGallonPerMile => value * 2.8248093633182216e-6,
+            VolumePerLengthUnit::OilBarrelPerFoot => {
+                crate::conv::mul_ratio(value, 26080593.0, 50000000.0)
+            }
+            VolumePerLengthUnit::CubicYardPerFoot => {
+                crate::conv::mul_ratio(value, 3919347.0, 1562500.0)
+            }
+            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => {
+                crate::conv::mul_ratio(value, 1959669580653.0, 781250000000.0)
+            }
+            VolumePerLengthUnit::UsGallonPerMile => {
+                crate::conv::mul_ratio(value, 112903.0, 48000000000.0)
+            }
+            VolumePerLengthUnit::ImperialGallonPerMile => {
+                crate::conv::mul_ratio(value, 454609.0, 160934400000.0)
+            }
         })
     }
 }

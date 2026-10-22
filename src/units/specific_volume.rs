@@ -135,7 +135,9 @@ impl<T: Number> crate::UnitOf<SpecificVolume<T>> for SpecificVolumeUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             SpecificVolumeUnit::CubicMeterPerKilogram => value,
-            SpecificVolumeUnit::CubicMillimeterPerKilogram => value / T::from_f64(1e9),
+            SpecificVolumeUnit::CubicMillimeterPerKilogram => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
             SpecificVolumeUnit::CubicFootPerPound => {
                 T::mul_ratio(value, 1769802912.0, 28349523125.0)
             }
@@ -180,7 +182,7 @@ impl<T: Number> SpecificVolume<T> {
     /// A [`SpecificVolume`] from a value in `mm³/kg`.
     #[inline]
     pub fn from_cubic_millimeters_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `mm³/kg`.
@@ -209,8 +211,12 @@ impl SpecificVolume<f64> {
     pub const fn const_new(value: f64, unit: SpecificVolumeUnit) -> Self {
         Self(match unit {
             SpecificVolumeUnit::CubicMeterPerKilogram => value,
-            SpecificVolumeUnit::CubicMillimeterPerKilogram => value / 1e9,
-            SpecificVolumeUnit::CubicFootPerPound => value * 0.06242796057614461,
+            SpecificVolumeUnit::CubicMillimeterPerKilogram => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            SpecificVolumeUnit::CubicFootPerPound => {
+                crate::conv::mul_ratio(value, 1769802912.0, 28349523125.0)
+            }
         })
     }
 }

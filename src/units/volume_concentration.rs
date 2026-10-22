@@ -355,24 +355,26 @@ impl<T: Number> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUni
         match self {
             VolumeConcentrationUnit::DecimalFraction => value,
             VolumeConcentrationUnit::LiterPerLiter => value,
-            VolumeConcentrationUnit::PicoliterPerLiter => value / T::from_f64(1e12),
-            VolumeConcentrationUnit::NanoliterPerLiter => value / T::from_f64(1e9),
-            VolumeConcentrationUnit::MicroliterPerLiter => value / T::from_f64(1000000.0),
-            VolumeConcentrationUnit::MilliliterPerLiter => value / T::from_f64(1000.0),
-            VolumeConcentrationUnit::CentiliterPerLiter => value / T::from_f64(100.0),
-            VolumeConcentrationUnit::DeciliterPerLiter => value / T::from_f64(10.0),
+            VolumeConcentrationUnit::PicoliterPerLiter => T::div_ratio(value, 1000000000000.0, 1.0),
+            VolumeConcentrationUnit::NanoliterPerLiter => T::div_ratio(value, 1000000000.0, 1.0),
+            VolumeConcentrationUnit::MicroliterPerLiter => T::div_ratio(value, 1000000.0, 1.0),
+            VolumeConcentrationUnit::MilliliterPerLiter => T::div_ratio(value, 1000.0, 1.0),
+            VolumeConcentrationUnit::CentiliterPerLiter => T::div_ratio(value, 100.0, 1.0),
+            VolumeConcentrationUnit::DeciliterPerLiter => T::div_ratio(value, 10.0, 1.0),
             VolumeConcentrationUnit::LiterPerMilliliter => value * T::from_f64(1000.0),
-            VolumeConcentrationUnit::PicoliterPerMilliliter => value / T::from_f64(1e9),
-            VolumeConcentrationUnit::NanoliterPerMilliliter => value / T::from_f64(1000000.0),
-            VolumeConcentrationUnit::MicroliterPerMilliliter => value / T::from_f64(1000.0),
+            VolumeConcentrationUnit::PicoliterPerMilliliter => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::NanoliterPerMilliliter => T::div_ratio(value, 1000000.0, 1.0),
+            VolumeConcentrationUnit::MicroliterPerMilliliter => T::div_ratio(value, 1000.0, 1.0),
             VolumeConcentrationUnit::MilliliterPerMilliliter => value,
             VolumeConcentrationUnit::CentiliterPerMilliliter => value * T::from_f64(10.0),
             VolumeConcentrationUnit::DeciliterPerMilliliter => value * T::from_f64(100.0),
-            VolumeConcentrationUnit::Percent => value / T::from_f64(100.0),
-            VolumeConcentrationUnit::PartPerThousand => value / T::from_f64(1000.0),
-            VolumeConcentrationUnit::PartPerMillion => value / T::from_f64(1000000.0),
-            VolumeConcentrationUnit::PartPerBillion => value / T::from_f64(1e9),
-            VolumeConcentrationUnit::PartPerTrillion => value / T::from_f64(1e12),
+            VolumeConcentrationUnit::Percent => T::div_ratio(value, 100.0, 1.0),
+            VolumeConcentrationUnit::PartPerThousand => T::div_ratio(value, 1000.0, 1.0),
+            VolumeConcentrationUnit::PartPerMillion => T::div_ratio(value, 1000000.0, 1.0),
+            VolumeConcentrationUnit::PartPerBillion => T::div_ratio(value, 1000000000.0, 1.0),
+            VolumeConcentrationUnit::PartPerTrillion => T::div_ratio(value, 1000000000000.0, 1.0),
         }
     }
 
@@ -387,13 +389,13 @@ impl<T: Number> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUni
             VolumeConcentrationUnit::MilliliterPerLiter => value * T::from_f64(1000.0),
             VolumeConcentrationUnit::CentiliterPerLiter => value * T::from_f64(100.0),
             VolumeConcentrationUnit::DeciliterPerLiter => value * T::from_f64(10.0),
-            VolumeConcentrationUnit::LiterPerMilliliter => value / T::from_f64(1000.0),
+            VolumeConcentrationUnit::LiterPerMilliliter => T::div_ratio(value, 1000.0, 1.0),
             VolumeConcentrationUnit::PicoliterPerMilliliter => value * T::from_f64(1e9),
             VolumeConcentrationUnit::NanoliterPerMilliliter => value * T::from_f64(1000000.0),
             VolumeConcentrationUnit::MicroliterPerMilliliter => value * T::from_f64(1000.0),
             VolumeConcentrationUnit::MilliliterPerMilliliter => value,
-            VolumeConcentrationUnit::CentiliterPerMilliliter => value / T::from_f64(10.0),
-            VolumeConcentrationUnit::DeciliterPerMilliliter => value / T::from_f64(100.0),
+            VolumeConcentrationUnit::CentiliterPerMilliliter => T::div_ratio(value, 10.0, 1.0),
+            VolumeConcentrationUnit::DeciliterPerMilliliter => T::div_ratio(value, 100.0, 1.0),
             VolumeConcentrationUnit::Percent => value * T::from_f64(100.0),
             VolumeConcentrationUnit::PartPerThousand => value * T::from_f64(1000.0),
             VolumeConcentrationUnit::PartPerMillion => value * T::from_f64(1000000.0),
@@ -441,7 +443,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `pl/l`.
     #[inline]
     pub fn from_picoliters_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pl/l`.
@@ -453,7 +455,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `nl/l`.
     #[inline]
     pub fn from_nanoliters_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nl/l`.
@@ -465,7 +467,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `µl/l`.
     #[inline]
     pub fn from_microliters_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µl/l`.
@@ -477,7 +479,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `ml/l`.
     #[inline]
     pub fn from_milliliters_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `ml/l`.
@@ -489,7 +491,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `cl/l`.
     #[inline]
     pub fn from_centiliters_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cl/l`.
@@ -501,7 +503,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `dl/l`.
     #[inline]
     pub fn from_deciliters_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dl/l`.
@@ -519,13 +521,13 @@ impl<T: Number> VolumeConcentration<T> {
     /// The value in `l/ml`.
     #[inline]
     pub fn as_liters_per_milliliter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`VolumeConcentration`] from a value in `pl/ml`.
     #[inline]
     pub fn from_picoliters_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `pl/ml`.
@@ -537,7 +539,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `nl/ml`.
     #[inline]
     pub fn from_nanoliters_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `nl/ml`.
@@ -549,7 +551,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `µl/ml`.
     #[inline]
     pub fn from_microliters_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `µl/ml`.
@@ -579,7 +581,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// The value in `cl/ml`.
     #[inline]
     pub fn as_centiliters_per_milliliter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`VolumeConcentration`] from a value in `dl/ml`.
@@ -591,13 +593,13 @@ impl<T: Number> VolumeConcentration<T> {
     /// The value in `dl/ml`.
     #[inline]
     pub fn as_deciliters_per_milliliter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`VolumeConcentration`] from a value in `%`.
     #[inline]
     pub fn from_percent(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `%`.
@@ -609,7 +611,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `‰`.
     #[inline]
     pub fn from_parts_per_thousand(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `‰`.
@@ -621,7 +623,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `ppm`.
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ppm`.
@@ -633,7 +635,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `ppb`.
     #[inline]
     pub fn from_parts_per_billion(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ppb`.
@@ -645,7 +647,7 @@ impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in `ppt`.
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ppt`.
@@ -663,24 +665,46 @@ impl VolumeConcentration<f64> {
         Self(match unit {
             VolumeConcentrationUnit::DecimalFraction => value,
             VolumeConcentrationUnit::LiterPerLiter => value,
-            VolumeConcentrationUnit::PicoliterPerLiter => value / 1e12,
-            VolumeConcentrationUnit::NanoliterPerLiter => value / 1e9,
-            VolumeConcentrationUnit::MicroliterPerLiter => value / 1000000.0,
-            VolumeConcentrationUnit::MilliliterPerLiter => value / 1000.0,
-            VolumeConcentrationUnit::CentiliterPerLiter => value / 100.0,
-            VolumeConcentrationUnit::DeciliterPerLiter => value / 10.0,
+            VolumeConcentrationUnit::PicoliterPerLiter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::NanoliterPerLiter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::MicroliterPerLiter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::MilliliterPerLiter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            VolumeConcentrationUnit::CentiliterPerLiter => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            VolumeConcentrationUnit::DeciliterPerLiter => crate::conv::div_ratio(value, 10.0, 1.0),
             VolumeConcentrationUnit::LiterPerMilliliter => value * 1000.0,
-            VolumeConcentrationUnit::PicoliterPerMilliliter => value / 1e9,
-            VolumeConcentrationUnit::NanoliterPerMilliliter => value / 1000000.0,
-            VolumeConcentrationUnit::MicroliterPerMilliliter => value / 1000.0,
+            VolumeConcentrationUnit::PicoliterPerMilliliter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::NanoliterPerMilliliter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::MicroliterPerMilliliter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             VolumeConcentrationUnit::MilliliterPerMilliliter => value,
             VolumeConcentrationUnit::CentiliterPerMilliliter => value * 10.0,
             VolumeConcentrationUnit::DeciliterPerMilliliter => value * 100.0,
-            VolumeConcentrationUnit::Percent => value / 100.0,
-            VolumeConcentrationUnit::PartPerThousand => value / 1000.0,
-            VolumeConcentrationUnit::PartPerMillion => value / 1000000.0,
-            VolumeConcentrationUnit::PartPerBillion => value / 1e9,
-            VolumeConcentrationUnit::PartPerTrillion => value / 1e12,
+            VolumeConcentrationUnit::Percent => crate::conv::div_ratio(value, 100.0, 1.0),
+            VolumeConcentrationUnit::PartPerThousand => crate::conv::div_ratio(value, 1000.0, 1.0),
+            VolumeConcentrationUnit::PartPerMillion => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::PartPerBillion => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            VolumeConcentrationUnit::PartPerTrillion => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
         })
     }
 }

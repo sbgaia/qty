@@ -512,31 +512,31 @@ impl<T: Number> crate::UnitOf<Mass<T>> for MassUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            MassUnit::Gram => value / T::from_f64(1000.0),
+            MassUnit::Gram => T::div_ratio(value, 1000.0, 1.0),
             MassUnit::Femtogram => value / T::from_f64(1e18),
-            MassUnit::Picogram => value / T::from_f64(1e15),
-            MassUnit::Nanogram => value / T::from_f64(1e12),
-            MassUnit::Microgram => value / T::from_f64(1e9),
-            MassUnit::Milligram => value / T::from_f64(1000000.0),
-            MassUnit::Centigram => value / T::from_f64(100000.0),
-            MassUnit::Decigram => value / T::from_f64(10000.0),
-            MassUnit::Decagram => value / T::from_f64(100.0),
-            MassUnit::Hectogram => value / T::from_f64(10.0),
+            MassUnit::Picogram => T::div_ratio(value, 1000000000000000.0, 1.0),
+            MassUnit::Nanogram => T::div_ratio(value, 1000000000000.0, 1.0),
+            MassUnit::Microgram => T::div_ratio(value, 1000000000.0, 1.0),
+            MassUnit::Milligram => T::div_ratio(value, 1000000.0, 1.0),
+            MassUnit::Centigram => T::div_ratio(value, 100000.0, 1.0),
+            MassUnit::Decigram => T::div_ratio(value, 10000.0, 1.0),
+            MassUnit::Decagram => T::div_ratio(value, 100.0, 1.0),
+            MassUnit::Hectogram => T::div_ratio(value, 10.0, 1.0),
             MassUnit::Kilogram => value,
             MassUnit::Tonne => value * T::from_f64(1000.0),
             MassUnit::Kilotonne => value * T::from_f64(1000000.0),
             MassUnit::Megatonne => value * T::from_f64(1e9),
-            MassUnit::ShortTon => value * T::from_f64(907.18474),
-            MassUnit::LongTon => value * T::from_f64(1016.0469088),
-            MassUnit::Pound => value * T::from_f64(0.45359237),
-            MassUnit::Kilopound => value * T::from_f64(453.59237),
-            MassUnit::Megapound => value * T::from_f64(453592.37),
-            MassUnit::Ounce => value * T::from_f64(0.028349523125),
+            MassUnit::ShortTon => T::mul_ratio(value, 45359237.0, 50000.0),
+            MassUnit::LongTon => T::mul_ratio(value, 317514659.0, 312500.0),
+            MassUnit::Pound => T::mul_ratio(value, 45359237.0, 100000000.0),
+            MassUnit::Kilopound => T::mul_ratio(value, 45359237.0, 100000.0),
+            MassUnit::Megapound => T::mul_ratio(value, 45359237.0, 100.0),
+            MassUnit::Ounce => T::mul_ratio(value, 45359237.0, 1600000000.0),
             MassUnit::Slug => T::mul_ratio(value, 8896443230521.0, 609600000000.0),
-            MassUnit::Stone => value * T::from_f64(6.35029318),
-            MassUnit::ShortHundredweight => value * T::from_f64(45.359237),
-            MassUnit::LongHundredweight => value * T::from_f64(50.80234544),
-            MassUnit::Grain => value * T::from_f64(6.479891e-5),
+            MassUnit::Stone => T::mul_ratio(value, 317514659.0, 50000000.0),
+            MassUnit::ShortHundredweight => T::mul_ratio(value, 45359237.0, 1000000.0),
+            MassUnit::LongHundredweight => T::mul_ratio(value, 317514659.0, 6250000.0),
+            MassUnit::Grain => T::mul_ratio(value, 6479891.0, 100000000000.0),
             MassUnit::SolarMass => value * T::from_f64(1.98947e30),
             MassUnit::EarthMass => value * T::from_f64(5.9722e24),
             MassUnit::Dalton => value * T::from_f64(1.6605390666e-27),
@@ -560,20 +560,20 @@ impl<T: Number> crate::UnitOf<Mass<T>> for MassUnit {
             MassUnit::Decagram => value * T::from_f64(100.0),
             MassUnit::Hectogram => value * T::from_f64(10.0),
             MassUnit::Kilogram => value,
-            MassUnit::Tonne => value / T::from_f64(1000.0),
-            MassUnit::Kilotonne => value / T::from_f64(1000000.0),
-            MassUnit::Megatonne => value / T::from_f64(1e9),
-            MassUnit::ShortTon => value / T::from_f64(907.18474),
-            MassUnit::LongTon => value / T::from_f64(1016.0469088),
-            MassUnit::Pound => value / T::from_f64(0.45359237),
-            MassUnit::Kilopound => value / T::from_f64(453.59237),
-            MassUnit::Megapound => value / T::from_f64(453592.37),
-            MassUnit::Ounce => value / T::from_f64(0.028349523125),
+            MassUnit::Tonne => T::div_ratio(value, 1000.0, 1.0),
+            MassUnit::Kilotonne => T::div_ratio(value, 1000000.0, 1.0),
+            MassUnit::Megatonne => T::div_ratio(value, 1000000000.0, 1.0),
+            MassUnit::ShortTon => T::div_ratio(value, 45359237.0, 50000.0),
+            MassUnit::LongTon => T::div_ratio(value, 317514659.0, 312500.0),
+            MassUnit::Pound => T::div_ratio(value, 45359237.0, 100000000.0),
+            MassUnit::Kilopound => T::div_ratio(value, 45359237.0, 100000.0),
+            MassUnit::Megapound => T::div_ratio(value, 45359237.0, 100.0),
+            MassUnit::Ounce => T::div_ratio(value, 45359237.0, 1600000000.0),
             MassUnit::Slug => T::div_ratio(value, 8896443230521.0, 609600000000.0),
-            MassUnit::Stone => value / T::from_f64(6.35029318),
-            MassUnit::ShortHundredweight => value / T::from_f64(45.359237),
-            MassUnit::LongHundredweight => value / T::from_f64(50.80234544),
-            MassUnit::Grain => value / T::from_f64(6.479891e-5),
+            MassUnit::Stone => T::div_ratio(value, 317514659.0, 50000000.0),
+            MassUnit::ShortHundredweight => T::div_ratio(value, 45359237.0, 1000000.0),
+            MassUnit::LongHundredweight => T::div_ratio(value, 317514659.0, 6250000.0),
+            MassUnit::Grain => T::div_ratio(value, 6479891.0, 100000000000.0),
             MassUnit::SolarMass => value / T::from_f64(1.98947e30),
             MassUnit::EarthMass => value / T::from_f64(5.9722e24),
             MassUnit::Dalton => value / T::from_f64(1.6605390666e-27),
@@ -607,7 +607,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `g`.
     #[inline]
     pub fn from_grams(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g`.
@@ -631,7 +631,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `pg`.
     #[inline]
     pub fn from_picograms(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `pg`.
@@ -643,7 +643,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `ng`.
     #[inline]
     pub fn from_nanograms(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ng`.
@@ -655,7 +655,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `µg`.
     #[inline]
     pub fn from_micrograms(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µg`.
@@ -667,7 +667,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `mg`.
     #[inline]
     pub fn from_milligrams(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg`.
@@ -679,7 +679,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `cg`.
     #[inline]
     pub fn from_centigrams(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `cg`.
@@ -691,7 +691,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `dg`.
     #[inline]
     pub fn from_decigrams(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `dg`.
@@ -703,7 +703,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `dag`.
     #[inline]
     pub fn from_decagrams(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `dag`.
@@ -715,7 +715,7 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `hg`.
     #[inline]
     pub fn from_hectograms(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `hg`.
@@ -745,7 +745,7 @@ impl<T: Number> Mass<T> {
     /// The value in `t`.
     #[inline]
     pub fn as_tonnes(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Mass`] from a value in `kt`.
@@ -757,7 +757,7 @@ impl<T: Number> Mass<T> {
     /// The value in `kt`.
     #[inline]
     pub fn as_kilotonnes(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Mass`] from a value in `Mt`.
@@ -769,79 +769,79 @@ impl<T: Number> Mass<T> {
     /// The value in `Mt`.
     #[inline]
     pub fn as_megatonnes(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Mass`] from a value in `t (short)`.
     #[inline]
     pub fn from_short_tons(value: T) -> Self {
-        Self(value * T::from_f64(907.18474))
+        Self(T::mul_ratio(value, 45359237.0, 50000.0))
     }
 
     /// The value in `t (short)`.
     #[inline]
     pub fn as_short_tons(self) -> T {
-        self.0 / T::from_f64(907.18474)
+        T::div_ratio(self.0, 45359237.0, 50000.0)
     }
 
     /// A [`Mass`] from a value in `long tn`.
     #[inline]
     pub fn from_long_tons(value: T) -> Self {
-        Self(value * T::from_f64(1016.0469088))
+        Self(T::mul_ratio(value, 317514659.0, 312500.0))
     }
 
     /// The value in `long tn`.
     #[inline]
     pub fn as_long_tons(self) -> T {
-        self.0 / T::from_f64(1016.0469088)
+        T::div_ratio(self.0, 317514659.0, 312500.0)
     }
 
     /// A [`Mass`] from a value in `lb`.
     #[inline]
     pub fn from_pounds(value: T) -> Self {
-        Self(value * T::from_f64(0.45359237))
+        Self(T::mul_ratio(value, 45359237.0, 100000000.0))
     }
 
     /// The value in `lb`.
     #[inline]
     pub fn as_pounds(self) -> T {
-        self.0 / T::from_f64(0.45359237)
+        T::div_ratio(self.0, 45359237.0, 100000000.0)
     }
 
     /// A [`Mass`] from a value in `klb`.
     #[inline]
     pub fn from_kilopounds(value: T) -> Self {
-        Self(value * T::from_f64(453.59237))
+        Self(T::mul_ratio(value, 45359237.0, 100000.0))
     }
 
     /// The value in `klb`.
     #[inline]
     pub fn as_kilopounds(self) -> T {
-        self.0 / T::from_f64(453.59237)
+        T::div_ratio(self.0, 45359237.0, 100000.0)
     }
 
     /// A [`Mass`] from a value in `Mlb`.
     #[inline]
     pub fn from_megapounds(value: T) -> Self {
-        Self(value * T::from_f64(453592.37))
+        Self(T::mul_ratio(value, 45359237.0, 100.0))
     }
 
     /// The value in `Mlb`.
     #[inline]
     pub fn as_megapounds(self) -> T {
-        self.0 / T::from_f64(453592.37)
+        T::div_ratio(self.0, 45359237.0, 100.0)
     }
 
     /// A [`Mass`] from a value in `oz`.
     #[inline]
     pub fn from_ounces(value: T) -> Self {
-        Self(value * T::from_f64(0.028349523125))
+        Self(T::mul_ratio(value, 45359237.0, 1600000000.0))
     }
 
     /// The value in `oz`.
     #[inline]
     pub fn as_ounces(self) -> T {
-        self.0 / T::from_f64(0.028349523125)
+        T::div_ratio(self.0, 45359237.0, 1600000000.0)
     }
 
     /// A [`Mass`] from a value in `slug`.
@@ -859,49 +859,49 @@ impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `st`.
     #[inline]
     pub fn from_stone(value: T) -> Self {
-        Self(value * T::from_f64(6.35029318))
+        Self(T::mul_ratio(value, 317514659.0, 50000000.0))
     }
 
     /// The value in `st`.
     #[inline]
     pub fn as_stone(self) -> T {
-        self.0 / T::from_f64(6.35029318)
+        T::div_ratio(self.0, 317514659.0, 50000000.0)
     }
 
     /// A [`Mass`] from a value in `cwt`.
     #[inline]
     pub fn from_short_hundredweight(value: T) -> Self {
-        Self(value * T::from_f64(45.359237))
+        Self(T::mul_ratio(value, 45359237.0, 1000000.0))
     }
 
     /// The value in `cwt`.
     #[inline]
     pub fn as_short_hundredweight(self) -> T {
-        self.0 / T::from_f64(45.359237)
+        T::div_ratio(self.0, 45359237.0, 1000000.0)
     }
 
     /// A [`Mass`] from a value in `cwt`.
     #[inline]
     pub fn from_long_hundredweight(value: T) -> Self {
-        Self(value * T::from_f64(50.80234544))
+        Self(T::mul_ratio(value, 317514659.0, 6250000.0))
     }
 
     /// The value in `cwt`.
     #[inline]
     pub fn as_long_hundredweight(self) -> T {
-        self.0 / T::from_f64(50.80234544)
+        T::div_ratio(self.0, 317514659.0, 6250000.0)
     }
 
     /// A [`Mass`] from a value in `gr`.
     #[inline]
     pub fn from_grains(value: T) -> Self {
-        Self(value * T::from_f64(6.479891e-5))
+        Self(T::mul_ratio(value, 6479891.0, 100000000000.0))
     }
 
     /// The value in `gr`.
     #[inline]
     pub fn as_grains(self) -> T {
-        self.0 / T::from_f64(6.479891e-5)
+        T::div_ratio(self.0, 6479891.0, 100000000000.0)
     }
 
     /// A [`Mass`] from a value in `M☉`.
@@ -983,31 +983,31 @@ impl Mass<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: MassUnit) -> Self {
         Self(match unit {
-            MassUnit::Gram => value / 1000.0,
+            MassUnit::Gram => crate::conv::div_ratio(value, 1000.0, 1.0),
             MassUnit::Femtogram => value / 1e18,
-            MassUnit::Picogram => value / 1e15,
-            MassUnit::Nanogram => value / 1e12,
-            MassUnit::Microgram => value / 1e9,
-            MassUnit::Milligram => value / 1000000.0,
-            MassUnit::Centigram => value / 100000.0,
-            MassUnit::Decigram => value / 10000.0,
-            MassUnit::Decagram => value / 100.0,
-            MassUnit::Hectogram => value / 10.0,
+            MassUnit::Picogram => crate::conv::div_ratio(value, 1000000000000000.0, 1.0),
+            MassUnit::Nanogram => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            MassUnit::Microgram => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            MassUnit::Milligram => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MassUnit::Centigram => crate::conv::div_ratio(value, 100000.0, 1.0),
+            MassUnit::Decigram => crate::conv::div_ratio(value, 10000.0, 1.0),
+            MassUnit::Decagram => crate::conv::div_ratio(value, 100.0, 1.0),
+            MassUnit::Hectogram => crate::conv::div_ratio(value, 10.0, 1.0),
             MassUnit::Kilogram => value,
             MassUnit::Tonne => value * 1000.0,
             MassUnit::Kilotonne => value * 1000000.0,
             MassUnit::Megatonne => value * 1e9,
-            MassUnit::ShortTon => value * 907.18474,
-            MassUnit::LongTon => value * 1016.0469088,
-            MassUnit::Pound => value * 0.45359237,
-            MassUnit::Kilopound => value * 453.59237,
-            MassUnit::Megapound => value * 453592.37,
-            MassUnit::Ounce => value * 0.028349523125,
-            MassUnit::Slug => value * 14.593902937206364,
-            MassUnit::Stone => value * 6.35029318,
-            MassUnit::ShortHundredweight => value * 45.359237,
-            MassUnit::LongHundredweight => value * 50.80234544,
-            MassUnit::Grain => value * 6.479891e-5,
+            MassUnit::ShortTon => crate::conv::mul_ratio(value, 45359237.0, 50000.0),
+            MassUnit::LongTon => crate::conv::mul_ratio(value, 317514659.0, 312500.0),
+            MassUnit::Pound => crate::conv::mul_ratio(value, 45359237.0, 100000000.0),
+            MassUnit::Kilopound => crate::conv::mul_ratio(value, 45359237.0, 100000.0),
+            MassUnit::Megapound => crate::conv::mul_ratio(value, 45359237.0, 100.0),
+            MassUnit::Ounce => crate::conv::mul_ratio(value, 45359237.0, 1600000000.0),
+            MassUnit::Slug => crate::conv::mul_ratio(value, 8896443230521.0, 609600000000.0),
+            MassUnit::Stone => crate::conv::mul_ratio(value, 317514659.0, 50000000.0),
+            MassUnit::ShortHundredweight => crate::conv::mul_ratio(value, 45359237.0, 1000000.0),
+            MassUnit::LongHundredweight => crate::conv::mul_ratio(value, 317514659.0, 6250000.0),
+            MassUnit::Grain => crate::conv::mul_ratio(value, 6479891.0, 100000000000.0),
             MassUnit::SolarMass => value * 1.98947e30,
             MassUnit::EarthMass => value * 5.9722e24,
             MassUnit::Dalton => value * 1.6605390666e-27,

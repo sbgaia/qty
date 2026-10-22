@@ -267,11 +267,11 @@ impl<T: Number> crate::UnitOf<RotationalSpeed<T>> for RotationalSpeedUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             RotationalSpeedUnit::RadianPerSecond => value,
-            RotationalSpeedUnit::NanoradianPerSecond => value / T::from_f64(1e9),
-            RotationalSpeedUnit::MicroradianPerSecond => value / T::from_f64(1000000.0),
-            RotationalSpeedUnit::MilliradianPerSecond => value / T::from_f64(1000.0),
-            RotationalSpeedUnit::CentiradianPerSecond => value / T::from_f64(100.0),
-            RotationalSpeedUnit::DeciradianPerSecond => value / T::from_f64(10.0),
+            RotationalSpeedUnit::NanoradianPerSecond => T::div_ratio(value, 1000000000.0, 1.0),
+            RotationalSpeedUnit::MicroradianPerSecond => T::div_ratio(value, 1000000.0, 1.0),
+            RotationalSpeedUnit::MilliradianPerSecond => T::div_ratio(value, 1000.0, 1.0),
+            RotationalSpeedUnit::CentiradianPerSecond => T::div_ratio(value, 100.0, 1.0),
+            RotationalSpeedUnit::DeciradianPerSecond => T::div_ratio(value, 10.0, 1.0),
             RotationalSpeedUnit::DegreePerSecond => value * T::from_f64(0.017453292519943295),
             RotationalSpeedUnit::NanodegreePerSecond => value * T::from_f64(1.7453292519943295e-11),
             RotationalSpeedUnit::MicrodegreePerSecond => value * T::from_f64(1.7453292519943295e-8),
@@ -334,7 +334,7 @@ impl<T: Number> RotationalSpeed<T> {
     /// A [`RotationalSpeed`] from a value in `nrad/s`.
     #[inline]
     pub fn from_nanoradians_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nrad/s`.
@@ -346,7 +346,7 @@ impl<T: Number> RotationalSpeed<T> {
     /// A [`RotationalSpeed`] from a value in `µrad/s`.
     #[inline]
     pub fn from_microradians_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µrad/s`.
@@ -358,7 +358,7 @@ impl<T: Number> RotationalSpeed<T> {
     /// A [`RotationalSpeed`] from a value in `mrad/s`.
     #[inline]
     pub fn from_milliradians_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mrad/s`.
@@ -370,7 +370,7 @@ impl<T: Number> RotationalSpeed<T> {
     /// A [`RotationalSpeed`] from a value in `crad/s`.
     #[inline]
     pub fn from_centiradians_per_second(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `crad/s`.
@@ -382,7 +382,7 @@ impl<T: Number> RotationalSpeed<T> {
     /// A [`RotationalSpeed`] from a value in `drad/s`.
     #[inline]
     pub fn from_deciradians_per_second(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `drad/s`.
@@ -483,11 +483,15 @@ impl RotationalSpeed<f64> {
     pub const fn const_new(value: f64, unit: RotationalSpeedUnit) -> Self {
         Self(match unit {
             RotationalSpeedUnit::RadianPerSecond => value,
-            RotationalSpeedUnit::NanoradianPerSecond => value / 1e9,
-            RotationalSpeedUnit::MicroradianPerSecond => value / 1000000.0,
-            RotationalSpeedUnit::MilliradianPerSecond => value / 1000.0,
-            RotationalSpeedUnit::CentiradianPerSecond => value / 100.0,
-            RotationalSpeedUnit::DeciradianPerSecond => value / 10.0,
+            RotationalSpeedUnit::NanoradianPerSecond => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            RotationalSpeedUnit::MicroradianPerSecond => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            RotationalSpeedUnit::MilliradianPerSecond => crate::conv::div_ratio(value, 1000.0, 1.0),
+            RotationalSpeedUnit::CentiradianPerSecond => crate::conv::div_ratio(value, 100.0, 1.0),
+            RotationalSpeedUnit::DeciradianPerSecond => crate::conv::div_ratio(value, 10.0, 1.0),
             RotationalSpeedUnit::DegreePerSecond => value * 0.017453292519943295,
             RotationalSpeedUnit::NanodegreePerSecond => value * 1.7453292519943295e-11,
             RotationalSpeedUnit::MicrodegreePerSecond => value * 1.7453292519943295e-8,

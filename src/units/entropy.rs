@@ -188,7 +188,7 @@ impl<T: Number> crate::UnitOf<Entropy<T>> for EntropyUnit {
             EntropyUnit::JoulePerKelvin => value,
             EntropyUnit::KilojoulePerKelvin => value * T::from_f64(1000.0),
             EntropyUnit::MegajoulePerKelvin => value * T::from_f64(1000000.0),
-            EntropyUnit::CaloriePerKelvin => value * T::from_f64(4.184),
+            EntropyUnit::CaloriePerKelvin => T::mul_ratio(value, 523.0, 125.0),
             EntropyUnit::KilocaloriePerKelvin => value * T::from_f64(4184.0),
             EntropyUnit::JoulePerDegreeCelsius => value,
             EntropyUnit::KilojoulePerDegreeCelsius => value * T::from_f64(1000.0),
@@ -199,12 +199,12 @@ impl<T: Number> crate::UnitOf<Entropy<T>> for EntropyUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             EntropyUnit::JoulePerKelvin => value,
-            EntropyUnit::KilojoulePerKelvin => value / T::from_f64(1000.0),
-            EntropyUnit::MegajoulePerKelvin => value / T::from_f64(1000000.0),
-            EntropyUnit::CaloriePerKelvin => value / T::from_f64(4.184),
-            EntropyUnit::KilocaloriePerKelvin => value / T::from_f64(4184.0),
+            EntropyUnit::KilojoulePerKelvin => T::div_ratio(value, 1000.0, 1.0),
+            EntropyUnit::MegajoulePerKelvin => T::div_ratio(value, 1000000.0, 1.0),
+            EntropyUnit::CaloriePerKelvin => T::div_ratio(value, 523.0, 125.0),
+            EntropyUnit::KilocaloriePerKelvin => T::div_ratio(value, 4184.0, 1.0),
             EntropyUnit::JoulePerDegreeCelsius => value,
-            EntropyUnit::KilojoulePerDegreeCelsius => value / T::from_f64(1000.0),
+            EntropyUnit::KilojoulePerDegreeCelsius => T::div_ratio(value, 1000.0, 1.0),
         }
     }
 }
@@ -246,7 +246,7 @@ impl<T: Number> Entropy<T> {
     /// The value in `kJ/K`.
     #[inline]
     pub fn as_kilojoules_per_kelvin(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Entropy`] from a value in `MJ/K`.
@@ -258,19 +258,19 @@ impl<T: Number> Entropy<T> {
     /// The value in `MJ/K`.
     #[inline]
     pub fn as_megajoules_per_kelvin(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Entropy`] from a value in `cal/K`.
     #[inline]
     pub fn from_calories_per_kelvin(value: T) -> Self {
-        Self(value * T::from_f64(4.184))
+        Self(T::mul_ratio(value, 523.0, 125.0))
     }
 
     /// The value in `cal/K`.
     #[inline]
     pub fn as_calories_per_kelvin(self) -> T {
-        self.0 / T::from_f64(4.184)
+        T::div_ratio(self.0, 523.0, 125.0)
     }
 
     /// A [`Entropy`] from a value in `kcal/K`.
@@ -282,7 +282,7 @@ impl<T: Number> Entropy<T> {
     /// The value in `kcal/K`.
     #[inline]
     pub fn as_kilocalories_per_kelvin(self) -> T {
-        self.0 / T::from_f64(4184.0)
+        T::div_ratio(self.0, 4184.0, 1.0)
     }
 
     /// A [`Entropy`] from a value in `J/°C`.
@@ -306,7 +306,7 @@ impl<T: Number> Entropy<T> {
     /// The value in `kJ/°C`.
     #[inline]
     pub fn as_kilojoules_per_degree_celsius(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 }
 
@@ -319,7 +319,7 @@ impl Entropy<f64> {
             EntropyUnit::JoulePerKelvin => value,
             EntropyUnit::KilojoulePerKelvin => value * 1000.0,
             EntropyUnit::MegajoulePerKelvin => value * 1000000.0,
-            EntropyUnit::CaloriePerKelvin => value * 4.184,
+            EntropyUnit::CaloriePerKelvin => crate::conv::mul_ratio(value, 523.0, 125.0),
             EntropyUnit::KilocaloriePerKelvin => value * 4184.0,
             EntropyUnit::JoulePerDegreeCelsius => value,
             EntropyUnit::KilojoulePerDegreeCelsius => value * 1000.0,

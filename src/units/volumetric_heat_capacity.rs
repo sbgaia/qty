@@ -255,22 +255,24 @@ impl<T: Number> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapac
     fn value_from_base(self, value: T) -> T {
         match self {
             VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin => value,
-            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin => value / T::from_f64(1000.0),
+            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
             VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin => {
-                value / T::from_f64(1000000.0)
+                T::div_ratio(value, 1000000.0, 1.0)
             }
             VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius => value,
             VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius => {
-                value / T::from_f64(1000.0)
+                T::div_ratio(value, 1000.0, 1.0)
             }
             VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius => {
-                value / T::from_f64(1000000.0)
+                T::div_ratio(value, 1000000.0, 1.0)
             }
             VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius => {
-                value / T::from_f64(4184000.0)
+                T::div_ratio(value, 4184000.0, 1.0)
             }
             VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius => {
-                value / T::from_f64(4.184e9)
+                T::div_ratio(value, 4184000000.0, 1.0)
             }
             VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
                 T::div_ratio(value, 6594099078875.0, 98322384.0)
@@ -322,7 +324,7 @@ impl<T: Number> VolumetricHeatCapacity<T> {
     /// The value in `kJ/(m³·K)`.
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_kelvin(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`VolumetricHeatCapacity`] from a value in `MJ/(m³·K)`.
@@ -334,7 +336,7 @@ impl<T: Number> VolumetricHeatCapacity<T> {
     /// The value in `MJ/(m³·K)`.
     #[inline]
     pub fn as_megajoules_per_cubic_meter_kelvin(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`VolumetricHeatCapacity`] from a value in `J/(m³·°C)`.
@@ -358,7 +360,7 @@ impl<T: Number> VolumetricHeatCapacity<T> {
     /// The value in `kJ/(m³·°C)`.
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_degree_celsius(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`VolumetricHeatCapacity`] from a value in `MJ/(m³·°C)`.
@@ -370,7 +372,7 @@ impl<T: Number> VolumetricHeatCapacity<T> {
     /// The value in `MJ/(m³·°C)`.
     #[inline]
     pub fn as_megajoules_per_cubic_meter_degree_celsius(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`VolumetricHeatCapacity`] from a value in `cal/(cm³·°C)`.
@@ -382,7 +384,7 @@ impl<T: Number> VolumetricHeatCapacity<T> {
     /// The value in `cal/(cm³·°C)`.
     #[inline]
     pub fn as_calories_per_cubic_centimeter_degree_celsius(self) -> T {
-        self.0 / T::from_f64(4184000.0)
+        T::div_ratio(self.0, 4184000.0, 1.0)
     }
 
     /// A [`VolumetricHeatCapacity`] from a value in `kcal/(cm³·°C)`.
@@ -394,7 +396,7 @@ impl<T: Number> VolumetricHeatCapacity<T> {
     /// The value in `kcal/(cm³·°C)`.
     #[inline]
     pub fn as_kilocalories_per_cubic_centimeter_degree_celsius(self) -> T {
-        self.0 / T::from_f64(4.184e9)
+        T::div_ratio(self.0, 4184000000.0, 1.0)
     }
 
     /// A [`VolumetricHeatCapacity`] from a value in `BTU/(ft³·°F)`.
@@ -427,7 +429,7 @@ impl VolumetricHeatCapacity<f64> {
                 value * 4.184e9
             }
             VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
-                value * 67066.10245409631
+                crate::conv::mul_ratio(value, 6594099078875.0, 98322384.0)
             }
         })
     }

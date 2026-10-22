@@ -314,22 +314,22 @@ impl<T: Number> crate::UnitOf<Force<T>> for ForceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            ForceUnit::Dyn => value / T::from_f64(100000.0),
-            ForceUnit::GramForce => value * T::from_f64(0.00980665),
-            ForceUnit::KilogramForce => value * T::from_f64(9.80665),
-            ForceUnit::TonneForce => value * T::from_f64(9806.65),
+            ForceUnit::Dyn => T::div_ratio(value, 100000.0, 1.0),
+            ForceUnit::GramForce => T::mul_ratio(value, 196133.0, 20000000.0),
+            ForceUnit::KilogramForce => T::mul_ratio(value, 196133.0, 20000.0),
+            ForceUnit::TonneForce => T::mul_ratio(value, 196133.0, 20.0),
             ForceUnit::Newton => value,
-            ForceUnit::Micronewton => value / T::from_f64(1000000.0),
-            ForceUnit::Millinewton => value / T::from_f64(1000.0),
+            ForceUnit::Micronewton => T::div_ratio(value, 1000000.0, 1.0),
+            ForceUnit::Millinewton => T::div_ratio(value, 1000.0, 1.0),
             ForceUnit::Decanewton => value * T::from_f64(10.0),
             ForceUnit::Kilonewton => value * T::from_f64(1000.0),
             ForceUnit::Meganewton => value * T::from_f64(1000000.0),
-            ForceUnit::Kilopond => value * T::from_f64(9.80665),
-            ForceUnit::Poundal => value * T::from_f64(0.138254954376),
-            ForceUnit::PoundForce => value * T::from_f64(4.4482216152605),
-            ForceUnit::KilopoundForce => value * T::from_f64(4448.2216152605),
+            ForceUnit::Kilopond => T::mul_ratio(value, 196133.0, 20000.0),
+            ForceUnit::Poundal => T::mul_ratio(value, 17281869297.0, 125000000000.0),
+            ForceUnit::PoundForce => T::mul_ratio(value, 8896443230521.0, 2000000000000.0),
+            ForceUnit::KilopoundForce => T::mul_ratio(value, 8896443230521.0, 2000000000.0),
             ForceUnit::OunceForce => T::mul_ratio(value, 8896443230521.0, 32000000000000.0),
-            ForceUnit::ShortTonForce => value * T::from_f64(8896.443230521),
+            ForceUnit::ShortTonForce => T::mul_ratio(value, 8896443230521.0, 1000000000.0),
         }
     }
 
@@ -337,21 +337,21 @@ impl<T: Number> crate::UnitOf<Force<T>> for ForceUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             ForceUnit::Dyn => value * T::from_f64(100000.0),
-            ForceUnit::GramForce => value / T::from_f64(0.00980665),
-            ForceUnit::KilogramForce => value / T::from_f64(9.80665),
-            ForceUnit::TonneForce => value / T::from_f64(9806.65),
+            ForceUnit::GramForce => T::div_ratio(value, 196133.0, 20000000.0),
+            ForceUnit::KilogramForce => T::div_ratio(value, 196133.0, 20000.0),
+            ForceUnit::TonneForce => T::div_ratio(value, 196133.0, 20.0),
             ForceUnit::Newton => value,
             ForceUnit::Micronewton => value * T::from_f64(1000000.0),
             ForceUnit::Millinewton => value * T::from_f64(1000.0),
-            ForceUnit::Decanewton => value / T::from_f64(10.0),
-            ForceUnit::Kilonewton => value / T::from_f64(1000.0),
-            ForceUnit::Meganewton => value / T::from_f64(1000000.0),
-            ForceUnit::Kilopond => value / T::from_f64(9.80665),
-            ForceUnit::Poundal => value / T::from_f64(0.138254954376),
-            ForceUnit::PoundForce => value / T::from_f64(4.4482216152605),
-            ForceUnit::KilopoundForce => value / T::from_f64(4448.2216152605),
+            ForceUnit::Decanewton => T::div_ratio(value, 10.0, 1.0),
+            ForceUnit::Kilonewton => T::div_ratio(value, 1000.0, 1.0),
+            ForceUnit::Meganewton => T::div_ratio(value, 1000000.0, 1.0),
+            ForceUnit::Kilopond => T::div_ratio(value, 196133.0, 20000.0),
+            ForceUnit::Poundal => T::div_ratio(value, 17281869297.0, 125000000000.0),
+            ForceUnit::PoundForce => T::div_ratio(value, 8896443230521.0, 2000000000000.0),
+            ForceUnit::KilopoundForce => T::div_ratio(value, 8896443230521.0, 2000000000.0),
             ForceUnit::OunceForce => T::div_ratio(value, 8896443230521.0, 32000000000000.0),
-            ForceUnit::ShortTonForce => value / T::from_f64(8896.443230521),
+            ForceUnit::ShortTonForce => T::div_ratio(value, 8896443230521.0, 1000000000.0),
         }
     }
 }
@@ -377,7 +377,7 @@ impl<T: Number> Force<T> {
     /// A [`Force`] from a value in `dyn`.
     #[inline]
     pub fn from_dyne(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `dyn`.
@@ -389,37 +389,37 @@ impl<T: Number> Force<T> {
     /// A [`Force`] from a value in `gf`.
     #[inline]
     pub fn from_grams_force(value: T) -> Self {
-        Self(value * T::from_f64(0.00980665))
+        Self(T::mul_ratio(value, 196133.0, 20000000.0))
     }
 
     /// The value in `gf`.
     #[inline]
     pub fn as_grams_force(self) -> T {
-        self.0 / T::from_f64(0.00980665)
+        T::div_ratio(self.0, 196133.0, 20000000.0)
     }
 
     /// A [`Force`] from a value in `kgf`.
     #[inline]
     pub fn from_kilograms_force(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `kgf`.
     #[inline]
     pub fn as_kilograms_force(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`Force`] from a value in `tf`.
     #[inline]
     pub fn from_tonnes_force(value: T) -> Self {
-        Self(value * T::from_f64(9806.65))
+        Self(T::mul_ratio(value, 196133.0, 20.0))
     }
 
     /// The value in `tf`.
     #[inline]
     pub fn as_tonnes_force(self) -> T {
-        self.0 / T::from_f64(9806.65)
+        T::div_ratio(self.0, 196133.0, 20.0)
     }
 
     /// A [`Force`] from a value in `N`.
@@ -437,7 +437,7 @@ impl<T: Number> Force<T> {
     /// A [`Force`] from a value in `µN`.
     #[inline]
     pub fn from_micronewtons(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µN`.
@@ -449,7 +449,7 @@ impl<T: Number> Force<T> {
     /// A [`Force`] from a value in `mN`.
     #[inline]
     pub fn from_millinewtons(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mN`.
@@ -467,7 +467,7 @@ impl<T: Number> Force<T> {
     /// The value in `daN`.
     #[inline]
     pub fn as_decanewtons(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Force`] from a value in `kN`.
@@ -479,7 +479,7 @@ impl<T: Number> Force<T> {
     /// The value in `kN`.
     #[inline]
     pub fn as_kilonewtons(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Force`] from a value in `MN`.
@@ -491,55 +491,55 @@ impl<T: Number> Force<T> {
     /// The value in `MN`.
     #[inline]
     pub fn as_meganewtons(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Force`] from a value in `kp`.
     #[inline]
     pub fn from_kiloponds(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `kp`.
     #[inline]
     pub fn as_kiloponds(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`Force`] from a value in `pdl`.
     #[inline]
     pub fn from_poundals(value: T) -> Self {
-        Self(value * T::from_f64(0.138254954376))
+        Self(T::mul_ratio(value, 17281869297.0, 125000000000.0))
     }
 
     /// The value in `pdl`.
     #[inline]
     pub fn as_poundals(self) -> T {
-        self.0 / T::from_f64(0.138254954376)
+        T::div_ratio(self.0, 17281869297.0, 125000000000.0)
     }
 
     /// A [`Force`] from a value in `lbf`.
     #[inline]
     pub fn from_pounds_force(value: T) -> Self {
-        Self(value * T::from_f64(4.4482216152605))
+        Self(T::mul_ratio(value, 8896443230521.0, 2000000000000.0))
     }
 
     /// The value in `lbf`.
     #[inline]
     pub fn as_pounds_force(self) -> T {
-        self.0 / T::from_f64(4.4482216152605)
+        T::div_ratio(self.0, 8896443230521.0, 2000000000000.0)
     }
 
     /// A [`Force`] from a value in `klbf`.
     #[inline]
     pub fn from_kilopounds_force(value: T) -> Self {
-        Self(value * T::from_f64(4448.2216152605))
+        Self(T::mul_ratio(value, 8896443230521.0, 2000000000.0))
     }
 
     /// The value in `klbf`.
     #[inline]
     pub fn as_kilopounds_force(self) -> T {
-        self.0 / T::from_f64(4448.2216152605)
+        T::div_ratio(self.0, 8896443230521.0, 2000000000.0)
     }
 
     /// A [`Force`] from a value in `ozf`.
@@ -557,13 +557,13 @@ impl<T: Number> Force<T> {
     /// A [`Force`] from a value in `tf (short)`.
     #[inline]
     pub fn from_short_tons_force(value: T) -> Self {
-        Self(value * T::from_f64(8896.443230521))
+        Self(T::mul_ratio(value, 8896443230521.0, 1000000000.0))
     }
 
     /// The value in `tf (short)`.
     #[inline]
     pub fn as_short_tons_force(self) -> T {
-        self.0 / T::from_f64(8896.443230521)
+        T::div_ratio(self.0, 8896443230521.0, 1000000000.0)
     }
 }
 
@@ -573,22 +573,30 @@ impl Force<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: ForceUnit) -> Self {
         Self(match unit {
-            ForceUnit::Dyn => value / 100000.0,
-            ForceUnit::GramForce => value * 0.00980665,
-            ForceUnit::KilogramForce => value * 9.80665,
-            ForceUnit::TonneForce => value * 9806.65,
+            ForceUnit::Dyn => crate::conv::div_ratio(value, 100000.0, 1.0),
+            ForceUnit::GramForce => crate::conv::mul_ratio(value, 196133.0, 20000000.0),
+            ForceUnit::KilogramForce => crate::conv::mul_ratio(value, 196133.0, 20000.0),
+            ForceUnit::TonneForce => crate::conv::mul_ratio(value, 196133.0, 20.0),
             ForceUnit::Newton => value,
-            ForceUnit::Micronewton => value / 1000000.0,
-            ForceUnit::Millinewton => value / 1000.0,
+            ForceUnit::Micronewton => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ForceUnit::Millinewton => crate::conv::div_ratio(value, 1000.0, 1.0),
             ForceUnit::Decanewton => value * 10.0,
             ForceUnit::Kilonewton => value * 1000.0,
             ForceUnit::Meganewton => value * 1000000.0,
-            ForceUnit::Kilopond => value * 9.80665,
-            ForceUnit::Poundal => value * 0.138254954376,
-            ForceUnit::PoundForce => value * 4.4482216152605,
-            ForceUnit::KilopoundForce => value * 4448.2216152605,
-            ForceUnit::OunceForce => value * 0.2780138509537812,
-            ForceUnit::ShortTonForce => value * 8896.443230521,
+            ForceUnit::Kilopond => crate::conv::mul_ratio(value, 196133.0, 20000.0),
+            ForceUnit::Poundal => crate::conv::mul_ratio(value, 17281869297.0, 125000000000.0),
+            ForceUnit::PoundForce => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 2000000000000.0)
+            }
+            ForceUnit::KilopoundForce => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 2000000000.0)
+            }
+            ForceUnit::OunceForce => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 32000000000000.0)
+            }
+            ForceUnit::ShortTonForce => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 1000000000.0)
+            }
         })
     }
 }

@@ -147,7 +147,7 @@ impl<T: Number> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUni
             TemperatureGradientUnit::KelvinPerMeter => value,
             TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
             TemperatureGradientUnit::DegreeFahrenheitPerFoot => T::mul_ratio(value, 6250.0, 3429.0),
-            TemperatureGradientUnit::DegreeCelsiusPerKilometer => value / T::from_f64(1000.0),
+            TemperatureGradientUnit::DegreeCelsiusPerKilometer => T::div_ratio(value, 1000.0, 1.0),
         }
     }
 
@@ -212,7 +212,7 @@ impl<T: Number> TemperatureGradient<T> {
     /// A [`TemperatureGradient`] from a value in `∆°C/km`.
     #[inline]
     pub fn from_degrees_celsius_per_kilometer(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `∆°C/km`.
@@ -230,8 +230,12 @@ impl TemperatureGradient<f64> {
         Self(match unit {
             TemperatureGradientUnit::KelvinPerMeter => value,
             TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
-            TemperatureGradientUnit::DegreeFahrenheitPerFoot => value * 1.8226888305628464,
-            TemperatureGradientUnit::DegreeCelsiusPerKilometer => value / 1000.0,
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
+                crate::conv::mul_ratio(value, 6250.0, 3429.0)
+            }
+            TemperatureGradientUnit::DegreeCelsiusPerKilometer => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
         })
     }
 }

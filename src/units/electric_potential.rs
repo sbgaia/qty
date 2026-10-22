@@ -173,9 +173,9 @@ impl<T: Number> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricPotentialUnit::Volt => value,
-            ElectricPotentialUnit::Nanovolt => value / T::from_f64(1e9),
-            ElectricPotentialUnit::Microvolt => value / T::from_f64(1000000.0),
-            ElectricPotentialUnit::Millivolt => value / T::from_f64(1000.0),
+            ElectricPotentialUnit::Nanovolt => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricPotentialUnit::Microvolt => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricPotentialUnit::Millivolt => T::div_ratio(value, 1000.0, 1.0),
             ElectricPotentialUnit::Kilovolt => value * T::from_f64(1000.0),
             ElectricPotentialUnit::Megavolt => value * T::from_f64(1000000.0),
         }
@@ -188,8 +188,8 @@ impl<T: Number> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
             ElectricPotentialUnit::Nanovolt => value * T::from_f64(1e9),
             ElectricPotentialUnit::Microvolt => value * T::from_f64(1000000.0),
             ElectricPotentialUnit::Millivolt => value * T::from_f64(1000.0),
-            ElectricPotentialUnit::Kilovolt => value / T::from_f64(1000.0),
-            ElectricPotentialUnit::Megavolt => value / T::from_f64(1000000.0),
+            ElectricPotentialUnit::Kilovolt => T::div_ratio(value, 1000.0, 1.0),
+            ElectricPotentialUnit::Megavolt => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -228,7 +228,7 @@ impl<T: Number> ElectricPotential<T> {
     /// A [`ElectricPotential`] from a value in `nV`.
     #[inline]
     pub fn from_nanovolts(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nV`.
@@ -240,7 +240,7 @@ impl<T: Number> ElectricPotential<T> {
     /// A [`ElectricPotential`] from a value in `µV`.
     #[inline]
     pub fn from_microvolts(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µV`.
@@ -252,7 +252,7 @@ impl<T: Number> ElectricPotential<T> {
     /// A [`ElectricPotential`] from a value in `mV`.
     #[inline]
     pub fn from_millivolts(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mV`.
@@ -270,7 +270,7 @@ impl<T: Number> ElectricPotential<T> {
     /// The value in `kV`.
     #[inline]
     pub fn as_kilovolts(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricPotential`] from a value in `MV`.
@@ -282,7 +282,7 @@ impl<T: Number> ElectricPotential<T> {
     /// The value in `MV`.
     #[inline]
     pub fn as_megavolts(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 
@@ -293,9 +293,9 @@ impl ElectricPotential<f64> {
     pub const fn const_new(value: f64, unit: ElectricPotentialUnit) -> Self {
         Self(match unit {
             ElectricPotentialUnit::Volt => value,
-            ElectricPotentialUnit::Nanovolt => value / 1e9,
-            ElectricPotentialUnit::Microvolt => value / 1000000.0,
-            ElectricPotentialUnit::Millivolt => value / 1000.0,
+            ElectricPotentialUnit::Nanovolt => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricPotentialUnit::Microvolt => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricPotentialUnit::Millivolt => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricPotentialUnit::Kilovolt => value * 1000.0,
             ElectricPotentialUnit::Megavolt => value * 1000000.0,
         })

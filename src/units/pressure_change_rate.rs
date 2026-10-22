@@ -349,11 +349,11 @@ impl<T: Number> crate::UnitOf<PressureChangeRate<T>> for PressureChangeRateUnit 
             PressureChangeRateUnit::PascalPerSecond => value,
             PressureChangeRateUnit::KilopascalPerSecond => value * T::from_f64(1000.0),
             PressureChangeRateUnit::MegapascalPerSecond => value * T::from_f64(1000000.0),
-            PressureChangeRateUnit::PascalPerMinute => value / T::from_f64(60.0),
+            PressureChangeRateUnit::PascalPerMinute => T::div_ratio(value, 60.0, 1.0),
             PressureChangeRateUnit::KilopascalPerMinute => T::mul_ratio(value, 50.0, 3.0),
             PressureChangeRateUnit::MegapascalPerMinute => T::mul_ratio(value, 50000.0, 3.0),
             PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
-                value * T::from_f64(133.322387415)
+                T::mul_ratio(value, 26664477483.0, 200000000.0)
             }
             PressureChangeRateUnit::AtmospherePerSecond => value * T::from_f64(101325.0),
             PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
@@ -385,15 +385,15 @@ impl<T: Number> crate::UnitOf<PressureChangeRate<T>> for PressureChangeRateUnit 
     fn value_from_base(self, value: T) -> T {
         match self {
             PressureChangeRateUnit::PascalPerSecond => value,
-            PressureChangeRateUnit::KilopascalPerSecond => value / T::from_f64(1000.0),
-            PressureChangeRateUnit::MegapascalPerSecond => value / T::from_f64(1000000.0),
+            PressureChangeRateUnit::KilopascalPerSecond => T::div_ratio(value, 1000.0, 1.0),
+            PressureChangeRateUnit::MegapascalPerSecond => T::div_ratio(value, 1000000.0, 1.0),
             PressureChangeRateUnit::PascalPerMinute => value * T::from_f64(60.0),
             PressureChangeRateUnit::KilopascalPerMinute => T::div_ratio(value, 50.0, 3.0),
             PressureChangeRateUnit::MegapascalPerMinute => T::div_ratio(value, 50000.0, 3.0),
             PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
-                value / T::from_f64(133.322387415)
+                T::div_ratio(value, 26664477483.0, 200000000.0)
             }
-            PressureChangeRateUnit::AtmospherePerSecond => value / T::from_f64(101325.0),
+            PressureChangeRateUnit::AtmospherePerSecond => T::div_ratio(value, 101325.0, 1.0),
             PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
                 T::div_ratio(value, 8896443230521.0, 1290320000.0)
             }
@@ -412,8 +412,8 @@ impl<T: Number> crate::UnitOf<PressureChangeRate<T>> for PressureChangeRateUnit 
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
                 T::div_ratio(value, 44482216152605.0, 387096.0)
             }
-            PressureChangeRateUnit::BarPerSecond => value / T::from_f64(100000.0),
-            PressureChangeRateUnit::MillibarPerSecond => value / T::from_f64(100.0),
+            PressureChangeRateUnit::BarPerSecond => T::div_ratio(value, 100000.0, 1.0),
+            PressureChangeRateUnit::MillibarPerSecond => T::div_ratio(value, 100.0, 1.0),
             PressureChangeRateUnit::BarPerMinute => T::div_ratio(value, 5000.0, 3.0),
             PressureChangeRateUnit::MillibarPerMinute => T::div_ratio(value, 5.0, 3.0),
         }
@@ -457,7 +457,7 @@ impl<T: Number> PressureChangeRate<T> {
     /// The value in `kPa/s`.
     #[inline]
     pub fn as_kilopascals_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`PressureChangeRate`] from a value in `MPa/s`.
@@ -469,13 +469,13 @@ impl<T: Number> PressureChangeRate<T> {
     /// The value in `MPa/s`.
     #[inline]
     pub fn as_megapascals_per_second(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`PressureChangeRate`] from a value in `Pa/min`.
     #[inline]
     pub fn from_pascals_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `Pa/min`.
@@ -511,13 +511,13 @@ impl<T: Number> PressureChangeRate<T> {
     /// A [`PressureChangeRate`] from a value in `mmHg/s`.
     #[inline]
     pub fn from_millimeters_of_mercury_per_second(value: T) -> Self {
-        Self(value * T::from_f64(133.322387415))
+        Self(T::mul_ratio(value, 26664477483.0, 200000000.0))
     }
 
     /// The value in `mmHg/s`.
     #[inline]
     pub fn as_millimeters_of_mercury_per_second(self) -> T {
-        self.0 / T::from_f64(133.322387415)
+        T::div_ratio(self.0, 26664477483.0, 200000000.0)
     }
 
     /// A [`PressureChangeRate`] from a value in `atm/s`.
@@ -529,7 +529,7 @@ impl<T: Number> PressureChangeRate<T> {
     /// The value in `atm/s`.
     #[inline]
     pub fn as_atmospheres_per_second(self) -> T {
-        self.0 / T::from_f64(101325.0)
+        T::div_ratio(self.0, 101325.0, 1.0)
     }
 
     /// A [`PressureChangeRate`] from a value in `psi/s`.
@@ -613,7 +613,7 @@ impl<T: Number> PressureChangeRate<T> {
     /// The value in `bar/s`.
     #[inline]
     pub fn as_bars_per_second(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`PressureChangeRate`] from a value in `mbar/s`.
@@ -625,7 +625,7 @@ impl<T: Number> PressureChangeRate<T> {
     /// The value in `mbar/s`.
     #[inline]
     pub fn as_millibars_per_second(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`PressureChangeRate`] from a value in `bar/min`.
@@ -662,29 +662,37 @@ impl PressureChangeRate<f64> {
             PressureChangeRateUnit::PascalPerSecond => value,
             PressureChangeRateUnit::KilopascalPerSecond => value * 1000.0,
             PressureChangeRateUnit::MegapascalPerSecond => value * 1000000.0,
-            PressureChangeRateUnit::PascalPerMinute => value / 60.0,
-            PressureChangeRateUnit::KilopascalPerMinute => value * 16.666666666666668,
-            PressureChangeRateUnit::MegapascalPerMinute => value * 16666.666666666668,
-            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => value * 133.322387415,
+            PressureChangeRateUnit::PascalPerMinute => crate::conv::div_ratio(value, 60.0, 1.0),
+            PressureChangeRateUnit::KilopascalPerMinute => crate::conv::mul_ratio(value, 50.0, 3.0),
+            PressureChangeRateUnit::MegapascalPerMinute => {
+                crate::conv::mul_ratio(value, 50000.0, 3.0)
+            }
+            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
+                crate::conv::mul_ratio(value, 26664477483.0, 200000000.0)
+            }
             PressureChangeRateUnit::AtmospherePerSecond => value * 101325.0,
-            PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => value * 6894.757293168362,
+            PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 1290320000.0)
+            }
             PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond => {
-                value * 6894757.293168361
+                crate::conv::mul_ratio(value, 8896443230521.0, 1290320.0)
             }
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond => {
-                value * 6.894757293168362e9
+                crate::conv::mul_ratio(value, 222411080763025.0, 32258.0)
             }
-            PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => value * 114.91262155280602,
+            PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 77419200000.0)
+            }
             PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute => {
-                value * 114912.62155280603
+                crate::conv::mul_ratio(value, 8896443230521.0, 77419200.0)
             }
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
-                value * 1.1491262155280602e8
+                crate::conv::mul_ratio(value, 44482216152605.0, 387096.0)
             }
             PressureChangeRateUnit::BarPerSecond => value * 100000.0,
             PressureChangeRateUnit::MillibarPerSecond => value * 100.0,
-            PressureChangeRateUnit::BarPerMinute => value * 1666.6666666666667,
-            PressureChangeRateUnit::MillibarPerMinute => value * 1.6666666666666667,
+            PressureChangeRateUnit::BarPerMinute => crate::conv::mul_ratio(value, 5000.0, 3.0),
+            PressureChangeRateUnit::MillibarPerMinute => crate::conv::mul_ratio(value, 5.0, 3.0),
         })
     }
 }

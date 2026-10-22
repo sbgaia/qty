@@ -199,9 +199,9 @@ impl<T: Number> crate::UnitOf<ElectricReactance<T>> for ElectricReactanceUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricReactanceUnit::Ohm => value,
-            ElectricReactanceUnit::Nanoohm => value / T::from_f64(1e9),
-            ElectricReactanceUnit::Microohm => value / T::from_f64(1000000.0),
-            ElectricReactanceUnit::Milliohm => value / T::from_f64(1000.0),
+            ElectricReactanceUnit::Nanoohm => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricReactanceUnit::Microohm => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricReactanceUnit::Milliohm => T::div_ratio(value, 1000.0, 1.0),
             ElectricReactanceUnit::Kiloohm => value * T::from_f64(1000.0),
             ElectricReactanceUnit::Megaohm => value * T::from_f64(1000000.0),
             ElectricReactanceUnit::Gigaohm => value * T::from_f64(1e9),
@@ -216,10 +216,10 @@ impl<T: Number> crate::UnitOf<ElectricReactance<T>> for ElectricReactanceUnit {
             ElectricReactanceUnit::Nanoohm => value * T::from_f64(1e9),
             ElectricReactanceUnit::Microohm => value * T::from_f64(1000000.0),
             ElectricReactanceUnit::Milliohm => value * T::from_f64(1000.0),
-            ElectricReactanceUnit::Kiloohm => value / T::from_f64(1000.0),
-            ElectricReactanceUnit::Megaohm => value / T::from_f64(1000000.0),
-            ElectricReactanceUnit::Gigaohm => value / T::from_f64(1e9),
-            ElectricReactanceUnit::Teraohm => value / T::from_f64(1e12),
+            ElectricReactanceUnit::Kiloohm => T::div_ratio(value, 1000.0, 1.0),
+            ElectricReactanceUnit::Megaohm => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricReactanceUnit::Gigaohm => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricReactanceUnit::Teraohm => T::div_ratio(value, 1000000000000.0, 1.0),
         }
     }
 }
@@ -260,7 +260,7 @@ impl<T: Number> ElectricReactance<T> {
     /// A [`ElectricReactance`] from a value in `nΩ`.
     #[inline]
     pub fn from_nanoohms(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nΩ`.
@@ -272,7 +272,7 @@ impl<T: Number> ElectricReactance<T> {
     /// A [`ElectricReactance`] from a value in `µΩ`.
     #[inline]
     pub fn from_microohms(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µΩ`.
@@ -284,7 +284,7 @@ impl<T: Number> ElectricReactance<T> {
     /// A [`ElectricReactance`] from a value in `mΩ`.
     #[inline]
     pub fn from_milliohms(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mΩ`.
@@ -302,7 +302,7 @@ impl<T: Number> ElectricReactance<T> {
     /// The value in `kΩ`.
     #[inline]
     pub fn as_kiloohms(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricReactance`] from a value in `MΩ`.
@@ -314,7 +314,7 @@ impl<T: Number> ElectricReactance<T> {
     /// The value in `MΩ`.
     #[inline]
     pub fn as_megaohms(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricReactance`] from a value in `GΩ`.
@@ -326,7 +326,7 @@ impl<T: Number> ElectricReactance<T> {
     /// The value in `GΩ`.
     #[inline]
     pub fn as_gigaohms(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`ElectricReactance`] from a value in `TΩ`.
@@ -338,7 +338,7 @@ impl<T: Number> ElectricReactance<T> {
     /// The value in `TΩ`.
     #[inline]
     pub fn as_teraohms(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 }
 
@@ -349,9 +349,9 @@ impl ElectricReactance<f64> {
     pub const fn const_new(value: f64, unit: ElectricReactanceUnit) -> Self {
         Self(match unit {
             ElectricReactanceUnit::Ohm => value,
-            ElectricReactanceUnit::Nanoohm => value / 1e9,
-            ElectricReactanceUnit::Microohm => value / 1000000.0,
-            ElectricReactanceUnit::Milliohm => value / 1000.0,
+            ElectricReactanceUnit::Nanoohm => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricReactanceUnit::Microohm => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricReactanceUnit::Milliohm => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricReactanceUnit::Kiloohm => value * 1000.0,
             ElectricReactanceUnit::Megaohm => value * 1000000.0,
             ElectricReactanceUnit::Gigaohm => value * 1e9,

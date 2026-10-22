@@ -377,8 +377,12 @@ impl<T: Number> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
             FluidResistanceUnit::PascalSecondPerCubicCentimeter => value * T::from_f64(1000000.0),
             FluidResistanceUnit::PascalMinutePerCubicCentimeter => value * T::from_f64(6e7),
             FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => value * T::from_f64(100000.0),
-            FluidResistanceUnit::MillimeterMercurySecondPerLiter => value * T::from_f64(133322.368),
-            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => value * T::from_f64(7999342.08),
+            FluidResistanceUnit::MillimeterMercurySecondPerLiter => {
+                T::mul_ratio(value, 16665296.0, 125.0)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => {
+                T::mul_ratio(value, 199983552.0, 25.0)
+            }
             FluidResistanceUnit::MillimeterMercurySecondPerMilliliter => {
                 value * T::from_f64(1.33322368e8)
             }
@@ -392,49 +396,61 @@ impl<T: Number> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
                 value * T::from_f64(7.99934208e9)
             }
             FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => {
-                value * T::from_f64(133.322368)
+                T::mul_ratio(value, 2083162.0, 15625.0)
             }
             FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => {
-                value * T::from_f64(7999.34208)
+                T::mul_ratio(value, 24997944.0, 3125.0)
             }
-            FluidResistanceUnit::WoodUnit => value * T::from_f64(7999342.08),
+            FluidResistanceUnit::WoodUnit => T::mul_ratio(value, 199983552.0, 25.0),
         }
     }
 
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            FluidResistanceUnit::PascalSecondPerLiter => value / T::from_f64(1000.0),
-            FluidResistanceUnit::PascalMinutePerLiter => value / T::from_f64(60000.0),
-            FluidResistanceUnit::PascalSecondPerMilliliter => value / T::from_f64(1000000.0),
-            FluidResistanceUnit::PascalMinutePerMilliliter => value / T::from_f64(6e7),
+            FluidResistanceUnit::PascalSecondPerLiter => T::div_ratio(value, 1000.0, 1.0),
+            FluidResistanceUnit::PascalMinutePerLiter => T::div_ratio(value, 60000.0, 1.0),
+            FluidResistanceUnit::PascalSecondPerMilliliter => T::div_ratio(value, 1000000.0, 1.0),
+            FluidResistanceUnit::PascalMinutePerMilliliter => T::div_ratio(value, 60000000.0, 1.0),
             FluidResistanceUnit::PascalSecondPerCubicMeter => value,
-            FluidResistanceUnit::MegapascalSecondPerCubicMeter => value / T::from_f64(1000000.0),
-            FluidResistanceUnit::PascalMinutePerCubicMeter => value / T::from_f64(60.0),
-            FluidResistanceUnit::PascalSecondPerCubicCentimeter => value / T::from_f64(1000000.0),
-            FluidResistanceUnit::PascalMinutePerCubicCentimeter => value / T::from_f64(6e7),
-            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => value / T::from_f64(100000.0),
-            FluidResistanceUnit::MillimeterMercurySecondPerLiter => value / T::from_f64(133322.368),
-            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => value / T::from_f64(7999342.08),
+            FluidResistanceUnit::MegapascalSecondPerCubicMeter => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            FluidResistanceUnit::PascalMinutePerCubicMeter => T::div_ratio(value, 60.0, 1.0),
+            FluidResistanceUnit::PascalSecondPerCubicCentimeter => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            FluidResistanceUnit::PascalMinutePerCubicCentimeter => {
+                T::div_ratio(value, 60000000.0, 1.0)
+            }
+            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => {
+                T::div_ratio(value, 100000.0, 1.0)
+            }
+            FluidResistanceUnit::MillimeterMercurySecondPerLiter => {
+                T::div_ratio(value, 16665296.0, 125.0)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => {
+                T::div_ratio(value, 199983552.0, 25.0)
+            }
             FluidResistanceUnit::MillimeterMercurySecondPerMilliliter => {
-                value / T::from_f64(1.33322368e8)
+                T::div_ratio(value, 133322368.0, 1.0)
             }
             FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter => {
-                value / T::from_f64(7.99934208e9)
+                T::div_ratio(value, 7999342080.0, 1.0)
             }
             FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter => {
-                value / T::from_f64(1.33322368e8)
+                T::div_ratio(value, 133322368.0, 1.0)
             }
             FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter => {
-                value / T::from_f64(7.99934208e9)
+                T::div_ratio(value, 7999342080.0, 1.0)
             }
             FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => {
-                value / T::from_f64(133.322368)
+                T::div_ratio(value, 2083162.0, 15625.0)
             }
             FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => {
-                value / T::from_f64(7999.34208)
+                T::div_ratio(value, 24997944.0, 3125.0)
             }
-            FluidResistanceUnit::WoodUnit => value / T::from_f64(7999342.08),
+            FluidResistanceUnit::WoodUnit => T::div_ratio(value, 199983552.0, 25.0),
         }
     }
 }
@@ -466,7 +482,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·s/l`.
     #[inline]
     pub fn as_pascal_seconds_per_liter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·min/l`.
@@ -478,7 +494,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·min/l`.
     #[inline]
     pub fn as_pascal_minutes_per_liter(self) -> T {
-        self.0 / T::from_f64(60000.0)
+        T::div_ratio(self.0, 60000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·s/ml`.
@@ -490,7 +506,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·s/ml`.
     #[inline]
     pub fn as_pascal_seconds_per_milliliter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·min/ml`.
@@ -502,7 +518,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·min/ml`.
     #[inline]
     pub fn as_pascal_minutes_per_milliliter(self) -> T {
-        self.0 / T::from_f64(6e7)
+        T::div_ratio(self.0, 60000000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·s/m³`.
@@ -526,7 +542,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `MPa·s/m³`.
     #[inline]
     pub fn as_megapascal_seconds_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·min/m³`.
@@ -538,7 +554,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·min/m³`.
     #[inline]
     pub fn as_pascal_minutes_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(60.0)
+        T::div_ratio(self.0, 60.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·s/cm³`.
@@ -550,7 +566,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·s/cm³`.
     #[inline]
     pub fn as_pascal_seconds_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `Pa·min/cm³`.
@@ -562,7 +578,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `Pa·min/cm³`.
     #[inline]
     pub fn as_pascal_minutes_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(6e7)
+        T::div_ratio(self.0, 60000000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `dyn·s/cm⁵`.
@@ -574,31 +590,31 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `dyn·s/cm⁵`.
     #[inline]
     pub fn as_dyne_seconds_per_centimeter_to_the_fifth(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·s/l`.
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_liter(value: T) -> Self {
-        Self(value * T::from_f64(133322.368))
+        Self(T::mul_ratio(value, 16665296.0, 125.0))
     }
 
     /// The value in `mmHg·s/l`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_liter(self) -> T {
-        self.0 / T::from_f64(133322.368)
+        T::div_ratio(self.0, 16665296.0, 125.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·min/l`.
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_liter(value: T) -> Self {
-        Self(value * T::from_f64(7999342.08))
+        Self(T::mul_ratio(value, 199983552.0, 25.0))
     }
 
     /// The value in `mmHg·min/l`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_liter(self) -> T {
-        self.0 / T::from_f64(7999342.08)
+        T::div_ratio(self.0, 199983552.0, 25.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·s/ml`.
@@ -610,7 +626,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `mmHg·s/ml`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_milliliter(self) -> T {
-        self.0 / T::from_f64(1.33322368e8)
+        T::div_ratio(self.0, 133322368.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·min/ml`.
@@ -622,7 +638,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `mmHg·min/ml`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_milliliter(self) -> T {
-        self.0 / T::from_f64(7.99934208e9)
+        T::div_ratio(self.0, 7999342080.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·s/cm³`.
@@ -634,7 +650,7 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `mmHg·s/cm³`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1.33322368e8)
+        T::div_ratio(self.0, 133322368.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·min/cm³`.
@@ -646,43 +662,43 @@ impl<T: Number> FluidResistance<T> {
     /// The value in `mmHg·min/cm³`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(7.99934208e9)
+        T::div_ratio(self.0, 7999342080.0, 1.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·s/m³`.
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_cubic_meter(value: T) -> Self {
-        Self(value * T::from_f64(133.322368))
+        Self(T::mul_ratio(value, 2083162.0, 15625.0))
     }
 
     /// The value in `mmHg·s/m³`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(133.322368)
+        T::div_ratio(self.0, 2083162.0, 15625.0)
     }
 
     /// A [`FluidResistance`] from a value in `mmHg·min/m³`.
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_meter(value: T) -> Self {
-        Self(value * T::from_f64(7999.34208))
+        Self(T::mul_ratio(value, 24997944.0, 3125.0))
     }
 
     /// The value in `mmHg·min/m³`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(7999.34208)
+        T::div_ratio(self.0, 24997944.0, 3125.0)
     }
 
     /// A [`FluidResistance`] from a value in `WU`.
     #[inline]
     pub fn from_wood_units(value: T) -> Self {
-        Self(value * T::from_f64(7999342.08))
+        Self(T::mul_ratio(value, 199983552.0, 25.0))
     }
 
     /// The value in `WU`.
     #[inline]
     pub fn as_wood_units(self) -> T {
-        self.0 / T::from_f64(7999342.08)
+        T::div_ratio(self.0, 199983552.0, 25.0)
     }
 }
 
@@ -702,15 +718,23 @@ impl FluidResistance<f64> {
             FluidResistanceUnit::PascalSecondPerCubicCentimeter => value * 1000000.0,
             FluidResistanceUnit::PascalMinutePerCubicCentimeter => value * 6e7,
             FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => value * 100000.0,
-            FluidResistanceUnit::MillimeterMercurySecondPerLiter => value * 133322.368,
-            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => value * 7999342.08,
+            FluidResistanceUnit::MillimeterMercurySecondPerLiter => {
+                crate::conv::mul_ratio(value, 16665296.0, 125.0)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => {
+                crate::conv::mul_ratio(value, 199983552.0, 25.0)
+            }
             FluidResistanceUnit::MillimeterMercurySecondPerMilliliter => value * 1.33322368e8,
             FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter => value * 7.99934208e9,
             FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter => value * 1.33322368e8,
             FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter => value * 7.99934208e9,
-            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => value * 133.322368,
-            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => value * 7999.34208,
-            FluidResistanceUnit::WoodUnit => value * 7999342.08,
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => {
+                crate::conv::mul_ratio(value, 2083162.0, 15625.0)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => {
+                crate::conv::mul_ratio(value, 24997944.0, 3125.0)
+            }
+            FluidResistanceUnit::WoodUnit => crate::conv::mul_ratio(value, 199983552.0, 25.0),
         })
     }
 }

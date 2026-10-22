@@ -222,7 +222,7 @@ impl<T: Number> crate::UnitOf<SpecificEntropy<T>> for SpecificEntropyUnit {
             }
             SpecificEntropyUnit::CaloriePerGramKelvin => value * T::from_f64(4184.0),
             SpecificEntropyUnit::KilocaloriePerGramKelvin => value * T::from_f64(4184000.0),
-            SpecificEntropyUnit::BtuPerPoundFahrenheit => value * T::from_f64(4186.8),
+            SpecificEntropyUnit::BtuPerPoundFahrenheit => T::mul_ratio(value, 20934.0, 5.0),
         }
     }
 
@@ -230,16 +230,18 @@ impl<T: Number> crate::UnitOf<SpecificEntropy<T>> for SpecificEntropyUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             SpecificEntropyUnit::JoulePerKilogramKelvin => value,
-            SpecificEntropyUnit::KilojoulePerKilogramKelvin => value / T::from_f64(1000.0),
-            SpecificEntropyUnit::MegajoulePerKilogramKelvin => value / T::from_f64(1000000.0),
+            SpecificEntropyUnit::KilojoulePerKilogramKelvin => T::div_ratio(value, 1000.0, 1.0),
+            SpecificEntropyUnit::MegajoulePerKilogramKelvin => T::div_ratio(value, 1000000.0, 1.0),
             SpecificEntropyUnit::JoulePerKilogramDegreeCelsius => value,
-            SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius => value / T::from_f64(1000.0),
-            SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius => {
-                value / T::from_f64(1000000.0)
+            SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius => {
+                T::div_ratio(value, 1000.0, 1.0)
             }
-            SpecificEntropyUnit::CaloriePerGramKelvin => value / T::from_f64(4184.0),
-            SpecificEntropyUnit::KilocaloriePerGramKelvin => value / T::from_f64(4184000.0),
-            SpecificEntropyUnit::BtuPerPoundFahrenheit => value / T::from_f64(4186.8),
+            SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            SpecificEntropyUnit::CaloriePerGramKelvin => T::div_ratio(value, 4184.0, 1.0),
+            SpecificEntropyUnit::KilocaloriePerGramKelvin => T::div_ratio(value, 4184000.0, 1.0),
+            SpecificEntropyUnit::BtuPerPoundFahrenheit => T::div_ratio(value, 20934.0, 5.0),
         }
     }
 }
@@ -281,7 +283,7 @@ impl<T: Number> SpecificEntropy<T> {
     /// The value in `kJ/kg·K`.
     #[inline]
     pub fn as_kilojoules_per_kilogram_kelvin(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`SpecificEntropy`] from a value in `MJ/kg·K`.
@@ -293,7 +295,7 @@ impl<T: Number> SpecificEntropy<T> {
     /// The value in `MJ/kg·K`.
     #[inline]
     pub fn as_megajoules_per_kilogram_kelvin(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`SpecificEntropy`] from a value in `J/kg·°C`.
@@ -317,7 +319,7 @@ impl<T: Number> SpecificEntropy<T> {
     /// The value in `kJ/kg·°C`.
     #[inline]
     pub fn as_kilojoules_per_kilogram_degree_celsius(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`SpecificEntropy`] from a value in `MJ/kg·°C`.
@@ -329,7 +331,7 @@ impl<T: Number> SpecificEntropy<T> {
     /// The value in `MJ/kg·°C`.
     #[inline]
     pub fn as_megajoules_per_kilogram_degree_celsius(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`SpecificEntropy`] from a value in `cal/g·K`.
@@ -341,7 +343,7 @@ impl<T: Number> SpecificEntropy<T> {
     /// The value in `cal/g·K`.
     #[inline]
     pub fn as_calories_per_gram_kelvin(self) -> T {
-        self.0 / T::from_f64(4184.0)
+        T::div_ratio(self.0, 4184.0, 1.0)
     }
 
     /// A [`SpecificEntropy`] from a value in `kcal/g·K`.
@@ -353,19 +355,19 @@ impl<T: Number> SpecificEntropy<T> {
     /// The value in `kcal/g·K`.
     #[inline]
     pub fn as_kilocalories_per_gram_kelvin(self) -> T {
-        self.0 / T::from_f64(4184000.0)
+        T::div_ratio(self.0, 4184000.0, 1.0)
     }
 
     /// A [`SpecificEntropy`] from a value in `BTU/(lb·°F)`.
     #[inline]
     pub fn from_btus_per_pound_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(4186.8))
+        Self(T::mul_ratio(value, 20934.0, 5.0))
     }
 
     /// The value in `BTU/(lb·°F)`.
     #[inline]
     pub fn as_btus_per_pound_fahrenheit(self) -> T {
-        self.0 / T::from_f64(4186.8)
+        T::div_ratio(self.0, 20934.0, 5.0)
     }
 }
 
@@ -383,7 +385,9 @@ impl SpecificEntropy<f64> {
             SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius => value * 1000000.0,
             SpecificEntropyUnit::CaloriePerGramKelvin => value * 4184.0,
             SpecificEntropyUnit::KilocaloriePerGramKelvin => value * 4184000.0,
-            SpecificEntropyUnit::BtuPerPoundFahrenheit => value * 4186.8,
+            SpecificEntropyUnit::BtuPerPoundFahrenheit => {
+                crate::conv::mul_ratio(value, 20934.0, 5.0)
+            }
         })
     }
 }

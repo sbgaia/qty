@@ -234,16 +234,16 @@ impl<T: Number> crate::UnitOf<Jerk<T>> for JerkUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             JerkUnit::MeterPerSecondCubed => value,
-            JerkUnit::NanometerPerSecondCubed => value / T::from_f64(1e9),
-            JerkUnit::MicrometerPerSecondCubed => value / T::from_f64(1000000.0),
-            JerkUnit::MillimeterPerSecondCubed => value / T::from_f64(1000.0),
-            JerkUnit::CentimeterPerSecondCubed => value / T::from_f64(100.0),
-            JerkUnit::DecimeterPerSecondCubed => value / T::from_f64(10.0),
+            JerkUnit::NanometerPerSecondCubed => T::div_ratio(value, 1000000000.0, 1.0),
+            JerkUnit::MicrometerPerSecondCubed => T::div_ratio(value, 1000000.0, 1.0),
+            JerkUnit::MillimeterPerSecondCubed => T::div_ratio(value, 1000.0, 1.0),
+            JerkUnit::CentimeterPerSecondCubed => T::div_ratio(value, 100.0, 1.0),
+            JerkUnit::DecimeterPerSecondCubed => T::div_ratio(value, 10.0, 1.0),
             JerkUnit::KilometerPerSecondCubed => value * T::from_f64(1000.0),
-            JerkUnit::InchPerSecondCubed => value * T::from_f64(0.0254),
-            JerkUnit::FootPerSecondCubed => value * T::from_f64(0.3048),
-            JerkUnit::StandardGravitiesPerSecond => value * T::from_f64(9.80665),
-            JerkUnit::MillistandardGravitiesPerSecond => value * T::from_f64(0.00980665),
+            JerkUnit::InchPerSecondCubed => T::mul_ratio(value, 127.0, 5000.0),
+            JerkUnit::FootPerSecondCubed => T::mul_ratio(value, 381.0, 1250.0),
+            JerkUnit::StandardGravitiesPerSecond => T::mul_ratio(value, 196133.0, 20000.0),
+            JerkUnit::MillistandardGravitiesPerSecond => T::mul_ratio(value, 196133.0, 20000000.0),
         }
     }
 
@@ -256,11 +256,11 @@ impl<T: Number> crate::UnitOf<Jerk<T>> for JerkUnit {
             JerkUnit::MillimeterPerSecondCubed => value * T::from_f64(1000.0),
             JerkUnit::CentimeterPerSecondCubed => value * T::from_f64(100.0),
             JerkUnit::DecimeterPerSecondCubed => value * T::from_f64(10.0),
-            JerkUnit::KilometerPerSecondCubed => value / T::from_f64(1000.0),
-            JerkUnit::InchPerSecondCubed => value / T::from_f64(0.0254),
-            JerkUnit::FootPerSecondCubed => value / T::from_f64(0.3048),
-            JerkUnit::StandardGravitiesPerSecond => value / T::from_f64(9.80665),
-            JerkUnit::MillistandardGravitiesPerSecond => value / T::from_f64(0.00980665),
+            JerkUnit::KilometerPerSecondCubed => T::div_ratio(value, 1000.0, 1.0),
+            JerkUnit::InchPerSecondCubed => T::div_ratio(value, 127.0, 5000.0),
+            JerkUnit::FootPerSecondCubed => T::div_ratio(value, 381.0, 1250.0),
+            JerkUnit::StandardGravitiesPerSecond => T::div_ratio(value, 196133.0, 20000.0),
+            JerkUnit::MillistandardGravitiesPerSecond => T::div_ratio(value, 196133.0, 20000000.0),
         }
     }
 }
@@ -298,7 +298,7 @@ impl<T: Number> Jerk<T> {
     /// A [`Jerk`] from a value in `nm/s³`.
     #[inline]
     pub fn from_nanometers_per_second_cubed(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nm/s³`.
@@ -310,7 +310,7 @@ impl<T: Number> Jerk<T> {
     /// A [`Jerk`] from a value in `µm/s³`.
     #[inline]
     pub fn from_micrometers_per_second_cubed(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µm/s³`.
@@ -322,7 +322,7 @@ impl<T: Number> Jerk<T> {
     /// A [`Jerk`] from a value in `mm/s³`.
     #[inline]
     pub fn from_millimeters_per_second_cubed(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mm/s³`.
@@ -334,7 +334,7 @@ impl<T: Number> Jerk<T> {
     /// A [`Jerk`] from a value in `cm/s³`.
     #[inline]
     pub fn from_centimeters_per_second_cubed(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cm/s³`.
@@ -346,7 +346,7 @@ impl<T: Number> Jerk<T> {
     /// A [`Jerk`] from a value in `dm/s³`.
     #[inline]
     pub fn from_decimeters_per_second_cubed(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dm/s³`.
@@ -364,55 +364,55 @@ impl<T: Number> Jerk<T> {
     /// The value in `km/s³`.
     #[inline]
     pub fn as_kilometers_per_second_cubed(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Jerk`] from a value in `in/s³`.
     #[inline]
     pub fn from_inches_per_second_cubed(value: T) -> Self {
-        Self(value * T::from_f64(0.0254))
+        Self(T::mul_ratio(value, 127.0, 5000.0))
     }
 
     /// The value in `in/s³`.
     #[inline]
     pub fn as_inches_per_second_cubed(self) -> T {
-        self.0 / T::from_f64(0.0254)
+        T::div_ratio(self.0, 127.0, 5000.0)
     }
 
     /// A [`Jerk`] from a value in `ft/s³`.
     #[inline]
     pub fn from_feet_per_second_cubed(value: T) -> Self {
-        Self(value * T::from_f64(0.3048))
+        Self(T::mul_ratio(value, 381.0, 1250.0))
     }
 
     /// The value in `ft/s³`.
     #[inline]
     pub fn as_feet_per_second_cubed(self) -> T {
-        self.0 / T::from_f64(0.3048)
+        T::div_ratio(self.0, 381.0, 1250.0)
     }
 
     /// A [`Jerk`] from a value in `g/s`.
     #[inline]
     pub fn from_standard_gravities_per_second(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `g/s`.
     #[inline]
     pub fn as_standard_gravities_per_second(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`Jerk`] from a value in `mg/s`.
     #[inline]
     pub fn from_millistandard_gravities_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.00980665))
+        Self(T::mul_ratio(value, 196133.0, 20000000.0))
     }
 
     /// The value in `mg/s`.
     #[inline]
     pub fn as_millistandard_gravities_per_second(self) -> T {
-        self.0 / T::from_f64(0.00980665)
+        T::div_ratio(self.0, 196133.0, 20000000.0)
     }
 }
 
@@ -423,16 +423,20 @@ impl Jerk<f64> {
     pub const fn const_new(value: f64, unit: JerkUnit) -> Self {
         Self(match unit {
             JerkUnit::MeterPerSecondCubed => value,
-            JerkUnit::NanometerPerSecondCubed => value / 1e9,
-            JerkUnit::MicrometerPerSecondCubed => value / 1000000.0,
-            JerkUnit::MillimeterPerSecondCubed => value / 1000.0,
-            JerkUnit::CentimeterPerSecondCubed => value / 100.0,
-            JerkUnit::DecimeterPerSecondCubed => value / 10.0,
+            JerkUnit::NanometerPerSecondCubed => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            JerkUnit::MicrometerPerSecondCubed => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            JerkUnit::MillimeterPerSecondCubed => crate::conv::div_ratio(value, 1000.0, 1.0),
+            JerkUnit::CentimeterPerSecondCubed => crate::conv::div_ratio(value, 100.0, 1.0),
+            JerkUnit::DecimeterPerSecondCubed => crate::conv::div_ratio(value, 10.0, 1.0),
             JerkUnit::KilometerPerSecondCubed => value * 1000.0,
-            JerkUnit::InchPerSecondCubed => value * 0.0254,
-            JerkUnit::FootPerSecondCubed => value * 0.3048,
-            JerkUnit::StandardGravitiesPerSecond => value * 9.80665,
-            JerkUnit::MillistandardGravitiesPerSecond => value * 0.00980665,
+            JerkUnit::InchPerSecondCubed => crate::conv::mul_ratio(value, 127.0, 5000.0),
+            JerkUnit::FootPerSecondCubed => crate::conv::mul_ratio(value, 381.0, 1250.0),
+            JerkUnit::StandardGravitiesPerSecond => {
+                crate::conv::mul_ratio(value, 196133.0, 20000.0)
+            }
+            JerkUnit::MillistandardGravitiesPerSecond => {
+                crate::conv::mul_ratio(value, 196133.0, 20000000.0)
+            }
         })
     }
 }

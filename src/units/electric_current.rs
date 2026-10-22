@@ -212,12 +212,12 @@ impl<T: Number> crate::UnitOf<ElectricCurrent<T>> for ElectricCurrentUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricCurrentUnit::Ampere => value,
-            ElectricCurrentUnit::Femtoampere => value / T::from_f64(1e15),
-            ElectricCurrentUnit::Picoampere => value / T::from_f64(1e12),
-            ElectricCurrentUnit::Nanoampere => value / T::from_f64(1e9),
-            ElectricCurrentUnit::Microampere => value / T::from_f64(1000000.0),
-            ElectricCurrentUnit::Milliampere => value / T::from_f64(1000.0),
-            ElectricCurrentUnit::Centiampere => value / T::from_f64(100.0),
+            ElectricCurrentUnit::Femtoampere => T::div_ratio(value, 1000000000000000.0, 1.0),
+            ElectricCurrentUnit::Picoampere => T::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricCurrentUnit::Nanoampere => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricCurrentUnit::Microampere => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricCurrentUnit::Milliampere => T::div_ratio(value, 1000.0, 1.0),
+            ElectricCurrentUnit::Centiampere => T::div_ratio(value, 100.0, 1.0),
             ElectricCurrentUnit::Kiloampere => value * T::from_f64(1000.0),
             ElectricCurrentUnit::Megaampere => value * T::from_f64(1000000.0),
         }
@@ -233,8 +233,8 @@ impl<T: Number> crate::UnitOf<ElectricCurrent<T>> for ElectricCurrentUnit {
             ElectricCurrentUnit::Microampere => value * T::from_f64(1000000.0),
             ElectricCurrentUnit::Milliampere => value * T::from_f64(1000.0),
             ElectricCurrentUnit::Centiampere => value * T::from_f64(100.0),
-            ElectricCurrentUnit::Kiloampere => value / T::from_f64(1000.0),
-            ElectricCurrentUnit::Megaampere => value / T::from_f64(1000000.0),
+            ElectricCurrentUnit::Kiloampere => T::div_ratio(value, 1000.0, 1.0),
+            ElectricCurrentUnit::Megaampere => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -275,7 +275,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `fA`.
     #[inline]
     pub fn from_femtoamperes(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fA`.
@@ -287,7 +287,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `pA`.
     #[inline]
     pub fn from_picoamperes(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pA`.
@@ -299,7 +299,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `nA`.
     #[inline]
     pub fn from_nanoamperes(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nA`.
@@ -311,7 +311,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `µA`.
     #[inline]
     pub fn from_microamperes(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µA`.
@@ -323,7 +323,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `mA`.
     #[inline]
     pub fn from_milliamperes(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mA`.
@@ -335,7 +335,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `cA`.
     #[inline]
     pub fn from_centiamperes(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cA`.
@@ -353,7 +353,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// The value in `kA`.
     #[inline]
     pub fn as_kiloamperes(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricCurrent`] from a value in `MA`.
@@ -365,7 +365,7 @@ impl<T: Number> ElectricCurrent<T> {
     /// The value in `MA`.
     #[inline]
     pub fn as_megaamperes(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 
@@ -376,12 +376,14 @@ impl ElectricCurrent<f64> {
     pub const fn const_new(value: f64, unit: ElectricCurrentUnit) -> Self {
         Self(match unit {
             ElectricCurrentUnit::Ampere => value,
-            ElectricCurrentUnit::Femtoampere => value / 1e15,
-            ElectricCurrentUnit::Picoampere => value / 1e12,
-            ElectricCurrentUnit::Nanoampere => value / 1e9,
-            ElectricCurrentUnit::Microampere => value / 1000000.0,
-            ElectricCurrentUnit::Milliampere => value / 1000.0,
-            ElectricCurrentUnit::Centiampere => value / 100.0,
+            ElectricCurrentUnit::Femtoampere => {
+                crate::conv::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            ElectricCurrentUnit::Picoampere => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricCurrentUnit::Nanoampere => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricCurrentUnit::Microampere => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricCurrentUnit::Milliampere => crate::conv::div_ratio(value, 1000.0, 1.0),
+            ElectricCurrentUnit::Centiampere => crate::conv::div_ratio(value, 100.0, 1.0),
             ElectricCurrentUnit::Kiloampere => value * 1000.0,
             ElectricCurrentUnit::Megaampere => value * 1000000.0,
         })

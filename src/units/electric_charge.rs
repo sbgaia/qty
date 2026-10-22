@@ -239,14 +239,14 @@ impl<T: Number> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricChargeUnit::Coulomb => value,
-            ElectricChargeUnit::Picocoulomb => value / T::from_f64(1e12),
-            ElectricChargeUnit::Nanocoulomb => value / T::from_f64(1e9),
-            ElectricChargeUnit::Microcoulomb => value / T::from_f64(1000000.0),
-            ElectricChargeUnit::Millicoulomb => value / T::from_f64(1000.0),
+            ElectricChargeUnit::Picocoulomb => T::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricChargeUnit::Nanocoulomb => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricChargeUnit::Microcoulomb => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricChargeUnit::Millicoulomb => T::div_ratio(value, 1000.0, 1.0),
             ElectricChargeUnit::Kilocoulomb => value * T::from_f64(1000.0),
             ElectricChargeUnit::Megacoulomb => value * T::from_f64(1000000.0),
             ElectricChargeUnit::AmpereHour => value * T::from_f64(3600.0),
-            ElectricChargeUnit::MilliampereHour => value * T::from_f64(3.6),
+            ElectricChargeUnit::MilliampereHour => T::mul_ratio(value, 18.0, 5.0),
             ElectricChargeUnit::KiloampereHour => value * T::from_f64(3600000.0),
             ElectricChargeUnit::MegaampereHour => value * T::from_f64(3.6e9),
         }
@@ -260,12 +260,12 @@ impl<T: Number> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
             ElectricChargeUnit::Nanocoulomb => value * T::from_f64(1e9),
             ElectricChargeUnit::Microcoulomb => value * T::from_f64(1000000.0),
             ElectricChargeUnit::Millicoulomb => value * T::from_f64(1000.0),
-            ElectricChargeUnit::Kilocoulomb => value / T::from_f64(1000.0),
-            ElectricChargeUnit::Megacoulomb => value / T::from_f64(1000000.0),
-            ElectricChargeUnit::AmpereHour => value / T::from_f64(3600.0),
-            ElectricChargeUnit::MilliampereHour => value / T::from_f64(3.6),
-            ElectricChargeUnit::KiloampereHour => value / T::from_f64(3600000.0),
-            ElectricChargeUnit::MegaampereHour => value / T::from_f64(3.6e9),
+            ElectricChargeUnit::Kilocoulomb => T::div_ratio(value, 1000.0, 1.0),
+            ElectricChargeUnit::Megacoulomb => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricChargeUnit::AmpereHour => T::div_ratio(value, 3600.0, 1.0),
+            ElectricChargeUnit::MilliampereHour => T::div_ratio(value, 18.0, 5.0),
+            ElectricChargeUnit::KiloampereHour => T::div_ratio(value, 3600000.0, 1.0),
+            ElectricChargeUnit::MegaampereHour => T::div_ratio(value, 3600000000.0, 1.0),
         }
     }
 }
@@ -305,7 +305,7 @@ impl<T: Number> ElectricCharge<T> {
     /// A [`ElectricCharge`] from a value in `pC`.
     #[inline]
     pub fn from_picocoulombs(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pC`.
@@ -317,7 +317,7 @@ impl<T: Number> ElectricCharge<T> {
     /// A [`ElectricCharge`] from a value in `nC`.
     #[inline]
     pub fn from_nanocoulombs(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nC`.
@@ -329,7 +329,7 @@ impl<T: Number> ElectricCharge<T> {
     /// A [`ElectricCharge`] from a value in `µC`.
     #[inline]
     pub fn from_microcoulombs(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µC`.
@@ -341,7 +341,7 @@ impl<T: Number> ElectricCharge<T> {
     /// A [`ElectricCharge`] from a value in `mC`.
     #[inline]
     pub fn from_millicoulombs(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mC`.
@@ -359,7 +359,7 @@ impl<T: Number> ElectricCharge<T> {
     /// The value in `kC`.
     #[inline]
     pub fn as_kilocoulombs(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricCharge`] from a value in `MC`.
@@ -371,7 +371,7 @@ impl<T: Number> ElectricCharge<T> {
     /// The value in `MC`.
     #[inline]
     pub fn as_megacoulombs(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricCharge`] from a value in `A-h`.
@@ -383,19 +383,19 @@ impl<T: Number> ElectricCharge<T> {
     /// The value in `A-h`.
     #[inline]
     pub fn as_ampere_hours(self) -> T {
-        self.0 / T::from_f64(3600.0)
+        T::div_ratio(self.0, 3600.0, 1.0)
     }
 
     /// A [`ElectricCharge`] from a value in `mA-h`.
     #[inline]
     pub fn from_milliampere_hours(value: T) -> Self {
-        Self(value * T::from_f64(3.6))
+        Self(T::mul_ratio(value, 18.0, 5.0))
     }
 
     /// The value in `mA-h`.
     #[inline]
     pub fn as_milliampere_hours(self) -> T {
-        self.0 / T::from_f64(3.6)
+        T::div_ratio(self.0, 18.0, 5.0)
     }
 
     /// A [`ElectricCharge`] from a value in `kA-h`.
@@ -407,7 +407,7 @@ impl<T: Number> ElectricCharge<T> {
     /// The value in `kA-h`.
     #[inline]
     pub fn as_kiloampere_hours(self) -> T {
-        self.0 / T::from_f64(3600000.0)
+        T::div_ratio(self.0, 3600000.0, 1.0)
     }
 
     /// A [`ElectricCharge`] from a value in `MA-h`.
@@ -419,7 +419,7 @@ impl<T: Number> ElectricCharge<T> {
     /// The value in `MA-h`.
     #[inline]
     pub fn as_megaampere_hours(self) -> T {
-        self.0 / T::from_f64(3.6e9)
+        T::div_ratio(self.0, 3600000000.0, 1.0)
     }
 }
 
@@ -430,14 +430,14 @@ impl ElectricCharge<f64> {
     pub const fn const_new(value: f64, unit: ElectricChargeUnit) -> Self {
         Self(match unit {
             ElectricChargeUnit::Coulomb => value,
-            ElectricChargeUnit::Picocoulomb => value / 1e12,
-            ElectricChargeUnit::Nanocoulomb => value / 1e9,
-            ElectricChargeUnit::Microcoulomb => value / 1000000.0,
-            ElectricChargeUnit::Millicoulomb => value / 1000.0,
+            ElectricChargeUnit::Picocoulomb => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricChargeUnit::Nanocoulomb => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricChargeUnit::Microcoulomb => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricChargeUnit::Millicoulomb => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricChargeUnit::Kilocoulomb => value * 1000.0,
             ElectricChargeUnit::Megacoulomb => value * 1000000.0,
             ElectricChargeUnit::AmpereHour => value * 3600.0,
-            ElectricChargeUnit::MilliampereHour => value * 3.6,
+            ElectricChargeUnit::MilliampereHour => crate::conv::mul_ratio(value, 18.0, 5.0),
             ElectricChargeUnit::KiloampereHour => value * 3600000.0,
             ElectricChargeUnit::MegaampereHour => value * 3.6e9,
         })

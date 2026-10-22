@@ -174,12 +174,12 @@ impl<T: Number> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalen
     fn value_to_base(self, value: T) -> T {
         match self {
             RadiationEquivalentDoseUnit::Sievert => value,
-            RadiationEquivalentDoseUnit::Nanosievert => value / T::from_f64(1e9),
-            RadiationEquivalentDoseUnit::Microsievert => value / T::from_f64(1000000.0),
-            RadiationEquivalentDoseUnit::Millisievert => value / T::from_f64(1000.0),
-            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => value / T::from_f64(100.0),
+            RadiationEquivalentDoseUnit::Nanosievert => T::div_ratio(value, 1000000000.0, 1.0),
+            RadiationEquivalentDoseUnit::Microsievert => T::div_ratio(value, 1000000.0, 1.0),
+            RadiationEquivalentDoseUnit::Millisievert => T::div_ratio(value, 1000.0, 1.0),
+            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => T::div_ratio(value, 100.0, 1.0),
             RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
-                value / T::from_f64(100000.0)
+                T::div_ratio(value, 100000.0, 1.0)
             }
         }
     }
@@ -231,7 +231,7 @@ impl<T: Number> RadiationEquivalentDose<T> {
     /// A [`RadiationEquivalentDose`] from a value in `nSv`.
     #[inline]
     pub fn from_nanosieverts(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nSv`.
@@ -243,7 +243,7 @@ impl<T: Number> RadiationEquivalentDose<T> {
     /// A [`RadiationEquivalentDose`] from a value in `µSv`.
     #[inline]
     pub fn from_microsieverts(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µSv`.
@@ -255,7 +255,7 @@ impl<T: Number> RadiationEquivalentDose<T> {
     /// A [`RadiationEquivalentDose`] from a value in `mSv`.
     #[inline]
     pub fn from_millisieverts(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mSv`.
@@ -267,7 +267,7 @@ impl<T: Number> RadiationEquivalentDose<T> {
     /// A [`RadiationEquivalentDose`] from a value in `rem`.
     #[inline]
     pub fn from_roentgens_equivalent_man(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `rem`.
@@ -279,7 +279,7 @@ impl<T: Number> RadiationEquivalentDose<T> {
     /// A [`RadiationEquivalentDose`] from a value in `mrem`.
     #[inline]
     pub fn from_milliroentgens_equivalent_man(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `mrem`.
@@ -296,11 +296,19 @@ impl RadiationEquivalentDose<f64> {
     pub const fn const_new(value: f64, unit: RadiationEquivalentDoseUnit) -> Self {
         Self(match unit {
             RadiationEquivalentDoseUnit::Sievert => value,
-            RadiationEquivalentDoseUnit::Nanosievert => value / 1e9,
-            RadiationEquivalentDoseUnit::Microsievert => value / 1000000.0,
-            RadiationEquivalentDoseUnit::Millisievert => value / 1000.0,
-            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => value / 100.0,
-            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => value / 100000.0,
+            RadiationEquivalentDoseUnit::Nanosievert => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            RadiationEquivalentDoseUnit::Microsievert => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            RadiationEquivalentDoseUnit::Millisievert => crate::conv::div_ratio(value, 1000.0, 1.0),
+            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
         })
     }
 }

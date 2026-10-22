@@ -224,21 +224,31 @@ impl<T: Number> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquiv
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            RadiationEquivalentDoseRateUnit::SievertPerHour => value / T::from_f64(3600.0),
-            RadiationEquivalentDoseRateUnit::NanosievertPerHour => value / T::from_f64(3.6e12),
-            RadiationEquivalentDoseRateUnit::MicrosievertPerHour => value / T::from_f64(3.6e9),
-            RadiationEquivalentDoseRateUnit::MillisievertPerHour => value / T::from_f64(3600000.0),
-            RadiationEquivalentDoseRateUnit::SievertPerSecond => value,
-            RadiationEquivalentDoseRateUnit::NanosievertPerSecond => value / T::from_f64(1e9),
-            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond => {
-                value / T::from_f64(1000000.0)
+            RadiationEquivalentDoseRateUnit::SievertPerHour => T::div_ratio(value, 3600.0, 1.0),
+            RadiationEquivalentDoseRateUnit::NanosievertPerHour => {
+                T::div_ratio(value, 3600000000000.0, 1.0)
             }
-            RadiationEquivalentDoseRateUnit::MillisievertPerSecond => value / T::from_f64(1000.0),
+            RadiationEquivalentDoseRateUnit::MicrosievertPerHour => {
+                T::div_ratio(value, 3600000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MillisievertPerHour => {
+                T::div_ratio(value, 3600000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::SievertPerSecond => value,
+            RadiationEquivalentDoseRateUnit::NanosievertPerSecond => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MillisievertPerSecond => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
             RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour => {
-                value / T::from_f64(360000.0)
+                T::div_ratio(value, 360000.0, 1.0)
             }
             RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour => {
-                value / T::from_f64(3.6e8)
+                T::div_ratio(value, 360000000.0, 1.0)
             }
         }
     }
@@ -289,7 +299,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `Sv/h`.
     #[inline]
     pub fn from_sieverts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `Sv/h`.
@@ -301,7 +311,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `nSv/h`.
     #[inline]
     pub fn from_nanosieverts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3.6e12))
+        Self(T::div_ratio(value, 3600000000000.0, 1.0))
     }
 
     /// The value in `nSv/h`.
@@ -313,7 +323,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `µSv/h`.
     #[inline]
     pub fn from_microsieverts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3.6e9))
+        Self(T::div_ratio(value, 3600000000.0, 1.0))
     }
 
     /// The value in `µSv/h`.
@@ -325,7 +335,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `mSv/h`.
     #[inline]
     pub fn from_millisieverts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600000.0))
+        Self(T::div_ratio(value, 3600000.0, 1.0))
     }
 
     /// The value in `mSv/h`.
@@ -349,7 +359,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `nSv/s`.
     #[inline]
     pub fn from_nanosieverts_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nSv/s`.
@@ -361,7 +371,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `µSv/s`.
     #[inline]
     pub fn from_microsieverts_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µSv/s`.
@@ -373,7 +383,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `mSv/s`.
     #[inline]
     pub fn from_millisieverts_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mSv/s`.
@@ -385,7 +395,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `rem/h`.
     #[inline]
     pub fn from_roentgens_equivalent_man_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(360000.0))
+        Self(T::div_ratio(value, 360000.0, 1.0))
     }
 
     /// The value in `rem/h`.
@@ -397,7 +407,7 @@ impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `mrem/h`.
     #[inline]
     pub fn from_milliroentgens_equivalent_man_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3.6e8))
+        Self(T::div_ratio(value, 360000000.0, 1.0))
     }
 
     /// The value in `mrem/h`.
@@ -413,16 +423,34 @@ impl RadiationEquivalentDoseRate<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: RadiationEquivalentDoseRateUnit) -> Self {
         Self(match unit {
-            RadiationEquivalentDoseRateUnit::SievertPerHour => value / 3600.0,
-            RadiationEquivalentDoseRateUnit::NanosievertPerHour => value / 3.6e12,
-            RadiationEquivalentDoseRateUnit::MicrosievertPerHour => value / 3.6e9,
-            RadiationEquivalentDoseRateUnit::MillisievertPerHour => value / 3600000.0,
+            RadiationEquivalentDoseRateUnit::SievertPerHour => {
+                crate::conv::div_ratio(value, 3600.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::NanosievertPerHour => {
+                crate::conv::div_ratio(value, 3600000000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MicrosievertPerHour => {
+                crate::conv::div_ratio(value, 3600000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MillisievertPerHour => {
+                crate::conv::div_ratio(value, 3600000.0, 1.0)
+            }
             RadiationEquivalentDoseRateUnit::SievertPerSecond => value,
-            RadiationEquivalentDoseRateUnit::NanosievertPerSecond => value / 1e9,
-            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond => value / 1000000.0,
-            RadiationEquivalentDoseRateUnit::MillisievertPerSecond => value / 1000.0,
-            RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour => value / 360000.0,
-            RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour => value / 3.6e8,
+            RadiationEquivalentDoseRateUnit::NanosievertPerSecond => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MillisievertPerSecond => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour => {
+                crate::conv::div_ratio(value, 360000.0, 1.0)
+            }
+            RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour => {
+                crate::conv::div_ratio(value, 360000000.0, 1.0)
+            }
         })
     }
 }

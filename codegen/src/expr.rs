@@ -8,8 +8,10 @@
 //!
 //! This module parses each formula and reduces it with exact rational
 //! arithmetic to `y = a·x + b` (with `b = 0` for most units) or `y = k / x`
-//! (km/L and L/100 km). The constants are then rounded once to the nearest
-//! `f64`, so the generated code does one operation per conversion.
+//! (km/L and L/100 km). Constants exact in binary are written as literals;
+//! the others as exact fractions (`T::mul_ratio(x, 381.0, 1250.0)`), which
+//! floats evaluate with one rounding where the target has an FMA
+//! instruction and with one operation by the rounded constant otherwise.
 
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
@@ -454,6 +456,22 @@ impl Const {
     }
 }
 
+impl Const {
+    /// The constant as `(numerator, denominator)` `f64` literals, when it
+    /// has no π and both fit in 53 bits, so that `numerator / denominator`
+    /// is the correctly rounded constant.
+    fn fraction(&self) -> Option<(String, String)> {
+        const MAX: u64 = 1 << 53;
+        if self.pi != 0 {
+            return None;
+        }
+        let n = self.r.numer().abs().to_u64().filter(|&n| n <= MAX)?;
+        let d = self.r.denom().to_u64().filter(|&d| d <= MAX)?;
+        let sign = if self.r.is_negative() { "-" } else { "" };
+        Some((format!("{sign}{n}.0"), format!("{d}.0")))
+    }
+}
+
 /// A constant as an expression of type `T`.
 fn lit(c: &Const, target: Target) -> String {
     match (target, c.written()) {
@@ -472,31 +490,42 @@ fn unparen(x: &str) -> &str {
 }
 
 /// `x · c`, where `c` is not exact as an `f64`.
+///
+/// With the exact fraction, `T::mul_ratio` lets each storage type pick its
+/// arithmetic: rationals stay exact, and floats round once where the target
+/// has an FMA instruction (see `src/conv.rs`).
 fn mul_inexact(x: &str, c: &Const, target: Target) -> String {
-    match (target, c.written()) {
-        (Target::Generic, Written::Ratio(n, d)) => {
-            format!("T::mul_ratio({}, {n}, {d})", unparen(x))
+    match (target, c.fraction()) {
+        (Target::Generic, Some((n, d))) => format!("T::mul_ratio({}, {n}, {d})", unparen(x)),
+        (Target::ConstF64, Some((n, d))) => {
+            format!("crate::conv::mul_ratio({}, {n}, {d})", unparen(x))
         }
         _ => format!("{x} * {}", lit(c, target)),
     }
 }
 
-/// `x / c`, where `c` is not exact as an `f64`.
+/// `x / c`, where `c` is exact as an `f64` but `1/c` is not (1000), or
+/// neither is (0.3048). Floats with an FMA instruction multiply by `1/c` in
+/// two parts instead of dividing, with the same correctly rounded result.
 fn div_inexact(x: &str, c: &Const, target: Target) -> String {
-    match (target, c.written()) {
-        (Target::Generic, Written::Ratio(n, d)) => {
-            format!("T::div_ratio({}, {n}, {d})", unparen(x))
+    match (target, c.fraction()) {
+        (Target::Generic, Some((n, d))) => format!("T::div_ratio({}, {n}, {d})", unparen(x)),
+        (Target::ConstF64, Some((n, d))) => {
+            format!("crate::conv::div_ratio({}, {n}, {d})", unparen(x))
         }
         _ => format!("{x} / {}", lit(c, target)),
     }
 }
 
-/// Emits `x · f` using a single operation.
+/// Emits `x · f` using a single rounding where it can.
 ///
-/// Uses whichever of `f` and `1/f` is exactly representable, so kilometres
-/// to metres is `x * 1000` and back is `x / 1000`, both correctly rounded.
-/// When neither is exact, both directions share the constant rounded for the
-/// to-base direction, so `from_unit(v).as_unit()` almost always gives `v`.
+/// When `f` is exact, kilometres to metres is `x * 1000`, correctly rounded.
+/// Otherwise the exact fraction goes to `mul_ratio` or `div_ratio`: with an
+/// FMA instruction, `f32` and `f64` round once; without, they multiply or
+/// divide by the rounded constant, so metres to kilometres is `x / 1000`,
+/// still correctly rounded. When neither `f` nor `1/f` is exact, both
+/// directions share the constant rounded for the to-base direction, so
+/// `from_unit(v).as_unit()` almost always gives `v`.
 fn emit_scale(x: &str, f: &Const, dir: Direction, target: Target) -> String {
     if f.is_one() {
         return x.to_owned();
@@ -505,7 +534,7 @@ fn emit_scale(x: &str, f: &Const, dir: Direction, target: Target) -> String {
     if f.is_exact_f64() {
         format!("{x} * {}", lit(f, target))
     } else if inv.is_exact_f64() {
-        format!("{x} / {}", lit(&inv, target))
+        div_inexact(x, &inv, target)
     } else {
         match dir {
             Direction::ToBase => mul_inexact(x, f, target),
@@ -786,33 +815,41 @@ mod tests {
             emit(&km, "x", Direction::ToBase, Target::Generic),
             "x * T::from_f64(1000.0)"
         );
+        // Dividing by 1000 rounds once, and so does the FMA path.
         assert_eq!(
             emit(&km.inverse(), "x", Direction::FromBase, Target::Generic),
-            "x / T::from_f64(1000.0)"
+            "T::div_ratio(x, 1000.0, 1.0)"
         );
         let mm = parse("{x} / 1e3");
         assert_eq!(
             emit(&mm, "x", Direction::ToBase, Target::Generic),
-            "x / T::from_f64(1000.0)"
+            "T::div_ratio(x, 1000.0, 1.0)"
         );
         let fm = parse("{x} * 1e-15");
         assert_eq!(
             emit(&fm, "x", Direction::ToBase, Target::Generic),
-            "x / T::from_f64(1e15)"
+            "T::div_ratio(x, 1000000000000000.0, 1.0)"
         );
         assert_eq!(
             emit(&mm.inverse(), "x", Direction::FromBase, Target::Generic),
             "x * T::from_f64(1000.0)"
         );
-        // Neither 0.0254 nor 1/0.0254 is exact: both directions share 0.0254.
+        // Neither 0.0254 nor 1/0.0254 is exact: both directions get the
+        // exact fraction 127/5000.
         let inch = parse("{x} * 2.54e-2");
         assert_eq!(
             emit(&inch, "x", Direction::ToBase, Target::Generic),
-            "x * T::from_f64(0.0254)"
+            "T::mul_ratio(x, 127.0, 5000.0)"
         );
         assert_eq!(
             emit(&inch.inverse(), "x", Direction::FromBase, Target::Generic),
-            "x / T::from_f64(0.0254)"
+            "T::div_ratio(x, 127.0, 5000.0)"
+        );
+        // π can't be a fraction.
+        let degree = parse("{x} * Math.PI / 180");
+        assert_eq!(
+            emit(&degree.inverse(), "x", Direction::FromBase, Target::Generic),
+            "x / T::from_f64(0.017453292519943295)"
         );
     }
 
@@ -841,10 +878,10 @@ mod tests {
             emit(&kmh.inverse(), "x", Direction::FromBase, Target::Generic),
             "T::div_ratio(x, 5.0, 18.0)"
         );
-        // The same values in plain `f64`.
+        // The same values in plain `f64`, for `const_new`.
         assert_eq!(
             emit(&kmh, "x", Direction::ToBase, Target::ConstF64),
-            "x * 0.2777777777777778"
+            "crate::conv::mul_ratio(x, 5.0, 18.0)"
         );
         let f = parse("({x} + 459.67) * 5 / 9");
         assert_eq!(

@@ -96,12 +96,18 @@ mod complex {
 
                 #[inline]
                 fn mul_ratio(self, numerator: f64, denominator: f64) -> Self {
-                    self * <$t as crate::Number>::from_ratio(numerator, denominator)
+                    Complex::new(
+                        <$t as crate::Number>::mul_ratio(self.re, numerator, denominator),
+                        <$t as crate::Number>::mul_ratio(self.im, numerator, denominator),
+                    )
                 }
 
                 #[inline]
                 fn div_ratio(self, numerator: f64, denominator: f64) -> Self {
-                    self / <$t as crate::Number>::from_ratio(numerator, denominator)
+                    Complex::new(
+                        <$t as crate::Number>::div_ratio(self.re, numerator, denominator),
+                        <$t as crate::Number>::div_ratio(self.im, numerator, denominator),
+                    )
                 }
             }
         )*};

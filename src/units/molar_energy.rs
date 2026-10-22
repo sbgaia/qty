@@ -143,8 +143,8 @@ impl<T: Number> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             MolarEnergyUnit::JoulePerMole => value,
-            MolarEnergyUnit::KilojoulePerMole => value / T::from_f64(1000.0),
-            MolarEnergyUnit::MegajoulePerMole => value / T::from_f64(1000000.0),
+            MolarEnergyUnit::KilojoulePerMole => T::div_ratio(value, 1000.0, 1.0),
+            MolarEnergyUnit::MegajoulePerMole => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -186,7 +186,7 @@ impl<T: Number> MolarEnergy<T> {
     /// The value in `kJ/mol`.
     #[inline]
     pub fn as_kilojoules_per_mole(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MolarEnergy`] from a value in `MJ/mol`.
@@ -198,7 +198,7 @@ impl<T: Number> MolarEnergy<T> {
     /// The value in `MJ/mol`.
     #[inline]
     pub fn as_megajoules_per_mole(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 

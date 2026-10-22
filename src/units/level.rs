@@ -173,7 +173,7 @@ impl Level<f64> {
     pub const fn const_new(value: f64, unit: LevelUnit) -> Self {
         Self(match unit {
             LevelUnit::Decibel => value,
-            LevelUnit::Neper => value * 8.685889687081618,
+            LevelUnit::Neper => crate::conv::mul_ratio(value, 500000000.0, 57564627.0),
         })
     }
 }

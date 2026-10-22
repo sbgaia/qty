@@ -474,10 +474,10 @@ impl<T: Number> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             RadioactivityUnit::Becquerel => value,
-            RadioactivityUnit::Picobecquerel => value / T::from_f64(1e12),
-            RadioactivityUnit::Nanobecquerel => value / T::from_f64(1e9),
-            RadioactivityUnit::Microbecquerel => value / T::from_f64(1000000.0),
-            RadioactivityUnit::Millibecquerel => value / T::from_f64(1000.0),
+            RadioactivityUnit::Picobecquerel => T::div_ratio(value, 1000000000000.0, 1.0),
+            RadioactivityUnit::Nanobecquerel => T::div_ratio(value, 1000000000.0, 1.0),
+            RadioactivityUnit::Microbecquerel => T::div_ratio(value, 1000000.0, 1.0),
+            RadioactivityUnit::Millibecquerel => T::div_ratio(value, 1000.0, 1.0),
             RadioactivityUnit::Kilobecquerel => value * T::from_f64(1000.0),
             RadioactivityUnit::Megabecquerel => value * T::from_f64(1000000.0),
             RadioactivityUnit::Gigabecquerel => value * T::from_f64(1e9),
@@ -485,7 +485,7 @@ impl<T: Number> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
             RadioactivityUnit::Petabecquerel => value * T::from_f64(1e15),
             RadioactivityUnit::Exabecquerel => value * T::from_f64(1e18),
             RadioactivityUnit::Curie => value * T::from_f64(3.7e10),
-            RadioactivityUnit::Picocurie => value * T::from_f64(0.037),
+            RadioactivityUnit::Picocurie => T::mul_ratio(value, 37.0, 1000.0),
             RadioactivityUnit::Nanocurie => value * T::from_f64(37.0),
             RadioactivityUnit::Microcurie => value * T::from_f64(37000.0),
             RadioactivityUnit::Millicurie => value * T::from_f64(3.7e7),
@@ -494,8 +494,8 @@ impl<T: Number> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
             RadioactivityUnit::Gigacurie => value * T::from_f64(3.7e19),
             RadioactivityUnit::Teracurie => value * T::from_f64(3.7e22),
             RadioactivityUnit::Rutherford => value * T::from_f64(1000000.0),
-            RadioactivityUnit::Picorutherford => value / T::from_f64(1000000.0),
-            RadioactivityUnit::Nanorutherford => value / T::from_f64(1000.0),
+            RadioactivityUnit::Picorutherford => T::div_ratio(value, 1000000.0, 1.0),
+            RadioactivityUnit::Nanorutherford => T::div_ratio(value, 1000.0, 1.0),
             RadioactivityUnit::Microrutherford => value,
             RadioactivityUnit::Millirutherford => value * T::from_f64(1000.0),
             RadioactivityUnit::Kilorutherford => value * T::from_f64(1e9),
@@ -513,29 +513,29 @@ impl<T: Number> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
             RadioactivityUnit::Nanobecquerel => value * T::from_f64(1e9),
             RadioactivityUnit::Microbecquerel => value * T::from_f64(1000000.0),
             RadioactivityUnit::Millibecquerel => value * T::from_f64(1000.0),
-            RadioactivityUnit::Kilobecquerel => value / T::from_f64(1000.0),
-            RadioactivityUnit::Megabecquerel => value / T::from_f64(1000000.0),
-            RadioactivityUnit::Gigabecquerel => value / T::from_f64(1e9),
-            RadioactivityUnit::Terabecquerel => value / T::from_f64(1e12),
-            RadioactivityUnit::Petabecquerel => value / T::from_f64(1e15),
+            RadioactivityUnit::Kilobecquerel => T::div_ratio(value, 1000.0, 1.0),
+            RadioactivityUnit::Megabecquerel => T::div_ratio(value, 1000000.0, 1.0),
+            RadioactivityUnit::Gigabecquerel => T::div_ratio(value, 1000000000.0, 1.0),
+            RadioactivityUnit::Terabecquerel => T::div_ratio(value, 1000000000000.0, 1.0),
+            RadioactivityUnit::Petabecquerel => T::div_ratio(value, 1000000000000000.0, 1.0),
             RadioactivityUnit::Exabecquerel => value / T::from_f64(1e18),
-            RadioactivityUnit::Curie => value / T::from_f64(3.7e10),
-            RadioactivityUnit::Picocurie => value / T::from_f64(0.037),
-            RadioactivityUnit::Nanocurie => value / T::from_f64(37.0),
-            RadioactivityUnit::Microcurie => value / T::from_f64(37000.0),
-            RadioactivityUnit::Millicurie => value / T::from_f64(3.7e7),
-            RadioactivityUnit::Kilocurie => value / T::from_f64(3.7e13),
+            RadioactivityUnit::Curie => T::div_ratio(value, 37000000000.0, 1.0),
+            RadioactivityUnit::Picocurie => T::div_ratio(value, 37.0, 1000.0),
+            RadioactivityUnit::Nanocurie => T::div_ratio(value, 37.0, 1.0),
+            RadioactivityUnit::Microcurie => T::div_ratio(value, 37000.0, 1.0),
+            RadioactivityUnit::Millicurie => T::div_ratio(value, 37000000.0, 1.0),
+            RadioactivityUnit::Kilocurie => T::div_ratio(value, 37000000000000.0, 1.0),
             RadioactivityUnit::Megacurie => value / T::from_f64(3.7e16),
             RadioactivityUnit::Gigacurie => value / T::from_f64(3.7e19),
             RadioactivityUnit::Teracurie => value / T::from_f64(3.7e22),
-            RadioactivityUnit::Rutherford => value / T::from_f64(1000000.0),
+            RadioactivityUnit::Rutherford => T::div_ratio(value, 1000000.0, 1.0),
             RadioactivityUnit::Picorutherford => value * T::from_f64(1000000.0),
             RadioactivityUnit::Nanorutherford => value * T::from_f64(1000.0),
             RadioactivityUnit::Microrutherford => value,
-            RadioactivityUnit::Millirutherford => value / T::from_f64(1000.0),
-            RadioactivityUnit::Kilorutherford => value / T::from_f64(1e9),
-            RadioactivityUnit::Megarutherford => value / T::from_f64(1e12),
-            RadioactivityUnit::Gigarutherford => value / T::from_f64(1e15),
+            RadioactivityUnit::Millirutherford => T::div_ratio(value, 1000.0, 1.0),
+            RadioactivityUnit::Kilorutherford => T::div_ratio(value, 1000000000.0, 1.0),
+            RadioactivityUnit::Megarutherford => T::div_ratio(value, 1000000000000.0, 1.0),
+            RadioactivityUnit::Gigarutherford => T::div_ratio(value, 1000000000000000.0, 1.0),
             RadioactivityUnit::Terarutherford => value / T::from_f64(1e18),
         }
     }
@@ -580,7 +580,7 @@ impl<T: Number> Radioactivity<T> {
     /// A [`Radioactivity`] from a value in `pBq`.
     #[inline]
     pub fn from_picobecquerels(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pBq`.
@@ -592,7 +592,7 @@ impl<T: Number> Radioactivity<T> {
     /// A [`Radioactivity`] from a value in `nBq`.
     #[inline]
     pub fn from_nanobecquerels(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nBq`.
@@ -604,7 +604,7 @@ impl<T: Number> Radioactivity<T> {
     /// A [`Radioactivity`] from a value in `µBq`.
     #[inline]
     pub fn from_microbecquerels(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µBq`.
@@ -616,7 +616,7 @@ impl<T: Number> Radioactivity<T> {
     /// A [`Radioactivity`] from a value in `mBq`.
     #[inline]
     pub fn from_millibecquerels(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mBq`.
@@ -634,7 +634,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `kBq`.
     #[inline]
     pub fn as_kilobecquerels(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `MBq`.
@@ -646,7 +646,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `MBq`.
     #[inline]
     pub fn as_megabecquerels(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `GBq`.
@@ -658,7 +658,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `GBq`.
     #[inline]
     pub fn as_gigabecquerels(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `TBq`.
@@ -670,7 +670,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `TBq`.
     #[inline]
     pub fn as_terabecquerels(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `PBq`.
@@ -682,7 +682,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `PBq`.
     #[inline]
     pub fn as_petabecquerels(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `EBq`.
@@ -706,19 +706,19 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `Ci`.
     #[inline]
     pub fn as_curies(self) -> T {
-        self.0 / T::from_f64(3.7e10)
+        T::div_ratio(self.0, 37000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `pCi`.
     #[inline]
     pub fn from_picocuries(value: T) -> Self {
-        Self(value * T::from_f64(0.037))
+        Self(T::mul_ratio(value, 37.0, 1000.0))
     }
 
     /// The value in `pCi`.
     #[inline]
     pub fn as_picocuries(self) -> T {
-        self.0 / T::from_f64(0.037)
+        T::div_ratio(self.0, 37.0, 1000.0)
     }
 
     /// A [`Radioactivity`] from a value in `nCi`.
@@ -730,7 +730,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `nCi`.
     #[inline]
     pub fn as_nanocuries(self) -> T {
-        self.0 / T::from_f64(37.0)
+        T::div_ratio(self.0, 37.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `µCi`.
@@ -742,7 +742,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `µCi`.
     #[inline]
     pub fn as_microcuries(self) -> T {
-        self.0 / T::from_f64(37000.0)
+        T::div_ratio(self.0, 37000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `mCi`.
@@ -754,7 +754,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `mCi`.
     #[inline]
     pub fn as_millicuries(self) -> T {
-        self.0 / T::from_f64(3.7e7)
+        T::div_ratio(self.0, 37000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `kCi`.
@@ -766,7 +766,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `kCi`.
     #[inline]
     pub fn as_kilocuries(self) -> T {
-        self.0 / T::from_f64(3.7e13)
+        T::div_ratio(self.0, 37000000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `MCi`.
@@ -814,13 +814,13 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `Rd`.
     #[inline]
     pub fn as_rutherfords(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `pRd`.
     #[inline]
     pub fn from_picorutherfords(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `pRd`.
@@ -832,7 +832,7 @@ impl<T: Number> Radioactivity<T> {
     /// A [`Radioactivity`] from a value in `nRd`.
     #[inline]
     pub fn from_nanorutherfords(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `nRd`.
@@ -862,7 +862,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `mRd`.
     #[inline]
     pub fn as_millirutherfords(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `kRd`.
@@ -874,7 +874,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `kRd`.
     #[inline]
     pub fn as_kilorutherfords(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `MRd`.
@@ -886,7 +886,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `MRd`.
     #[inline]
     pub fn as_megarutherfords(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `GRd`.
@@ -898,7 +898,7 @@ impl<T: Number> Radioactivity<T> {
     /// The value in `GRd`.
     #[inline]
     pub fn as_gigarutherfords(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`Radioactivity`] from a value in `TRd`.
@@ -921,10 +921,10 @@ impl Radioactivity<f64> {
     pub const fn const_new(value: f64, unit: RadioactivityUnit) -> Self {
         Self(match unit {
             RadioactivityUnit::Becquerel => value,
-            RadioactivityUnit::Picobecquerel => value / 1e12,
-            RadioactivityUnit::Nanobecquerel => value / 1e9,
-            RadioactivityUnit::Microbecquerel => value / 1000000.0,
-            RadioactivityUnit::Millibecquerel => value / 1000.0,
+            RadioactivityUnit::Picobecquerel => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            RadioactivityUnit::Nanobecquerel => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            RadioactivityUnit::Microbecquerel => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            RadioactivityUnit::Millibecquerel => crate::conv::div_ratio(value, 1000.0, 1.0),
             RadioactivityUnit::Kilobecquerel => value * 1000.0,
             RadioactivityUnit::Megabecquerel => value * 1000000.0,
             RadioactivityUnit::Gigabecquerel => value * 1e9,
@@ -932,7 +932,7 @@ impl Radioactivity<f64> {
             RadioactivityUnit::Petabecquerel => value * 1e15,
             RadioactivityUnit::Exabecquerel => value * 1e18,
             RadioactivityUnit::Curie => value * 3.7e10,
-            RadioactivityUnit::Picocurie => value * 0.037,
+            RadioactivityUnit::Picocurie => crate::conv::mul_ratio(value, 37.0, 1000.0),
             RadioactivityUnit::Nanocurie => value * 37.0,
             RadioactivityUnit::Microcurie => value * 37000.0,
             RadioactivityUnit::Millicurie => value * 3.7e7,
@@ -941,8 +941,8 @@ impl Radioactivity<f64> {
             RadioactivityUnit::Gigacurie => value * 3.7e19,
             RadioactivityUnit::Teracurie => value * 3.7e22,
             RadioactivityUnit::Rutherford => value * 1000000.0,
-            RadioactivityUnit::Picorutherford => value / 1000000.0,
-            RadioactivityUnit::Nanorutherford => value / 1000.0,
+            RadioactivityUnit::Picorutherford => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            RadioactivityUnit::Nanorutherford => crate::conv::div_ratio(value, 1000.0, 1.0),
             RadioactivityUnit::Microrutherford => value,
             RadioactivityUnit::Millirutherford => value * 1000.0,
             RadioactivityUnit::Kilorutherford => value * 1e9,

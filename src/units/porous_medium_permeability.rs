@@ -162,7 +162,7 @@ impl<T: Number> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPerme
             PorousMediumPermeabilityUnit::Microdarcy => value * T::from_f64(9.869233e-19),
             PorousMediumPermeabilityUnit::Millidarcy => value * T::from_f64(9.869233e-16),
             PorousMediumPermeabilityUnit::SquareMeter => value,
-            PorousMediumPermeabilityUnit::SquareCentimeter => value / T::from_f64(10000.0),
+            PorousMediumPermeabilityUnit::SquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
         }
     }
 
@@ -240,7 +240,7 @@ impl<T: Number> PorousMediumPermeability<T> {
     /// A [`PorousMediumPermeability`] from a value in `cm²`.
     #[inline]
     pub fn from_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `cm²`.
@@ -260,7 +260,9 @@ impl PorousMediumPermeability<f64> {
             PorousMediumPermeabilityUnit::Microdarcy => value * 9.869233e-19,
             PorousMediumPermeabilityUnit::Millidarcy => value * 9.869233e-16,
             PorousMediumPermeabilityUnit::SquareMeter => value,
-            PorousMediumPermeabilityUnit::SquareCentimeter => value / 10000.0,
+            PorousMediumPermeabilityUnit::SquareCentimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
         })
     }
 }

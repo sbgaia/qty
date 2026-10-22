@@ -173,8 +173,8 @@ impl<T: Number> crate::UnitOf<ElectricApparentPower<T>> for ElectricApparentPowe
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricApparentPowerUnit::Voltampere => value,
-            ElectricApparentPowerUnit::Microvoltampere => value / T::from_f64(1000000.0),
-            ElectricApparentPowerUnit::Millivoltampere => value / T::from_f64(1000.0),
+            ElectricApparentPowerUnit::Microvoltampere => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricApparentPowerUnit::Millivoltampere => T::div_ratio(value, 1000.0, 1.0),
             ElectricApparentPowerUnit::Kilovoltampere => value * T::from_f64(1000.0),
             ElectricApparentPowerUnit::Megavoltampere => value * T::from_f64(1000000.0),
             ElectricApparentPowerUnit::Gigavoltampere => value * T::from_f64(1e9),
@@ -187,9 +187,9 @@ impl<T: Number> crate::UnitOf<ElectricApparentPower<T>> for ElectricApparentPowe
             ElectricApparentPowerUnit::Voltampere => value,
             ElectricApparentPowerUnit::Microvoltampere => value * T::from_f64(1000000.0),
             ElectricApparentPowerUnit::Millivoltampere => value * T::from_f64(1000.0),
-            ElectricApparentPowerUnit::Kilovoltampere => value / T::from_f64(1000.0),
-            ElectricApparentPowerUnit::Megavoltampere => value / T::from_f64(1000000.0),
-            ElectricApparentPowerUnit::Gigavoltampere => value / T::from_f64(1e9),
+            ElectricApparentPowerUnit::Kilovoltampere => T::div_ratio(value, 1000.0, 1.0),
+            ElectricApparentPowerUnit::Megavoltampere => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricApparentPowerUnit::Gigavoltampere => T::div_ratio(value, 1000000000.0, 1.0),
         }
     }
 }
@@ -228,7 +228,7 @@ impl<T: Number> ElectricApparentPower<T> {
     /// A [`ElectricApparentPower`] from a value in `µVA`.
     #[inline]
     pub fn from_microvoltamperes(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µVA`.
@@ -240,7 +240,7 @@ impl<T: Number> ElectricApparentPower<T> {
     /// A [`ElectricApparentPower`] from a value in `mVA`.
     #[inline]
     pub fn from_millivoltamperes(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mVA`.
@@ -258,7 +258,7 @@ impl<T: Number> ElectricApparentPower<T> {
     /// The value in `kVA`.
     #[inline]
     pub fn as_kilovoltamperes(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricApparentPower`] from a value in `MVA`.
@@ -270,7 +270,7 @@ impl<T: Number> ElectricApparentPower<T> {
     /// The value in `MVA`.
     #[inline]
     pub fn as_megavoltamperes(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricApparentPower`] from a value in `GVA`.
@@ -282,7 +282,7 @@ impl<T: Number> ElectricApparentPower<T> {
     /// The value in `GVA`.
     #[inline]
     pub fn as_gigavoltamperes(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 }
 
@@ -293,8 +293,12 @@ impl ElectricApparentPower<f64> {
     pub const fn const_new(value: f64, unit: ElectricApparentPowerUnit) -> Self {
         Self(match unit {
             ElectricApparentPowerUnit::Voltampere => value,
-            ElectricApparentPowerUnit::Microvoltampere => value / 1000000.0,
-            ElectricApparentPowerUnit::Millivoltampere => value / 1000.0,
+            ElectricApparentPowerUnit::Microvoltampere => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            ElectricApparentPowerUnit::Millivoltampere => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             ElectricApparentPowerUnit::Kilovoltampere => value * 1000.0,
             ElectricApparentPowerUnit::Megavoltampere => value * 1000000.0,
             ElectricApparentPowerUnit::Gigavoltampere => value * 1e9,

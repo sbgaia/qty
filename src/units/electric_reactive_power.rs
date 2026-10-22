@@ -157,9 +157,13 @@ impl<T: Number> crate::UnitOf<ElectricReactivePower<T>> for ElectricReactivePowe
     fn value_from_base(self, value: T) -> T {
         match self {
             ElectricReactivePowerUnit::VoltampereReactive => value,
-            ElectricReactivePowerUnit::KilovoltampereReactive => value / T::from_f64(1000.0),
-            ElectricReactivePowerUnit::MegavoltampereReactive => value / T::from_f64(1000000.0),
-            ElectricReactivePowerUnit::GigavoltampereReactive => value / T::from_f64(1e9),
+            ElectricReactivePowerUnit::KilovoltampereReactive => T::div_ratio(value, 1000.0, 1.0),
+            ElectricReactivePowerUnit::MegavoltampereReactive => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            ElectricReactivePowerUnit::GigavoltampereReactive => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
         }
     }
 }
@@ -202,7 +206,7 @@ impl<T: Number> ElectricReactivePower<T> {
     /// The value in `kvar`.
     #[inline]
     pub fn as_kilovoltamperes_reactive(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricReactivePower`] from a value in `Mvar`.
@@ -214,7 +218,7 @@ impl<T: Number> ElectricReactivePower<T> {
     /// The value in `Mvar`.
     #[inline]
     pub fn as_megavoltamperes_reactive(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricReactivePower`] from a value in `Gvar`.
@@ -226,7 +230,7 @@ impl<T: Number> ElectricReactivePower<T> {
     /// The value in `Gvar`.
     #[inline]
     pub fn as_gigavoltamperes_reactive(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 }
 

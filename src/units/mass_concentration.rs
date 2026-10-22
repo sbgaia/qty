@@ -735,38 +735,38 @@ impl<T: Number> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
             MassConcentrationUnit::KilogramPerCubicMillimeter => value * T::from_f64(1e9),
             MassConcentrationUnit::GramPerCubicCentimeter => value * T::from_f64(1000.0),
             MassConcentrationUnit::KilogramPerCubicCentimeter => value * T::from_f64(1000000.0),
-            MassConcentrationUnit::GramPerCubicMeter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::GramPerCubicMeter => T::div_ratio(value, 1000.0, 1.0),
             MassConcentrationUnit::KilogramPerCubicMeter => value,
-            MassConcentrationUnit::MilligramPerCubicMeter => value / T::from_f64(1000000.0),
-            MassConcentrationUnit::MicrogramPerCubicMeter => value / T::from_f64(1e9),
+            MassConcentrationUnit::MilligramPerCubicMeter => T::div_ratio(value, 1000000.0, 1.0),
+            MassConcentrationUnit::MicrogramPerCubicMeter => T::div_ratio(value, 1000000000.0, 1.0),
             MassConcentrationUnit::GramPerMicroliter => value * T::from_f64(1000000.0),
-            MassConcentrationUnit::PicogramPerMicroliter => value / T::from_f64(1000000.0),
-            MassConcentrationUnit::NanogramPerMicroliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::PicogramPerMicroliter => T::div_ratio(value, 1000000.0, 1.0),
+            MassConcentrationUnit::NanogramPerMicroliter => T::div_ratio(value, 1000.0, 1.0),
             MassConcentrationUnit::MicrogramPerMicroliter => value,
             MassConcentrationUnit::MilligramPerMicroliter => value * T::from_f64(1000.0),
             MassConcentrationUnit::CentigramPerMicroliter => value * T::from_f64(10000.0),
             MassConcentrationUnit::DecigramPerMicroliter => value * T::from_f64(100000.0),
             MassConcentrationUnit::GramPerMilliliter => value * T::from_f64(1000.0),
-            MassConcentrationUnit::PicogramPerMilliliter => value / T::from_f64(1e9),
-            MassConcentrationUnit::NanogramPerMilliliter => value / T::from_f64(1000000.0),
-            MassConcentrationUnit::MicrogramPerMilliliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::PicogramPerMilliliter => T::div_ratio(value, 1000000000.0, 1.0),
+            MassConcentrationUnit::NanogramPerMilliliter => T::div_ratio(value, 1000000.0, 1.0),
+            MassConcentrationUnit::MicrogramPerMilliliter => T::div_ratio(value, 1000.0, 1.0),
             MassConcentrationUnit::MilligramPerMilliliter => value,
             MassConcentrationUnit::CentigramPerMilliliter => value * T::from_f64(10.0),
             MassConcentrationUnit::DecigramPerMilliliter => value * T::from_f64(100.0),
             MassConcentrationUnit::GramPerDeciliter => value * T::from_f64(10.0),
-            MassConcentrationUnit::PicogramPerDeciliter => value / T::from_f64(1e11),
-            MassConcentrationUnit::NanogramPerDeciliter => value / T::from_f64(1e8),
-            MassConcentrationUnit::MicrogramPerDeciliter => value / T::from_f64(100000.0),
-            MassConcentrationUnit::MilligramPerDeciliter => value / T::from_f64(100.0),
-            MassConcentrationUnit::CentigramPerDeciliter => value / T::from_f64(10.0),
+            MassConcentrationUnit::PicogramPerDeciliter => T::div_ratio(value, 100000000000.0, 1.0),
+            MassConcentrationUnit::NanogramPerDeciliter => T::div_ratio(value, 100000000.0, 1.0),
+            MassConcentrationUnit::MicrogramPerDeciliter => T::div_ratio(value, 100000.0, 1.0),
+            MassConcentrationUnit::MilligramPerDeciliter => T::div_ratio(value, 100.0, 1.0),
+            MassConcentrationUnit::CentigramPerDeciliter => T::div_ratio(value, 10.0, 1.0),
             MassConcentrationUnit::DecigramPerDeciliter => value,
             MassConcentrationUnit::GramPerLiter => value,
-            MassConcentrationUnit::PicogramPerLiter => value / T::from_f64(1e12),
-            MassConcentrationUnit::NanogramPerLiter => value / T::from_f64(1e9),
-            MassConcentrationUnit::MicrogramPerLiter => value / T::from_f64(1000000.0),
-            MassConcentrationUnit::MilligramPerLiter => value / T::from_f64(1000.0),
-            MassConcentrationUnit::CentigramPerLiter => value / T::from_f64(100.0),
-            MassConcentrationUnit::DecigramPerLiter => value / T::from_f64(10.0),
+            MassConcentrationUnit::PicogramPerLiter => T::div_ratio(value, 1000000000000.0, 1.0),
+            MassConcentrationUnit::NanogramPerLiter => T::div_ratio(value, 1000000000.0, 1.0),
+            MassConcentrationUnit::MicrogramPerLiter => T::div_ratio(value, 1000000.0, 1.0),
+            MassConcentrationUnit::MilligramPerLiter => T::div_ratio(value, 1000.0, 1.0),
+            MassConcentrationUnit::CentigramPerLiter => T::div_ratio(value, 100.0, 1.0),
+            MassConcentrationUnit::DecigramPerLiter => T::div_ratio(value, 10.0, 1.0),
             MassConcentrationUnit::KilogramPerLiter => value * T::from_f64(1000.0),
             MassConcentrationUnit::TonnePerCubicMillimeter => value * T::from_f64(1e12),
             MassConcentrationUnit::TonnePerCubicCentimeter => value * T::from_f64(1e9),
@@ -800,29 +800,33 @@ impl<T: Number> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            MassConcentrationUnit::GramPerCubicMillimeter => value / T::from_f64(1000000.0),
-            MassConcentrationUnit::KilogramPerCubicMillimeter => value / T::from_f64(1e9),
-            MassConcentrationUnit::GramPerCubicCentimeter => value / T::from_f64(1000.0),
-            MassConcentrationUnit::KilogramPerCubicCentimeter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::GramPerCubicMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            MassConcentrationUnit::KilogramPerCubicMillimeter => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
+            MassConcentrationUnit::GramPerCubicCentimeter => T::div_ratio(value, 1000.0, 1.0),
+            MassConcentrationUnit::KilogramPerCubicCentimeter => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
             MassConcentrationUnit::GramPerCubicMeter => value * T::from_f64(1000.0),
             MassConcentrationUnit::KilogramPerCubicMeter => value,
             MassConcentrationUnit::MilligramPerCubicMeter => value * T::from_f64(1000000.0),
             MassConcentrationUnit::MicrogramPerCubicMeter => value * T::from_f64(1e9),
-            MassConcentrationUnit::GramPerMicroliter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::GramPerMicroliter => T::div_ratio(value, 1000000.0, 1.0),
             MassConcentrationUnit::PicogramPerMicroliter => value * T::from_f64(1000000.0),
             MassConcentrationUnit::NanogramPerMicroliter => value * T::from_f64(1000.0),
             MassConcentrationUnit::MicrogramPerMicroliter => value,
-            MassConcentrationUnit::MilligramPerMicroliter => value / T::from_f64(1000.0),
-            MassConcentrationUnit::CentigramPerMicroliter => value / T::from_f64(10000.0),
-            MassConcentrationUnit::DecigramPerMicroliter => value / T::from_f64(100000.0),
-            MassConcentrationUnit::GramPerMilliliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::MilligramPerMicroliter => T::div_ratio(value, 1000.0, 1.0),
+            MassConcentrationUnit::CentigramPerMicroliter => T::div_ratio(value, 10000.0, 1.0),
+            MassConcentrationUnit::DecigramPerMicroliter => T::div_ratio(value, 100000.0, 1.0),
+            MassConcentrationUnit::GramPerMilliliter => T::div_ratio(value, 1000.0, 1.0),
             MassConcentrationUnit::PicogramPerMilliliter => value * T::from_f64(1e9),
             MassConcentrationUnit::NanogramPerMilliliter => value * T::from_f64(1000000.0),
             MassConcentrationUnit::MicrogramPerMilliliter => value * T::from_f64(1000.0),
             MassConcentrationUnit::MilligramPerMilliliter => value,
-            MassConcentrationUnit::CentigramPerMilliliter => value / T::from_f64(10.0),
-            MassConcentrationUnit::DecigramPerMilliliter => value / T::from_f64(100.0),
-            MassConcentrationUnit::GramPerDeciliter => value / T::from_f64(10.0),
+            MassConcentrationUnit::CentigramPerMilliliter => T::div_ratio(value, 10.0, 1.0),
+            MassConcentrationUnit::DecigramPerMilliliter => T::div_ratio(value, 100.0, 1.0),
+            MassConcentrationUnit::GramPerDeciliter => T::div_ratio(value, 10.0, 1.0),
             MassConcentrationUnit::PicogramPerDeciliter => value * T::from_f64(1e11),
             MassConcentrationUnit::NanogramPerDeciliter => value * T::from_f64(1e8),
             MassConcentrationUnit::MicrogramPerDeciliter => value * T::from_f64(100000.0),
@@ -836,10 +840,14 @@ impl<T: Number> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
             MassConcentrationUnit::MilligramPerLiter => value * T::from_f64(1000.0),
             MassConcentrationUnit::CentigramPerLiter => value * T::from_f64(100.0),
             MassConcentrationUnit::DecigramPerLiter => value * T::from_f64(10.0),
-            MassConcentrationUnit::KilogramPerLiter => value / T::from_f64(1000.0),
-            MassConcentrationUnit::TonnePerCubicMillimeter => value / T::from_f64(1e12),
-            MassConcentrationUnit::TonnePerCubicCentimeter => value / T::from_f64(1e9),
-            MassConcentrationUnit::TonnePerCubicMeter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerLiter => T::div_ratio(value, 1000.0, 1.0),
+            MassConcentrationUnit::TonnePerCubicMillimeter => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            MassConcentrationUnit::TonnePerCubicCentimeter => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
+            MassConcentrationUnit::TonnePerCubicMeter => T::div_ratio(value, 1000.0, 1.0),
             MassConcentrationUnit::PoundPerCubicInch => {
                 T::div_ratio(value, 56699046250.0, 2048383.0)
             }
@@ -893,7 +901,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `g/mm³`.
     #[inline]
     pub fn as_grams_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `kg/mm³`.
@@ -905,7 +913,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `kg/mm³`.
     #[inline]
     pub fn as_kilograms_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `g/cm³`.
@@ -917,7 +925,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `g/cm³`.
     #[inline]
     pub fn as_grams_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `kg/cm³`.
@@ -929,13 +937,13 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `kg/cm³`.
     #[inline]
     pub fn as_kilograms_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `g/m³`.
     #[inline]
     pub fn from_grams_per_cubic_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g/m³`.
@@ -959,7 +967,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `mg/m³`.
     #[inline]
     pub fn from_milligrams_per_cubic_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg/m³`.
@@ -971,7 +979,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `µg/m³`.
     #[inline]
     pub fn from_micrograms_per_cubic_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µg/m³`.
@@ -989,13 +997,13 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `g/μl`.
     #[inline]
     pub fn as_grams_per_microliter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `pg/μl`.
     #[inline]
     pub fn from_picograms_per_microliter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `pg/μl`.
@@ -1007,7 +1015,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `ng/μl`.
     #[inline]
     pub fn from_nanograms_per_microliter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `ng/μl`.
@@ -1037,7 +1045,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `mg/μl`.
     #[inline]
     pub fn as_milligrams_per_microliter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `cg/μl`.
@@ -1049,7 +1057,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `cg/μl`.
     #[inline]
     pub fn as_centigrams_per_microliter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `dg/μl`.
@@ -1061,7 +1069,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `dg/μl`.
     #[inline]
     pub fn as_decigrams_per_microliter(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `g/ml`.
@@ -1073,13 +1081,13 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `g/ml`.
     #[inline]
     pub fn as_grams_per_milliliter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `pg/ml`.
     #[inline]
     pub fn from_picograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `pg/ml`.
@@ -1091,7 +1099,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `ng/ml`.
     #[inline]
     pub fn from_nanograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ng/ml`.
@@ -1103,7 +1111,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `µg/ml`.
     #[inline]
     pub fn from_micrograms_per_milliliter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `µg/ml`.
@@ -1133,7 +1141,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `cg/ml`.
     #[inline]
     pub fn as_centigrams_per_milliliter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `dg/ml`.
@@ -1145,7 +1153,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `dg/ml`.
     #[inline]
     pub fn as_decigrams_per_milliliter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `g/dl`.
@@ -1157,13 +1165,13 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `g/dl`.
     #[inline]
     pub fn as_grams_per_deciliter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `pg/dl`.
     #[inline]
     pub fn from_picograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(1e11))
+        Self(T::div_ratio(value, 100000000000.0, 1.0))
     }
 
     /// The value in `pg/dl`.
@@ -1175,7 +1183,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `ng/dl`.
     #[inline]
     pub fn from_nanograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `ng/dl`.
@@ -1187,7 +1195,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `µg/dl`.
     #[inline]
     pub fn from_micrograms_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `µg/dl`.
@@ -1199,7 +1207,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `mg/dl`.
     #[inline]
     pub fn from_milligrams_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `mg/dl`.
@@ -1211,7 +1219,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `cg/dl`.
     #[inline]
     pub fn from_centigrams_per_deciliter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `cg/dl`.
@@ -1247,7 +1255,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `pg/l`.
     #[inline]
     pub fn from_picograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pg/l`.
@@ -1259,7 +1267,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `ng/l`.
     #[inline]
     pub fn from_nanograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ng/l`.
@@ -1271,7 +1279,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `µg/l`.
     #[inline]
     pub fn from_micrograms_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µg/l`.
@@ -1283,7 +1291,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `mg/l`.
     #[inline]
     pub fn from_milligrams_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mg/l`.
@@ -1295,7 +1303,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `cg/l`.
     #[inline]
     pub fn from_centigrams_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cg/l`.
@@ -1307,7 +1315,7 @@ impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `dg/l`.
     #[inline]
     pub fn from_decigrams_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dg/l`.
@@ -1325,7 +1333,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `kg/l`.
     #[inline]
     pub fn as_kilograms_per_liter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `t/mm³`.
@@ -1337,7 +1345,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `t/mm³`.
     #[inline]
     pub fn as_tonnes_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `t/cm³`.
@@ -1349,7 +1357,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `t/cm³`.
     #[inline]
     pub fn as_tonnes_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `t/m³`.
@@ -1361,7 +1369,7 @@ impl<T: Number> MassConcentration<T> {
     /// The value in `t/m³`.
     #[inline]
     pub fn as_tonnes_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassConcentration`] from a value in `lb/in³`.
@@ -1483,51 +1491,99 @@ impl MassConcentration<f64> {
             MassConcentrationUnit::KilogramPerCubicMillimeter => value * 1e9,
             MassConcentrationUnit::GramPerCubicCentimeter => value * 1000.0,
             MassConcentrationUnit::KilogramPerCubicCentimeter => value * 1000000.0,
-            MassConcentrationUnit::GramPerCubicMeter => value / 1000.0,
+            MassConcentrationUnit::GramPerCubicMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             MassConcentrationUnit::KilogramPerCubicMeter => value,
-            MassConcentrationUnit::MilligramPerCubicMeter => value / 1000000.0,
-            MassConcentrationUnit::MicrogramPerCubicMeter => value / 1e9,
+            MassConcentrationUnit::MilligramPerCubicMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            MassConcentrationUnit::MicrogramPerCubicMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
             MassConcentrationUnit::GramPerMicroliter => value * 1000000.0,
-            MassConcentrationUnit::PicogramPerMicroliter => value / 1000000.0,
-            MassConcentrationUnit::NanogramPerMicroliter => value / 1000.0,
+            MassConcentrationUnit::PicogramPerMicroliter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            MassConcentrationUnit::NanogramPerMicroliter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             MassConcentrationUnit::MicrogramPerMicroliter => value,
             MassConcentrationUnit::MilligramPerMicroliter => value * 1000.0,
             MassConcentrationUnit::CentigramPerMicroliter => value * 10000.0,
             MassConcentrationUnit::DecigramPerMicroliter => value * 100000.0,
             MassConcentrationUnit::GramPerMilliliter => value * 1000.0,
-            MassConcentrationUnit::PicogramPerMilliliter => value / 1e9,
-            MassConcentrationUnit::NanogramPerMilliliter => value / 1000000.0,
-            MassConcentrationUnit::MicrogramPerMilliliter => value / 1000.0,
+            MassConcentrationUnit::PicogramPerMilliliter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            MassConcentrationUnit::NanogramPerMilliliter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            MassConcentrationUnit::MicrogramPerMilliliter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             MassConcentrationUnit::MilligramPerMilliliter => value,
             MassConcentrationUnit::CentigramPerMilliliter => value * 10.0,
             MassConcentrationUnit::DecigramPerMilliliter => value * 100.0,
             MassConcentrationUnit::GramPerDeciliter => value * 10.0,
-            MassConcentrationUnit::PicogramPerDeciliter => value / 1e11,
-            MassConcentrationUnit::NanogramPerDeciliter => value / 1e8,
-            MassConcentrationUnit::MicrogramPerDeciliter => value / 100000.0,
-            MassConcentrationUnit::MilligramPerDeciliter => value / 100.0,
-            MassConcentrationUnit::CentigramPerDeciliter => value / 10.0,
+            MassConcentrationUnit::PicogramPerDeciliter => {
+                crate::conv::div_ratio(value, 100000000000.0, 1.0)
+            }
+            MassConcentrationUnit::NanogramPerDeciliter => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            MassConcentrationUnit::MicrogramPerDeciliter => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
+            MassConcentrationUnit::MilligramPerDeciliter => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            MassConcentrationUnit::CentigramPerDeciliter => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
             MassConcentrationUnit::DecigramPerDeciliter => value,
             MassConcentrationUnit::GramPerLiter => value,
-            MassConcentrationUnit::PicogramPerLiter => value / 1e12,
-            MassConcentrationUnit::NanogramPerLiter => value / 1e9,
-            MassConcentrationUnit::MicrogramPerLiter => value / 1000000.0,
-            MassConcentrationUnit::MilligramPerLiter => value / 1000.0,
-            MassConcentrationUnit::CentigramPerLiter => value / 100.0,
-            MassConcentrationUnit::DecigramPerLiter => value / 10.0,
+            MassConcentrationUnit::PicogramPerLiter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            MassConcentrationUnit::NanogramPerLiter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            MassConcentrationUnit::MicrogramPerLiter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            MassConcentrationUnit::MilligramPerLiter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MassConcentrationUnit::CentigramPerLiter => crate::conv::div_ratio(value, 100.0, 1.0),
+            MassConcentrationUnit::DecigramPerLiter => crate::conv::div_ratio(value, 10.0, 1.0),
             MassConcentrationUnit::KilogramPerLiter => value * 1000.0,
             MassConcentrationUnit::TonnePerCubicMillimeter => value * 1e12,
             MassConcentrationUnit::TonnePerCubicCentimeter => value * 1e9,
             MassConcentrationUnit::TonnePerCubicMeter => value * 1000.0,
-            MassConcentrationUnit::PoundPerCubicInch => value * 27679.90471020312,
-            MassConcentrationUnit::KilopoundPerCubicInch => value * 2.7679904710203122e7,
-            MassConcentrationUnit::PoundPerCubicFoot => value * 16.018463373960138,
-            MassConcentrationUnit::KilopoundPerCubicFoot => value * 16018.46337396014,
-            MassConcentrationUnit::SlugPerCubicFoot => value * 515.3788183931962,
-            MassConcentrationUnit::PoundPerUSGallon => value * 119.82642731689663,
-            MassConcentrationUnit::OuncePerUSGallon => value * 7.489151707306039,
-            MassConcentrationUnit::OuncePerImperialGallon => value * 6.236023291443856,
-            MassConcentrationUnit::PoundPerImperialGallon => value * 99.7763726631017,
+            MassConcentrationUnit::PoundPerCubicInch => {
+                crate::conv::mul_ratio(value, 56699046250.0, 2048383.0)
+            }
+            MassConcentrationUnit::KilopoundPerCubicInch => {
+                crate::conv::mul_ratio(value, 56699046250000.0, 2048383.0)
+            }
+            MassConcentrationUnit::PoundPerCubicFoot => {
+                crate::conv::mul_ratio(value, 28349523125.0, 1769802912.0)
+            }
+            MassConcentrationUnit::KilopoundPerCubicFoot => {
+                crate::conv::mul_ratio(value, 3543690390625.0, 221225364.0)
+            }
+            MassConcentrationUnit::SlugPerCubicFoot => {
+                crate::conv::mul_ratio(value, 5560277019075625.0, 10788718551552.0)
+            }
+            MassConcentrationUnit::PoundPerUSGallon => {
+                crate::conv::mul_ratio(value, 736351250.0, 6145149.0)
+            }
+            MassConcentrationUnit::OuncePerUSGallon => {
+                crate::conv::mul_ratio(value, 368175625.0, 49161192.0)
+            }
+            MassConcentrationUnit::OuncePerImperialGallon => {
+                crate::conv::mul_ratio(value, 45359237.0, 7273744.0)
+            }
+            MassConcentrationUnit::PoundPerImperialGallon => {
+                crate::conv::mul_ratio(value, 45359237.0, 454609.0)
+            }
         })
     }
 }

@@ -150,7 +150,7 @@ impl<T: Number> crate::UnitOf<ElectricSurfaceChargeDensity<T>>
         match self {
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => value,
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter => {
-                value / T::from_f64(10000.0)
+                T::div_ratio(value, 10000.0, 1.0)
             }
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
                 T::div_ratio(value, 25000000.0, 16129.0)
@@ -191,7 +191,7 @@ impl<T: Number> ElectricSurfaceChargeDensity<T> {
     /// The value in `C/cm²`.
     #[inline]
     pub fn as_coulombs_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`ElectricSurfaceChargeDensity`] from a value in `C/in²`.
@@ -215,7 +215,9 @@ impl ElectricSurfaceChargeDensity<f64> {
         Self(match unit {
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => value,
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter => value * 10000.0,
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => value * 1550.0031000062,
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
+                crate::conv::mul_ratio(value, 25000000.0, 16129.0)
+            }
         })
     }
 }

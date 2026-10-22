@@ -199,13 +199,15 @@ impl<T: Number> crate::UnitOf<RadiationExposure<T>> for RadiationExposureUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             RadiationExposureUnit::CoulombPerKilogram => value,
-            RadiationExposureUnit::PicocoulombPerKilogram => value / T::from_f64(1e12),
-            RadiationExposureUnit::NanocoulombPerKilogram => value / T::from_f64(1e9),
-            RadiationExposureUnit::MicrocoulombPerKilogram => value / T::from_f64(1000000.0),
-            RadiationExposureUnit::MillicoulombPerKilogram => value / T::from_f64(1000.0),
-            RadiationExposureUnit::Roentgen => value * T::from_f64(0.000258),
-            RadiationExposureUnit::Microroentgen => value * T::from_f64(2.58e-10),
-            RadiationExposureUnit::Milliroentgen => value * T::from_f64(2.58e-7),
+            RadiationExposureUnit::PicocoulombPerKilogram => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            RadiationExposureUnit::NanocoulombPerKilogram => T::div_ratio(value, 1000000000.0, 1.0),
+            RadiationExposureUnit::MicrocoulombPerKilogram => T::div_ratio(value, 1000000.0, 1.0),
+            RadiationExposureUnit::MillicoulombPerKilogram => T::div_ratio(value, 1000.0, 1.0),
+            RadiationExposureUnit::Roentgen => T::mul_ratio(value, 129.0, 500000.0),
+            RadiationExposureUnit::Microroentgen => T::mul_ratio(value, 129.0, 500000000000.0),
+            RadiationExposureUnit::Milliroentgen => T::mul_ratio(value, 129.0, 500000000.0),
         }
     }
 
@@ -217,9 +219,9 @@ impl<T: Number> crate::UnitOf<RadiationExposure<T>> for RadiationExposureUnit {
             RadiationExposureUnit::NanocoulombPerKilogram => value * T::from_f64(1e9),
             RadiationExposureUnit::MicrocoulombPerKilogram => value * T::from_f64(1000000.0),
             RadiationExposureUnit::MillicoulombPerKilogram => value * T::from_f64(1000.0),
-            RadiationExposureUnit::Roentgen => value / T::from_f64(0.000258),
-            RadiationExposureUnit::Microroentgen => value / T::from_f64(2.58e-10),
-            RadiationExposureUnit::Milliroentgen => value / T::from_f64(2.58e-7),
+            RadiationExposureUnit::Roentgen => T::div_ratio(value, 129.0, 500000.0),
+            RadiationExposureUnit::Microroentgen => T::div_ratio(value, 129.0, 500000000000.0),
+            RadiationExposureUnit::Milliroentgen => T::div_ratio(value, 129.0, 500000000.0),
         }
     }
 }
@@ -257,7 +259,7 @@ impl<T: Number> RadiationExposure<T> {
     /// A [`RadiationExposure`] from a value in `pC/kg`.
     #[inline]
     pub fn from_picocoulombs_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pC/kg`.
@@ -269,7 +271,7 @@ impl<T: Number> RadiationExposure<T> {
     /// A [`RadiationExposure`] from a value in `nC/kg`.
     #[inline]
     pub fn from_nanocoulombs_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nC/kg`.
@@ -281,7 +283,7 @@ impl<T: Number> RadiationExposure<T> {
     /// A [`RadiationExposure`] from a value in `µC/kg`.
     #[inline]
     pub fn from_microcoulombs_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µC/kg`.
@@ -293,7 +295,7 @@ impl<T: Number> RadiationExposure<T> {
     /// A [`RadiationExposure`] from a value in `mC/kg`.
     #[inline]
     pub fn from_millicoulombs_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mC/kg`.
@@ -305,37 +307,37 @@ impl<T: Number> RadiationExposure<T> {
     /// A [`RadiationExposure`] from a value in `R`.
     #[inline]
     pub fn from_roentgens(value: T) -> Self {
-        Self(value * T::from_f64(0.000258))
+        Self(T::mul_ratio(value, 129.0, 500000.0))
     }
 
     /// The value in `R`.
     #[inline]
     pub fn as_roentgens(self) -> T {
-        self.0 / T::from_f64(0.000258)
+        T::div_ratio(self.0, 129.0, 500000.0)
     }
 
     /// A [`RadiationExposure`] from a value in `µR`.
     #[inline]
     pub fn from_microroentgens(value: T) -> Self {
-        Self(value * T::from_f64(2.58e-10))
+        Self(T::mul_ratio(value, 129.0, 500000000000.0))
     }
 
     /// The value in `µR`.
     #[inline]
     pub fn as_microroentgens(self) -> T {
-        self.0 / T::from_f64(2.58e-10)
+        T::div_ratio(self.0, 129.0, 500000000000.0)
     }
 
     /// A [`RadiationExposure`] from a value in `mR`.
     #[inline]
     pub fn from_milliroentgens(value: T) -> Self {
-        Self(value * T::from_f64(2.58e-7))
+        Self(T::mul_ratio(value, 129.0, 500000000.0))
     }
 
     /// The value in `mR`.
     #[inline]
     pub fn as_milliroentgens(self) -> T {
-        self.0 / T::from_f64(2.58e-7)
+        T::div_ratio(self.0, 129.0, 500000000.0)
     }
 }
 
@@ -346,13 +348,25 @@ impl RadiationExposure<f64> {
     pub const fn const_new(value: f64, unit: RadiationExposureUnit) -> Self {
         Self(match unit {
             RadiationExposureUnit::CoulombPerKilogram => value,
-            RadiationExposureUnit::PicocoulombPerKilogram => value / 1e12,
-            RadiationExposureUnit::NanocoulombPerKilogram => value / 1e9,
-            RadiationExposureUnit::MicrocoulombPerKilogram => value / 1000000.0,
-            RadiationExposureUnit::MillicoulombPerKilogram => value / 1000.0,
-            RadiationExposureUnit::Roentgen => value * 0.000258,
-            RadiationExposureUnit::Microroentgen => value * 2.58e-10,
-            RadiationExposureUnit::Milliroentgen => value * 2.58e-7,
+            RadiationExposureUnit::PicocoulombPerKilogram => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            RadiationExposureUnit::NanocoulombPerKilogram => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            RadiationExposureUnit::MicrocoulombPerKilogram => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            RadiationExposureUnit::MillicoulombPerKilogram => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            RadiationExposureUnit::Roentgen => crate::conv::mul_ratio(value, 129.0, 500000.0),
+            RadiationExposureUnit::Microroentgen => {
+                crate::conv::mul_ratio(value, 129.0, 500000000000.0)
+            }
+            RadiationExposureUnit::Milliroentgen => {
+                crate::conv::mul_ratio(value, 129.0, 500000000.0)
+            }
         })
     }
 }

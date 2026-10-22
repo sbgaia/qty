@@ -193,11 +193,15 @@ impl<T: Number> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => T::div_ratio(value, 1000.0, 1.0),
             ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value,
             ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value,
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / T::from_f64(10000.0),
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / T::from_f64(1000000.0),
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => {
+                T::div_ratio(value, 10000.0, 1.0)
+            }
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
                 T::mul_ratio(value, 9.0, 104600.0)
             }
@@ -239,7 +243,7 @@ impl<T: Number> ThermalInsulance<T> {
     /// A [`ThermalInsulance`] from a value in `m²K/kW`.
     #[inline]
     pub fn from_square_meter_kelvins_per_kilowatt(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `m²K/kW`.
@@ -275,7 +279,7 @@ impl<T: Number> ThermalInsulance<T> {
     /// A [`ThermalInsulance`] from a value in `cm²K/W`.
     #[inline]
     pub fn from_square_centimeter_kelvins_per_watt(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `cm²K/W`.
@@ -287,7 +291,7 @@ impl<T: Number> ThermalInsulance<T> {
     /// A [`ThermalInsulance`] from a value in `mm²K/W`.
     #[inline]
     pub fn from_square_millimeter_kelvins_per_watt(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mm²K/W`.
@@ -327,16 +331,22 @@ impl ThermalInsulance<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: ThermalInsulanceUnit) -> Self {
         Self(match unit {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value / 1000.0,
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value,
             ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value,
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / 10000.0,
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / 1000000.0,
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                value * 8.604206500956024e-5
+                crate::conv::mul_ratio(value, 9.0, 104600.0)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                value * 0.17611018368230585
+                crate::conv::mul_ratio(value, 9290304000.0, 52752792631.0)
             }
         })
     }

@@ -316,22 +316,26 @@ impl<T: Number> crate::UnitOf<AmountOfSubstance<T>> for AmountOfSubstanceUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             AmountOfSubstanceUnit::Mole => value,
-            AmountOfSubstanceUnit::Femtomole => value / T::from_f64(1e15),
-            AmountOfSubstanceUnit::Picomole => value / T::from_f64(1e12),
-            AmountOfSubstanceUnit::Nanomole => value / T::from_f64(1e9),
-            AmountOfSubstanceUnit::Micromole => value / T::from_f64(1000000.0),
-            AmountOfSubstanceUnit::Millimole => value / T::from_f64(1000.0),
-            AmountOfSubstanceUnit::Centimole => value / T::from_f64(100.0),
-            AmountOfSubstanceUnit::Decimole => value / T::from_f64(10.0),
+            AmountOfSubstanceUnit::Femtomole => T::div_ratio(value, 1000000000000000.0, 1.0),
+            AmountOfSubstanceUnit::Picomole => T::div_ratio(value, 1000000000000.0, 1.0),
+            AmountOfSubstanceUnit::Nanomole => T::div_ratio(value, 1000000000.0, 1.0),
+            AmountOfSubstanceUnit::Micromole => T::div_ratio(value, 1000000.0, 1.0),
+            AmountOfSubstanceUnit::Millimole => T::div_ratio(value, 1000.0, 1.0),
+            AmountOfSubstanceUnit::Centimole => T::div_ratio(value, 100.0, 1.0),
+            AmountOfSubstanceUnit::Decimole => T::div_ratio(value, 10.0, 1.0),
             AmountOfSubstanceUnit::Kilomole => value * T::from_f64(1000.0),
             AmountOfSubstanceUnit::Megamole => value * T::from_f64(1000000.0),
-            AmountOfSubstanceUnit::PoundMole => value * T::from_f64(453.59237),
-            AmountOfSubstanceUnit::NanopoundMole => value * T::from_f64(4.5359237e-7),
-            AmountOfSubstanceUnit::MicropoundMole => value * T::from_f64(0.00045359237),
-            AmountOfSubstanceUnit::MillipoundMole => value * T::from_f64(0.45359237),
-            AmountOfSubstanceUnit::CentipoundMole => value * T::from_f64(4.5359237),
-            AmountOfSubstanceUnit::DecipoundMole => value * T::from_f64(45.359237),
-            AmountOfSubstanceUnit::KilopoundMole => value * T::from_f64(453592.37),
+            AmountOfSubstanceUnit::PoundMole => T::mul_ratio(value, 45359237.0, 100000.0),
+            AmountOfSubstanceUnit::NanopoundMole => {
+                T::mul_ratio(value, 45359237.0, 100000000000000.0)
+            }
+            AmountOfSubstanceUnit::MicropoundMole => {
+                T::mul_ratio(value, 45359237.0, 100000000000.0)
+            }
+            AmountOfSubstanceUnit::MillipoundMole => T::mul_ratio(value, 45359237.0, 100000000.0),
+            AmountOfSubstanceUnit::CentipoundMole => T::mul_ratio(value, 45359237.0, 10000000.0),
+            AmountOfSubstanceUnit::DecipoundMole => T::mul_ratio(value, 45359237.0, 1000000.0),
+            AmountOfSubstanceUnit::KilopoundMole => T::mul_ratio(value, 45359237.0, 100.0),
         }
     }
 
@@ -346,15 +350,19 @@ impl<T: Number> crate::UnitOf<AmountOfSubstance<T>> for AmountOfSubstanceUnit {
             AmountOfSubstanceUnit::Millimole => value * T::from_f64(1000.0),
             AmountOfSubstanceUnit::Centimole => value * T::from_f64(100.0),
             AmountOfSubstanceUnit::Decimole => value * T::from_f64(10.0),
-            AmountOfSubstanceUnit::Kilomole => value / T::from_f64(1000.0),
-            AmountOfSubstanceUnit::Megamole => value / T::from_f64(1000000.0),
-            AmountOfSubstanceUnit::PoundMole => value / T::from_f64(453.59237),
-            AmountOfSubstanceUnit::NanopoundMole => value / T::from_f64(4.5359237e-7),
-            AmountOfSubstanceUnit::MicropoundMole => value / T::from_f64(0.00045359237),
-            AmountOfSubstanceUnit::MillipoundMole => value / T::from_f64(0.45359237),
-            AmountOfSubstanceUnit::CentipoundMole => value / T::from_f64(4.5359237),
-            AmountOfSubstanceUnit::DecipoundMole => value / T::from_f64(45.359237),
-            AmountOfSubstanceUnit::KilopoundMole => value / T::from_f64(453592.37),
+            AmountOfSubstanceUnit::Kilomole => T::div_ratio(value, 1000.0, 1.0),
+            AmountOfSubstanceUnit::Megamole => T::div_ratio(value, 1000000.0, 1.0),
+            AmountOfSubstanceUnit::PoundMole => T::div_ratio(value, 45359237.0, 100000.0),
+            AmountOfSubstanceUnit::NanopoundMole => {
+                T::div_ratio(value, 45359237.0, 100000000000000.0)
+            }
+            AmountOfSubstanceUnit::MicropoundMole => {
+                T::div_ratio(value, 45359237.0, 100000000000.0)
+            }
+            AmountOfSubstanceUnit::MillipoundMole => T::div_ratio(value, 45359237.0, 100000000.0),
+            AmountOfSubstanceUnit::CentipoundMole => T::div_ratio(value, 45359237.0, 10000000.0),
+            AmountOfSubstanceUnit::DecipoundMole => T::div_ratio(value, 45359237.0, 1000000.0),
+            AmountOfSubstanceUnit::KilopoundMole => T::div_ratio(value, 45359237.0, 100.0),
         }
     }
 }
@@ -395,7 +403,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `fmol`.
     #[inline]
     pub fn from_femtomoles(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fmol`.
@@ -407,7 +415,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `pmol`.
     #[inline]
     pub fn from_picomoles(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pmol`.
@@ -419,7 +427,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `nmol`.
     #[inline]
     pub fn from_nanomoles(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nmol`.
@@ -431,7 +439,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `µmol`.
     #[inline]
     pub fn from_micromoles(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µmol`.
@@ -443,7 +451,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `mmol`.
     #[inline]
     pub fn from_millimoles(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mmol`.
@@ -455,7 +463,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `cmol`.
     #[inline]
     pub fn from_centimoles(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cmol`.
@@ -467,7 +475,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `dmol`.
     #[inline]
     pub fn from_decimoles(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dmol`.
@@ -485,7 +493,7 @@ impl<T: Number> AmountOfSubstance<T> {
     /// The value in `kmol`.
     #[inline]
     pub fn as_kilomoles(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `Mmol`.
@@ -497,91 +505,91 @@ impl<T: Number> AmountOfSubstance<T> {
     /// The value in `Mmol`.
     #[inline]
     pub fn as_megamoles(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `lbmol`.
     #[inline]
     pub fn from_pound_moles(value: T) -> Self {
-        Self(value * T::from_f64(453.59237))
+        Self(T::mul_ratio(value, 45359237.0, 100000.0))
     }
 
     /// The value in `lbmol`.
     #[inline]
     pub fn as_pound_moles(self) -> T {
-        self.0 / T::from_f64(453.59237)
+        T::div_ratio(self.0, 45359237.0, 100000.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `nlbmol`.
     #[inline]
     pub fn from_nanopound_moles(value: T) -> Self {
-        Self(value * T::from_f64(4.5359237e-7))
+        Self(T::mul_ratio(value, 45359237.0, 100000000000000.0))
     }
 
     /// The value in `nlbmol`.
     #[inline]
     pub fn as_nanopound_moles(self) -> T {
-        self.0 / T::from_f64(4.5359237e-7)
+        T::div_ratio(self.0, 45359237.0, 100000000000000.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `µlbmol`.
     #[inline]
     pub fn from_micropound_moles(value: T) -> Self {
-        Self(value * T::from_f64(0.00045359237))
+        Self(T::mul_ratio(value, 45359237.0, 100000000000.0))
     }
 
     /// The value in `µlbmol`.
     #[inline]
     pub fn as_micropound_moles(self) -> T {
-        self.0 / T::from_f64(0.00045359237)
+        T::div_ratio(self.0, 45359237.0, 100000000000.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `mlbmol`.
     #[inline]
     pub fn from_millipound_moles(value: T) -> Self {
-        Self(value * T::from_f64(0.45359237))
+        Self(T::mul_ratio(value, 45359237.0, 100000000.0))
     }
 
     /// The value in `mlbmol`.
     #[inline]
     pub fn as_millipound_moles(self) -> T {
-        self.0 / T::from_f64(0.45359237)
+        T::div_ratio(self.0, 45359237.0, 100000000.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `clbmol`.
     #[inline]
     pub fn from_centipound_moles(value: T) -> Self {
-        Self(value * T::from_f64(4.5359237))
+        Self(T::mul_ratio(value, 45359237.0, 10000000.0))
     }
 
     /// The value in `clbmol`.
     #[inline]
     pub fn as_centipound_moles(self) -> T {
-        self.0 / T::from_f64(4.5359237)
+        T::div_ratio(self.0, 45359237.0, 10000000.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `dlbmol`.
     #[inline]
     pub fn from_decipound_moles(value: T) -> Self {
-        Self(value * T::from_f64(45.359237))
+        Self(T::mul_ratio(value, 45359237.0, 1000000.0))
     }
 
     /// The value in `dlbmol`.
     #[inline]
     pub fn as_decipound_moles(self) -> T {
-        self.0 / T::from_f64(45.359237)
+        T::div_ratio(self.0, 45359237.0, 1000000.0)
     }
 
     /// A [`AmountOfSubstance`] from a value in `klbmol`.
     #[inline]
     pub fn from_kilopound_moles(value: T) -> Self {
-        Self(value * T::from_f64(453592.37))
+        Self(T::mul_ratio(value, 45359237.0, 100.0))
     }
 
     /// The value in `klbmol`.
     #[inline]
     pub fn as_kilopound_moles(self) -> T {
-        self.0 / T::from_f64(453592.37)
+        T::div_ratio(self.0, 45359237.0, 100.0)
     }
 }
 
@@ -592,22 +600,36 @@ impl AmountOfSubstance<f64> {
     pub const fn const_new(value: f64, unit: AmountOfSubstanceUnit) -> Self {
         Self(match unit {
             AmountOfSubstanceUnit::Mole => value,
-            AmountOfSubstanceUnit::Femtomole => value / 1e15,
-            AmountOfSubstanceUnit::Picomole => value / 1e12,
-            AmountOfSubstanceUnit::Nanomole => value / 1e9,
-            AmountOfSubstanceUnit::Micromole => value / 1000000.0,
-            AmountOfSubstanceUnit::Millimole => value / 1000.0,
-            AmountOfSubstanceUnit::Centimole => value / 100.0,
-            AmountOfSubstanceUnit::Decimole => value / 10.0,
+            AmountOfSubstanceUnit::Femtomole => {
+                crate::conv::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            AmountOfSubstanceUnit::Picomole => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            AmountOfSubstanceUnit::Nanomole => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            AmountOfSubstanceUnit::Micromole => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            AmountOfSubstanceUnit::Millimole => crate::conv::div_ratio(value, 1000.0, 1.0),
+            AmountOfSubstanceUnit::Centimole => crate::conv::div_ratio(value, 100.0, 1.0),
+            AmountOfSubstanceUnit::Decimole => crate::conv::div_ratio(value, 10.0, 1.0),
             AmountOfSubstanceUnit::Kilomole => value * 1000.0,
             AmountOfSubstanceUnit::Megamole => value * 1000000.0,
-            AmountOfSubstanceUnit::PoundMole => value * 453.59237,
-            AmountOfSubstanceUnit::NanopoundMole => value * 4.5359237e-7,
-            AmountOfSubstanceUnit::MicropoundMole => value * 0.00045359237,
-            AmountOfSubstanceUnit::MillipoundMole => value * 0.45359237,
-            AmountOfSubstanceUnit::CentipoundMole => value * 4.5359237,
-            AmountOfSubstanceUnit::DecipoundMole => value * 45.359237,
-            AmountOfSubstanceUnit::KilopoundMole => value * 453592.37,
+            AmountOfSubstanceUnit::PoundMole => crate::conv::mul_ratio(value, 45359237.0, 100000.0),
+            AmountOfSubstanceUnit::NanopoundMole => {
+                crate::conv::mul_ratio(value, 45359237.0, 100000000000000.0)
+            }
+            AmountOfSubstanceUnit::MicropoundMole => {
+                crate::conv::mul_ratio(value, 45359237.0, 100000000000.0)
+            }
+            AmountOfSubstanceUnit::MillipoundMole => {
+                crate::conv::mul_ratio(value, 45359237.0, 100000000.0)
+            }
+            AmountOfSubstanceUnit::CentipoundMole => {
+                crate::conv::mul_ratio(value, 45359237.0, 10000000.0)
+            }
+            AmountOfSubstanceUnit::DecipoundMole => {
+                crate::conv::mul_ratio(value, 45359237.0, 1000000.0)
+            }
+            AmountOfSubstanceUnit::KilopoundMole => {
+                crate::conv::mul_ratio(value, 45359237.0, 100.0)
+            }
         })
     }
 }

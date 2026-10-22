@@ -241,10 +241,10 @@ impl<T: Number> crate::UnitOf<Molarity<T>> for MolarityUnit {
             MolarityUnit::MolePerCubicMeter => value,
             MolarityUnit::KilomolePerCubicMeter => value * T::from_f64(1000.0),
             MolarityUnit::MolePerLiter => value * T::from_f64(1000.0),
-            MolarityUnit::FemtomolePerLiter => value / T::from_f64(1e12),
-            MolarityUnit::PicomolePerLiter => value / T::from_f64(1e9),
-            MolarityUnit::NanomolePerLiter => value / T::from_f64(1000000.0),
-            MolarityUnit::MicromolePerLiter => value / T::from_f64(1000.0),
+            MolarityUnit::FemtomolePerLiter => T::div_ratio(value, 1000000000000.0, 1.0),
+            MolarityUnit::PicomolePerLiter => T::div_ratio(value, 1000000000.0, 1.0),
+            MolarityUnit::NanomolePerLiter => T::div_ratio(value, 1000000.0, 1.0),
+            MolarityUnit::MicromolePerLiter => T::div_ratio(value, 1000.0, 1.0),
             MolarityUnit::MillimolePerLiter => value,
             MolarityUnit::CentimolePerLiter => value * T::from_f64(10.0),
             MolarityUnit::DecimolePerLiter => value * T::from_f64(100.0),
@@ -258,15 +258,15 @@ impl<T: Number> crate::UnitOf<Molarity<T>> for MolarityUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             MolarityUnit::MolePerCubicMeter => value,
-            MolarityUnit::KilomolePerCubicMeter => value / T::from_f64(1000.0),
-            MolarityUnit::MolePerLiter => value / T::from_f64(1000.0),
+            MolarityUnit::KilomolePerCubicMeter => T::div_ratio(value, 1000.0, 1.0),
+            MolarityUnit::MolePerLiter => T::div_ratio(value, 1000.0, 1.0),
             MolarityUnit::FemtomolePerLiter => value * T::from_f64(1e12),
             MolarityUnit::PicomolePerLiter => value * T::from_f64(1e9),
             MolarityUnit::NanomolePerLiter => value * T::from_f64(1000000.0),
             MolarityUnit::MicromolePerLiter => value * T::from_f64(1000.0),
             MolarityUnit::MillimolePerLiter => value,
-            MolarityUnit::CentimolePerLiter => value / T::from_f64(10.0),
-            MolarityUnit::DecimolePerLiter => value / T::from_f64(100.0),
+            MolarityUnit::CentimolePerLiter => T::div_ratio(value, 10.0, 1.0),
+            MolarityUnit::DecimolePerLiter => T::div_ratio(value, 100.0, 1.0),
             MolarityUnit::PoundMolePerCubicFoot => {
                 T::div_ratio(value, 3543690390625.0, 221225364.0)
             }
@@ -310,7 +310,7 @@ impl<T: Number> Molarity<T> {
     /// The value in `kmol/m³`.
     #[inline]
     pub fn as_kilomoles_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Molarity`] from a value in `mol/l`.
@@ -322,13 +322,13 @@ impl<T: Number> Molarity<T> {
     /// The value in `mol/l`.
     #[inline]
     pub fn as_moles_per_liter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Molarity`] from a value in `fmol/l`.
     #[inline]
     pub fn from_femtomoles_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `fmol/l`.
@@ -340,7 +340,7 @@ impl<T: Number> Molarity<T> {
     /// A [`Molarity`] from a value in `pmol/l`.
     #[inline]
     pub fn from_picomoles_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `pmol/l`.
@@ -352,7 +352,7 @@ impl<T: Number> Molarity<T> {
     /// A [`Molarity`] from a value in `nmol/l`.
     #[inline]
     pub fn from_nanomoles_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `nmol/l`.
@@ -364,7 +364,7 @@ impl<T: Number> Molarity<T> {
     /// A [`Molarity`] from a value in `µmol/l`.
     #[inline]
     pub fn from_micromoles_per_liter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `µmol/l`.
@@ -394,7 +394,7 @@ impl<T: Number> Molarity<T> {
     /// The value in `cmol/l`.
     #[inline]
     pub fn as_centimoles_per_liter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Molarity`] from a value in `dmol/l`.
@@ -406,7 +406,7 @@ impl<T: Number> Molarity<T> {
     /// The value in `dmol/l`.
     #[inline]
     pub fn as_decimoles_per_liter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`Molarity`] from a value in `lbmol/ft³`.
@@ -431,14 +431,16 @@ impl Molarity<f64> {
             MolarityUnit::MolePerCubicMeter => value,
             MolarityUnit::KilomolePerCubicMeter => value * 1000.0,
             MolarityUnit::MolePerLiter => value * 1000.0,
-            MolarityUnit::FemtomolePerLiter => value / 1e12,
-            MolarityUnit::PicomolePerLiter => value / 1e9,
-            MolarityUnit::NanomolePerLiter => value / 1000000.0,
-            MolarityUnit::MicromolePerLiter => value / 1000.0,
+            MolarityUnit::FemtomolePerLiter => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            MolarityUnit::PicomolePerLiter => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            MolarityUnit::NanomolePerLiter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MolarityUnit::MicromolePerLiter => crate::conv::div_ratio(value, 1000.0, 1.0),
             MolarityUnit::MillimolePerLiter => value,
             MolarityUnit::CentimolePerLiter => value * 10.0,
             MolarityUnit::DecimolePerLiter => value * 100.0,
-            MolarityUnit::PoundMolePerCubicFoot => value * 16018.46337396014,
+            MolarityUnit::PoundMolePerCubicFoot => {
+                crate::conv::mul_ratio(value, 3543690390625.0, 221225364.0)
+            }
         })
     }
 }

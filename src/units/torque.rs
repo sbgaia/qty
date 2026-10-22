@@ -460,10 +460,10 @@ impl<T: Number> crate::UnitOf<Torque<T>> for TorqueUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            TorqueUnit::NewtonMillimeter => value / T::from_f64(1000.0),
+            TorqueUnit::NewtonMillimeter => T::div_ratio(value, 1000.0, 1.0),
             TorqueUnit::KilonewtonMillimeter => value,
             TorqueUnit::MeganewtonMillimeter => value * T::from_f64(1000.0),
-            TorqueUnit::NewtonCentimeter => value / T::from_f64(100.0),
+            TorqueUnit::NewtonCentimeter => T::div_ratio(value, 100.0, 1.0),
             TorqueUnit::KilonewtonCentimeter => value * T::from_f64(10.0),
             TorqueUnit::MeganewtonCentimeter => value * T::from_f64(10000.0),
             TorqueUnit::NewtonMeter => value,
@@ -471,24 +471,30 @@ impl<T: Number> crate::UnitOf<Torque<T>> for TorqueUnit {
             TorqueUnit::MeganewtonMeter => value * T::from_f64(1000000.0),
             TorqueUnit::OunceForceFoot => value * T::from_f64(0.08473862177071252),
             TorqueUnit::OunceForceInch => value * T::from_f64(0.0070615518142260435),
-            TorqueUnit::PoundalFoot => value * T::from_f64(0.0421401100938048),
+            TorqueUnit::PoundalFoot => T::mul_ratio(value, 6584392202157.0, 156250000000000.0),
             TorqueUnit::PoundForceInch => value * T::from_f64(0.1129848290276167),
-            TorqueUnit::KilopoundForceInch => value * T::from_f64(112.9848290276167),
-            TorqueUnit::MegapoundForceInch => value * T::from_f64(112984.8290276167),
+            TorqueUnit::KilopoundForceInch => {
+                T::mul_ratio(value, 1129848290276167.0, 10000000000000.0)
+            }
+            TorqueUnit::MegapoundForceInch => {
+                T::mul_ratio(value, 1129848290276167.0, 10000000000.0)
+            }
             TorqueUnit::PoundForceFoot => {
                 T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
-            TorqueUnit::KilopoundForceFoot => value * T::from_f64(1355.8179483314004),
+            TorqueUnit::KilopoundForceFoot => {
+                T::mul_ratio(value, 3389544870828501.0, 2500000000000.0)
+            }
             TorqueUnit::MegapoundForceFoot => T::mul_ratio(value, 3389544870828501.0, 2500000000.0),
-            TorqueUnit::GramForceMillimeter => value * T::from_f64(9.80665e-6),
-            TorqueUnit::GramForceCentimeter => value * T::from_f64(9.80665e-5),
-            TorqueUnit::GramForceMeter => value * T::from_f64(0.00980665),
-            TorqueUnit::KilogramForceMillimeter => value * T::from_f64(0.00980665),
-            TorqueUnit::KilogramForceCentimeter => value * T::from_f64(0.0980665),
-            TorqueUnit::KilogramForceMeter => value * T::from_f64(9.80665),
-            TorqueUnit::TonneForceMillimeter => value * T::from_f64(9.80665),
-            TorqueUnit::TonneForceCentimeter => value * T::from_f64(98.0665),
-            TorqueUnit::TonneForceMeter => value * T::from_f64(9806.65),
+            TorqueUnit::GramForceMillimeter => T::mul_ratio(value, 196133.0, 20000000000.0),
+            TorqueUnit::GramForceCentimeter => T::mul_ratio(value, 196133.0, 2000000000.0),
+            TorqueUnit::GramForceMeter => T::mul_ratio(value, 196133.0, 20000000.0),
+            TorqueUnit::KilogramForceMillimeter => T::mul_ratio(value, 196133.0, 20000000.0),
+            TorqueUnit::KilogramForceCentimeter => T::mul_ratio(value, 196133.0, 2000000.0),
+            TorqueUnit::KilogramForceMeter => T::mul_ratio(value, 196133.0, 20000.0),
+            TorqueUnit::TonneForceMillimeter => T::mul_ratio(value, 196133.0, 20000.0),
+            TorqueUnit::TonneForceCentimeter => T::mul_ratio(value, 196133.0, 2000.0),
+            TorqueUnit::TonneForceMeter => T::mul_ratio(value, 196133.0, 20.0),
         }
     }
 
@@ -497,33 +503,39 @@ impl<T: Number> crate::UnitOf<Torque<T>> for TorqueUnit {
         match self {
             TorqueUnit::NewtonMillimeter => value * T::from_f64(1000.0),
             TorqueUnit::KilonewtonMillimeter => value,
-            TorqueUnit::MeganewtonMillimeter => value / T::from_f64(1000.0),
+            TorqueUnit::MeganewtonMillimeter => T::div_ratio(value, 1000.0, 1.0),
             TorqueUnit::NewtonCentimeter => value * T::from_f64(100.0),
-            TorqueUnit::KilonewtonCentimeter => value / T::from_f64(10.0),
-            TorqueUnit::MeganewtonCentimeter => value / T::from_f64(10000.0),
+            TorqueUnit::KilonewtonCentimeter => T::div_ratio(value, 10.0, 1.0),
+            TorqueUnit::MeganewtonCentimeter => T::div_ratio(value, 10000.0, 1.0),
             TorqueUnit::NewtonMeter => value,
-            TorqueUnit::KilonewtonMeter => value / T::from_f64(1000.0),
-            TorqueUnit::MeganewtonMeter => value / T::from_f64(1000000.0),
+            TorqueUnit::KilonewtonMeter => T::div_ratio(value, 1000.0, 1.0),
+            TorqueUnit::MeganewtonMeter => T::div_ratio(value, 1000000.0, 1.0),
             TorqueUnit::OunceForceFoot => value / T::from_f64(0.08473862177071252),
             TorqueUnit::OunceForceInch => value / T::from_f64(0.0070615518142260435),
-            TorqueUnit::PoundalFoot => value / T::from_f64(0.0421401100938048),
+            TorqueUnit::PoundalFoot => T::div_ratio(value, 6584392202157.0, 156250000000000.0),
             TorqueUnit::PoundForceInch => value / T::from_f64(0.1129848290276167),
-            TorqueUnit::KilopoundForceInch => value / T::from_f64(112.9848290276167),
-            TorqueUnit::MegapoundForceInch => value / T::from_f64(112984.8290276167),
+            TorqueUnit::KilopoundForceInch => {
+                T::div_ratio(value, 1129848290276167.0, 10000000000000.0)
+            }
+            TorqueUnit::MegapoundForceInch => {
+                T::div_ratio(value, 1129848290276167.0, 10000000000.0)
+            }
             TorqueUnit::PoundForceFoot => {
                 T::div_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
-            TorqueUnit::KilopoundForceFoot => value / T::from_f64(1355.8179483314004),
+            TorqueUnit::KilopoundForceFoot => {
+                T::div_ratio(value, 3389544870828501.0, 2500000000000.0)
+            }
             TorqueUnit::MegapoundForceFoot => T::div_ratio(value, 3389544870828501.0, 2500000000.0),
-            TorqueUnit::GramForceMillimeter => value / T::from_f64(9.80665e-6),
-            TorqueUnit::GramForceCentimeter => value / T::from_f64(9.80665e-5),
-            TorqueUnit::GramForceMeter => value / T::from_f64(0.00980665),
-            TorqueUnit::KilogramForceMillimeter => value / T::from_f64(0.00980665),
-            TorqueUnit::KilogramForceCentimeter => value / T::from_f64(0.0980665),
-            TorqueUnit::KilogramForceMeter => value / T::from_f64(9.80665),
-            TorqueUnit::TonneForceMillimeter => value / T::from_f64(9.80665),
-            TorqueUnit::TonneForceCentimeter => value / T::from_f64(98.0665),
-            TorqueUnit::TonneForceMeter => value / T::from_f64(9806.65),
+            TorqueUnit::GramForceMillimeter => T::div_ratio(value, 196133.0, 20000000000.0),
+            TorqueUnit::GramForceCentimeter => T::div_ratio(value, 196133.0, 2000000000.0),
+            TorqueUnit::GramForceMeter => T::div_ratio(value, 196133.0, 20000000.0),
+            TorqueUnit::KilogramForceMillimeter => T::div_ratio(value, 196133.0, 20000000.0),
+            TorqueUnit::KilogramForceCentimeter => T::div_ratio(value, 196133.0, 2000000.0),
+            TorqueUnit::KilogramForceMeter => T::div_ratio(value, 196133.0, 20000.0),
+            TorqueUnit::TonneForceMillimeter => T::div_ratio(value, 196133.0, 20000.0),
+            TorqueUnit::TonneForceCentimeter => T::div_ratio(value, 196133.0, 2000.0),
+            TorqueUnit::TonneForceMeter => T::div_ratio(value, 196133.0, 20.0),
         }
     }
 }
@@ -547,7 +559,7 @@ impl<T: Number> Torque<T> {
     /// A [`Torque`] from a value in `N·mm`.
     #[inline]
     pub fn from_newton_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `N·mm`.
@@ -577,13 +589,13 @@ impl<T: Number> Torque<T> {
     /// The value in `MN·mm`.
     #[inline]
     pub fn as_meganewton_millimeters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Torque`] from a value in `N·cm`.
     #[inline]
     pub fn from_newton_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `N·cm`.
@@ -601,7 +613,7 @@ impl<T: Number> Torque<T> {
     /// The value in `kN·cm`.
     #[inline]
     pub fn as_kilonewton_centimeters(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Torque`] from a value in `MN·cm`.
@@ -613,7 +625,7 @@ impl<T: Number> Torque<T> {
     /// The value in `MN·cm`.
     #[inline]
     pub fn as_meganewton_centimeters(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`Torque`] from a value in `N·m`.
@@ -637,7 +649,7 @@ impl<T: Number> Torque<T> {
     /// The value in `kN·m`.
     #[inline]
     pub fn as_kilonewton_meters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Torque`] from a value in `MN·m`.
@@ -649,7 +661,7 @@ impl<T: Number> Torque<T> {
     /// The value in `MN·m`.
     #[inline]
     pub fn as_meganewton_meters(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Torque`] from a value in `ozf·ft`.
@@ -679,13 +691,13 @@ impl<T: Number> Torque<T> {
     /// A [`Torque`] from a value in `pdl·ft`.
     #[inline]
     pub fn from_poundal_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.0421401100938048))
+        Self(T::mul_ratio(value, 6584392202157.0, 156250000000000.0))
     }
 
     /// The value in `pdl·ft`.
     #[inline]
     pub fn as_poundal_feet(self) -> T {
-        self.0 / T::from_f64(0.0421401100938048)
+        T::div_ratio(self.0, 6584392202157.0, 156250000000000.0)
     }
 
     /// A [`Torque`] from a value in `lbf·in`.
@@ -703,25 +715,25 @@ impl<T: Number> Torque<T> {
     /// A [`Torque`] from a value in `klbf·in`.
     #[inline]
     pub fn from_kilopound_force_inches(value: T) -> Self {
-        Self(value * T::from_f64(112.9848290276167))
+        Self(T::mul_ratio(value, 1129848290276167.0, 10000000000000.0))
     }
 
     /// The value in `klbf·in`.
     #[inline]
     pub fn as_kilopound_force_inches(self) -> T {
-        self.0 / T::from_f64(112.9848290276167)
+        T::div_ratio(self.0, 1129848290276167.0, 10000000000000.0)
     }
 
     /// A [`Torque`] from a value in `Mlbf·in`.
     #[inline]
     pub fn from_megapound_force_inches(value: T) -> Self {
-        Self(value * T::from_f64(112984.8290276167))
+        Self(T::mul_ratio(value, 1129848290276167.0, 10000000000.0))
     }
 
     /// The value in `Mlbf·in`.
     #[inline]
     pub fn as_megapound_force_inches(self) -> T {
-        self.0 / T::from_f64(112984.8290276167)
+        T::div_ratio(self.0, 1129848290276167.0, 10000000000.0)
     }
 
     /// A [`Torque`] from a value in `lbf·ft`.
@@ -739,13 +751,13 @@ impl<T: Number> Torque<T> {
     /// A [`Torque`] from a value in `klbf·ft`.
     #[inline]
     pub fn from_kilopound_force_feet(value: T) -> Self {
-        Self(value * T::from_f64(1355.8179483314004))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000000.0))
     }
 
     /// The value in `klbf·ft`.
     #[inline]
     pub fn as_kilopound_force_feet(self) -> T {
-        self.0 / T::from_f64(1355.8179483314004)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000000.0)
     }
 
     /// A [`Torque`] from a value in `Mlbf·ft`.
@@ -763,109 +775,109 @@ impl<T: Number> Torque<T> {
     /// A [`Torque`] from a value in `gf·mm`.
     #[inline]
     pub fn from_gram_force_millimeters(value: T) -> Self {
-        Self(value * T::from_f64(9.80665e-6))
+        Self(T::mul_ratio(value, 196133.0, 20000000000.0))
     }
 
     /// The value in `gf·mm`.
     #[inline]
     pub fn as_gram_force_millimeters(self) -> T {
-        self.0 / T::from_f64(9.80665e-6)
+        T::div_ratio(self.0, 196133.0, 20000000000.0)
     }
 
     /// A [`Torque`] from a value in `gf·cm`.
     #[inline]
     pub fn from_gram_force_centimeters(value: T) -> Self {
-        Self(value * T::from_f64(9.80665e-5))
+        Self(T::mul_ratio(value, 196133.0, 2000000000.0))
     }
 
     /// The value in `gf·cm`.
     #[inline]
     pub fn as_gram_force_centimeters(self) -> T {
-        self.0 / T::from_f64(9.80665e-5)
+        T::div_ratio(self.0, 196133.0, 2000000000.0)
     }
 
     /// A [`Torque`] from a value in `gf·m`.
     #[inline]
     pub fn from_gram_force_meters(value: T) -> Self {
-        Self(value * T::from_f64(0.00980665))
+        Self(T::mul_ratio(value, 196133.0, 20000000.0))
     }
 
     /// The value in `gf·m`.
     #[inline]
     pub fn as_gram_force_meters(self) -> T {
-        self.0 / T::from_f64(0.00980665)
+        T::div_ratio(self.0, 196133.0, 20000000.0)
     }
 
     /// A [`Torque`] from a value in `kgf·mm`.
     #[inline]
     pub fn from_kilogram_force_millimeters(value: T) -> Self {
-        Self(value * T::from_f64(0.00980665))
+        Self(T::mul_ratio(value, 196133.0, 20000000.0))
     }
 
     /// The value in `kgf·mm`.
     #[inline]
     pub fn as_kilogram_force_millimeters(self) -> T {
-        self.0 / T::from_f64(0.00980665)
+        T::div_ratio(self.0, 196133.0, 20000000.0)
     }
 
     /// A [`Torque`] from a value in `kgf·cm`.
     #[inline]
     pub fn from_kilogram_force_centimeters(value: T) -> Self {
-        Self(value * T::from_f64(0.0980665))
+        Self(T::mul_ratio(value, 196133.0, 2000000.0))
     }
 
     /// The value in `kgf·cm`.
     #[inline]
     pub fn as_kilogram_force_centimeters(self) -> T {
-        self.0 / T::from_f64(0.0980665)
+        T::div_ratio(self.0, 196133.0, 2000000.0)
     }
 
     /// A [`Torque`] from a value in `kgf·m`.
     #[inline]
     pub fn from_kilogram_force_meters(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `kgf·m`.
     #[inline]
     pub fn as_kilogram_force_meters(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`Torque`] from a value in `tf·mm`.
     #[inline]
     pub fn from_tonne_force_millimeters(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `tf·mm`.
     #[inline]
     pub fn as_tonne_force_millimeters(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`Torque`] from a value in `tf·cm`.
     #[inline]
     pub fn from_tonne_force_centimeters(value: T) -> Self {
-        Self(value * T::from_f64(98.0665))
+        Self(T::mul_ratio(value, 196133.0, 2000.0))
     }
 
     /// The value in `tf·cm`.
     #[inline]
     pub fn as_tonne_force_centimeters(self) -> T {
-        self.0 / T::from_f64(98.0665)
+        T::div_ratio(self.0, 196133.0, 2000.0)
     }
 
     /// A [`Torque`] from a value in `tf·m`.
     #[inline]
     pub fn from_tonne_force_meters(value: T) -> Self {
-        Self(value * T::from_f64(9806.65))
+        Self(T::mul_ratio(value, 196133.0, 20.0))
     }
 
     /// The value in `tf·m`.
     #[inline]
     pub fn as_tonne_force_meters(self) -> T {
-        self.0 / T::from_f64(9806.65)
+        T::div_ratio(self.0, 196133.0, 20.0)
     }
 }
 
@@ -875,10 +887,10 @@ impl Torque<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: TorqueUnit) -> Self {
         Self(match unit {
-            TorqueUnit::NewtonMillimeter => value / 1000.0,
+            TorqueUnit::NewtonMillimeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             TorqueUnit::KilonewtonMillimeter => value,
             TorqueUnit::MeganewtonMillimeter => value * 1000.0,
-            TorqueUnit::NewtonCentimeter => value / 100.0,
+            TorqueUnit::NewtonCentimeter => crate::conv::div_ratio(value, 100.0, 1.0),
             TorqueUnit::KilonewtonCentimeter => value * 10.0,
             TorqueUnit::MeganewtonCentimeter => value * 10000.0,
             TorqueUnit::NewtonMeter => value,
@@ -886,22 +898,42 @@ impl Torque<f64> {
             TorqueUnit::MeganewtonMeter => value * 1000000.0,
             TorqueUnit::OunceForceFoot => value * 0.08473862177071252,
             TorqueUnit::OunceForceInch => value * 0.0070615518142260435,
-            TorqueUnit::PoundalFoot => value * 0.0421401100938048,
+            TorqueUnit::PoundalFoot => {
+                crate::conv::mul_ratio(value, 6584392202157.0, 156250000000000.0)
+            }
             TorqueUnit::PoundForceInch => value * 0.1129848290276167,
-            TorqueUnit::KilopoundForceInch => value * 112.9848290276167,
-            TorqueUnit::MegapoundForceInch => value * 112984.8290276167,
-            TorqueUnit::PoundForceFoot => value * 1.3558179483314003,
-            TorqueUnit::KilopoundForceFoot => value * 1355.8179483314004,
-            TorqueUnit::MegapoundForceFoot => value * 1355817.9483314003,
-            TorqueUnit::GramForceMillimeter => value * 9.80665e-6,
-            TorqueUnit::GramForceCentimeter => value * 9.80665e-5,
-            TorqueUnit::GramForceMeter => value * 0.00980665,
-            TorqueUnit::KilogramForceMillimeter => value * 0.00980665,
-            TorqueUnit::KilogramForceCentimeter => value * 0.0980665,
-            TorqueUnit::KilogramForceMeter => value * 9.80665,
-            TorqueUnit::TonneForceMillimeter => value * 9.80665,
-            TorqueUnit::TonneForceCentimeter => value * 98.0665,
-            TorqueUnit::TonneForceMeter => value * 9806.65,
+            TorqueUnit::KilopoundForceInch => {
+                crate::conv::mul_ratio(value, 1129848290276167.0, 10000000000000.0)
+            }
+            TorqueUnit::MegapoundForceInch => {
+                crate::conv::mul_ratio(value, 1129848290276167.0, 10000000000.0)
+            }
+            TorqueUnit::PoundForceFoot => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
+            TorqueUnit::KilopoundForceFoot => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000000.0)
+            }
+            TorqueUnit::MegapoundForceFoot => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000.0)
+            }
+            TorqueUnit::GramForceMillimeter => {
+                crate::conv::mul_ratio(value, 196133.0, 20000000000.0)
+            }
+            TorqueUnit::GramForceCentimeter => {
+                crate::conv::mul_ratio(value, 196133.0, 2000000000.0)
+            }
+            TorqueUnit::GramForceMeter => crate::conv::mul_ratio(value, 196133.0, 20000000.0),
+            TorqueUnit::KilogramForceMillimeter => {
+                crate::conv::mul_ratio(value, 196133.0, 20000000.0)
+            }
+            TorqueUnit::KilogramForceCentimeter => {
+                crate::conv::mul_ratio(value, 196133.0, 2000000.0)
+            }
+            TorqueUnit::KilogramForceMeter => crate::conv::mul_ratio(value, 196133.0, 20000.0),
+            TorqueUnit::TonneForceMillimeter => crate::conv::mul_ratio(value, 196133.0, 20000.0),
+            TorqueUnit::TonneForceCentimeter => crate::conv::mul_ratio(value, 196133.0, 2000.0),
+            TorqueUnit::TonneForceMeter => crate::conv::mul_ratio(value, 196133.0, 20.0),
         })
     }
 }

@@ -593,36 +593,36 @@ impl<T: Number> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             ForcePerLengthUnit::NewtonPerMeter => value,
-            ForcePerLengthUnit::NanonewtonPerMeter => value / T::from_f64(1e9),
-            ForcePerLengthUnit::MicronewtonPerMeter => value / T::from_f64(1000000.0),
-            ForcePerLengthUnit::MillinewtonPerMeter => value / T::from_f64(1000.0),
-            ForcePerLengthUnit::CentinewtonPerMeter => value / T::from_f64(100.0),
-            ForcePerLengthUnit::DecinewtonPerMeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::NanonewtonPerMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            ForcePerLengthUnit::MicronewtonPerMeter => T::div_ratio(value, 1000000.0, 1.0),
+            ForcePerLengthUnit::MillinewtonPerMeter => T::div_ratio(value, 1000.0, 1.0),
+            ForcePerLengthUnit::CentinewtonPerMeter => T::div_ratio(value, 100.0, 1.0),
+            ForcePerLengthUnit::DecinewtonPerMeter => T::div_ratio(value, 10.0, 1.0),
             ForcePerLengthUnit::DecanewtonPerMeter => value * T::from_f64(10.0),
             ForcePerLengthUnit::KilonewtonPerMeter => value * T::from_f64(1000.0),
             ForcePerLengthUnit::MeganewtonPerMeter => value * T::from_f64(1000000.0),
             ForcePerLengthUnit::NewtonPerCentimeter => value * T::from_f64(100.0),
-            ForcePerLengthUnit::NanonewtonPerCentimeter => value / T::from_f64(1e7),
-            ForcePerLengthUnit::MicronewtonPerCentimeter => value / T::from_f64(10000.0),
-            ForcePerLengthUnit::MillinewtonPerCentimeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::NanonewtonPerCentimeter => T::div_ratio(value, 10000000.0, 1.0),
+            ForcePerLengthUnit::MicronewtonPerCentimeter => T::div_ratio(value, 10000.0, 1.0),
+            ForcePerLengthUnit::MillinewtonPerCentimeter => T::div_ratio(value, 10.0, 1.0),
             ForcePerLengthUnit::CentinewtonPerCentimeter => value,
             ForcePerLengthUnit::DecinewtonPerCentimeter => value * T::from_f64(10.0),
             ForcePerLengthUnit::DecanewtonPerCentimeter => value * T::from_f64(1000.0),
             ForcePerLengthUnit::KilonewtonPerCentimeter => value * T::from_f64(100000.0),
             ForcePerLengthUnit::MeganewtonPerCentimeter => value * T::from_f64(1e8),
             ForcePerLengthUnit::NewtonPerMillimeter => value * T::from_f64(1000.0),
-            ForcePerLengthUnit::NanonewtonPerMillimeter => value / T::from_f64(1000000.0),
-            ForcePerLengthUnit::MicronewtonPerMillimeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::NanonewtonPerMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            ForcePerLengthUnit::MicronewtonPerMillimeter => T::div_ratio(value, 1000.0, 1.0),
             ForcePerLengthUnit::MillinewtonPerMillimeter => value,
             ForcePerLengthUnit::CentinewtonPerMillimeter => value * T::from_f64(10.0),
             ForcePerLengthUnit::DecinewtonPerMillimeter => value * T::from_f64(100.0),
             ForcePerLengthUnit::DecanewtonPerMillimeter => value * T::from_f64(10000.0),
             ForcePerLengthUnit::KilonewtonPerMillimeter => value * T::from_f64(1000000.0),
             ForcePerLengthUnit::MeganewtonPerMillimeter => value * T::from_f64(1e9),
-            ForcePerLengthUnit::KilogramForcePerMeter => value * T::from_f64(9.80665),
-            ForcePerLengthUnit::KilogramForcePerCentimeter => value * T::from_f64(980.665),
-            ForcePerLengthUnit::KilogramForcePerMillimeter => value * T::from_f64(9806.65),
-            ForcePerLengthUnit::TonneForcePerMeter => value * T::from_f64(9806.65),
+            ForcePerLengthUnit::KilogramForcePerMeter => T::mul_ratio(value, 196133.0, 20000.0),
+            ForcePerLengthUnit::KilogramForcePerCentimeter => T::mul_ratio(value, 196133.0, 200.0),
+            ForcePerLengthUnit::KilogramForcePerMillimeter => T::mul_ratio(value, 196133.0, 20.0),
+            ForcePerLengthUnit::TonneForcePerMeter => T::mul_ratio(value, 196133.0, 20.0),
             ForcePerLengthUnit::TonneForcePerCentimeter => value * T::from_f64(980665.0),
             ForcePerLengthUnit::TonneForcePerMillimeter => value * T::from_f64(9806650.0),
             ForcePerLengthUnit::PoundForcePerFoot => {
@@ -652,33 +652,33 @@ impl<T: Number> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
             ForcePerLengthUnit::MillinewtonPerMeter => value * T::from_f64(1000.0),
             ForcePerLengthUnit::CentinewtonPerMeter => value * T::from_f64(100.0),
             ForcePerLengthUnit::DecinewtonPerMeter => value * T::from_f64(10.0),
-            ForcePerLengthUnit::DecanewtonPerMeter => value / T::from_f64(10.0),
-            ForcePerLengthUnit::KilonewtonPerMeter => value / T::from_f64(1000.0),
-            ForcePerLengthUnit::MeganewtonPerMeter => value / T::from_f64(1000000.0),
-            ForcePerLengthUnit::NewtonPerCentimeter => value / T::from_f64(100.0),
+            ForcePerLengthUnit::DecanewtonPerMeter => T::div_ratio(value, 10.0, 1.0),
+            ForcePerLengthUnit::KilonewtonPerMeter => T::div_ratio(value, 1000.0, 1.0),
+            ForcePerLengthUnit::MeganewtonPerMeter => T::div_ratio(value, 1000000.0, 1.0),
+            ForcePerLengthUnit::NewtonPerCentimeter => T::div_ratio(value, 100.0, 1.0),
             ForcePerLengthUnit::NanonewtonPerCentimeter => value * T::from_f64(1e7),
             ForcePerLengthUnit::MicronewtonPerCentimeter => value * T::from_f64(10000.0),
             ForcePerLengthUnit::MillinewtonPerCentimeter => value * T::from_f64(10.0),
             ForcePerLengthUnit::CentinewtonPerCentimeter => value,
-            ForcePerLengthUnit::DecinewtonPerCentimeter => value / T::from_f64(10.0),
-            ForcePerLengthUnit::DecanewtonPerCentimeter => value / T::from_f64(1000.0),
-            ForcePerLengthUnit::KilonewtonPerCentimeter => value / T::from_f64(100000.0),
-            ForcePerLengthUnit::MeganewtonPerCentimeter => value / T::from_f64(1e8),
-            ForcePerLengthUnit::NewtonPerMillimeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::DecinewtonPerCentimeter => T::div_ratio(value, 10.0, 1.0),
+            ForcePerLengthUnit::DecanewtonPerCentimeter => T::div_ratio(value, 1000.0, 1.0),
+            ForcePerLengthUnit::KilonewtonPerCentimeter => T::div_ratio(value, 100000.0, 1.0),
+            ForcePerLengthUnit::MeganewtonPerCentimeter => T::div_ratio(value, 100000000.0, 1.0),
+            ForcePerLengthUnit::NewtonPerMillimeter => T::div_ratio(value, 1000.0, 1.0),
             ForcePerLengthUnit::NanonewtonPerMillimeter => value * T::from_f64(1000000.0),
             ForcePerLengthUnit::MicronewtonPerMillimeter => value * T::from_f64(1000.0),
             ForcePerLengthUnit::MillinewtonPerMillimeter => value,
-            ForcePerLengthUnit::CentinewtonPerMillimeter => value / T::from_f64(10.0),
-            ForcePerLengthUnit::DecinewtonPerMillimeter => value / T::from_f64(100.0),
-            ForcePerLengthUnit::DecanewtonPerMillimeter => value / T::from_f64(10000.0),
-            ForcePerLengthUnit::KilonewtonPerMillimeter => value / T::from_f64(1000000.0),
-            ForcePerLengthUnit::MeganewtonPerMillimeter => value / T::from_f64(1e9),
-            ForcePerLengthUnit::KilogramForcePerMeter => value / T::from_f64(9.80665),
-            ForcePerLengthUnit::KilogramForcePerCentimeter => value / T::from_f64(980.665),
-            ForcePerLengthUnit::KilogramForcePerMillimeter => value / T::from_f64(9806.65),
-            ForcePerLengthUnit::TonneForcePerMeter => value / T::from_f64(9806.65),
-            ForcePerLengthUnit::TonneForcePerCentimeter => value / T::from_f64(980665.0),
-            ForcePerLengthUnit::TonneForcePerMillimeter => value / T::from_f64(9806650.0),
+            ForcePerLengthUnit::CentinewtonPerMillimeter => T::div_ratio(value, 10.0, 1.0),
+            ForcePerLengthUnit::DecinewtonPerMillimeter => T::div_ratio(value, 100.0, 1.0),
+            ForcePerLengthUnit::DecanewtonPerMillimeter => T::div_ratio(value, 10000.0, 1.0),
+            ForcePerLengthUnit::KilonewtonPerMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            ForcePerLengthUnit::MeganewtonPerMillimeter => T::div_ratio(value, 1000000000.0, 1.0),
+            ForcePerLengthUnit::KilogramForcePerMeter => T::div_ratio(value, 196133.0, 20000.0),
+            ForcePerLengthUnit::KilogramForcePerCentimeter => T::div_ratio(value, 196133.0, 200.0),
+            ForcePerLengthUnit::KilogramForcePerMillimeter => T::div_ratio(value, 196133.0, 20.0),
+            ForcePerLengthUnit::TonneForcePerMeter => T::div_ratio(value, 196133.0, 20.0),
+            ForcePerLengthUnit::TonneForcePerCentimeter => T::div_ratio(value, 980665.0, 1.0),
+            ForcePerLengthUnit::TonneForcePerMillimeter => T::div_ratio(value, 9806650.0, 1.0),
             ForcePerLengthUnit::PoundForcePerFoot => {
                 T::div_ratio(value, 8896443230521.0, 609600000000.0)
             }
@@ -732,7 +732,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `nN/m`.
     #[inline]
     pub fn from_nanonewtons_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nN/m`.
@@ -744,7 +744,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `µN/m`.
     #[inline]
     pub fn from_micronewtons_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µN/m`.
@@ -756,7 +756,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `mN/m`.
     #[inline]
     pub fn from_millinewtons_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mN/m`.
@@ -768,7 +768,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `cN/m`.
     #[inline]
     pub fn from_centinewtons_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cN/m`.
@@ -780,7 +780,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `dN/m`.
     #[inline]
     pub fn from_decinewtons_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dN/m`.
@@ -798,7 +798,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `daN/m`.
     #[inline]
     pub fn as_decanewtons_per_meter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kN/m`.
@@ -810,7 +810,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `kN/m`.
     #[inline]
     pub fn as_kilonewtons_per_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `MN/m`.
@@ -822,7 +822,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `MN/m`.
     #[inline]
     pub fn as_meganewtons_per_meter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `N/cm`.
@@ -834,13 +834,13 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `N/cm`.
     #[inline]
     pub fn as_newtons_per_centimeter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `nN/cm`.
     #[inline]
     pub fn from_nanonewtons_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `nN/cm`.
@@ -852,7 +852,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `µN/cm`.
     #[inline]
     pub fn from_micronewtons_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `µN/cm`.
@@ -864,7 +864,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `mN/cm`.
     #[inline]
     pub fn from_millinewtons_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `mN/cm`.
@@ -894,7 +894,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `dN/cm`.
     #[inline]
     pub fn as_decinewtons_per_centimeter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `daN/cm`.
@@ -906,7 +906,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `daN/cm`.
     #[inline]
     pub fn as_decanewtons_per_centimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kN/cm`.
@@ -918,7 +918,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `kN/cm`.
     #[inline]
     pub fn as_kilonewtons_per_centimeter(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `MN/cm`.
@@ -930,7 +930,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `MN/cm`.
     #[inline]
     pub fn as_meganewtons_per_centimeter(self) -> T {
-        self.0 / T::from_f64(1e8)
+        T::div_ratio(self.0, 100000000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `N/mm`.
@@ -942,13 +942,13 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `N/mm`.
     #[inline]
     pub fn as_newtons_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `nN/mm`.
     #[inline]
     pub fn from_nanonewtons_per_millimeter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `nN/mm`.
@@ -960,7 +960,7 @@ impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `µN/mm`.
     #[inline]
     pub fn from_micronewtons_per_millimeter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `µN/mm`.
@@ -990,7 +990,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `cN/mm`.
     #[inline]
     pub fn as_centinewtons_per_millimeter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `dN/mm`.
@@ -1002,7 +1002,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `dN/mm`.
     #[inline]
     pub fn as_decinewtons_per_millimeter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `daN/mm`.
@@ -1014,7 +1014,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `daN/mm`.
     #[inline]
     pub fn as_decanewtons_per_millimeter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kN/mm`.
@@ -1026,7 +1026,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `kN/mm`.
     #[inline]
     pub fn as_kilonewtons_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `MN/mm`.
@@ -1038,55 +1038,55 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `MN/mm`.
     #[inline]
     pub fn as_meganewtons_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kgf/m`.
     #[inline]
     pub fn from_kilograms_force_per_meter(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `kgf/m`.
     #[inline]
     pub fn as_kilograms_force_per_meter(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kgf/cm`.
     #[inline]
     pub fn from_kilograms_force_per_centimeter(value: T) -> Self {
-        Self(value * T::from_f64(980.665))
+        Self(T::mul_ratio(value, 196133.0, 200.0))
     }
 
     /// The value in `kgf/cm`.
     #[inline]
     pub fn as_kilograms_force_per_centimeter(self) -> T {
-        self.0 / T::from_f64(980.665)
+        T::div_ratio(self.0, 196133.0, 200.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kgf/mm`.
     #[inline]
     pub fn from_kilograms_force_per_millimeter(value: T) -> Self {
-        Self(value * T::from_f64(9806.65))
+        Self(T::mul_ratio(value, 196133.0, 20.0))
     }
 
     /// The value in `kgf/mm`.
     #[inline]
     pub fn as_kilograms_force_per_millimeter(self) -> T {
-        self.0 / T::from_f64(9806.65)
+        T::div_ratio(self.0, 196133.0, 20.0)
     }
 
     /// A [`ForcePerLength`] from a value in `tf/m`.
     #[inline]
     pub fn from_tonnes_force_per_meter(value: T) -> Self {
-        Self(value * T::from_f64(9806.65))
+        Self(T::mul_ratio(value, 196133.0, 20.0))
     }
 
     /// The value in `tf/m`.
     #[inline]
     pub fn as_tonnes_force_per_meter(self) -> T {
-        self.0 / T::from_f64(9806.65)
+        T::div_ratio(self.0, 196133.0, 20.0)
     }
 
     /// A [`ForcePerLength`] from a value in `tf/cm`.
@@ -1098,7 +1098,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `tf/cm`.
     #[inline]
     pub fn as_tonnes_force_per_centimeter(self) -> T {
-        self.0 / T::from_f64(980665.0)
+        T::div_ratio(self.0, 980665.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `tf/mm`.
@@ -1110,7 +1110,7 @@ impl<T: Number> ForcePerLength<T> {
     /// The value in `tf/mm`.
     #[inline]
     pub fn as_tonnes_force_per_millimeter(self) -> T {
-        self.0 / T::from_f64(9806650.0)
+        T::div_ratio(self.0, 9806650.0, 1.0)
     }
 
     /// A [`ForcePerLength`] from a value in `lbf/ft`.
@@ -1181,43 +1181,73 @@ impl ForcePerLength<f64> {
     pub const fn const_new(value: f64, unit: ForcePerLengthUnit) -> Self {
         Self(match unit {
             ForcePerLengthUnit::NewtonPerMeter => value,
-            ForcePerLengthUnit::NanonewtonPerMeter => value / 1e9,
-            ForcePerLengthUnit::MicronewtonPerMeter => value / 1000000.0,
-            ForcePerLengthUnit::MillinewtonPerMeter => value / 1000.0,
-            ForcePerLengthUnit::CentinewtonPerMeter => value / 100.0,
-            ForcePerLengthUnit::DecinewtonPerMeter => value / 10.0,
+            ForcePerLengthUnit::NanonewtonPerMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            ForcePerLengthUnit::MicronewtonPerMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            ForcePerLengthUnit::MillinewtonPerMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            ForcePerLengthUnit::CentinewtonPerMeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            ForcePerLengthUnit::DecinewtonPerMeter => crate::conv::div_ratio(value, 10.0, 1.0),
             ForcePerLengthUnit::DecanewtonPerMeter => value * 10.0,
             ForcePerLengthUnit::KilonewtonPerMeter => value * 1000.0,
             ForcePerLengthUnit::MeganewtonPerMeter => value * 1000000.0,
             ForcePerLengthUnit::NewtonPerCentimeter => value * 100.0,
-            ForcePerLengthUnit::NanonewtonPerCentimeter => value / 1e7,
-            ForcePerLengthUnit::MicronewtonPerCentimeter => value / 10000.0,
-            ForcePerLengthUnit::MillinewtonPerCentimeter => value / 10.0,
+            ForcePerLengthUnit::NanonewtonPerCentimeter => {
+                crate::conv::div_ratio(value, 10000000.0, 1.0)
+            }
+            ForcePerLengthUnit::MicronewtonPerCentimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            ForcePerLengthUnit::MillinewtonPerCentimeter => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
             ForcePerLengthUnit::CentinewtonPerCentimeter => value,
             ForcePerLengthUnit::DecinewtonPerCentimeter => value * 10.0,
             ForcePerLengthUnit::DecanewtonPerCentimeter => value * 1000.0,
             ForcePerLengthUnit::KilonewtonPerCentimeter => value * 100000.0,
             ForcePerLengthUnit::MeganewtonPerCentimeter => value * 1e8,
             ForcePerLengthUnit::NewtonPerMillimeter => value * 1000.0,
-            ForcePerLengthUnit::NanonewtonPerMillimeter => value / 1000000.0,
-            ForcePerLengthUnit::MicronewtonPerMillimeter => value / 1000.0,
+            ForcePerLengthUnit::NanonewtonPerMillimeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            ForcePerLengthUnit::MicronewtonPerMillimeter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             ForcePerLengthUnit::MillinewtonPerMillimeter => value,
             ForcePerLengthUnit::CentinewtonPerMillimeter => value * 10.0,
             ForcePerLengthUnit::DecinewtonPerMillimeter => value * 100.0,
             ForcePerLengthUnit::DecanewtonPerMillimeter => value * 10000.0,
             ForcePerLengthUnit::KilonewtonPerMillimeter => value * 1000000.0,
             ForcePerLengthUnit::MeganewtonPerMillimeter => value * 1e9,
-            ForcePerLengthUnit::KilogramForcePerMeter => value * 9.80665,
-            ForcePerLengthUnit::KilogramForcePerCentimeter => value * 980.665,
-            ForcePerLengthUnit::KilogramForcePerMillimeter => value * 9806.65,
-            ForcePerLengthUnit::TonneForcePerMeter => value * 9806.65,
+            ForcePerLengthUnit::KilogramForcePerMeter => {
+                crate::conv::mul_ratio(value, 196133.0, 20000.0)
+            }
+            ForcePerLengthUnit::KilogramForcePerCentimeter => {
+                crate::conv::mul_ratio(value, 196133.0, 200.0)
+            }
+            ForcePerLengthUnit::KilogramForcePerMillimeter => {
+                crate::conv::mul_ratio(value, 196133.0, 20.0)
+            }
+            ForcePerLengthUnit::TonneForcePerMeter => crate::conv::mul_ratio(value, 196133.0, 20.0),
             ForcePerLengthUnit::TonneForcePerCentimeter => value * 980665.0,
             ForcePerLengthUnit::TonneForcePerMillimeter => value * 9806650.0,
-            ForcePerLengthUnit::PoundForcePerFoot => value * 14.593902937206364,
-            ForcePerLengthUnit::PoundForcePerInch => value * 175.1268352464764,
-            ForcePerLengthUnit::PoundForcePerYard => value * 4.864634312402122,
-            ForcePerLengthUnit::KilopoundForcePerFoot => value * 14593.902937206365,
-            ForcePerLengthUnit::KilopoundForcePerInch => value * 175126.83524647637,
+            ForcePerLengthUnit::PoundForcePerFoot => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 609600000000.0)
+            }
+            ForcePerLengthUnit::PoundForcePerInch => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 50800000000.0)
+            }
+            ForcePerLengthUnit::PoundForcePerYard => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 1828800000000.0)
+            }
+            ForcePerLengthUnit::KilopoundForcePerFoot => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 609600000.0)
+            }
+            ForcePerLengthUnit::KilopoundForcePerInch => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 50800000.0)
+            }
         })
     }
 }

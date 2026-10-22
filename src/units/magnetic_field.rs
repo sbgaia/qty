@@ -172,11 +172,11 @@ impl<T: Number> crate::UnitOf<MagneticField<T>> for MagneticFieldUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             MagneticFieldUnit::Tesla => value,
-            MagneticFieldUnit::Nanotesla => value / T::from_f64(1e9),
-            MagneticFieldUnit::Microtesla => value / T::from_f64(1000000.0),
-            MagneticFieldUnit::Millitesla => value / T::from_f64(1000.0),
-            MagneticFieldUnit::Gauss => value / T::from_f64(10000.0),
-            MagneticFieldUnit::Milligauss => value / T::from_f64(1e7),
+            MagneticFieldUnit::Nanotesla => T::div_ratio(value, 1000000000.0, 1.0),
+            MagneticFieldUnit::Microtesla => T::div_ratio(value, 1000000.0, 1.0),
+            MagneticFieldUnit::Millitesla => T::div_ratio(value, 1000.0, 1.0),
+            MagneticFieldUnit::Gauss => T::div_ratio(value, 10000.0, 1.0),
+            MagneticFieldUnit::Milligauss => T::div_ratio(value, 10000000.0, 1.0),
         }
     }
 
@@ -225,7 +225,7 @@ impl<T: Number> MagneticField<T> {
     /// A [`MagneticField`] from a value in `nT`.
     #[inline]
     pub fn from_nanoteslas(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nT`.
@@ -237,7 +237,7 @@ impl<T: Number> MagneticField<T> {
     /// A [`MagneticField`] from a value in `µT`.
     #[inline]
     pub fn from_microteslas(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µT`.
@@ -249,7 +249,7 @@ impl<T: Number> MagneticField<T> {
     /// A [`MagneticField`] from a value in `mT`.
     #[inline]
     pub fn from_milliteslas(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mT`.
@@ -261,7 +261,7 @@ impl<T: Number> MagneticField<T> {
     /// A [`MagneticField`] from a value in `G`.
     #[inline]
     pub fn from_gausses(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `G`.
@@ -273,7 +273,7 @@ impl<T: Number> MagneticField<T> {
     /// A [`MagneticField`] from a value in `mG`.
     #[inline]
     pub fn from_milligausses(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `mG`.
@@ -290,11 +290,11 @@ impl MagneticField<f64> {
     pub const fn const_new(value: f64, unit: MagneticFieldUnit) -> Self {
         Self(match unit {
             MagneticFieldUnit::Tesla => value,
-            MagneticFieldUnit::Nanotesla => value / 1e9,
-            MagneticFieldUnit::Microtesla => value / 1000000.0,
-            MagneticFieldUnit::Millitesla => value / 1000.0,
-            MagneticFieldUnit::Gauss => value / 10000.0,
-            MagneticFieldUnit::Milligauss => value / 1e7,
+            MagneticFieldUnit::Nanotesla => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            MagneticFieldUnit::Microtesla => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MagneticFieldUnit::Millitesla => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MagneticFieldUnit::Gauss => crate::conv::div_ratio(value, 10000.0, 1.0),
+            MagneticFieldUnit::Milligauss => crate::conv::div_ratio(value, 10000000.0, 1.0),
         })
     }
 }

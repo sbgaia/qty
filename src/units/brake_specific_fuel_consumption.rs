@@ -136,7 +136,9 @@ impl<T: Number> crate::UnitOf<BrakeSpecificFuelConsumption<T>>
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value / T::from_f64(3.6e9),
+            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => {
+                T::div_ratio(value, 3600000000.0, 1.0)
+            }
             BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
             BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
                 T::mul_ratio(value, 32399455.0, 191751395532579.0)
@@ -170,7 +172,7 @@ impl<T: Number> BrakeSpecificFuelConsumption<T> {
     /// A [`BrakeSpecificFuelConsumption`] from a value in `g/kWh`.
     #[inline]
     pub fn from_grams_per_kilo_watt_hour(value: T) -> Self {
-        Self(value / T::from_f64(3.6e9))
+        Self(T::div_ratio(value, 3600000000.0, 1.0))
     }
 
     /// The value in `g/kWh`.
@@ -210,10 +212,12 @@ impl BrakeSpecificFuelConsumption<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: BrakeSpecificFuelConsumptionUnit) -> Self {
         Self(match unit {
-            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value / 3.6e9,
+            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => {
+                crate::conv::div_ratio(value, 3600000000.0, 1.0)
+            }
             BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
             BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
-                value * 1.6896594108226585e-7
+                crate::conv::mul_ratio(value, 32399455.0, 191751395532579.0)
             }
         })
     }

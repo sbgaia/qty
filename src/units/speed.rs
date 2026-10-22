@@ -530,38 +530,38 @@ impl<T: Number> crate::UnitOf<Speed<T>> for SpeedUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             SpeedUnit::MeterPerSecond => value,
-            SpeedUnit::NanometerPerSecond => value / T::from_f64(1e9),
-            SpeedUnit::MicrometerPerSecond => value / T::from_f64(1000000.0),
-            SpeedUnit::MillimeterPerSecond => value / T::from_f64(1000.0),
-            SpeedUnit::CentimeterPerSecond => value / T::from_f64(100.0),
-            SpeedUnit::DecimeterPerSecond => value / T::from_f64(10.0),
+            SpeedUnit::NanometerPerSecond => T::div_ratio(value, 1000000000.0, 1.0),
+            SpeedUnit::MicrometerPerSecond => T::div_ratio(value, 1000000.0, 1.0),
+            SpeedUnit::MillimeterPerSecond => T::div_ratio(value, 1000.0, 1.0),
+            SpeedUnit::CentimeterPerSecond => T::div_ratio(value, 100.0, 1.0),
+            SpeedUnit::DecimeterPerSecond => T::div_ratio(value, 10.0, 1.0),
             SpeedUnit::KilometerPerSecond => value * T::from_f64(1000.0),
-            SpeedUnit::MeterPerMinute => value / T::from_f64(60.0),
-            SpeedUnit::NanometerPerMinute => value / T::from_f64(6e10),
-            SpeedUnit::MicrometerPerMinute => value / T::from_f64(6e7),
-            SpeedUnit::MillimeterPerMinute => value / T::from_f64(60000.0),
-            SpeedUnit::CentimeterPerMinute => value / T::from_f64(6000.0),
-            SpeedUnit::DecimeterPerMinute => value / T::from_f64(600.0),
+            SpeedUnit::MeterPerMinute => T::div_ratio(value, 60.0, 1.0),
+            SpeedUnit::NanometerPerMinute => T::div_ratio(value, 60000000000.0, 1.0),
+            SpeedUnit::MicrometerPerMinute => T::div_ratio(value, 60000000.0, 1.0),
+            SpeedUnit::MillimeterPerMinute => T::div_ratio(value, 60000.0, 1.0),
+            SpeedUnit::CentimeterPerMinute => T::div_ratio(value, 6000.0, 1.0),
+            SpeedUnit::DecimeterPerMinute => T::div_ratio(value, 600.0, 1.0),
             SpeedUnit::KilometerPerMinute => T::mul_ratio(value, 50.0, 3.0),
-            SpeedUnit::MeterPerHour => value / T::from_f64(3600.0),
-            SpeedUnit::MillimeterPerHour => value / T::from_f64(3600000.0),
-            SpeedUnit::CentimeterPerHour => value / T::from_f64(360000.0),
+            SpeedUnit::MeterPerHour => T::div_ratio(value, 3600.0, 1.0),
+            SpeedUnit::MillimeterPerHour => T::div_ratio(value, 3600000.0, 1.0),
+            SpeedUnit::CentimeterPerHour => T::div_ratio(value, 360000.0, 1.0),
             SpeedUnit::KilometerPerHour => T::mul_ratio(value, 5.0, 18.0),
-            SpeedUnit::FootPerSecond => value * T::from_f64(0.3048),
-            SpeedUnit::FootPerMinute => value * T::from_f64(0.00508),
+            SpeedUnit::FootPerSecond => T::mul_ratio(value, 381.0, 1250.0),
+            SpeedUnit::FootPerMinute => T::mul_ratio(value, 127.0, 25000.0),
             SpeedUnit::FootPerHour => T::mul_ratio(value, 127.0, 1500000.0),
             SpeedUnit::UsSurveyFootPerSecond => T::mul_ratio(value, 1200.0, 3937.0),
             SpeedUnit::UsSurveyFootPerMinute => T::mul_ratio(value, 20.0, 3937.0),
-            SpeedUnit::UsSurveyFootPerHour => value / T::from_f64(11811.0),
-            SpeedUnit::InchPerSecond => value * T::from_f64(0.0254),
+            SpeedUnit::UsSurveyFootPerHour => T::div_ratio(value, 11811.0, 1.0),
+            SpeedUnit::InchPerSecond => T::mul_ratio(value, 127.0, 5000.0),
             SpeedUnit::InchPerMinute => T::mul_ratio(value, 127.0, 300000.0),
             SpeedUnit::InchPerHour => T::mul_ratio(value, 127.0, 18000000.0),
-            SpeedUnit::YardPerSecond => value * T::from_f64(0.9144),
-            SpeedUnit::YardPerMinute => value * T::from_f64(0.01524),
-            SpeedUnit::YardPerHour => value * T::from_f64(0.000254),
+            SpeedUnit::YardPerSecond => T::mul_ratio(value, 1143.0, 1250.0),
+            SpeedUnit::YardPerMinute => T::mul_ratio(value, 381.0, 25000.0),
+            SpeedUnit::YardPerHour => T::mul_ratio(value, 127.0, 500000.0),
             SpeedUnit::Knot => T::mul_ratio(value, 463.0, 900.0),
-            SpeedUnit::MilePerHour => value * T::from_f64(0.44704),
-            SpeedUnit::Mach => value * T::from_f64(340.29),
+            SpeedUnit::MilePerHour => T::mul_ratio(value, 1397.0, 3125.0),
+            SpeedUnit::Mach => T::mul_ratio(value, 34029.0, 100.0),
         }
     }
 
@@ -574,7 +574,7 @@ impl<T: Number> crate::UnitOf<Speed<T>> for SpeedUnit {
             SpeedUnit::MillimeterPerSecond => value * T::from_f64(1000.0),
             SpeedUnit::CentimeterPerSecond => value * T::from_f64(100.0),
             SpeedUnit::DecimeterPerSecond => value * T::from_f64(10.0),
-            SpeedUnit::KilometerPerSecond => value / T::from_f64(1000.0),
+            SpeedUnit::KilometerPerSecond => T::div_ratio(value, 1000.0, 1.0),
             SpeedUnit::MeterPerMinute => value * T::from_f64(60.0),
             SpeedUnit::NanometerPerMinute => value * T::from_f64(6e10),
             SpeedUnit::MicrometerPerMinute => value * T::from_f64(6e7),
@@ -586,21 +586,21 @@ impl<T: Number> crate::UnitOf<Speed<T>> for SpeedUnit {
             SpeedUnit::MillimeterPerHour => value * T::from_f64(3600000.0),
             SpeedUnit::CentimeterPerHour => value * T::from_f64(360000.0),
             SpeedUnit::KilometerPerHour => T::div_ratio(value, 5.0, 18.0),
-            SpeedUnit::FootPerSecond => value / T::from_f64(0.3048),
-            SpeedUnit::FootPerMinute => value / T::from_f64(0.00508),
+            SpeedUnit::FootPerSecond => T::div_ratio(value, 381.0, 1250.0),
+            SpeedUnit::FootPerMinute => T::div_ratio(value, 127.0, 25000.0),
             SpeedUnit::FootPerHour => T::div_ratio(value, 127.0, 1500000.0),
             SpeedUnit::UsSurveyFootPerSecond => T::div_ratio(value, 1200.0, 3937.0),
             SpeedUnit::UsSurveyFootPerMinute => T::div_ratio(value, 20.0, 3937.0),
             SpeedUnit::UsSurveyFootPerHour => value * T::from_f64(11811.0),
-            SpeedUnit::InchPerSecond => value / T::from_f64(0.0254),
+            SpeedUnit::InchPerSecond => T::div_ratio(value, 127.0, 5000.0),
             SpeedUnit::InchPerMinute => T::div_ratio(value, 127.0, 300000.0),
             SpeedUnit::InchPerHour => T::div_ratio(value, 127.0, 18000000.0),
-            SpeedUnit::YardPerSecond => value / T::from_f64(0.9144),
-            SpeedUnit::YardPerMinute => value / T::from_f64(0.01524),
-            SpeedUnit::YardPerHour => value / T::from_f64(0.000254),
+            SpeedUnit::YardPerSecond => T::div_ratio(value, 1143.0, 1250.0),
+            SpeedUnit::YardPerMinute => T::div_ratio(value, 381.0, 25000.0),
+            SpeedUnit::YardPerHour => T::div_ratio(value, 127.0, 500000.0),
             SpeedUnit::Knot => T::div_ratio(value, 463.0, 900.0),
-            SpeedUnit::MilePerHour => value / T::from_f64(0.44704),
-            SpeedUnit::Mach => value / T::from_f64(340.29),
+            SpeedUnit::MilePerHour => T::div_ratio(value, 1397.0, 3125.0),
+            SpeedUnit::Mach => T::div_ratio(value, 34029.0, 100.0),
         }
     }
 }
@@ -638,7 +638,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `nm/s`.
     #[inline]
     pub fn from_nanometers_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nm/s`.
@@ -650,7 +650,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `µm/s`.
     #[inline]
     pub fn from_micrometers_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µm/s`.
@@ -662,7 +662,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `mm/s`.
     #[inline]
     pub fn from_millimeters_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mm/s`.
@@ -674,7 +674,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `cm/s`.
     #[inline]
     pub fn from_centimeters_per_second(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cm/s`.
@@ -686,7 +686,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `dm/s`.
     #[inline]
     pub fn from_decimeters_per_second(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dm/s`.
@@ -704,13 +704,13 @@ impl<T: Number> Speed<T> {
     /// The value in `km/s`.
     #[inline]
     pub fn as_kilometers_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Speed`] from a value in `m/min`.
     #[inline]
     pub fn from_meters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `m/min`.
@@ -722,7 +722,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `nm/min`.
     #[inline]
     pub fn from_nanometers_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(6e10))
+        Self(T::div_ratio(value, 60000000000.0, 1.0))
     }
 
     /// The value in `nm/min`.
@@ -734,7 +734,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `µm/min`.
     #[inline]
     pub fn from_micrometers_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(6e7))
+        Self(T::div_ratio(value, 60000000.0, 1.0))
     }
 
     /// The value in `µm/min`.
@@ -746,7 +746,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `mm/min`.
     #[inline]
     pub fn from_millimeters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60000.0))
+        Self(T::div_ratio(value, 60000.0, 1.0))
     }
 
     /// The value in `mm/min`.
@@ -758,7 +758,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `cm/min`.
     #[inline]
     pub fn from_centimeters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(6000.0))
+        Self(T::div_ratio(value, 6000.0, 1.0))
     }
 
     /// The value in `cm/min`.
@@ -770,7 +770,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `dm/min`.
     #[inline]
     pub fn from_decimeters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(600.0))
+        Self(T::div_ratio(value, 600.0, 1.0))
     }
 
     /// The value in `dm/min`.
@@ -794,7 +794,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `m/h`.
     #[inline]
     pub fn from_meters_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `m/h`.
@@ -806,7 +806,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `mm/h`.
     #[inline]
     pub fn from_millimeters_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600000.0))
+        Self(T::div_ratio(value, 3600000.0, 1.0))
     }
 
     /// The value in `mm/h`.
@@ -818,7 +818,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `cm/h`.
     #[inline]
     pub fn from_centimeters_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(360000.0))
+        Self(T::div_ratio(value, 360000.0, 1.0))
     }
 
     /// The value in `cm/h`.
@@ -842,25 +842,25 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `ft/s`.
     #[inline]
     pub fn from_feet_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.3048))
+        Self(T::mul_ratio(value, 381.0, 1250.0))
     }
 
     /// The value in `ft/s`.
     #[inline]
     pub fn as_feet_per_second(self) -> T {
-        self.0 / T::from_f64(0.3048)
+        T::div_ratio(self.0, 381.0, 1250.0)
     }
 
     /// A [`Speed`] from a value in `ft/min`.
     #[inline]
     pub fn from_feet_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.00508))
+        Self(T::mul_ratio(value, 127.0, 25000.0))
     }
 
     /// The value in `ft/min`.
     #[inline]
     pub fn as_feet_per_minute(self) -> T {
-        self.0 / T::from_f64(0.00508)
+        T::div_ratio(self.0, 127.0, 25000.0)
     }
 
     /// A [`Speed`] from a value in `ft/h`.
@@ -902,7 +902,7 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `ftUS/h`.
     #[inline]
     pub fn from_us_survey_feet_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(11811.0))
+        Self(T::div_ratio(value, 11811.0, 1.0))
     }
 
     /// The value in `ftUS/h`.
@@ -914,13 +914,13 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `in/s`.
     #[inline]
     pub fn from_inches_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.0254))
+        Self(T::mul_ratio(value, 127.0, 5000.0))
     }
 
     /// The value in `in/s`.
     #[inline]
     pub fn as_inches_per_second(self) -> T {
-        self.0 / T::from_f64(0.0254)
+        T::div_ratio(self.0, 127.0, 5000.0)
     }
 
     /// A [`Speed`] from a value in `in/min`.
@@ -950,37 +950,37 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `yd/s`.
     #[inline]
     pub fn from_yards_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.9144))
+        Self(T::mul_ratio(value, 1143.0, 1250.0))
     }
 
     /// The value in `yd/s`.
     #[inline]
     pub fn as_yards_per_second(self) -> T {
-        self.0 / T::from_f64(0.9144)
+        T::div_ratio(self.0, 1143.0, 1250.0)
     }
 
     /// A [`Speed`] from a value in `yd/min`.
     #[inline]
     pub fn from_yards_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.01524))
+        Self(T::mul_ratio(value, 381.0, 25000.0))
     }
 
     /// The value in `yd/min`.
     #[inline]
     pub fn as_yards_per_minute(self) -> T {
-        self.0 / T::from_f64(0.01524)
+        T::div_ratio(self.0, 381.0, 25000.0)
     }
 
     /// A [`Speed`] from a value in `yd/h`.
     #[inline]
     pub fn from_yards_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.000254))
+        Self(T::mul_ratio(value, 127.0, 500000.0))
     }
 
     /// The value in `yd/h`.
     #[inline]
     pub fn as_yards_per_hour(self) -> T {
-        self.0 / T::from_f64(0.000254)
+        T::div_ratio(self.0, 127.0, 500000.0)
     }
 
     /// A [`Speed`] from a value in `kn`.
@@ -998,25 +998,25 @@ impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `mph`.
     #[inline]
     pub fn from_miles_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.44704))
+        Self(T::mul_ratio(value, 1397.0, 3125.0))
     }
 
     /// The value in `mph`.
     #[inline]
     pub fn as_miles_per_hour(self) -> T {
-        self.0 / T::from_f64(0.44704)
+        T::div_ratio(self.0, 1397.0, 3125.0)
     }
 
     /// A [`Speed`] from a value in `M`.
     #[inline]
     pub fn from_mach(value: T) -> Self {
-        Self(value * T::from_f64(340.29))
+        Self(T::mul_ratio(value, 34029.0, 100.0))
     }
 
     /// The value in `M`.
     #[inline]
     pub fn as_mach(self) -> T {
-        self.0 / T::from_f64(340.29)
+        T::div_ratio(self.0, 34029.0, 100.0)
     }
 }
 
@@ -1027,38 +1027,38 @@ impl Speed<f64> {
     pub const fn const_new(value: f64, unit: SpeedUnit) -> Self {
         Self(match unit {
             SpeedUnit::MeterPerSecond => value,
-            SpeedUnit::NanometerPerSecond => value / 1e9,
-            SpeedUnit::MicrometerPerSecond => value / 1000000.0,
-            SpeedUnit::MillimeterPerSecond => value / 1000.0,
-            SpeedUnit::CentimeterPerSecond => value / 100.0,
-            SpeedUnit::DecimeterPerSecond => value / 10.0,
+            SpeedUnit::NanometerPerSecond => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            SpeedUnit::MicrometerPerSecond => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            SpeedUnit::MillimeterPerSecond => crate::conv::div_ratio(value, 1000.0, 1.0),
+            SpeedUnit::CentimeterPerSecond => crate::conv::div_ratio(value, 100.0, 1.0),
+            SpeedUnit::DecimeterPerSecond => crate::conv::div_ratio(value, 10.0, 1.0),
             SpeedUnit::KilometerPerSecond => value * 1000.0,
-            SpeedUnit::MeterPerMinute => value / 60.0,
-            SpeedUnit::NanometerPerMinute => value / 6e10,
-            SpeedUnit::MicrometerPerMinute => value / 6e7,
-            SpeedUnit::MillimeterPerMinute => value / 60000.0,
-            SpeedUnit::CentimeterPerMinute => value / 6000.0,
-            SpeedUnit::DecimeterPerMinute => value / 600.0,
-            SpeedUnit::KilometerPerMinute => value * 16.666666666666668,
-            SpeedUnit::MeterPerHour => value / 3600.0,
-            SpeedUnit::MillimeterPerHour => value / 3600000.0,
-            SpeedUnit::CentimeterPerHour => value / 360000.0,
-            SpeedUnit::KilometerPerHour => value * 0.2777777777777778,
-            SpeedUnit::FootPerSecond => value * 0.3048,
-            SpeedUnit::FootPerMinute => value * 0.00508,
-            SpeedUnit::FootPerHour => value * 8.466666666666666e-5,
-            SpeedUnit::UsSurveyFootPerSecond => value * 0.3048006096012192,
-            SpeedUnit::UsSurveyFootPerMinute => value * 0.00508001016002032,
-            SpeedUnit::UsSurveyFootPerHour => value / 11811.0,
-            SpeedUnit::InchPerSecond => value * 0.0254,
-            SpeedUnit::InchPerMinute => value * 0.00042333333333333334,
-            SpeedUnit::InchPerHour => value * 7.055555555555556e-6,
-            SpeedUnit::YardPerSecond => value * 0.9144,
-            SpeedUnit::YardPerMinute => value * 0.01524,
-            SpeedUnit::YardPerHour => value * 0.000254,
-            SpeedUnit::Knot => value * 0.5144444444444445,
-            SpeedUnit::MilePerHour => value * 0.44704,
-            SpeedUnit::Mach => value * 340.29,
+            SpeedUnit::MeterPerMinute => crate::conv::div_ratio(value, 60.0, 1.0),
+            SpeedUnit::NanometerPerMinute => crate::conv::div_ratio(value, 60000000000.0, 1.0),
+            SpeedUnit::MicrometerPerMinute => crate::conv::div_ratio(value, 60000000.0, 1.0),
+            SpeedUnit::MillimeterPerMinute => crate::conv::div_ratio(value, 60000.0, 1.0),
+            SpeedUnit::CentimeterPerMinute => crate::conv::div_ratio(value, 6000.0, 1.0),
+            SpeedUnit::DecimeterPerMinute => crate::conv::div_ratio(value, 600.0, 1.0),
+            SpeedUnit::KilometerPerMinute => crate::conv::mul_ratio(value, 50.0, 3.0),
+            SpeedUnit::MeterPerHour => crate::conv::div_ratio(value, 3600.0, 1.0),
+            SpeedUnit::MillimeterPerHour => crate::conv::div_ratio(value, 3600000.0, 1.0),
+            SpeedUnit::CentimeterPerHour => crate::conv::div_ratio(value, 360000.0, 1.0),
+            SpeedUnit::KilometerPerHour => crate::conv::mul_ratio(value, 5.0, 18.0),
+            SpeedUnit::FootPerSecond => crate::conv::mul_ratio(value, 381.0, 1250.0),
+            SpeedUnit::FootPerMinute => crate::conv::mul_ratio(value, 127.0, 25000.0),
+            SpeedUnit::FootPerHour => crate::conv::mul_ratio(value, 127.0, 1500000.0),
+            SpeedUnit::UsSurveyFootPerSecond => crate::conv::mul_ratio(value, 1200.0, 3937.0),
+            SpeedUnit::UsSurveyFootPerMinute => crate::conv::mul_ratio(value, 20.0, 3937.0),
+            SpeedUnit::UsSurveyFootPerHour => crate::conv::div_ratio(value, 11811.0, 1.0),
+            SpeedUnit::InchPerSecond => crate::conv::mul_ratio(value, 127.0, 5000.0),
+            SpeedUnit::InchPerMinute => crate::conv::mul_ratio(value, 127.0, 300000.0),
+            SpeedUnit::InchPerHour => crate::conv::mul_ratio(value, 127.0, 18000000.0),
+            SpeedUnit::YardPerSecond => crate::conv::mul_ratio(value, 1143.0, 1250.0),
+            SpeedUnit::YardPerMinute => crate::conv::mul_ratio(value, 381.0, 25000.0),
+            SpeedUnit::YardPerHour => crate::conv::mul_ratio(value, 127.0, 500000.0),
+            SpeedUnit::Knot => crate::conv::mul_ratio(value, 463.0, 900.0),
+            SpeedUnit::MilePerHour => crate::conv::mul_ratio(value, 1397.0, 3125.0),
+            SpeedUnit::Mach => crate::conv::mul_ratio(value, 34029.0, 100.0),
         })
     }
 }

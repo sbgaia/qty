@@ -191,11 +191,11 @@ impl<T: Number> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             CompressibilityUnit::InversePascal => value,
-            CompressibilityUnit::InverseKilopascal => value / T::from_f64(1000.0),
-            CompressibilityUnit::InverseMegapascal => value / T::from_f64(1000000.0),
-            CompressibilityUnit::InverseAtmosphere => value / T::from_f64(101325.0),
-            CompressibilityUnit::InverseMillibar => value / T::from_f64(100.0),
-            CompressibilityUnit::InverseBar => value / T::from_f64(100000.0),
+            CompressibilityUnit::InverseKilopascal => T::div_ratio(value, 1000.0, 1.0),
+            CompressibilityUnit::InverseMegapascal => T::div_ratio(value, 1000000.0, 1.0),
+            CompressibilityUnit::InverseAtmosphere => T::div_ratio(value, 101325.0, 1.0),
+            CompressibilityUnit::InverseMillibar => T::div_ratio(value, 100.0, 1.0),
+            CompressibilityUnit::InverseBar => T::div_ratio(value, 100000.0, 1.0),
             CompressibilityUnit::InversePoundForcePerSquareInch => {
                 T::mul_ratio(value, 1000000000000.0, 6894757293168361.0)
             }
@@ -244,7 +244,7 @@ impl<T: Number> Compressibility<T> {
     /// A [`Compressibility`] from a value in `kPa⁻¹`.
     #[inline]
     pub fn from_inverse_kilopascals(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `kPa⁻¹`.
@@ -256,7 +256,7 @@ impl<T: Number> Compressibility<T> {
     /// A [`Compressibility`] from a value in `MPa⁻¹`.
     #[inline]
     pub fn from_inverse_megapascals(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `MPa⁻¹`.
@@ -268,7 +268,7 @@ impl<T: Number> Compressibility<T> {
     /// A [`Compressibility`] from a value in `atm⁻¹`.
     #[inline]
     pub fn from_inverse_atmospheres(value: T) -> Self {
-        Self(value / T::from_f64(101325.0))
+        Self(T::div_ratio(value, 101325.0, 1.0))
     }
 
     /// The value in `atm⁻¹`.
@@ -280,7 +280,7 @@ impl<T: Number> Compressibility<T> {
     /// A [`Compressibility`] from a value in `mbar⁻¹`.
     #[inline]
     pub fn from_inverse_millibars(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `mbar⁻¹`.
@@ -292,7 +292,7 @@ impl<T: Number> Compressibility<T> {
     /// A [`Compressibility`] from a value in `bar⁻¹`.
     #[inline]
     pub fn from_inverse_bars(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `bar⁻¹`.
@@ -321,12 +321,14 @@ impl Compressibility<f64> {
     pub const fn const_new(value: f64, unit: CompressibilityUnit) -> Self {
         Self(match unit {
             CompressibilityUnit::InversePascal => value,
-            CompressibilityUnit::InverseKilopascal => value / 1000.0,
-            CompressibilityUnit::InverseMegapascal => value / 1000000.0,
-            CompressibilityUnit::InverseAtmosphere => value / 101325.0,
-            CompressibilityUnit::InverseMillibar => value / 100.0,
-            CompressibilityUnit::InverseBar => value / 100000.0,
-            CompressibilityUnit::InversePoundForcePerSquareInch => value * 0.0001450377377302092,
+            CompressibilityUnit::InverseKilopascal => crate::conv::div_ratio(value, 1000.0, 1.0),
+            CompressibilityUnit::InverseMegapascal => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            CompressibilityUnit::InverseAtmosphere => crate::conv::div_ratio(value, 101325.0, 1.0),
+            CompressibilityUnit::InverseMillibar => crate::conv::div_ratio(value, 100.0, 1.0),
+            CompressibilityUnit::InverseBar => crate::conv::div_ratio(value, 100000.0, 1.0),
+            CompressibilityUnit::InversePoundForcePerSquareInch => {
+                crate::conv::mul_ratio(value, 1000000000000.0, 6894757293168361.0)
+            }
         })
     }
 }

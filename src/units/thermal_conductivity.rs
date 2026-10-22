@@ -212,8 +212,12 @@ impl ThermalConductivity<f64> {
     pub const fn const_new(value: f64, unit: ThermalConductivityUnit) -> Self {
         Self(match unit {
             ThermalConductivityUnit::WattPerMeterKelvin => value,
-            ThermalConductivityUnit::BtuPerHourFootFahrenheit => value * 1.7307346663713912,
-            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => value * 74767.73758724409,
+            ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
+                crate::conv::mul_ratio(value, 52752792631.0, 30480000000.0)
+            }
+            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
+                crate::conv::mul_ratio(value, 474775133679.0, 6350000.0)
+            }
         })
     }
 }

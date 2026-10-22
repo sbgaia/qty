@@ -251,8 +251,8 @@ impl<T: Number> crate::UnitOf<ReciprocalLength<T>> for ReciprocalLengthUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             ReciprocalLengthUnit::InverseMeter => value,
-            ReciprocalLengthUnit::InverseCentimeter => value / T::from_f64(100.0),
-            ReciprocalLengthUnit::InverseMillimeter => value / T::from_f64(1000.0),
+            ReciprocalLengthUnit::InverseCentimeter => T::div_ratio(value, 100.0, 1.0),
+            ReciprocalLengthUnit::InverseMillimeter => T::div_ratio(value, 1000.0, 1.0),
             ReciprocalLengthUnit::InverseMile => T::div_ratio(value, 125.0, 201168.0),
             ReciprocalLengthUnit::InverseYard => T::div_ratio(value, 1250.0, 1143.0),
             ReciprocalLengthUnit::InverseFoot => T::div_ratio(value, 1250.0, 381.0),
@@ -296,7 +296,7 @@ impl<T: Number> ReciprocalLength<T> {
     /// The value in `cm⁻¹`.
     #[inline]
     pub fn as_inverse_centimeters(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `mm⁻¹`.
@@ -308,7 +308,7 @@ impl<T: Number> ReciprocalLength<T> {
     /// The value in `mm⁻¹`.
     #[inline]
     pub fn as_inverse_millimeters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `mi⁻¹`.
@@ -405,13 +405,17 @@ impl ReciprocalLength<f64> {
             ReciprocalLengthUnit::InverseMeter => value,
             ReciprocalLengthUnit::InverseCentimeter => value * 100.0,
             ReciprocalLengthUnit::InverseMillimeter => value * 1000.0,
-            ReciprocalLengthUnit::InverseMile => value * 0.0006213711922373339,
-            ReciprocalLengthUnit::InverseYard => value * 1.0936132983377078,
-            ReciprocalLengthUnit::InverseFoot => value * 3.2808398950131235,
-            ReciprocalLengthUnit::InverseUsSurveyFoot => value * 3.2808333333333333,
-            ReciprocalLengthUnit::InverseInch => value * 39.37007874015748,
-            ReciprocalLengthUnit::InverseMil => value * 39370.07874015748,
-            ReciprocalLengthUnit::InverseMicroinch => value * 3.937007874015748e7,
+            ReciprocalLengthUnit::InverseMile => crate::conv::mul_ratio(value, 125.0, 201168.0),
+            ReciprocalLengthUnit::InverseYard => crate::conv::mul_ratio(value, 1250.0, 1143.0),
+            ReciprocalLengthUnit::InverseFoot => crate::conv::mul_ratio(value, 1250.0, 381.0),
+            ReciprocalLengthUnit::InverseUsSurveyFoot => {
+                crate::conv::mul_ratio(value, 3937.0, 1200.0)
+            }
+            ReciprocalLengthUnit::InverseInch => crate::conv::mul_ratio(value, 5000.0, 127.0),
+            ReciprocalLengthUnit::InverseMil => crate::conv::mul_ratio(value, 5000000.0, 127.0),
+            ReciprocalLengthUnit::InverseMicroinch => {
+                crate::conv::mul_ratio(value, 5000000000.0, 127.0)
+            }
         })
     }
 }
