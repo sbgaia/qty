@@ -91,16 +91,21 @@ pub trait Number:
         Self::from_f64(numerator) / Self::from_f64(denominator)
     }
 
-    /// `self · numerator / denominator`, for conversions such as km/h to m/s
-    /// (5/18). Floats override it to multiply once by the rounded fraction.
+    /// `self · numerator / denominator`, for conversions by a constant with
+    /// no exact binary value, such as feet to metres (381/1250) or km/h to
+    /// m/s (5/18). Both are whole numbers. Floats override it: where the
+    /// target has an FMA instruction the result is the float nearest the
+    /// exact product, otherwise they multiply once by the rounded fraction.
     #[inline]
     fn mul_ratio(self, numerator: f64, denominator: f64) -> Self {
         self * Self::from_f64(numerator) / Self::from_f64(denominator)
     }
 
     /// `self / (numerator / denominator)`, the inverse of
-    /// [`mul_ratio`](Number::mul_ratio). Floats override it to divide once
-    /// by the rounded fraction.
+    /// [`mul_ratio`](Number::mul_ratio), also used for whole divisors such
+    /// as 1000. Floats override it: where the target has an FMA instruction
+    /// they multiply by the reciprocal in two parts, which rounds once,
+    /// otherwise they divide once by the rounded fraction.
     #[inline]
     fn div_ratio(self, numerator: f64, denominator: f64) -> Self {
         self * Self::from_f64(denominator) / Self::from_f64(numerator)
@@ -165,14 +170,35 @@ macro_rules! impl_float {
                 (numerator / denominator) as $t
             }
 
+            // With an FMA instruction, the fraction is used as two parts
+            // and the result rounds once (see `conv`). The parts fold to
+            // constants.
             #[inline(always)]
             fn mul_ratio(self, numerator: f64, denominator: f64) -> Self {
-                self * Self::from_ratio(numerator, denominator)
+                #[cfg(all(feature = "std", any(target_feature = "fma", target_arch = "aarch64")))]
+                {
+                    let c = numerator / denominator;
+                    let remainder = (-c).mul_add(denominator, numerator) / denominator;
+                    let hi = c as $t;
+                    let lo = ((c - hi as f64) + remainder) as $t;
+                    self.mul_add(hi, self * lo)
+                }
+                #[cfg(not(all(feature = "std", any(target_feature = "fma", target_arch = "aarch64"))))]
+                {
+                    self * Self::from_ratio(numerator, denominator)
+                }
             }
 
             #[inline(always)]
             fn div_ratio(self, numerator: f64, denominator: f64) -> Self {
-                self / Self::from_ratio(numerator, denominator)
+                #[cfg(all(feature = "std", any(target_feature = "fma", target_arch = "aarch64")))]
+                {
+                    self.mul_ratio(denominator, numerator)
+                }
+                #[cfg(not(all(feature = "std", any(target_feature = "fma", target_arch = "aarch64"))))]
+                {
+                    self / Self::from_ratio(numerator, denominator)
+                }
             }
         }
 
@@ -1554,6 +1580,7 @@ pub trait HasFixedBase {
     type Base: FixedUnit;
 }
 
+mod conv;
 mod rounding;
 pub use rounding::{Integer, RoundError, Rounding, ToFloat};
 

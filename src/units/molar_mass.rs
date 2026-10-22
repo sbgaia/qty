@@ -279,20 +279,20 @@ impl<T: Number> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            MolarMassUnit::GramPerMole => value / T::from_f64(1000.0),
-            MolarMassUnit::NanogramPerMole => value / T::from_f64(1e12),
-            MolarMassUnit::MicrogramPerMole => value / T::from_f64(1e9),
-            MolarMassUnit::MilligramPerMole => value / T::from_f64(1000000.0),
-            MolarMassUnit::CentigramPerMole => value / T::from_f64(100000.0),
-            MolarMassUnit::DecigramPerMole => value / T::from_f64(10000.0),
-            MolarMassUnit::DecagramPerMole => value / T::from_f64(100.0),
-            MolarMassUnit::HectogramPerMole => value / T::from_f64(10.0),
+            MolarMassUnit::GramPerMole => T::div_ratio(value, 1000.0, 1.0),
+            MolarMassUnit::NanogramPerMole => T::div_ratio(value, 1000000000000.0, 1.0),
+            MolarMassUnit::MicrogramPerMole => T::div_ratio(value, 1000000000.0, 1.0),
+            MolarMassUnit::MilligramPerMole => T::div_ratio(value, 1000000.0, 1.0),
+            MolarMassUnit::CentigramPerMole => T::div_ratio(value, 100000.0, 1.0),
+            MolarMassUnit::DecigramPerMole => T::div_ratio(value, 10000.0, 1.0),
+            MolarMassUnit::DecagramPerMole => T::div_ratio(value, 100.0, 1.0),
+            MolarMassUnit::HectogramPerMole => T::div_ratio(value, 10.0, 1.0),
             MolarMassUnit::KilogramPerMole => value,
-            MolarMassUnit::KilogramPerKilomole => value / T::from_f64(1000.0),
-            MolarMassUnit::PoundPerMole => value * T::from_f64(0.45359237),
-            MolarMassUnit::KilopoundPerMole => value * T::from_f64(453.59237),
-            MolarMassUnit::MegapoundPerMole => value * T::from_f64(453592.37),
-            MolarMassUnit::PoundPerPoundMole => value / T::from_f64(1000.0),
+            MolarMassUnit::KilogramPerKilomole => T::div_ratio(value, 1000.0, 1.0),
+            MolarMassUnit::PoundPerMole => T::mul_ratio(value, 45359237.0, 100000000.0),
+            MolarMassUnit::KilopoundPerMole => T::mul_ratio(value, 45359237.0, 100000.0),
+            MolarMassUnit::MegapoundPerMole => T::mul_ratio(value, 45359237.0, 100.0),
+            MolarMassUnit::PoundPerPoundMole => T::div_ratio(value, 1000.0, 1.0),
         }
     }
 
@@ -309,9 +309,9 @@ impl<T: Number> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
             MolarMassUnit::HectogramPerMole => value * T::from_f64(10.0),
             MolarMassUnit::KilogramPerMole => value,
             MolarMassUnit::KilogramPerKilomole => value * T::from_f64(1000.0),
-            MolarMassUnit::PoundPerMole => value / T::from_f64(0.45359237),
-            MolarMassUnit::KilopoundPerMole => value / T::from_f64(453.59237),
-            MolarMassUnit::MegapoundPerMole => value / T::from_f64(453592.37),
+            MolarMassUnit::PoundPerMole => T::div_ratio(value, 45359237.0, 100000000.0),
+            MolarMassUnit::KilopoundPerMole => T::div_ratio(value, 45359237.0, 100000.0),
+            MolarMassUnit::MegapoundPerMole => T::div_ratio(value, 45359237.0, 100.0),
             MolarMassUnit::PoundPerPoundMole => value * T::from_f64(1000.0),
         }
     }
@@ -338,7 +338,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `g/mol`.
     #[inline]
     pub fn from_grams_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g/mol`.
@@ -350,7 +350,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `ng/mol`.
     #[inline]
     pub fn from_nanograms_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ng/mol`.
@@ -362,7 +362,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `µg/mol`.
     #[inline]
     pub fn from_micrograms_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µg/mol`.
@@ -374,7 +374,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `mg/mol`.
     #[inline]
     pub fn from_milligrams_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg/mol`.
@@ -386,7 +386,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `cg/mol`.
     #[inline]
     pub fn from_centigrams_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `cg/mol`.
@@ -398,7 +398,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `dg/mol`.
     #[inline]
     pub fn from_decigrams_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `dg/mol`.
@@ -410,7 +410,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `dag/mol`.
     #[inline]
     pub fn from_decagrams_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `dag/mol`.
@@ -422,7 +422,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `hg/mol`.
     #[inline]
     pub fn from_hectograms_per_mole(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `hg/mol`.
@@ -446,7 +446,7 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `kg/kmol`.
     #[inline]
     pub fn from_kilograms_per_kilomole(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `kg/kmol`.
@@ -458,43 +458,43 @@ impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `lb/mol`.
     #[inline]
     pub fn from_pounds_per_mole(value: T) -> Self {
-        Self(value * T::from_f64(0.45359237))
+        Self(T::mul_ratio(value, 45359237.0, 100000000.0))
     }
 
     /// The value in `lb/mol`.
     #[inline]
     pub fn as_pounds_per_mole(self) -> T {
-        self.0 / T::from_f64(0.45359237)
+        T::div_ratio(self.0, 45359237.0, 100000000.0)
     }
 
     /// A [`MolarMass`] from a value in `klb/mol`.
     #[inline]
     pub fn from_kilopounds_per_mole(value: T) -> Self {
-        Self(value * T::from_f64(453.59237))
+        Self(T::mul_ratio(value, 45359237.0, 100000.0))
     }
 
     /// The value in `klb/mol`.
     #[inline]
     pub fn as_kilopounds_per_mole(self) -> T {
-        self.0 / T::from_f64(453.59237)
+        T::div_ratio(self.0, 45359237.0, 100000.0)
     }
 
     /// A [`MolarMass`] from a value in `Mlb/mol`.
     #[inline]
     pub fn from_megapounds_per_mole(value: T) -> Self {
-        Self(value * T::from_f64(453592.37))
+        Self(T::mul_ratio(value, 45359237.0, 100.0))
     }
 
     /// The value in `Mlb/mol`.
     #[inline]
     pub fn as_megapounds_per_mole(self) -> T {
-        self.0 / T::from_f64(453592.37)
+        T::div_ratio(self.0, 45359237.0, 100.0)
     }
 
     /// A [`MolarMass`] from a value in `lb/lbmol`.
     #[inline]
     pub fn from_pounds_per_pound_mole(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `lb/lbmol`.
@@ -510,20 +510,20 @@ impl MolarMass<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: MolarMassUnit) -> Self {
         Self(match unit {
-            MolarMassUnit::GramPerMole => value / 1000.0,
-            MolarMassUnit::NanogramPerMole => value / 1e12,
-            MolarMassUnit::MicrogramPerMole => value / 1e9,
-            MolarMassUnit::MilligramPerMole => value / 1000000.0,
-            MolarMassUnit::CentigramPerMole => value / 100000.0,
-            MolarMassUnit::DecigramPerMole => value / 10000.0,
-            MolarMassUnit::DecagramPerMole => value / 100.0,
-            MolarMassUnit::HectogramPerMole => value / 10.0,
+            MolarMassUnit::GramPerMole => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MolarMassUnit::NanogramPerMole => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            MolarMassUnit::MicrogramPerMole => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            MolarMassUnit::MilligramPerMole => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MolarMassUnit::CentigramPerMole => crate::conv::div_ratio(value, 100000.0, 1.0),
+            MolarMassUnit::DecigramPerMole => crate::conv::div_ratio(value, 10000.0, 1.0),
+            MolarMassUnit::DecagramPerMole => crate::conv::div_ratio(value, 100.0, 1.0),
+            MolarMassUnit::HectogramPerMole => crate::conv::div_ratio(value, 10.0, 1.0),
             MolarMassUnit::KilogramPerMole => value,
-            MolarMassUnit::KilogramPerKilomole => value / 1000.0,
-            MolarMassUnit::PoundPerMole => value * 0.45359237,
-            MolarMassUnit::KilopoundPerMole => value * 453.59237,
-            MolarMassUnit::MegapoundPerMole => value * 453592.37,
-            MolarMassUnit::PoundPerPoundMole => value / 1000.0,
+            MolarMassUnit::KilogramPerKilomole => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MolarMassUnit::PoundPerMole => crate::conv::mul_ratio(value, 45359237.0, 100000000.0),
+            MolarMassUnit::KilopoundPerMole => crate::conv::mul_ratio(value, 45359237.0, 100000.0),
+            MolarMassUnit::MegapoundPerMole => crate::conv::mul_ratio(value, 45359237.0, 100.0),
+            MolarMassUnit::PoundPerPoundMole => crate::conv::div_ratio(value, 1000.0, 1.0),
         })
     }
 }

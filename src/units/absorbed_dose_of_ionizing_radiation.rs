@@ -320,20 +320,24 @@ impl<T: Number> crate::UnitOf<AbsorbedDoseOfIonizingRadiation<T>>
     fn value_to_base(self, value: T) -> T {
         match self {
             AbsorbedDoseOfIonizingRadiationUnit::Gray => value,
-            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => value / T::from_f64(1e15),
-            AbsorbedDoseOfIonizingRadiationUnit::Picogray => value / T::from_f64(1e12),
-            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => value / T::from_f64(1e9),
-            AbsorbedDoseOfIonizingRadiationUnit::Microgray => value / T::from_f64(1000000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Milligray => value / T::from_f64(1000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Centigray => value / T::from_f64(100.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Decigray => value / T::from_f64(10.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => {
+                T::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Picogray => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => T::div_ratio(value, 1000000000.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Microgray => T::div_ratio(value, 1000000.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Milligray => T::div_ratio(value, 1000.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Centigray => T::div_ratio(value, 100.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Decigray => T::div_ratio(value, 10.0, 1.0),
             AbsorbedDoseOfIonizingRadiationUnit::Kilogray => value * T::from_f64(1000.0),
             AbsorbedDoseOfIonizingRadiationUnit::Megagray => value * T::from_f64(1000000.0),
             AbsorbedDoseOfIonizingRadiationUnit::Gigagray => value * T::from_f64(1e9),
             AbsorbedDoseOfIonizingRadiationUnit::Teragray => value * T::from_f64(1e12),
             AbsorbedDoseOfIonizingRadiationUnit::Petagray => value * T::from_f64(1e15),
-            AbsorbedDoseOfIonizingRadiationUnit::Rad => value / T::from_f64(100.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Millirad => value / T::from_f64(100000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Rad => T::div_ratio(value, 100.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Millirad => T::div_ratio(value, 100000.0, 1.0),
             AbsorbedDoseOfIonizingRadiationUnit::Kilorad => value * T::from_f64(10.0),
             AbsorbedDoseOfIonizingRadiationUnit::Megarad => value * T::from_f64(10000.0),
         }
@@ -350,15 +354,19 @@ impl<T: Number> crate::UnitOf<AbsorbedDoseOfIonizingRadiation<T>>
             AbsorbedDoseOfIonizingRadiationUnit::Milligray => value * T::from_f64(1000.0),
             AbsorbedDoseOfIonizingRadiationUnit::Centigray => value * T::from_f64(100.0),
             AbsorbedDoseOfIonizingRadiationUnit::Decigray => value * T::from_f64(10.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Kilogray => value / T::from_f64(1000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Megagray => value / T::from_f64(1000000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Gigagray => value / T::from_f64(1e9),
-            AbsorbedDoseOfIonizingRadiationUnit::Teragray => value / T::from_f64(1e12),
-            AbsorbedDoseOfIonizingRadiationUnit::Petagray => value / T::from_f64(1e15),
+            AbsorbedDoseOfIonizingRadiationUnit::Kilogray => T::div_ratio(value, 1000.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Megagray => T::div_ratio(value, 1000000.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Gigagray => T::div_ratio(value, 1000000000.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Teragray => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Petagray => {
+                T::div_ratio(value, 1000000000000000.0, 1.0)
+            }
             AbsorbedDoseOfIonizingRadiationUnit::Rad => value * T::from_f64(100.0),
             AbsorbedDoseOfIonizingRadiationUnit::Millirad => value * T::from_f64(100000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Kilorad => value / T::from_f64(10.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Megarad => value / T::from_f64(10000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Kilorad => T::div_ratio(value, 10.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Megarad => T::div_ratio(value, 10000.0, 1.0),
         }
     }
 }
@@ -402,7 +410,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `fGy`.
     #[inline]
     pub fn from_femtograys(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fGy`.
@@ -414,7 +422,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `pGy`.
     #[inline]
     pub fn from_picograys(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pGy`.
@@ -426,7 +434,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `nGy`.
     #[inline]
     pub fn from_nanograys(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nGy`.
@@ -438,7 +446,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `µGy`.
     #[inline]
     pub fn from_micrograys(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µGy`.
@@ -450,7 +458,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `mGy`.
     #[inline]
     pub fn from_milligrays(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mGy`.
@@ -462,7 +470,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `cGy`.
     #[inline]
     pub fn from_centigrays(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cGy`.
@@ -474,7 +482,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `dGy`.
     #[inline]
     pub fn from_decigrays(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dGy`.
@@ -492,7 +500,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `kGy`.
     #[inline]
     pub fn as_kilograys(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `MGy`.
@@ -504,7 +512,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `MGy`.
     #[inline]
     pub fn as_megagrays(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `GGy`.
@@ -516,7 +524,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `GGy`.
     #[inline]
     pub fn as_gigagrays(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `TGy`.
@@ -528,7 +536,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `TGy`.
     #[inline]
     pub fn as_teragrays(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `PGy`.
@@ -540,13 +548,13 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `PGy`.
     #[inline]
     pub fn as_petagrays(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `rad`.
     #[inline]
     pub fn from_rads(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `rad`.
@@ -558,7 +566,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `mrad`.
     #[inline]
     pub fn from_millirads(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `mrad`.
@@ -576,7 +584,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `krad`.
     #[inline]
     pub fn as_kilorads(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `Mrad`.
@@ -588,7 +596,7 @@ impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in `Mrad`.
     #[inline]
     pub fn as_megarads(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 }
 
@@ -599,20 +607,36 @@ impl AbsorbedDoseOfIonizingRadiation<f64> {
     pub const fn const_new(value: f64, unit: AbsorbedDoseOfIonizingRadiationUnit) -> Self {
         Self(match unit {
             AbsorbedDoseOfIonizingRadiationUnit::Gray => value,
-            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => value / 1e15,
-            AbsorbedDoseOfIonizingRadiationUnit::Picogray => value / 1e12,
-            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => value / 1e9,
-            AbsorbedDoseOfIonizingRadiationUnit::Microgray => value / 1000000.0,
-            AbsorbedDoseOfIonizingRadiationUnit::Milligray => value / 1000.0,
-            AbsorbedDoseOfIonizingRadiationUnit::Centigray => value / 100.0,
-            AbsorbedDoseOfIonizingRadiationUnit::Decigray => value / 10.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => {
+                crate::conv::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Picogray => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Microgray => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Milligray => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Centigray => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            AbsorbedDoseOfIonizingRadiationUnit::Decigray => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
             AbsorbedDoseOfIonizingRadiationUnit::Kilogray => value * 1000.0,
             AbsorbedDoseOfIonizingRadiationUnit::Megagray => value * 1000000.0,
             AbsorbedDoseOfIonizingRadiationUnit::Gigagray => value * 1e9,
             AbsorbedDoseOfIonizingRadiationUnit::Teragray => value * 1e12,
             AbsorbedDoseOfIonizingRadiationUnit::Petagray => value * 1e15,
-            AbsorbedDoseOfIonizingRadiationUnit::Rad => value / 100.0,
-            AbsorbedDoseOfIonizingRadiationUnit::Millirad => value / 100000.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Rad => crate::conv::div_ratio(value, 100.0, 1.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Millirad => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
             AbsorbedDoseOfIonizingRadiationUnit::Kilorad => value * 10.0,
             AbsorbedDoseOfIonizingRadiationUnit::Megarad => value * 10000.0,
         })

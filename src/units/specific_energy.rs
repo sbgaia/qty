@@ -498,7 +498,7 @@ impl<T: Number> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
             SpecificEnergyUnit::MegawattDayPerKilogram => value * T::from_f64(8.64e10),
             SpecificEnergyUnit::GigawattDayPerKilogram => value * T::from_f64(8.64e13),
             SpecificEnergyUnit::TerawattDayPerKilogram => value * T::from_f64(8.64e16),
-            SpecificEnergyUnit::WattDayPerTonne => value * T::from_f64(86.4),
+            SpecificEnergyUnit::WattDayPerTonne => T::mul_ratio(value, 432.0, 5.0),
             SpecificEnergyUnit::KilowattDayPerTonne => value * T::from_f64(86400.0),
             SpecificEnergyUnit::MegawattDayPerTonne => value * T::from_f64(8.64e7),
             SpecificEnergyUnit::GigawattDayPerTonne => value * T::from_f64(8.64e10),
@@ -512,7 +512,7 @@ impl<T: Number> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
             }
             SpecificEnergyUnit::GigawattDayPerShortTon => value * T::from_f64(9.523969726386711e10),
             SpecificEnergyUnit::TerawattDayPerShortTon => value * T::from_f64(9.523969726386711e13),
-            SpecificEnergyUnit::WattHourPerPound => value * T::from_f64(7936.64),
+            SpecificEnergyUnit::WattHourPerPound => T::mul_ratio(value, 198416.0, 25.0),
             SpecificEnergyUnit::KilowattHourPerPound => value * T::from_f64(7936640.0),
             SpecificEnergyUnit::MegawattHourPerPound => value * T::from_f64(7.93664e9),
             SpecificEnergyUnit::GigawattHourPerPound => value * T::from_f64(7.93664e12),
@@ -524,25 +524,29 @@ impl<T: Number> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             SpecificEnergyUnit::JoulePerKilogram => value,
-            SpecificEnergyUnit::KilojoulePerKilogram => value / T::from_f64(1000.0),
-            SpecificEnergyUnit::MegajoulePerKilogram => value / T::from_f64(1000000.0),
-            SpecificEnergyUnit::MegajoulePerTonne => value / T::from_f64(1000.0),
-            SpecificEnergyUnit::CaloriePerGram => value / T::from_f64(4184.0),
-            SpecificEnergyUnit::KilocaloriePerGram => value / T::from_f64(4184000.0),
-            SpecificEnergyUnit::WattHourPerKilogram => value / T::from_f64(3600.0),
-            SpecificEnergyUnit::KilowattHourPerKilogram => value / T::from_f64(3600000.0),
-            SpecificEnergyUnit::MegawattHourPerKilogram => value / T::from_f64(3.6e9),
-            SpecificEnergyUnit::GigawattHourPerKilogram => value / T::from_f64(3.6e12),
-            SpecificEnergyUnit::WattDayPerKilogram => value / T::from_f64(86400.0),
-            SpecificEnergyUnit::KilowattDayPerKilogram => value / T::from_f64(8.64e7),
-            SpecificEnergyUnit::MegawattDayPerKilogram => value / T::from_f64(8.64e10),
-            SpecificEnergyUnit::GigawattDayPerKilogram => value / T::from_f64(8.64e13),
+            SpecificEnergyUnit::KilojoulePerKilogram => T::div_ratio(value, 1000.0, 1.0),
+            SpecificEnergyUnit::MegajoulePerKilogram => T::div_ratio(value, 1000000.0, 1.0),
+            SpecificEnergyUnit::MegajoulePerTonne => T::div_ratio(value, 1000.0, 1.0),
+            SpecificEnergyUnit::CaloriePerGram => T::div_ratio(value, 4184.0, 1.0),
+            SpecificEnergyUnit::KilocaloriePerGram => T::div_ratio(value, 4184000.0, 1.0),
+            SpecificEnergyUnit::WattHourPerKilogram => T::div_ratio(value, 3600.0, 1.0),
+            SpecificEnergyUnit::KilowattHourPerKilogram => T::div_ratio(value, 3600000.0, 1.0),
+            SpecificEnergyUnit::MegawattHourPerKilogram => T::div_ratio(value, 3600000000.0, 1.0),
+            SpecificEnergyUnit::GigawattHourPerKilogram => {
+                T::div_ratio(value, 3600000000000.0, 1.0)
+            }
+            SpecificEnergyUnit::WattDayPerKilogram => T::div_ratio(value, 86400.0, 1.0),
+            SpecificEnergyUnit::KilowattDayPerKilogram => T::div_ratio(value, 86400000.0, 1.0),
+            SpecificEnergyUnit::MegawattDayPerKilogram => T::div_ratio(value, 86400000000.0, 1.0),
+            SpecificEnergyUnit::GigawattDayPerKilogram => {
+                T::div_ratio(value, 86400000000000.0, 1.0)
+            }
             SpecificEnergyUnit::TerawattDayPerKilogram => value / T::from_f64(8.64e16),
-            SpecificEnergyUnit::WattDayPerTonne => value / T::from_f64(86.4),
-            SpecificEnergyUnit::KilowattDayPerTonne => value / T::from_f64(86400.0),
-            SpecificEnergyUnit::MegawattDayPerTonne => value / T::from_f64(8.64e7),
-            SpecificEnergyUnit::GigawattDayPerTonne => value / T::from_f64(8.64e10),
-            SpecificEnergyUnit::TerawattDayPerTonne => value / T::from_f64(8.64e13),
+            SpecificEnergyUnit::WattDayPerTonne => T::div_ratio(value, 432.0, 5.0),
+            SpecificEnergyUnit::KilowattDayPerTonne => T::div_ratio(value, 86400.0, 1.0),
+            SpecificEnergyUnit::MegawattDayPerTonne => T::div_ratio(value, 86400000.0, 1.0),
+            SpecificEnergyUnit::GigawattDayPerTonne => T::div_ratio(value, 86400000000.0, 1.0),
+            SpecificEnergyUnit::TerawattDayPerTonne => T::div_ratio(value, 86400000000000.0, 1.0),
             SpecificEnergyUnit::WattDayPerShortTon => T::div_ratio(value, 4320000000.0, 45359237.0),
             SpecificEnergyUnit::KilowattDayPerShortTon => {
                 T::div_ratio(value, 4320000000000.0, 45359237.0)
@@ -552,11 +556,11 @@ impl<T: Number> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
             }
             SpecificEnergyUnit::GigawattDayPerShortTon => value / T::from_f64(9.523969726386711e10),
             SpecificEnergyUnit::TerawattDayPerShortTon => value / T::from_f64(9.523969726386711e13),
-            SpecificEnergyUnit::WattHourPerPound => value / T::from_f64(7936.64),
-            SpecificEnergyUnit::KilowattHourPerPound => value / T::from_f64(7936640.0),
-            SpecificEnergyUnit::MegawattHourPerPound => value / T::from_f64(7.93664e9),
-            SpecificEnergyUnit::GigawattHourPerPound => value / T::from_f64(7.93664e12),
-            SpecificEnergyUnit::BtuPerPound => value / T::from_f64(2326.0),
+            SpecificEnergyUnit::WattHourPerPound => T::div_ratio(value, 198416.0, 25.0),
+            SpecificEnergyUnit::KilowattHourPerPound => T::div_ratio(value, 7936640.0, 1.0),
+            SpecificEnergyUnit::MegawattHourPerPound => T::div_ratio(value, 7936640000.0, 1.0),
+            SpecificEnergyUnit::GigawattHourPerPound => T::div_ratio(value, 7936640000000.0, 1.0),
+            SpecificEnergyUnit::BtuPerPound => T::div_ratio(value, 2326.0, 1.0),
         }
     }
 }
@@ -598,7 +602,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `kJ/kg`.
     #[inline]
     pub fn as_kilojoules_per_kilogram(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MJ/kg`.
@@ -610,7 +614,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `MJ/kg`.
     #[inline]
     pub fn as_megajoules_per_kilogram(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MJ/t`.
@@ -622,7 +626,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `MJ/t`.
     #[inline]
     pub fn as_megajoules_per_tonne(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `cal/g`.
@@ -634,7 +638,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `cal/g`.
     #[inline]
     pub fn as_calories_per_gram(self) -> T {
-        self.0 / T::from_f64(4184.0)
+        T::div_ratio(self.0, 4184.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `kcal/g`.
@@ -646,7 +650,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `kcal/g`.
     #[inline]
     pub fn as_kilocalories_per_gram(self) -> T {
-        self.0 / T::from_f64(4184000.0)
+        T::div_ratio(self.0, 4184000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `Wh/kg`.
@@ -658,7 +662,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `Wh/kg`.
     #[inline]
     pub fn as_watt_hours_per_kilogram(self) -> T {
-        self.0 / T::from_f64(3600.0)
+        T::div_ratio(self.0, 3600.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `kWh/kg`.
@@ -670,7 +674,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `kWh/kg`.
     #[inline]
     pub fn as_kilowatt_hours_per_kilogram(self) -> T {
-        self.0 / T::from_f64(3600000.0)
+        T::div_ratio(self.0, 3600000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MWh/kg`.
@@ -682,7 +686,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `MWh/kg`.
     #[inline]
     pub fn as_megawatt_hours_per_kilogram(self) -> T {
-        self.0 / T::from_f64(3.6e9)
+        T::div_ratio(self.0, 3600000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `GWh/kg`.
@@ -694,7 +698,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `GWh/kg`.
     #[inline]
     pub fn as_gigawatt_hours_per_kilogram(self) -> T {
-        self.0 / T::from_f64(3.6e12)
+        T::div_ratio(self.0, 3600000000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `Wd/kg`.
@@ -706,7 +710,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `Wd/kg`.
     #[inline]
     pub fn as_watt_days_per_kilogram(self) -> T {
-        self.0 / T::from_f64(86400.0)
+        T::div_ratio(self.0, 86400.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `kWd/kg`.
@@ -718,7 +722,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `kWd/kg`.
     #[inline]
     pub fn as_kilowatt_days_per_kilogram(self) -> T {
-        self.0 / T::from_f64(8.64e7)
+        T::div_ratio(self.0, 86400000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MWd/kg`.
@@ -730,7 +734,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `MWd/kg`.
     #[inline]
     pub fn as_megawatt_days_per_kilogram(self) -> T {
-        self.0 / T::from_f64(8.64e10)
+        T::div_ratio(self.0, 86400000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `GWd/kg`.
@@ -742,7 +746,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `GWd/kg`.
     #[inline]
     pub fn as_gigawatt_days_per_kilogram(self) -> T {
-        self.0 / T::from_f64(8.64e13)
+        T::div_ratio(self.0, 86400000000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `TWd/kg`.
@@ -760,13 +764,13 @@ impl<T: Number> SpecificEnergy<T> {
     /// A [`SpecificEnergy`] from a value in `Wd/t`.
     #[inline]
     pub fn from_watt_days_per_tonne(value: T) -> Self {
-        Self(value * T::from_f64(86.4))
+        Self(T::mul_ratio(value, 432.0, 5.0))
     }
 
     /// The value in `Wd/t`.
     #[inline]
     pub fn as_watt_days_per_tonne(self) -> T {
-        self.0 / T::from_f64(86.4)
+        T::div_ratio(self.0, 432.0, 5.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `kWd/t`.
@@ -778,7 +782,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `kWd/t`.
     #[inline]
     pub fn as_kilowatt_days_per_tonne(self) -> T {
-        self.0 / T::from_f64(86400.0)
+        T::div_ratio(self.0, 86400.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MWd/t`.
@@ -790,7 +794,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `MWd/t`.
     #[inline]
     pub fn as_megawatt_days_per_tonne(self) -> T {
-        self.0 / T::from_f64(8.64e7)
+        T::div_ratio(self.0, 86400000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `GWd/t`.
@@ -802,7 +806,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `GWd/t`.
     #[inline]
     pub fn as_gigawatt_days_per_tonne(self) -> T {
-        self.0 / T::from_f64(8.64e10)
+        T::div_ratio(self.0, 86400000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `TWd/t`.
@@ -814,7 +818,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `TWd/t`.
     #[inline]
     pub fn as_terawatt_days_per_tonne(self) -> T {
-        self.0 / T::from_f64(8.64e13)
+        T::div_ratio(self.0, 86400000000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `Wd/ST`.
@@ -880,13 +884,13 @@ impl<T: Number> SpecificEnergy<T> {
     /// A [`SpecificEnergy`] from a value in `Wh/lbs`.
     #[inline]
     pub fn from_watt_hours_per_pound(value: T) -> Self {
-        Self(value * T::from_f64(7936.64))
+        Self(T::mul_ratio(value, 198416.0, 25.0))
     }
 
     /// The value in `Wh/lbs`.
     #[inline]
     pub fn as_watt_hours_per_pound(self) -> T {
-        self.0 / T::from_f64(7936.64)
+        T::div_ratio(self.0, 198416.0, 25.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `kWh/lbs`.
@@ -898,7 +902,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `kWh/lbs`.
     #[inline]
     pub fn as_kilowatt_hours_per_pound(self) -> T {
-        self.0 / T::from_f64(7936640.0)
+        T::div_ratio(self.0, 7936640.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MWh/lbs`.
@@ -910,7 +914,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `MWh/lbs`.
     #[inline]
     pub fn as_megawatt_hours_per_pound(self) -> T {
-        self.0 / T::from_f64(7.93664e9)
+        T::div_ratio(self.0, 7936640000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `GWh/lbs`.
@@ -922,7 +926,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `GWh/lbs`.
     #[inline]
     pub fn as_gigawatt_hours_per_pound(self) -> T {
-        self.0 / T::from_f64(7.93664e12)
+        T::div_ratio(self.0, 7936640000000.0, 1.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `btu/lb`.
@@ -934,7 +938,7 @@ impl<T: Number> SpecificEnergy<T> {
     /// The value in `btu/lb`.
     #[inline]
     pub fn as_btu_per_pound(self) -> T {
-        self.0 / T::from_f64(2326.0)
+        T::div_ratio(self.0, 2326.0, 1.0)
     }
 }
 
@@ -959,17 +963,23 @@ impl SpecificEnergy<f64> {
             SpecificEnergyUnit::MegawattDayPerKilogram => value * 8.64e10,
             SpecificEnergyUnit::GigawattDayPerKilogram => value * 8.64e13,
             SpecificEnergyUnit::TerawattDayPerKilogram => value * 8.64e16,
-            SpecificEnergyUnit::WattDayPerTonne => value * 86.4,
+            SpecificEnergyUnit::WattDayPerTonne => crate::conv::mul_ratio(value, 432.0, 5.0),
             SpecificEnergyUnit::KilowattDayPerTonne => value * 86400.0,
             SpecificEnergyUnit::MegawattDayPerTonne => value * 8.64e7,
             SpecificEnergyUnit::GigawattDayPerTonne => value * 8.64e10,
             SpecificEnergyUnit::TerawattDayPerTonne => value * 8.64e13,
-            SpecificEnergyUnit::WattDayPerShortTon => value * 95.23969726386711,
-            SpecificEnergyUnit::KilowattDayPerShortTon => value * 95239.69726386711,
-            SpecificEnergyUnit::MegawattDayPerShortTon => value * 9.523969726386711e7,
+            SpecificEnergyUnit::WattDayPerShortTon => {
+                crate::conv::mul_ratio(value, 4320000000.0, 45359237.0)
+            }
+            SpecificEnergyUnit::KilowattDayPerShortTon => {
+                crate::conv::mul_ratio(value, 4320000000000.0, 45359237.0)
+            }
+            SpecificEnergyUnit::MegawattDayPerShortTon => {
+                crate::conv::mul_ratio(value, 4320000000000000.0, 45359237.0)
+            }
             SpecificEnergyUnit::GigawattDayPerShortTon => value * 9.523969726386711e10,
             SpecificEnergyUnit::TerawattDayPerShortTon => value * 9.523969726386711e13,
-            SpecificEnergyUnit::WattHourPerPound => value * 7936.64,
+            SpecificEnergyUnit::WattHourPerPound => crate::conv::mul_ratio(value, 198416.0, 25.0),
             SpecificEnergyUnit::KilowattHourPerPound => value * 7936640.0,
             SpecificEnergyUnit::MegawattHourPerPound => value * 7.93664e9,
             SpecificEnergyUnit::GigawattHourPerPound => value * 7.93664e12,

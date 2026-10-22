@@ -267,16 +267,22 @@ impl<T: Number> crate::UnitOf<EnergyDensity<T>> for EnergyDensityUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             EnergyDensityUnit::JoulePerCubicMeter => value,
-            EnergyDensityUnit::KilojoulePerCubicMeter => value / T::from_f64(1000.0),
-            EnergyDensityUnit::MegajoulePerCubicMeter => value / T::from_f64(1000000.0),
-            EnergyDensityUnit::GigajoulePerCubicMeter => value / T::from_f64(1e9),
-            EnergyDensityUnit::TerajoulePerCubicMeter => value / T::from_f64(1e12),
-            EnergyDensityUnit::PetajoulePerCubicMeter => value / T::from_f64(1e15),
-            EnergyDensityUnit::WattHourPerCubicMeter => value / T::from_f64(3600.0),
-            EnergyDensityUnit::KilowattHourPerCubicMeter => value / T::from_f64(3600000.0),
-            EnergyDensityUnit::MegawattHourPerCubicMeter => value / T::from_f64(3.6e9),
-            EnergyDensityUnit::GigawattHourPerCubicMeter => value / T::from_f64(3.6e12),
-            EnergyDensityUnit::TerawattHourPerCubicMeter => value / T::from_f64(3.6e15),
+            EnergyDensityUnit::KilojoulePerCubicMeter => T::div_ratio(value, 1000.0, 1.0),
+            EnergyDensityUnit::MegajoulePerCubicMeter => T::div_ratio(value, 1000000.0, 1.0),
+            EnergyDensityUnit::GigajoulePerCubicMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            EnergyDensityUnit::TerajoulePerCubicMeter => T::div_ratio(value, 1000000000000.0, 1.0),
+            EnergyDensityUnit::PetajoulePerCubicMeter => {
+                T::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            EnergyDensityUnit::WattHourPerCubicMeter => T::div_ratio(value, 3600.0, 1.0),
+            EnergyDensityUnit::KilowattHourPerCubicMeter => T::div_ratio(value, 3600000.0, 1.0),
+            EnergyDensityUnit::MegawattHourPerCubicMeter => T::div_ratio(value, 3600000000.0, 1.0),
+            EnergyDensityUnit::GigawattHourPerCubicMeter => {
+                T::div_ratio(value, 3600000000000.0, 1.0)
+            }
+            EnergyDensityUnit::TerawattHourPerCubicMeter => {
+                T::div_ratio(value, 3600000000000000.0, 1.0)
+            }
             EnergyDensityUnit::PetawattHourPerCubicMeter => value / T::from_f64(3.6e18),
         }
     }
@@ -322,7 +328,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `kJ/m³`.
     #[inline]
     pub fn as_kilojoules_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `MJ/m³`.
@@ -334,7 +340,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `MJ/m³`.
     #[inline]
     pub fn as_megajoules_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `GJ/m³`.
@@ -346,7 +352,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `GJ/m³`.
     #[inline]
     pub fn as_gigajoules_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `TJ/m³`.
@@ -358,7 +364,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `TJ/m³`.
     #[inline]
     pub fn as_terajoules_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `PJ/m³`.
@@ -370,7 +376,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `PJ/m³`.
     #[inline]
     pub fn as_petajoules_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `Wh/m³`.
@@ -382,7 +388,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `Wh/m³`.
     #[inline]
     pub fn as_watt_hours_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(3600.0)
+        T::div_ratio(self.0, 3600.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `kWh/m³`.
@@ -394,7 +400,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `kWh/m³`.
     #[inline]
     pub fn as_kilowatt_hours_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(3600000.0)
+        T::div_ratio(self.0, 3600000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `MWh/m³`.
@@ -406,7 +412,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `MWh/m³`.
     #[inline]
     pub fn as_megawatt_hours_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(3.6e9)
+        T::div_ratio(self.0, 3600000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `GWh/m³`.
@@ -418,7 +424,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `GWh/m³`.
     #[inline]
     pub fn as_gigawatt_hours_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(3.6e12)
+        T::div_ratio(self.0, 3600000000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `TWh/m³`.
@@ -430,7 +436,7 @@ impl<T: Number> EnergyDensity<T> {
     /// The value in `TWh/m³`.
     #[inline]
     pub fn as_terawatt_hours_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(3.6e15)
+        T::div_ratio(self.0, 3600000000000000.0, 1.0)
     }
 
     /// A [`EnergyDensity`] from a value in `PWh/m³`.

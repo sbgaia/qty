@@ -227,12 +227,12 @@ impl<T: Number> crate::UnitOf<Irradiation<T>> for IrradiationUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             IrradiationUnit::JoulePerSquareMeter => value,
-            IrradiationUnit::KilojoulePerSquareMeter => value / T::from_f64(1000.0),
-            IrradiationUnit::JoulePerSquareCentimeter => value / T::from_f64(10000.0),
-            IrradiationUnit::MillijoulePerSquareCentimeter => value / T::from_f64(10.0),
-            IrradiationUnit::JoulePerSquareMillimeter => value / T::from_f64(1000000.0),
-            IrradiationUnit::WattHourPerSquareMeter => value / T::from_f64(3600.0),
-            IrradiationUnit::KilowattHourPerSquareMeter => value / T::from_f64(3600000.0),
+            IrradiationUnit::KilojoulePerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            IrradiationUnit::JoulePerSquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
+            IrradiationUnit::MillijoulePerSquareCentimeter => T::div_ratio(value, 10.0, 1.0),
+            IrradiationUnit::JoulePerSquareMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            IrradiationUnit::WattHourPerSquareMeter => T::div_ratio(value, 3600.0, 1.0),
+            IrradiationUnit::KilowattHourPerSquareMeter => T::div_ratio(value, 3600000.0, 1.0),
             IrradiationUnit::BtuPerSquareFoot => T::div_ratio(value, 52752792631.0, 4645152.0),
             IrradiationUnit::KilobtuPerSquareFoot => T::div_ratio(value, 6594099078875.0, 580644.0),
         }
@@ -275,7 +275,7 @@ impl<T: Number> Irradiation<T> {
     /// The value in `kJ/m²`.
     #[inline]
     pub fn as_kilojoules_per_square_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Irradiation`] from a value in `J/cm²`.
@@ -287,7 +287,7 @@ impl<T: Number> Irradiation<T> {
     /// The value in `J/cm²`.
     #[inline]
     pub fn as_joules_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`Irradiation`] from a value in `mJ/cm²`.
@@ -299,7 +299,7 @@ impl<T: Number> Irradiation<T> {
     /// The value in `mJ/cm²`.
     #[inline]
     pub fn as_millijoules_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Irradiation`] from a value in `J/mm²`.
@@ -311,7 +311,7 @@ impl<T: Number> Irradiation<T> {
     /// The value in `J/mm²`.
     #[inline]
     pub fn as_joules_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Irradiation`] from a value in `Wh/m²`.
@@ -323,7 +323,7 @@ impl<T: Number> Irradiation<T> {
     /// The value in `Wh/m²`.
     #[inline]
     pub fn as_watt_hours_per_square_meter(self) -> T {
-        self.0 / T::from_f64(3600.0)
+        T::div_ratio(self.0, 3600.0, 1.0)
     }
 
     /// A [`Irradiation`] from a value in `kWh/m²`.
@@ -335,7 +335,7 @@ impl<T: Number> Irradiation<T> {
     /// The value in `kWh/m²`.
     #[inline]
     pub fn as_kilowatt_hours_per_square_meter(self) -> T {
-        self.0 / T::from_f64(3600000.0)
+        T::div_ratio(self.0, 3600000.0, 1.0)
     }
 
     /// A [`Irradiation`] from a value in `Btu/ft²`.
@@ -376,8 +376,12 @@ impl Irradiation<f64> {
             IrradiationUnit::JoulePerSquareMillimeter => value * 1000000.0,
             IrradiationUnit::WattHourPerSquareMeter => value * 3600.0,
             IrradiationUnit::KilowattHourPerSquareMeter => value * 3600000.0,
-            IrradiationUnit::BtuPerSquareFoot => value * 11356.526682226975,
-            IrradiationUnit::KilobtuPerSquareFoot => value * 1.1356526682226976e7,
+            IrradiationUnit::BtuPerSquareFoot => {
+                crate::conv::mul_ratio(value, 52752792631.0, 4645152.0)
+            }
+            IrradiationUnit::KilobtuPerSquareFoot => {
+                crate::conv::mul_ratio(value, 6594099078875.0, 580644.0)
+            }
         })
     }
 }

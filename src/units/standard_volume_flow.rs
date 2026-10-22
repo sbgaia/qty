@@ -211,18 +211,22 @@ impl<T: Number> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit 
     fn value_to_base(self, value: T) -> T {
         match self {
             StandardVolumeFlowUnit::StandardCubicMeterPerSecond => value,
-            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => value / T::from_f64(60.0),
-            StandardVolumeFlowUnit::StandardCubicMeterPerHour => value / T::from_f64(3600.0),
-            StandardVolumeFlowUnit::StandardCubicMeterPerDay => value / T::from_f64(86400.0),
-            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => value / T::from_f64(6e7),
-            StandardVolumeFlowUnit::StandardLiterPerMinute => value / T::from_f64(60000.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => T::div_ratio(value, 60.0, 1.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerHour => T::div_ratio(value, 3600.0, 1.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerDay => T::div_ratio(value, 86400.0, 1.0),
+            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => {
+                T::div_ratio(value, 60000000.0, 1.0)
+            }
+            StandardVolumeFlowUnit::StandardLiterPerMinute => T::div_ratio(value, 60000.0, 1.0),
             StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
-                value * T::from_f64(0.028316846592)
+                T::mul_ratio(value, 55306341.0, 1953125000.0)
             }
             StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
-                value * T::from_f64(0.0004719474432)
+                T::mul_ratio(value, 18435447.0, 39062500000.0)
             }
-            StandardVolumeFlowUnit::StandardCubicFootPerHour => value * T::from_f64(7.86579072e-6),
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => {
+                T::mul_ratio(value, 6145149.0, 781250000000.0)
+            }
         }
     }
 
@@ -236,12 +240,14 @@ impl<T: Number> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit 
             StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => value * T::from_f64(6e7),
             StandardVolumeFlowUnit::StandardLiterPerMinute => value * T::from_f64(60000.0),
             StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
-                value / T::from_f64(0.028316846592)
+                T::div_ratio(value, 55306341.0, 1953125000.0)
             }
             StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
-                value / T::from_f64(0.0004719474432)
+                T::div_ratio(value, 18435447.0, 39062500000.0)
             }
-            StandardVolumeFlowUnit::StandardCubicFootPerHour => value / T::from_f64(7.86579072e-6),
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => {
+                T::div_ratio(value, 6145149.0, 781250000000.0)
+            }
         }
     }
 }
@@ -272,7 +278,7 @@ impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `Sm³/min`.
     #[inline]
     pub fn from_standard_cubic_meters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `Sm³/min`.
@@ -284,7 +290,7 @@ impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `Sm³/h`.
     #[inline]
     pub fn from_standard_cubic_meters_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `Sm³/h`.
@@ -296,7 +302,7 @@ impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `Sm³/d`.
     #[inline]
     pub fn from_standard_cubic_meters_per_day(value: T) -> Self {
-        Self(value / T::from_f64(86400.0))
+        Self(T::div_ratio(value, 86400.0, 1.0))
     }
 
     /// The value in `Sm³/d`.
@@ -308,7 +314,7 @@ impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `sccm`.
     #[inline]
     pub fn from_standard_cubic_centimeters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(6e7))
+        Self(T::div_ratio(value, 60000000.0, 1.0))
     }
 
     /// The value in `sccm`.
@@ -320,7 +326,7 @@ impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `slm`.
     #[inline]
     pub fn from_standard_liters_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60000.0))
+        Self(T::div_ratio(value, 60000.0, 1.0))
     }
 
     /// The value in `slm`.
@@ -332,37 +338,37 @@ impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `Sft³/s`.
     #[inline]
     pub fn from_standard_cubic_feet_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.028316846592))
+        Self(T::mul_ratio(value, 55306341.0, 1953125000.0))
     }
 
     /// The value in `Sft³/s`.
     #[inline]
     pub fn as_standard_cubic_feet_per_second(self) -> T {
-        self.0 / T::from_f64(0.028316846592)
+        T::div_ratio(self.0, 55306341.0, 1953125000.0)
     }
 
     /// A [`StandardVolumeFlow`] from a value in `scfm`.
     #[inline]
     pub fn from_standard_cubic_feet_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.0004719474432))
+        Self(T::mul_ratio(value, 18435447.0, 39062500000.0))
     }
 
     /// The value in `scfm`.
     #[inline]
     pub fn as_standard_cubic_feet_per_minute(self) -> T {
-        self.0 / T::from_f64(0.0004719474432)
+        T::div_ratio(self.0, 18435447.0, 39062500000.0)
     }
 
     /// A [`StandardVolumeFlow`] from a value in `scfh`.
     #[inline]
     pub fn from_standard_cubic_feet_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(7.86579072e-6))
+        Self(T::mul_ratio(value, 6145149.0, 781250000000.0))
     }
 
     /// The value in `scfh`.
     #[inline]
     pub fn as_standard_cubic_feet_per_hour(self) -> T {
-        self.0 / T::from_f64(7.86579072e-6)
+        T::div_ratio(self.0, 6145149.0, 781250000000.0)
     }
 }
 
@@ -373,14 +379,30 @@ impl StandardVolumeFlow<f64> {
     pub const fn const_new(value: f64, unit: StandardVolumeFlowUnit) -> Self {
         Self(match unit {
             StandardVolumeFlowUnit::StandardCubicMeterPerSecond => value,
-            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => value / 60.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerHour => value / 3600.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerDay => value / 86400.0,
-            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => value / 6e7,
-            StandardVolumeFlowUnit::StandardLiterPerMinute => value / 60000.0,
-            StandardVolumeFlowUnit::StandardCubicFootPerSecond => value * 0.028316846592,
-            StandardVolumeFlowUnit::StandardCubicFootPerMinute => value * 0.0004719474432,
-            StandardVolumeFlowUnit::StandardCubicFootPerHour => value * 7.86579072e-6,
+            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => {
+                crate::conv::div_ratio(value, 60.0, 1.0)
+            }
+            StandardVolumeFlowUnit::StandardCubicMeterPerHour => {
+                crate::conv::div_ratio(value, 3600.0, 1.0)
+            }
+            StandardVolumeFlowUnit::StandardCubicMeterPerDay => {
+                crate::conv::div_ratio(value, 86400.0, 1.0)
+            }
+            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => {
+                crate::conv::div_ratio(value, 60000000.0, 1.0)
+            }
+            StandardVolumeFlowUnit::StandardLiterPerMinute => {
+                crate::conv::div_ratio(value, 60000.0, 1.0)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
+                crate::conv::mul_ratio(value, 55306341.0, 1953125000.0)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
+                crate::conv::mul_ratio(value, 18435447.0, 39062500000.0)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => {
+                crate::conv::mul_ratio(value, 6145149.0, 781250000000.0)
+            }
         })
     }
 }

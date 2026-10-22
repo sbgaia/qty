@@ -646,11 +646,11 @@ impl<T: Number> crate::UnitOf<Information<T>> for InformationUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             InformationUnit::Byte => value * T::from_f64(0.125),
-            InformationUnit::Kilobyte => value / T::from_f64(8000.0),
-            InformationUnit::Megabyte => value / T::from_f64(8000000.0),
-            InformationUnit::Gigabyte => value / T::from_f64(8e9),
-            InformationUnit::Terabyte => value / T::from_f64(8e12),
-            InformationUnit::Petabyte => value / T::from_f64(8e15),
+            InformationUnit::Kilobyte => T::div_ratio(value, 8000.0, 1.0),
+            InformationUnit::Megabyte => T::div_ratio(value, 8000000.0, 1.0),
+            InformationUnit::Gigabyte => T::div_ratio(value, 8000000000.0, 1.0),
+            InformationUnit::Terabyte => T::div_ratio(value, 8000000000000.0, 1.0),
+            InformationUnit::Petabyte => T::div_ratio(value, 8000000000000000.0, 1.0),
             InformationUnit::Exabyte => value / T::from_f64(8e18),
             InformationUnit::Kibibyte => value * T::from_f64(0.0001220703125),
             InformationUnit::Mebibyte => value * T::from_f64(1.1920928955078125e-7),
@@ -659,11 +659,11 @@ impl<T: Number> crate::UnitOf<Information<T>> for InformationUnit {
             InformationUnit::Pebibyte => value * T::from_ratio(1.0, 9007199254740992.0),
             InformationUnit::Exbibyte => value * T::from_f64(1.0842021724855044e-19),
             InformationUnit::Octet => value * T::from_f64(0.125),
-            InformationUnit::Kilooctet => value / T::from_f64(8000.0),
-            InformationUnit::Megaoctet => value / T::from_f64(8000000.0),
-            InformationUnit::Gigaoctet => value / T::from_f64(8e9),
-            InformationUnit::Teraoctet => value / T::from_f64(8e12),
-            InformationUnit::Petaoctet => value / T::from_f64(8e15),
+            InformationUnit::Kilooctet => T::div_ratio(value, 8000.0, 1.0),
+            InformationUnit::Megaoctet => T::div_ratio(value, 8000000.0, 1.0),
+            InformationUnit::Gigaoctet => T::div_ratio(value, 8000000000.0, 1.0),
+            InformationUnit::Teraoctet => T::div_ratio(value, 8000000000000.0, 1.0),
+            InformationUnit::Petaoctet => T::div_ratio(value, 8000000000000000.0, 1.0),
             InformationUnit::Exaoctet => value / T::from_f64(8e18),
             InformationUnit::Kibioctet => value * T::from_f64(0.0001220703125),
             InformationUnit::Mebioctet => value * T::from_f64(1.1920928955078125e-7),
@@ -672,11 +672,11 @@ impl<T: Number> crate::UnitOf<Information<T>> for InformationUnit {
             InformationUnit::Pebioctet => value * T::from_ratio(1.0, 9007199254740992.0),
             InformationUnit::Exbioctet => value * T::from_f64(1.0842021724855044e-19),
             InformationUnit::Bit => value,
-            InformationUnit::Kilobit => value / T::from_f64(1000.0),
-            InformationUnit::Megabit => value / T::from_f64(1000000.0),
-            InformationUnit::Gigabit => value / T::from_f64(1e9),
-            InformationUnit::Terabit => value / T::from_f64(1e12),
-            InformationUnit::Petabit => value / T::from_f64(1e15),
+            InformationUnit::Kilobit => T::div_ratio(value, 1000.0, 1.0),
+            InformationUnit::Megabit => T::div_ratio(value, 1000000.0, 1.0),
+            InformationUnit::Gigabit => T::div_ratio(value, 1000000000.0, 1.0),
+            InformationUnit::Terabit => T::div_ratio(value, 1000000000000.0, 1.0),
+            InformationUnit::Petabit => T::div_ratio(value, 1000000000000000.0, 1.0),
             InformationUnit::Exabit => value / T::from_f64(1e18),
             InformationUnit::Kibibit => value * T::from_f64(0.0009765625),
             InformationUnit::Mebibit => value * T::from_f64(9.5367431640625e-7),
@@ -729,7 +729,7 @@ impl<T: Number> Information<T> {
     /// The value in `kB`.
     #[inline]
     pub fn as_kilobytes(self) -> T {
-        self.0 / T::from_f64(8000.0)
+        T::div_ratio(self.0, 8000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `MB`.
@@ -741,7 +741,7 @@ impl<T: Number> Information<T> {
     /// The value in `MB`.
     #[inline]
     pub fn as_megabytes(self) -> T {
-        self.0 / T::from_f64(8000000.0)
+        T::div_ratio(self.0, 8000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `GB`.
@@ -753,7 +753,7 @@ impl<T: Number> Information<T> {
     /// The value in `GB`.
     #[inline]
     pub fn as_gigabytes(self) -> T {
-        self.0 / T::from_f64(8e9)
+        T::div_ratio(self.0, 8000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `TB`.
@@ -765,7 +765,7 @@ impl<T: Number> Information<T> {
     /// The value in `TB`.
     #[inline]
     pub fn as_terabytes(self) -> T {
-        self.0 / T::from_f64(8e12)
+        T::div_ratio(self.0, 8000000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `PB`.
@@ -777,7 +777,7 @@ impl<T: Number> Information<T> {
     /// The value in `PB`.
     #[inline]
     pub fn as_petabytes(self) -> T {
-        self.0 / T::from_f64(8e15)
+        T::div_ratio(self.0, 8000000000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `EB`.
@@ -885,7 +885,7 @@ impl<T: Number> Information<T> {
     /// The value in `ko`.
     #[inline]
     pub fn as_kilooctets(self) -> T {
-        self.0 / T::from_f64(8000.0)
+        T::div_ratio(self.0, 8000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Mo`.
@@ -897,7 +897,7 @@ impl<T: Number> Information<T> {
     /// The value in `Mo`.
     #[inline]
     pub fn as_megaoctets(self) -> T {
-        self.0 / T::from_f64(8000000.0)
+        T::div_ratio(self.0, 8000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Go`.
@@ -909,7 +909,7 @@ impl<T: Number> Information<T> {
     /// The value in `Go`.
     #[inline]
     pub fn as_gigaoctets(self) -> T {
-        self.0 / T::from_f64(8e9)
+        T::div_ratio(self.0, 8000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `To`.
@@ -921,7 +921,7 @@ impl<T: Number> Information<T> {
     /// The value in `To`.
     #[inline]
     pub fn as_teraoctets(self) -> T {
-        self.0 / T::from_f64(8e12)
+        T::div_ratio(self.0, 8000000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Po`.
@@ -933,7 +933,7 @@ impl<T: Number> Information<T> {
     /// The value in `Po`.
     #[inline]
     pub fn as_petaoctets(self) -> T {
-        self.0 / T::from_f64(8e15)
+        T::div_ratio(self.0, 8000000000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Eo`.
@@ -1041,7 +1041,7 @@ impl<T: Number> Information<T> {
     /// The value in `kb`.
     #[inline]
     pub fn as_kilobits(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Mb`.
@@ -1053,7 +1053,7 @@ impl<T: Number> Information<T> {
     /// The value in `Mb`.
     #[inline]
     pub fn as_megabits(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Gb`.
@@ -1065,7 +1065,7 @@ impl<T: Number> Information<T> {
     /// The value in `Gb`.
     #[inline]
     pub fn as_gigabits(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Tb`.
@@ -1077,7 +1077,7 @@ impl<T: Number> Information<T> {
     /// The value in `Tb`.
     #[inline]
     pub fn as_terabits(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Pb`.
@@ -1089,7 +1089,7 @@ impl<T: Number> Information<T> {
     /// The value in `Pb`.
     #[inline]
     pub fn as_petabits(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`Information`] from a value in `Eb`.

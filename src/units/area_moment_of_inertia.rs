@@ -173,11 +173,17 @@ impl<T: Number> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUni
     fn value_to_base(self, value: T) -> T {
         match self {
             AreaMomentOfInertiaUnit::MeterToTheFourth => value,
-            AreaMomentOfInertiaUnit::DecimeterToTheFourth => value / T::from_f64(10000.0),
-            AreaMomentOfInertiaUnit::CentimeterToTheFourth => value / T::from_f64(1e8),
-            AreaMomentOfInertiaUnit::MillimeterToTheFourth => value / T::from_f64(1e12),
-            AreaMomentOfInertiaUnit::FootToTheFourth => value * T::from_f64(0.0086309748412416),
-            AreaMomentOfInertiaUnit::InchToTheFourth => value * T::from_f64(4.162314256e-7),
+            AreaMomentOfInertiaUnit::DecimeterToTheFourth => T::div_ratio(value, 10000.0, 1.0),
+            AreaMomentOfInertiaUnit::CentimeterToTheFourth => T::div_ratio(value, 100000000.0, 1.0),
+            AreaMomentOfInertiaUnit::MillimeterToTheFourth => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            AreaMomentOfInertiaUnit::FootToTheFourth => {
+                T::mul_ratio(value, 21071715921.0, 2441406250000.0)
+            }
+            AreaMomentOfInertiaUnit::InchToTheFourth => {
+                T::mul_ratio(value, 260144641.0, 625000000000000.0)
+            }
         }
     }
 
@@ -188,8 +194,12 @@ impl<T: Number> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUni
             AreaMomentOfInertiaUnit::DecimeterToTheFourth => value * T::from_f64(10000.0),
             AreaMomentOfInertiaUnit::CentimeterToTheFourth => value * T::from_f64(1e8),
             AreaMomentOfInertiaUnit::MillimeterToTheFourth => value * T::from_f64(1e12),
-            AreaMomentOfInertiaUnit::FootToTheFourth => value / T::from_f64(0.0086309748412416),
-            AreaMomentOfInertiaUnit::InchToTheFourth => value / T::from_f64(4.162314256e-7),
+            AreaMomentOfInertiaUnit::FootToTheFourth => {
+                T::div_ratio(value, 21071715921.0, 2441406250000.0)
+            }
+            AreaMomentOfInertiaUnit::InchToTheFourth => {
+                T::div_ratio(value, 260144641.0, 625000000000000.0)
+            }
         }
     }
 }
@@ -220,7 +230,7 @@ impl<T: Number> AreaMomentOfInertia<T> {
     /// A [`AreaMomentOfInertia`] from a value in `dm⁴`.
     #[inline]
     pub fn from_decimeters_to_the_fourth(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `dm⁴`.
@@ -232,7 +242,7 @@ impl<T: Number> AreaMomentOfInertia<T> {
     /// A [`AreaMomentOfInertia`] from a value in `cm⁴`.
     #[inline]
     pub fn from_centimeters_to_the_fourth(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `cm⁴`.
@@ -244,7 +254,7 @@ impl<T: Number> AreaMomentOfInertia<T> {
     /// A [`AreaMomentOfInertia`] from a value in `mm⁴`.
     #[inline]
     pub fn from_millimeters_to_the_fourth(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `mm⁴`.
@@ -256,25 +266,25 @@ impl<T: Number> AreaMomentOfInertia<T> {
     /// A [`AreaMomentOfInertia`] from a value in `ft⁴`.
     #[inline]
     pub fn from_feet_to_the_fourth(value: T) -> Self {
-        Self(value * T::from_f64(0.0086309748412416))
+        Self(T::mul_ratio(value, 21071715921.0, 2441406250000.0))
     }
 
     /// The value in `ft⁴`.
     #[inline]
     pub fn as_feet_to_the_fourth(self) -> T {
-        self.0 / T::from_f64(0.0086309748412416)
+        T::div_ratio(self.0, 21071715921.0, 2441406250000.0)
     }
 
     /// A [`AreaMomentOfInertia`] from a value in `in⁴`.
     #[inline]
     pub fn from_inches_to_the_fourth(value: T) -> Self {
-        Self(value * T::from_f64(4.162314256e-7))
+        Self(T::mul_ratio(value, 260144641.0, 625000000000000.0))
     }
 
     /// The value in `in⁴`.
     #[inline]
     pub fn as_inches_to_the_fourth(self) -> T {
-        self.0 / T::from_f64(4.162314256e-7)
+        T::div_ratio(self.0, 260144641.0, 625000000000000.0)
     }
 }
 
@@ -285,11 +295,21 @@ impl AreaMomentOfInertia<f64> {
     pub const fn const_new(value: f64, unit: AreaMomentOfInertiaUnit) -> Self {
         Self(match unit {
             AreaMomentOfInertiaUnit::MeterToTheFourth => value,
-            AreaMomentOfInertiaUnit::DecimeterToTheFourth => value / 10000.0,
-            AreaMomentOfInertiaUnit::CentimeterToTheFourth => value / 1e8,
-            AreaMomentOfInertiaUnit::MillimeterToTheFourth => value / 1e12,
-            AreaMomentOfInertiaUnit::FootToTheFourth => value * 0.0086309748412416,
-            AreaMomentOfInertiaUnit::InchToTheFourth => value * 4.162314256e-7,
+            AreaMomentOfInertiaUnit::DecimeterToTheFourth => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            AreaMomentOfInertiaUnit::CentimeterToTheFourth => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            AreaMomentOfInertiaUnit::MillimeterToTheFourth => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            AreaMomentOfInertiaUnit::FootToTheFourth => {
+                crate::conv::mul_ratio(value, 21071715921.0, 2441406250000.0)
+            }
+            AreaMomentOfInertiaUnit::InchToTheFourth => {
+                crate::conv::mul_ratio(value, 260144641.0, 625000000000000.0)
+            }
         })
     }
 }

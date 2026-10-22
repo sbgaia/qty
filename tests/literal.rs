@@ -24,8 +24,11 @@ fn gives_the_quantity_the_context_expects() {
 #[test]
 fn matches_the_from_methods() {
     assert_eq!(Length::from_miles(3.0), qty!(3 mi));
-    assert_eq!(Length::from_feet(12.0), qty!(12 ft));
-    assert_eq!(Length::from_inches(3.0), qty!(3 in));
+    // `qty!` multiplies by the rounded factor (0.3048, 0.0254). Where the
+    // target has an FMA instruction, the `from_` methods round once instead,
+    // to exactly 3.6576 m and 0.0762 m, so the two are within an ulp.
+    assert!(Length::from_feet(12.0).approx_eq_rel(qty!(12 ft), 1e-15));
+    assert!(Length::from_inches(3.0).approx_eq_rel(qty!(3 in), 1e-15));
     assert_eq!(Length::from_millimeters(2.5), qty!(2.5 mm));
     assert_eq!(Mass::from_kilograms(70.0), qty!(70 kg));
     assert_eq!(Mass::from_grams(250.0), qty!(250 g));

@@ -407,28 +407,28 @@ impl<T: Number> crate::UnitOf<MassFraction<T>> for MassFractionUnit {
         match self {
             MassFractionUnit::DecimalFraction => value,
             MassFractionUnit::GramPerGram => value,
-            MassFractionUnit::NanogramPerGram => value / T::from_f64(1e9),
-            MassFractionUnit::MicrogramPerGram => value / T::from_f64(1000000.0),
-            MassFractionUnit::MilligramPerGram => value / T::from_f64(1000.0),
-            MassFractionUnit::CentigramPerGram => value / T::from_f64(100.0),
-            MassFractionUnit::DecigramPerGram => value / T::from_f64(10.0),
+            MassFractionUnit::NanogramPerGram => T::div_ratio(value, 1000000000.0, 1.0),
+            MassFractionUnit::MicrogramPerGram => T::div_ratio(value, 1000000.0, 1.0),
+            MassFractionUnit::MilligramPerGram => T::div_ratio(value, 1000.0, 1.0),
+            MassFractionUnit::CentigramPerGram => T::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::DecigramPerGram => T::div_ratio(value, 10.0, 1.0),
             MassFractionUnit::DecagramPerGram => value * T::from_f64(10.0),
             MassFractionUnit::HectogramPerGram => value * T::from_f64(100.0),
             MassFractionUnit::KilogramPerGram => value * T::from_f64(1000.0),
-            MassFractionUnit::GramPerKilogram => value / T::from_f64(1000.0),
-            MassFractionUnit::NanogramPerKilogram => value / T::from_f64(1e12),
-            MassFractionUnit::MicrogramPerKilogram => value / T::from_f64(1e9),
-            MassFractionUnit::MilligramPerKilogram => value / T::from_f64(1000000.0),
-            MassFractionUnit::CentigramPerKilogram => value / T::from_f64(100000.0),
-            MassFractionUnit::DecigramPerKilogram => value / T::from_f64(10000.0),
-            MassFractionUnit::DecagramPerKilogram => value / T::from_f64(100.0),
-            MassFractionUnit::HectogramPerKilogram => value / T::from_f64(10.0),
+            MassFractionUnit::GramPerKilogram => T::div_ratio(value, 1000.0, 1.0),
+            MassFractionUnit::NanogramPerKilogram => T::div_ratio(value, 1000000000000.0, 1.0),
+            MassFractionUnit::MicrogramPerKilogram => T::div_ratio(value, 1000000000.0, 1.0),
+            MassFractionUnit::MilligramPerKilogram => T::div_ratio(value, 1000000.0, 1.0),
+            MassFractionUnit::CentigramPerKilogram => T::div_ratio(value, 100000.0, 1.0),
+            MassFractionUnit::DecigramPerKilogram => T::div_ratio(value, 10000.0, 1.0),
+            MassFractionUnit::DecagramPerKilogram => T::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::HectogramPerKilogram => T::div_ratio(value, 10.0, 1.0),
             MassFractionUnit::KilogramPerKilogram => value,
-            MassFractionUnit::Percent => value / T::from_f64(100.0),
-            MassFractionUnit::PartPerThousand => value / T::from_f64(1000.0),
-            MassFractionUnit::PartPerMillion => value / T::from_f64(1000000.0),
-            MassFractionUnit::PartPerBillion => value / T::from_f64(1e9),
-            MassFractionUnit::PartPerTrillion => value / T::from_f64(1e12),
+            MassFractionUnit::Percent => T::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::PartPerThousand => T::div_ratio(value, 1000.0, 1.0),
+            MassFractionUnit::PartPerMillion => T::div_ratio(value, 1000000.0, 1.0),
+            MassFractionUnit::PartPerBillion => T::div_ratio(value, 1000000000.0, 1.0),
+            MassFractionUnit::PartPerTrillion => T::div_ratio(value, 1000000000000.0, 1.0),
         }
     }
 
@@ -442,9 +442,9 @@ impl<T: Number> crate::UnitOf<MassFraction<T>> for MassFractionUnit {
             MassFractionUnit::MilligramPerGram => value * T::from_f64(1000.0),
             MassFractionUnit::CentigramPerGram => value * T::from_f64(100.0),
             MassFractionUnit::DecigramPerGram => value * T::from_f64(10.0),
-            MassFractionUnit::DecagramPerGram => value / T::from_f64(10.0),
-            MassFractionUnit::HectogramPerGram => value / T::from_f64(100.0),
-            MassFractionUnit::KilogramPerGram => value / T::from_f64(1000.0),
+            MassFractionUnit::DecagramPerGram => T::div_ratio(value, 10.0, 1.0),
+            MassFractionUnit::HectogramPerGram => T::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::KilogramPerGram => T::div_ratio(value, 1000.0, 1.0),
             MassFractionUnit::GramPerKilogram => value * T::from_f64(1000.0),
             MassFractionUnit::NanogramPerKilogram => value * T::from_f64(1e12),
             MassFractionUnit::MicrogramPerKilogram => value * T::from_f64(1e9),
@@ -501,7 +501,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `ng/g`.
     #[inline]
     pub fn from_nanograms_per_gram(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ng/g`.
@@ -513,7 +513,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `µg/g`.
     #[inline]
     pub fn from_micrograms_per_gram(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µg/g`.
@@ -525,7 +525,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `mg/g`.
     #[inline]
     pub fn from_milligrams_per_gram(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mg/g`.
@@ -537,7 +537,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `cg/g`.
     #[inline]
     pub fn from_centigrams_per_gram(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cg/g`.
@@ -549,7 +549,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `dg/g`.
     #[inline]
     pub fn from_decigrams_per_gram(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dg/g`.
@@ -567,7 +567,7 @@ impl<T: Number> MassFraction<T> {
     /// The value in `dag/g`.
     #[inline]
     pub fn as_decagrams_per_gram(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`MassFraction`] from a value in `hg/g`.
@@ -579,7 +579,7 @@ impl<T: Number> MassFraction<T> {
     /// The value in `hg/g`.
     #[inline]
     pub fn as_hectograms_per_gram(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`MassFraction`] from a value in `kg/g`.
@@ -591,13 +591,13 @@ impl<T: Number> MassFraction<T> {
     /// The value in `kg/g`.
     #[inline]
     pub fn as_kilograms_per_gram(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassFraction`] from a value in `g/kg`.
     #[inline]
     pub fn from_grams_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g/kg`.
@@ -609,7 +609,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `ng/kg`.
     #[inline]
     pub fn from_nanograms_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ng/kg`.
@@ -621,7 +621,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `µg/kg`.
     #[inline]
     pub fn from_micrograms_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µg/kg`.
@@ -633,7 +633,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `mg/kg`.
     #[inline]
     pub fn from_milligrams_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg/kg`.
@@ -645,7 +645,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `cg/kg`.
     #[inline]
     pub fn from_centigrams_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `cg/kg`.
@@ -657,7 +657,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `dg/kg`.
     #[inline]
     pub fn from_decigrams_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `dg/kg`.
@@ -669,7 +669,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `dag/kg`.
     #[inline]
     pub fn from_decagrams_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `dag/kg`.
@@ -681,7 +681,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `hg/kg`.
     #[inline]
     pub fn from_hectograms_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `hg/kg`.
@@ -705,7 +705,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `%`.
     #[inline]
     pub fn from_percent(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `%`.
@@ -717,7 +717,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `‰`.
     #[inline]
     pub fn from_parts_per_thousand(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `‰`.
@@ -729,7 +729,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `ppm`.
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ppm`.
@@ -741,7 +741,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `ppb`.
     #[inline]
     pub fn from_parts_per_billion(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ppb`.
@@ -753,7 +753,7 @@ impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in `ppt`.
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ppt`.
@@ -771,28 +771,34 @@ impl MassFraction<f64> {
         Self(match unit {
             MassFractionUnit::DecimalFraction => value,
             MassFractionUnit::GramPerGram => value,
-            MassFractionUnit::NanogramPerGram => value / 1e9,
-            MassFractionUnit::MicrogramPerGram => value / 1000000.0,
-            MassFractionUnit::MilligramPerGram => value / 1000.0,
-            MassFractionUnit::CentigramPerGram => value / 100.0,
-            MassFractionUnit::DecigramPerGram => value / 10.0,
+            MassFractionUnit::NanogramPerGram => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            MassFractionUnit::MicrogramPerGram => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MassFractionUnit::MilligramPerGram => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MassFractionUnit::CentigramPerGram => crate::conv::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::DecigramPerGram => crate::conv::div_ratio(value, 10.0, 1.0),
             MassFractionUnit::DecagramPerGram => value * 10.0,
             MassFractionUnit::HectogramPerGram => value * 100.0,
             MassFractionUnit::KilogramPerGram => value * 1000.0,
-            MassFractionUnit::GramPerKilogram => value / 1000.0,
-            MassFractionUnit::NanogramPerKilogram => value / 1e12,
-            MassFractionUnit::MicrogramPerKilogram => value / 1e9,
-            MassFractionUnit::MilligramPerKilogram => value / 1000000.0,
-            MassFractionUnit::CentigramPerKilogram => value / 100000.0,
-            MassFractionUnit::DecigramPerKilogram => value / 10000.0,
-            MassFractionUnit::DecagramPerKilogram => value / 100.0,
-            MassFractionUnit::HectogramPerKilogram => value / 10.0,
+            MassFractionUnit::GramPerKilogram => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MassFractionUnit::NanogramPerKilogram => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            MassFractionUnit::MicrogramPerKilogram => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            MassFractionUnit::MilligramPerKilogram => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MassFractionUnit::CentigramPerKilogram => crate::conv::div_ratio(value, 100000.0, 1.0),
+            MassFractionUnit::DecigramPerKilogram => crate::conv::div_ratio(value, 10000.0, 1.0),
+            MassFractionUnit::DecagramPerKilogram => crate::conv::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::HectogramPerKilogram => crate::conv::div_ratio(value, 10.0, 1.0),
             MassFractionUnit::KilogramPerKilogram => value,
-            MassFractionUnit::Percent => value / 100.0,
-            MassFractionUnit::PartPerThousand => value / 1000.0,
-            MassFractionUnit::PartPerMillion => value / 1000000.0,
-            MassFractionUnit::PartPerBillion => value / 1e9,
-            MassFractionUnit::PartPerTrillion => value / 1e12,
+            MassFractionUnit::Percent => crate::conv::div_ratio(value, 100.0, 1.0),
+            MassFractionUnit::PartPerThousand => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MassFractionUnit::PartPerMillion => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            MassFractionUnit::PartPerBillion => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            MassFractionUnit::PartPerTrillion => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
         })
     }
 }

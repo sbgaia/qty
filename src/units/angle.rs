@@ -297,11 +297,11 @@ impl<T: Number> crate::UnitOf<Angle<T>> for AngleUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             AngleUnit::Radian => value,
-            AngleUnit::Nanoradian => value / T::from_f64(1e9),
-            AngleUnit::Microradian => value / T::from_f64(1000000.0),
-            AngleUnit::Milliradian => value / T::from_f64(1000.0),
-            AngleUnit::Centiradian => value / T::from_f64(100.0),
-            AngleUnit::Deciradian => value / T::from_f64(10.0),
+            AngleUnit::Nanoradian => T::div_ratio(value, 1000000000.0, 1.0),
+            AngleUnit::Microradian => T::div_ratio(value, 1000000.0, 1.0),
+            AngleUnit::Milliradian => T::div_ratio(value, 1000.0, 1.0),
+            AngleUnit::Centiradian => T::div_ratio(value, 100.0, 1.0),
+            AngleUnit::Deciradian => T::div_ratio(value, 10.0, 1.0),
             AngleUnit::Degree => value * T::from_f64(0.017453292519943295),
             AngleUnit::Nanodegree => value * T::from_f64(1.7453292519943295e-11),
             AngleUnit::Microdegree => value * T::from_f64(1.7453292519943295e-8),
@@ -368,7 +368,7 @@ impl<T: Number> Angle<T> {
     /// A [`Angle`] from a value in `nrad`.
     #[inline]
     pub fn from_nanoradians(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nrad`.
@@ -380,7 +380,7 @@ impl<T: Number> Angle<T> {
     /// A [`Angle`] from a value in `µrad`.
     #[inline]
     pub fn from_microradians(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µrad`.
@@ -392,7 +392,7 @@ impl<T: Number> Angle<T> {
     /// A [`Angle`] from a value in `mrad`.
     #[inline]
     pub fn from_milliradians(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mrad`.
@@ -404,7 +404,7 @@ impl<T: Number> Angle<T> {
     /// A [`Angle`] from a value in `crad`.
     #[inline]
     pub fn from_centiradians(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `crad`.
@@ -416,7 +416,7 @@ impl<T: Number> Angle<T> {
     /// A [`Angle`] from a value in `drad`.
     #[inline]
     pub fn from_deciradians(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `drad`.
@@ -541,11 +541,11 @@ impl Angle<f64> {
     pub const fn const_new(value: f64, unit: AngleUnit) -> Self {
         Self(match unit {
             AngleUnit::Radian => value,
-            AngleUnit::Nanoradian => value / 1e9,
-            AngleUnit::Microradian => value / 1000000.0,
-            AngleUnit::Milliradian => value / 1000.0,
-            AngleUnit::Centiradian => value / 100.0,
-            AngleUnit::Deciradian => value / 10.0,
+            AngleUnit::Nanoradian => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            AngleUnit::Microradian => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            AngleUnit::Milliradian => crate::conv::div_ratio(value, 1000.0, 1.0),
+            AngleUnit::Centiradian => crate::conv::div_ratio(value, 100.0, 1.0),
+            AngleUnit::Deciradian => crate::conv::div_ratio(value, 10.0, 1.0),
             AngleUnit::Degree => value * 0.017453292519943295,
             AngleUnit::Nanodegree => value * 1.7453292519943295e-11,
             AngleUnit::Microdegree => value * 1.7453292519943295e-8,

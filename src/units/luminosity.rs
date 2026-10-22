@@ -278,12 +278,12 @@ impl<T: Number> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             LuminosityUnit::Watt => value,
-            LuminosityUnit::Femtowatt => value / T::from_f64(1e15),
-            LuminosityUnit::Picowatt => value / T::from_f64(1e12),
-            LuminosityUnit::Nanowatt => value / T::from_f64(1e9),
-            LuminosityUnit::Microwatt => value / T::from_f64(1000000.0),
-            LuminosityUnit::Milliwatt => value / T::from_f64(1000.0),
-            LuminosityUnit::Deciwatt => value / T::from_f64(10.0),
+            LuminosityUnit::Femtowatt => T::div_ratio(value, 1000000000000000.0, 1.0),
+            LuminosityUnit::Picowatt => T::div_ratio(value, 1000000000000.0, 1.0),
+            LuminosityUnit::Nanowatt => T::div_ratio(value, 1000000000.0, 1.0),
+            LuminosityUnit::Microwatt => T::div_ratio(value, 1000000.0, 1.0),
+            LuminosityUnit::Milliwatt => T::div_ratio(value, 1000.0, 1.0),
+            LuminosityUnit::Deciwatt => T::div_ratio(value, 10.0, 1.0),
             LuminosityUnit::Decawatt => value * T::from_f64(10.0),
             LuminosityUnit::Kilowatt => value * T::from_f64(1000.0),
             LuminosityUnit::Megawatt => value * T::from_f64(1000000.0),
@@ -304,12 +304,12 @@ impl<T: Number> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
             LuminosityUnit::Microwatt => value * T::from_f64(1000000.0),
             LuminosityUnit::Milliwatt => value * T::from_f64(1000.0),
             LuminosityUnit::Deciwatt => value * T::from_f64(10.0),
-            LuminosityUnit::Decawatt => value / T::from_f64(10.0),
-            LuminosityUnit::Kilowatt => value / T::from_f64(1000.0),
-            LuminosityUnit::Megawatt => value / T::from_f64(1000000.0),
-            LuminosityUnit::Gigawatt => value / T::from_f64(1e9),
-            LuminosityUnit::Terawatt => value / T::from_f64(1e12),
-            LuminosityUnit::Petawatt => value / T::from_f64(1e15),
+            LuminosityUnit::Decawatt => T::div_ratio(value, 10.0, 1.0),
+            LuminosityUnit::Kilowatt => T::div_ratio(value, 1000.0, 1.0),
+            LuminosityUnit::Megawatt => T::div_ratio(value, 1000000.0, 1.0),
+            LuminosityUnit::Gigawatt => T::div_ratio(value, 1000000000.0, 1.0),
+            LuminosityUnit::Terawatt => T::div_ratio(value, 1000000000000.0, 1.0),
+            LuminosityUnit::Petawatt => T::div_ratio(value, 1000000000000000.0, 1.0),
             LuminosityUnit::SolarLuminosity => value / T::from_f64(3.828e26),
         }
     }
@@ -354,7 +354,7 @@ impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `fW`.
     #[inline]
     pub fn from_femtowatts(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fW`.
@@ -366,7 +366,7 @@ impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `pW`.
     #[inline]
     pub fn from_picowatts(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pW`.
@@ -378,7 +378,7 @@ impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `nW`.
     #[inline]
     pub fn from_nanowatts(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nW`.
@@ -390,7 +390,7 @@ impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `µW`.
     #[inline]
     pub fn from_microwatts(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µW`.
@@ -402,7 +402,7 @@ impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `mW`.
     #[inline]
     pub fn from_milliwatts(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mW`.
@@ -414,7 +414,7 @@ impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `dW`.
     #[inline]
     pub fn from_deciwatts(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dW`.
@@ -432,7 +432,7 @@ impl<T: Number> Luminosity<T> {
     /// The value in `daW`.
     #[inline]
     pub fn as_decawatts(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Luminosity`] from a value in `kW`.
@@ -444,7 +444,7 @@ impl<T: Number> Luminosity<T> {
     /// The value in `kW`.
     #[inline]
     pub fn as_kilowatts(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Luminosity`] from a value in `MW`.
@@ -456,7 +456,7 @@ impl<T: Number> Luminosity<T> {
     /// The value in `MW`.
     #[inline]
     pub fn as_megawatts(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Luminosity`] from a value in `GW`.
@@ -468,7 +468,7 @@ impl<T: Number> Luminosity<T> {
     /// The value in `GW`.
     #[inline]
     pub fn as_gigawatts(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Luminosity`] from a value in `TW`.
@@ -480,7 +480,7 @@ impl<T: Number> Luminosity<T> {
     /// The value in `TW`.
     #[inline]
     pub fn as_terawatts(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Luminosity`] from a value in `PW`.
@@ -492,7 +492,7 @@ impl<T: Number> Luminosity<T> {
     /// The value in `PW`.
     #[inline]
     pub fn as_petawatts(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`Luminosity`] from a value in `L⊙`.
@@ -515,12 +515,12 @@ impl Luminosity<f64> {
     pub const fn const_new(value: f64, unit: LuminosityUnit) -> Self {
         Self(match unit {
             LuminosityUnit::Watt => value,
-            LuminosityUnit::Femtowatt => value / 1e15,
-            LuminosityUnit::Picowatt => value / 1e12,
-            LuminosityUnit::Nanowatt => value / 1e9,
-            LuminosityUnit::Microwatt => value / 1000000.0,
-            LuminosityUnit::Milliwatt => value / 1000.0,
-            LuminosityUnit::Deciwatt => value / 10.0,
+            LuminosityUnit::Femtowatt => crate::conv::div_ratio(value, 1000000000000000.0, 1.0),
+            LuminosityUnit::Picowatt => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            LuminosityUnit::Nanowatt => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            LuminosityUnit::Microwatt => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            LuminosityUnit::Milliwatt => crate::conv::div_ratio(value, 1000.0, 1.0),
+            LuminosityUnit::Deciwatt => crate::conv::div_ratio(value, 10.0, 1.0),
             LuminosityUnit::Decawatt => value * 10.0,
             LuminosityUnit::Kilowatt => value * 1000.0,
             LuminosityUnit::Megawatt => value * 1000000.0,

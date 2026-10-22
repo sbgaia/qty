@@ -291,31 +291,31 @@ impl<T: Number> crate::UnitOf<Duration<T>> for DurationUnit {
             DurationUnit::Hour => value * T::from_f64(3600.0),
             DurationUnit::Minute => value * T::from_f64(60.0),
             DurationUnit::Second => value,
-            DurationUnit::Picosecond => value / T::from_f64(1e12),
-            DurationUnit::Nanosecond => value / T::from_f64(1e9),
-            DurationUnit::Microsecond => value / T::from_f64(1000000.0),
-            DurationUnit::Millisecond => value / T::from_f64(1000.0),
+            DurationUnit::Picosecond => T::div_ratio(value, 1000000000000.0, 1.0),
+            DurationUnit::Nanosecond => T::div_ratio(value, 1000000000.0, 1.0),
+            DurationUnit::Microsecond => T::div_ratio(value, 1000000.0, 1.0),
+            DurationUnit::Millisecond => T::div_ratio(value, 1000.0, 1.0),
             DurationUnit::JulianYear => value * T::from_f64(3.15576e7),
-            DurationUnit::Sol => value * T::from_f64(88775.244),
+            DurationUnit::Sol => T::mul_ratio(value, 22193811.0, 250.0),
         }
     }
 
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            DurationUnit::Year365 => value / T::from_f64(3.1536e7),
-            DurationUnit::Month30 => value / T::from_f64(2592000.0),
-            DurationUnit::Week => value / T::from_f64(604800.0),
-            DurationUnit::Day => value / T::from_f64(86400.0),
-            DurationUnit::Hour => value / T::from_f64(3600.0),
-            DurationUnit::Minute => value / T::from_f64(60.0),
+            DurationUnit::Year365 => T::div_ratio(value, 31536000.0, 1.0),
+            DurationUnit::Month30 => T::div_ratio(value, 2592000.0, 1.0),
+            DurationUnit::Week => T::div_ratio(value, 604800.0, 1.0),
+            DurationUnit::Day => T::div_ratio(value, 86400.0, 1.0),
+            DurationUnit::Hour => T::div_ratio(value, 3600.0, 1.0),
+            DurationUnit::Minute => T::div_ratio(value, 60.0, 1.0),
             DurationUnit::Second => value,
             DurationUnit::Picosecond => value * T::from_f64(1e12),
             DurationUnit::Nanosecond => value * T::from_f64(1e9),
             DurationUnit::Microsecond => value * T::from_f64(1000000.0),
             DurationUnit::Millisecond => value * T::from_f64(1000.0),
-            DurationUnit::JulianYear => value / T::from_f64(3.15576e7),
-            DurationUnit::Sol => value / T::from_f64(88775.244),
+            DurationUnit::JulianYear => T::div_ratio(value, 31557600.0, 1.0),
+            DurationUnit::Sol => T::div_ratio(value, 22193811.0, 250.0),
         }
     }
 }
@@ -347,7 +347,7 @@ impl<T: Number> Duration<T> {
     /// The value in `yr`.
     #[inline]
     pub fn as_years365(self) -> T {
-        self.0 / T::from_f64(3.1536e7)
+        T::div_ratio(self.0, 31536000.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `mo`.
@@ -359,7 +359,7 @@ impl<T: Number> Duration<T> {
     /// The value in `mo`.
     #[inline]
     pub fn as_months30(self) -> T {
-        self.0 / T::from_f64(2592000.0)
+        T::div_ratio(self.0, 2592000.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `wk`.
@@ -371,7 +371,7 @@ impl<T: Number> Duration<T> {
     /// The value in `wk`.
     #[inline]
     pub fn as_weeks(self) -> T {
-        self.0 / T::from_f64(604800.0)
+        T::div_ratio(self.0, 604800.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `d`.
@@ -383,7 +383,7 @@ impl<T: Number> Duration<T> {
     /// The value in `d`.
     #[inline]
     pub fn as_days(self) -> T {
-        self.0 / T::from_f64(86400.0)
+        T::div_ratio(self.0, 86400.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `h`.
@@ -395,7 +395,7 @@ impl<T: Number> Duration<T> {
     /// The value in `h`.
     #[inline]
     pub fn as_hours(self) -> T {
-        self.0 / T::from_f64(3600.0)
+        T::div_ratio(self.0, 3600.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `min`.
@@ -407,7 +407,7 @@ impl<T: Number> Duration<T> {
     /// The value in `min`.
     #[inline]
     pub fn as_minutes(self) -> T {
-        self.0 / T::from_f64(60.0)
+        T::div_ratio(self.0, 60.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `s`.
@@ -425,7 +425,7 @@ impl<T: Number> Duration<T> {
     /// A [`Duration`] from a value in `ps`.
     #[inline]
     pub fn from_picoseconds(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ps`.
@@ -437,7 +437,7 @@ impl<T: Number> Duration<T> {
     /// A [`Duration`] from a value in `ns`.
     #[inline]
     pub fn from_nanoseconds(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ns`.
@@ -449,7 +449,7 @@ impl<T: Number> Duration<T> {
     /// A [`Duration`] from a value in `µs`.
     #[inline]
     pub fn from_microseconds(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µs`.
@@ -461,7 +461,7 @@ impl<T: Number> Duration<T> {
     /// A [`Duration`] from a value in `ms`.
     #[inline]
     pub fn from_milliseconds(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `ms`.
@@ -479,19 +479,19 @@ impl<T: Number> Duration<T> {
     /// The value in `jyr`.
     #[inline]
     pub fn as_julian_years(self) -> T {
-        self.0 / T::from_f64(3.15576e7)
+        T::div_ratio(self.0, 31557600.0, 1.0)
     }
 
     /// A [`Duration`] from a value in `sol`.
     #[inline]
     pub fn from_sols(value: T) -> Self {
-        Self(value * T::from_f64(88775.244))
+        Self(T::mul_ratio(value, 22193811.0, 250.0))
     }
 
     /// The value in `sol`.
     #[inline]
     pub fn as_sols(self) -> T {
-        self.0 / T::from_f64(88775.244)
+        T::div_ratio(self.0, 22193811.0, 250.0)
     }
 }
 
@@ -508,12 +508,12 @@ impl Duration<f64> {
             DurationUnit::Hour => value * 3600.0,
             DurationUnit::Minute => value * 60.0,
             DurationUnit::Second => value,
-            DurationUnit::Picosecond => value / 1e12,
-            DurationUnit::Nanosecond => value / 1e9,
-            DurationUnit::Microsecond => value / 1000000.0,
-            DurationUnit::Millisecond => value / 1000.0,
+            DurationUnit::Picosecond => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            DurationUnit::Nanosecond => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            DurationUnit::Microsecond => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            DurationUnit::Millisecond => crate::conv::div_ratio(value, 1000.0, 1.0),
             DurationUnit::JulianYear => value * 3.15576e7,
-            DurationUnit::Sol => value * 88775.244,
+            DurationUnit::Sol => crate::conv::mul_ratio(value, 22193811.0, 250.0),
         })
     }
 }

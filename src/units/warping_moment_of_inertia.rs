@@ -174,8 +174,10 @@ impl<T: Number> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfIner
     fn value_to_base(self, value: T) -> T {
         match self {
             WarpingMomentOfInertiaUnit::MeterToTheSixth => value,
-            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => value / T::from_f64(1000000.0),
-            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => value / T::from_f64(1e12),
+            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => T::div_ratio(value, 1000000.0, 1.0),
+            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
             WarpingMomentOfInertiaUnit::MillimeterToTheSixth => value / T::from_f64(1e18),
             WarpingMomentOfInertiaUnit::FootToTheSixth => value * T::from_f64(0.000801843800914862),
             WarpingMomentOfInertiaUnit::InchToTheSixth => value * T::from_f64(2.68535866540096e-10),
@@ -221,7 +223,7 @@ impl<T: Number> WarpingMomentOfInertia<T> {
     /// A [`WarpingMomentOfInertia`] from a value in `dm⁶`.
     #[inline]
     pub fn from_decimeters_to_the_sixth(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `dm⁶`.
@@ -233,7 +235,7 @@ impl<T: Number> WarpingMomentOfInertia<T> {
     /// A [`WarpingMomentOfInertia`] from a value in `cm⁶`.
     #[inline]
     pub fn from_centimeters_to_the_sixth(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `cm⁶`.
@@ -286,8 +288,12 @@ impl WarpingMomentOfInertia<f64> {
     pub const fn const_new(value: f64, unit: WarpingMomentOfInertiaUnit) -> Self {
         Self(match unit {
             WarpingMomentOfInertiaUnit::MeterToTheSixth => value,
-            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => value / 1000000.0,
-            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => value / 1e12,
+            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
             WarpingMomentOfInertiaUnit::MillimeterToTheSixth => value / 1e18,
             WarpingMomentOfInertiaUnit::FootToTheSixth => value * 0.000801843800914862,
             WarpingMomentOfInertiaUnit::InchToTheSixth => value * 2.68535866540096e-10,

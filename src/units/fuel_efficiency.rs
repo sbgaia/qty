@@ -230,8 +230,10 @@ impl FuelEfficiency<f64> {
     pub const fn const_new(value: f64, unit: FuelEfficiencyUnit) -> Self {
         Self(match unit {
             FuelEfficiencyUnit::LiterPer100Kilometers => 100.0 / value,
-            FuelEfficiencyUnit::MilePerUsGallon => value * 0.425143707430272,
-            FuelEfficiencyUnit::MilePerUkGallon => value * 0.3540061899346471,
+            FuelEfficiencyUnit::MilePerUsGallon => crate::conv::mul_ratio(value, 48000.0, 112903.0),
+            FuelEfficiencyUnit::MilePerUkGallon => {
+                crate::conv::mul_ratio(value, 804672.0, 2273045.0)
+            }
             FuelEfficiencyUnit::KilometerPerLiter => value,
         })
     }

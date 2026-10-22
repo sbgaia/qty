@@ -138,7 +138,7 @@ impl<T: Number> crate::UnitOf<Illuminance<T>> for IlluminanceUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             IlluminanceUnit::Lux => value,
-            IlluminanceUnit::Millilux => value / T::from_f64(1000.0),
+            IlluminanceUnit::Millilux => T::div_ratio(value, 1000.0, 1.0),
             IlluminanceUnit::Kilolux => value * T::from_f64(1000.0),
             IlluminanceUnit::Megalux => value * T::from_f64(1000000.0),
         }
@@ -149,8 +149,8 @@ impl<T: Number> crate::UnitOf<Illuminance<T>> for IlluminanceUnit {
         match self {
             IlluminanceUnit::Lux => value,
             IlluminanceUnit::Millilux => value * T::from_f64(1000.0),
-            IlluminanceUnit::Kilolux => value / T::from_f64(1000.0),
-            IlluminanceUnit::Megalux => value / T::from_f64(1000000.0),
+            IlluminanceUnit::Kilolux => T::div_ratio(value, 1000.0, 1.0),
+            IlluminanceUnit::Megalux => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -187,7 +187,7 @@ impl<T: Number> Illuminance<T> {
     /// A [`Illuminance`] from a value in `mlx`.
     #[inline]
     pub fn from_millilux(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mlx`.
@@ -205,7 +205,7 @@ impl<T: Number> Illuminance<T> {
     /// The value in `klx`.
     #[inline]
     pub fn as_kilolux(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Illuminance`] from a value in `Mlx`.
@@ -217,7 +217,7 @@ impl<T: Number> Illuminance<T> {
     /// The value in `Mlx`.
     #[inline]
     pub fn as_megalux(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 
@@ -228,7 +228,7 @@ impl Illuminance<f64> {
     pub const fn const_new(value: f64, unit: IlluminanceUnit) -> Self {
         Self(match unit {
             IlluminanceUnit::Lux => value,
-            IlluminanceUnit::Millilux => value / 1000.0,
+            IlluminanceUnit::Millilux => crate::conv::div_ratio(value, 1000.0, 1.0),
             IlluminanceUnit::Kilolux => value * 1000.0,
             IlluminanceUnit::Megalux => value * 1000000.0,
         })

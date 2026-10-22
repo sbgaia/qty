@@ -143,8 +143,8 @@ impl<T: Number> crate::UnitOf<MolarEntropy<T>> for MolarEntropyUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             MolarEntropyUnit::JoulePerMoleKelvin => value,
-            MolarEntropyUnit::KilojoulePerMoleKelvin => value / T::from_f64(1000.0),
-            MolarEntropyUnit::MegajoulePerMoleKelvin => value / T::from_f64(1000000.0),
+            MolarEntropyUnit::KilojoulePerMoleKelvin => T::div_ratio(value, 1000.0, 1.0),
+            MolarEntropyUnit::MegajoulePerMoleKelvin => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -186,7 +186,7 @@ impl<T: Number> MolarEntropy<T> {
     /// The value in `kJ/(mol·K)`.
     #[inline]
     pub fn as_kilojoules_per_mole_kelvin(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MolarEntropy`] from a value in `MJ/(mol·K)`.
@@ -198,7 +198,7 @@ impl<T: Number> MolarEntropy<T> {
     /// The value in `MJ/(mol·K)`.
     #[inline]
     pub fn as_megajoules_per_mole_kelvin(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 

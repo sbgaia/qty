@@ -265,17 +265,17 @@ impl<T: Number> crate::UnitOf<Impulse<T>> for ImpulseUnit {
         match self {
             ImpulseUnit::KilogramMeterPerSecond => value,
             ImpulseUnit::NewtonSecond => value,
-            ImpulseUnit::NanonewtonSecond => value / T::from_f64(1e9),
-            ImpulseUnit::MicronewtonSecond => value / T::from_f64(1000000.0),
-            ImpulseUnit::MillinewtonSecond => value / T::from_f64(1000.0),
-            ImpulseUnit::CentinewtonSecond => value / T::from_f64(100.0),
-            ImpulseUnit::DecinewtonSecond => value / T::from_f64(10.0),
+            ImpulseUnit::NanonewtonSecond => T::div_ratio(value, 1000000000.0, 1.0),
+            ImpulseUnit::MicronewtonSecond => T::div_ratio(value, 1000000.0, 1.0),
+            ImpulseUnit::MillinewtonSecond => T::div_ratio(value, 1000.0, 1.0),
+            ImpulseUnit::CentinewtonSecond => T::div_ratio(value, 100.0, 1.0),
+            ImpulseUnit::DecinewtonSecond => T::div_ratio(value, 10.0, 1.0),
             ImpulseUnit::DecanewtonSecond => value * T::from_f64(10.0),
             ImpulseUnit::KilonewtonSecond => value * T::from_f64(1000.0),
             ImpulseUnit::MeganewtonSecond => value * T::from_f64(1000000.0),
-            ImpulseUnit::PoundFootPerSecond => value * T::from_f64(0.138254954376),
-            ImpulseUnit::PoundForceSecond => value * T::from_f64(4.4482216152605),
-            ImpulseUnit::SlugFootPerSecond => value * T::from_f64(4.4482216152605),
+            ImpulseUnit::PoundFootPerSecond => T::mul_ratio(value, 17281869297.0, 125000000000.0),
+            ImpulseUnit::PoundForceSecond => T::mul_ratio(value, 8896443230521.0, 2000000000000.0),
+            ImpulseUnit::SlugFootPerSecond => T::mul_ratio(value, 8896443230521.0, 2000000000000.0),
         }
     }
 
@@ -289,12 +289,12 @@ impl<T: Number> crate::UnitOf<Impulse<T>> for ImpulseUnit {
             ImpulseUnit::MillinewtonSecond => value * T::from_f64(1000.0),
             ImpulseUnit::CentinewtonSecond => value * T::from_f64(100.0),
             ImpulseUnit::DecinewtonSecond => value * T::from_f64(10.0),
-            ImpulseUnit::DecanewtonSecond => value / T::from_f64(10.0),
-            ImpulseUnit::KilonewtonSecond => value / T::from_f64(1000.0),
-            ImpulseUnit::MeganewtonSecond => value / T::from_f64(1000000.0),
-            ImpulseUnit::PoundFootPerSecond => value / T::from_f64(0.138254954376),
-            ImpulseUnit::PoundForceSecond => value / T::from_f64(4.4482216152605),
-            ImpulseUnit::SlugFootPerSecond => value / T::from_f64(4.4482216152605),
+            ImpulseUnit::DecanewtonSecond => T::div_ratio(value, 10.0, 1.0),
+            ImpulseUnit::KilonewtonSecond => T::div_ratio(value, 1000.0, 1.0),
+            ImpulseUnit::MeganewtonSecond => T::div_ratio(value, 1000000.0, 1.0),
+            ImpulseUnit::PoundFootPerSecond => T::div_ratio(value, 17281869297.0, 125000000000.0),
+            ImpulseUnit::PoundForceSecond => T::div_ratio(value, 8896443230521.0, 2000000000000.0),
+            ImpulseUnit::SlugFootPerSecond => T::div_ratio(value, 8896443230521.0, 2000000000000.0),
         }
     }
 }
@@ -345,7 +345,7 @@ impl<T: Number> Impulse<T> {
     /// A [`Impulse`] from a value in `nN·s`.
     #[inline]
     pub fn from_nanonewton_seconds(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nN·s`.
@@ -357,7 +357,7 @@ impl<T: Number> Impulse<T> {
     /// A [`Impulse`] from a value in `µN·s`.
     #[inline]
     pub fn from_micronewton_seconds(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µN·s`.
@@ -369,7 +369,7 @@ impl<T: Number> Impulse<T> {
     /// A [`Impulse`] from a value in `mN·s`.
     #[inline]
     pub fn from_millinewton_seconds(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mN·s`.
@@ -381,7 +381,7 @@ impl<T: Number> Impulse<T> {
     /// A [`Impulse`] from a value in `cN·s`.
     #[inline]
     pub fn from_centinewton_seconds(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cN·s`.
@@ -393,7 +393,7 @@ impl<T: Number> Impulse<T> {
     /// A [`Impulse`] from a value in `dN·s`.
     #[inline]
     pub fn from_decinewton_seconds(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dN·s`.
@@ -411,7 +411,7 @@ impl<T: Number> Impulse<T> {
     /// The value in `daN·s`.
     #[inline]
     pub fn as_decanewton_seconds(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Impulse`] from a value in `kN·s`.
@@ -423,7 +423,7 @@ impl<T: Number> Impulse<T> {
     /// The value in `kN·s`.
     #[inline]
     pub fn as_kilonewton_seconds(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Impulse`] from a value in `MN·s`.
@@ -435,43 +435,43 @@ impl<T: Number> Impulse<T> {
     /// The value in `MN·s`.
     #[inline]
     pub fn as_meganewton_seconds(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Impulse`] from a value in `lb·ft/s`.
     #[inline]
     pub fn from_pound_feet_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.138254954376))
+        Self(T::mul_ratio(value, 17281869297.0, 125000000000.0))
     }
 
     /// The value in `lb·ft/s`.
     #[inline]
     pub fn as_pound_feet_per_second(self) -> T {
-        self.0 / T::from_f64(0.138254954376)
+        T::div_ratio(self.0, 17281869297.0, 125000000000.0)
     }
 
     /// A [`Impulse`] from a value in `lbf·s`.
     #[inline]
     pub fn from_pound_force_seconds(value: T) -> Self {
-        Self(value * T::from_f64(4.4482216152605))
+        Self(T::mul_ratio(value, 8896443230521.0, 2000000000000.0))
     }
 
     /// The value in `lbf·s`.
     #[inline]
     pub fn as_pound_force_seconds(self) -> T {
-        self.0 / T::from_f64(4.4482216152605)
+        T::div_ratio(self.0, 8896443230521.0, 2000000000000.0)
     }
 
     /// A [`Impulse`] from a value in `slug·ft/s`.
     #[inline]
     pub fn from_slug_feet_per_second(value: T) -> Self {
-        Self(value * T::from_f64(4.4482216152605))
+        Self(T::mul_ratio(value, 8896443230521.0, 2000000000000.0))
     }
 
     /// The value in `slug·ft/s`.
     #[inline]
     pub fn as_slug_feet_per_second(self) -> T {
-        self.0 / T::from_f64(4.4482216152605)
+        T::div_ratio(self.0, 8896443230521.0, 2000000000000.0)
     }
 }
 
@@ -483,17 +483,23 @@ impl Impulse<f64> {
         Self(match unit {
             ImpulseUnit::KilogramMeterPerSecond => value,
             ImpulseUnit::NewtonSecond => value,
-            ImpulseUnit::NanonewtonSecond => value / 1e9,
-            ImpulseUnit::MicronewtonSecond => value / 1000000.0,
-            ImpulseUnit::MillinewtonSecond => value / 1000.0,
-            ImpulseUnit::CentinewtonSecond => value / 100.0,
-            ImpulseUnit::DecinewtonSecond => value / 10.0,
+            ImpulseUnit::NanonewtonSecond => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ImpulseUnit::MicronewtonSecond => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ImpulseUnit::MillinewtonSecond => crate::conv::div_ratio(value, 1000.0, 1.0),
+            ImpulseUnit::CentinewtonSecond => crate::conv::div_ratio(value, 100.0, 1.0),
+            ImpulseUnit::DecinewtonSecond => crate::conv::div_ratio(value, 10.0, 1.0),
             ImpulseUnit::DecanewtonSecond => value * 10.0,
             ImpulseUnit::KilonewtonSecond => value * 1000.0,
             ImpulseUnit::MeganewtonSecond => value * 1000000.0,
-            ImpulseUnit::PoundFootPerSecond => value * 0.138254954376,
-            ImpulseUnit::PoundForceSecond => value * 4.4482216152605,
-            ImpulseUnit::SlugFootPerSecond => value * 4.4482216152605,
+            ImpulseUnit::PoundFootPerSecond => {
+                crate::conv::mul_ratio(value, 17281869297.0, 125000000000.0)
+            }
+            ImpulseUnit::PoundForceSecond => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 2000000000000.0)
+            }
+            ImpulseUnit::SlugFootPerSecond => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 2000000000000.0)
+            }
         })
     }
 }

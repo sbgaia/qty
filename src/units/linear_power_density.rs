@@ -420,12 +420,12 @@ impl<T: Number> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit 
     fn value_to_base(self, value: T) -> T {
         match self {
             LinearPowerDensityUnit::WattPerMeter => value,
-            LinearPowerDensityUnit::MilliwattPerMeter => value / T::from_f64(1000.0),
+            LinearPowerDensityUnit::MilliwattPerMeter => T::div_ratio(value, 1000.0, 1.0),
             LinearPowerDensityUnit::KilowattPerMeter => value * T::from_f64(1000.0),
             LinearPowerDensityUnit::MegawattPerMeter => value * T::from_f64(1000000.0),
             LinearPowerDensityUnit::GigawattPerMeter => value * T::from_f64(1e9),
             LinearPowerDensityUnit::WattPerCentimeter => value * T::from_f64(100.0),
-            LinearPowerDensityUnit::MilliwattPerCentimeter => value / T::from_f64(10.0),
+            LinearPowerDensityUnit::MilliwattPerCentimeter => T::div_ratio(value, 10.0, 1.0),
             LinearPowerDensityUnit::KilowattPerCentimeter => value * T::from_f64(100000.0),
             LinearPowerDensityUnit::MegawattPerCentimeter => value * T::from_f64(1e8),
             LinearPowerDensityUnit::GigawattPerCentimeter => value * T::from_f64(1e11),
@@ -452,19 +452,23 @@ impl<T: Number> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit 
         match self {
             LinearPowerDensityUnit::WattPerMeter => value,
             LinearPowerDensityUnit::MilliwattPerMeter => value * T::from_f64(1000.0),
-            LinearPowerDensityUnit::KilowattPerMeter => value / T::from_f64(1000.0),
-            LinearPowerDensityUnit::MegawattPerMeter => value / T::from_f64(1000000.0),
-            LinearPowerDensityUnit::GigawattPerMeter => value / T::from_f64(1e9),
-            LinearPowerDensityUnit::WattPerCentimeter => value / T::from_f64(100.0),
+            LinearPowerDensityUnit::KilowattPerMeter => T::div_ratio(value, 1000.0, 1.0),
+            LinearPowerDensityUnit::MegawattPerMeter => T::div_ratio(value, 1000000.0, 1.0),
+            LinearPowerDensityUnit::GigawattPerMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            LinearPowerDensityUnit::WattPerCentimeter => T::div_ratio(value, 100.0, 1.0),
             LinearPowerDensityUnit::MilliwattPerCentimeter => value * T::from_f64(10.0),
-            LinearPowerDensityUnit::KilowattPerCentimeter => value / T::from_f64(100000.0),
-            LinearPowerDensityUnit::MegawattPerCentimeter => value / T::from_f64(1e8),
-            LinearPowerDensityUnit::GigawattPerCentimeter => value / T::from_f64(1e11),
-            LinearPowerDensityUnit::WattPerMillimeter => value / T::from_f64(1000.0),
+            LinearPowerDensityUnit::KilowattPerCentimeter => T::div_ratio(value, 100000.0, 1.0),
+            LinearPowerDensityUnit::MegawattPerCentimeter => T::div_ratio(value, 100000000.0, 1.0),
+            LinearPowerDensityUnit::GigawattPerCentimeter => {
+                T::div_ratio(value, 100000000000.0, 1.0)
+            }
+            LinearPowerDensityUnit::WattPerMillimeter => T::div_ratio(value, 1000.0, 1.0),
             LinearPowerDensityUnit::MilliwattPerMillimeter => value,
-            LinearPowerDensityUnit::KilowattPerMillimeter => value / T::from_f64(1000000.0),
-            LinearPowerDensityUnit::MegawattPerMillimeter => value / T::from_f64(1e9),
-            LinearPowerDensityUnit::GigawattPerMillimeter => value / T::from_f64(1e12),
+            LinearPowerDensityUnit::KilowattPerMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            LinearPowerDensityUnit::MegawattPerMillimeter => T::div_ratio(value, 1000000000.0, 1.0),
+            LinearPowerDensityUnit::GigawattPerMillimeter => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
             LinearPowerDensityUnit::WattPerInch => T::div_ratio(value, 5000.0, 127.0),
             LinearPowerDensityUnit::MilliwattPerInch => T::div_ratio(value, 5.0, 127.0),
             LinearPowerDensityUnit::KilowattPerInch => T::div_ratio(value, 5000000.0, 127.0),
@@ -512,7 +516,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// A [`LinearPowerDensity`] from a value in `mW/m`.
     #[inline]
     pub fn from_milliwatts_per_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mW/m`.
@@ -530,7 +534,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `kW/m`.
     #[inline]
     pub fn as_kilowatts_per_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `MW/m`.
@@ -542,7 +546,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `MW/m`.
     #[inline]
     pub fn as_megawatts_per_meter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `GW/m`.
@@ -554,7 +558,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `GW/m`.
     #[inline]
     pub fn as_gigawatts_per_meter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `W/cm`.
@@ -566,13 +570,13 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `W/cm`.
     #[inline]
     pub fn as_watts_per_centimeter(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `mW/cm`.
     #[inline]
     pub fn from_milliwatts_per_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `mW/cm`.
@@ -590,7 +594,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `kW/cm`.
     #[inline]
     pub fn as_kilowatts_per_centimeter(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `MW/cm`.
@@ -602,7 +606,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `MW/cm`.
     #[inline]
     pub fn as_megawatts_per_centimeter(self) -> T {
-        self.0 / T::from_f64(1e8)
+        T::div_ratio(self.0, 100000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `GW/cm`.
@@ -614,7 +618,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `GW/cm`.
     #[inline]
     pub fn as_gigawatts_per_centimeter(self) -> T {
-        self.0 / T::from_f64(1e11)
+        T::div_ratio(self.0, 100000000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `W/mm`.
@@ -626,7 +630,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `W/mm`.
     #[inline]
     pub fn as_watts_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `mW/mm`.
@@ -650,7 +654,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `kW/mm`.
     #[inline]
     pub fn as_kilowatts_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `MW/mm`.
@@ -662,7 +666,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `MW/mm`.
     #[inline]
     pub fn as_megawatts_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `GW/mm`.
@@ -674,7 +678,7 @@ impl<T: Number> LinearPowerDensity<T> {
     /// The value in `GW/mm`.
     #[inline]
     pub fn as_gigawatts_per_millimeter(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `W/in`.
@@ -805,12 +809,14 @@ impl LinearPowerDensity<f64> {
     pub const fn const_new(value: f64, unit: LinearPowerDensityUnit) -> Self {
         Self(match unit {
             LinearPowerDensityUnit::WattPerMeter => value,
-            LinearPowerDensityUnit::MilliwattPerMeter => value / 1000.0,
+            LinearPowerDensityUnit::MilliwattPerMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             LinearPowerDensityUnit::KilowattPerMeter => value * 1000.0,
             LinearPowerDensityUnit::MegawattPerMeter => value * 1000000.0,
             LinearPowerDensityUnit::GigawattPerMeter => value * 1e9,
             LinearPowerDensityUnit::WattPerCentimeter => value * 100.0,
-            LinearPowerDensityUnit::MilliwattPerCentimeter => value / 10.0,
+            LinearPowerDensityUnit::MilliwattPerCentimeter => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
             LinearPowerDensityUnit::KilowattPerCentimeter => value * 100000.0,
             LinearPowerDensityUnit::MegawattPerCentimeter => value * 1e8,
             LinearPowerDensityUnit::GigawattPerCentimeter => value * 1e11,
@@ -819,16 +825,28 @@ impl LinearPowerDensity<f64> {
             LinearPowerDensityUnit::KilowattPerMillimeter => value * 1000000.0,
             LinearPowerDensityUnit::MegawattPerMillimeter => value * 1e9,
             LinearPowerDensityUnit::GigawattPerMillimeter => value * 1e12,
-            LinearPowerDensityUnit::WattPerInch => value * 39.37007874015748,
-            LinearPowerDensityUnit::MilliwattPerInch => value * 0.03937007874015748,
-            LinearPowerDensityUnit::KilowattPerInch => value * 39370.07874015748,
-            LinearPowerDensityUnit::MegawattPerInch => value * 3.937007874015748e7,
-            LinearPowerDensityUnit::GigawattPerInch => value * 3.937007874015748e10,
-            LinearPowerDensityUnit::WattPerFoot => value * 3.2808398950131235,
-            LinearPowerDensityUnit::MilliwattPerFoot => value * 0.0032808398950131233,
-            LinearPowerDensityUnit::KilowattPerFoot => value * 3280.839895013123,
-            LinearPowerDensityUnit::MegawattPerFoot => value * 3280839.8950131233,
-            LinearPowerDensityUnit::GigawattPerFoot => value * 3.2808398950131235e9,
+            LinearPowerDensityUnit::WattPerInch => crate::conv::mul_ratio(value, 5000.0, 127.0),
+            LinearPowerDensityUnit::MilliwattPerInch => crate::conv::mul_ratio(value, 5.0, 127.0),
+            LinearPowerDensityUnit::KilowattPerInch => {
+                crate::conv::mul_ratio(value, 5000000.0, 127.0)
+            }
+            LinearPowerDensityUnit::MegawattPerInch => {
+                crate::conv::mul_ratio(value, 5000000000.0, 127.0)
+            }
+            LinearPowerDensityUnit::GigawattPerInch => {
+                crate::conv::mul_ratio(value, 5000000000000.0, 127.0)
+            }
+            LinearPowerDensityUnit::WattPerFoot => crate::conv::mul_ratio(value, 1250.0, 381.0),
+            LinearPowerDensityUnit::MilliwattPerFoot => crate::conv::mul_ratio(value, 5.0, 1524.0),
+            LinearPowerDensityUnit::KilowattPerFoot => {
+                crate::conv::mul_ratio(value, 1250000.0, 381.0)
+            }
+            LinearPowerDensityUnit::MegawattPerFoot => {
+                crate::conv::mul_ratio(value, 1250000000.0, 381.0)
+            }
+            LinearPowerDensityUnit::GigawattPerFoot => {
+                crate::conv::mul_ratio(value, 1250000000000.0, 381.0)
+            }
         })
     }
 }

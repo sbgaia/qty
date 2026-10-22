@@ -459,32 +459,44 @@ impl<T: Number> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUni
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            MassMomentOfInertiaUnit::GramSquareMeter => value / T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::MilligramSquareMeter => value / T::from_f64(1000000.0),
+            MassMomentOfInertiaUnit::GramSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            MassMomentOfInertiaUnit::MilligramSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
             MassMomentOfInertiaUnit::KilogramSquareMeter => value,
-            MassMomentOfInertiaUnit::GramSquareDecimeter => value / T::from_f64(100000.0),
-            MassMomentOfInertiaUnit::MilligramSquareDecimeter => value / T::from_f64(1e8),
-            MassMomentOfInertiaUnit::KilogramSquareDecimeter => value / T::from_f64(100.0),
-            MassMomentOfInertiaUnit::GramSquareCentimeter => value / T::from_f64(1e7),
-            MassMomentOfInertiaUnit::MilligramSquareCentimeter => value / T::from_f64(1e10),
-            MassMomentOfInertiaUnit::KilogramSquareCentimeter => value / T::from_f64(10000.0),
-            MassMomentOfInertiaUnit::GramSquareMillimeter => value / T::from_f64(1e9),
-            MassMomentOfInertiaUnit::MilligramSquareMillimeter => value / T::from_f64(1e12),
-            MassMomentOfInertiaUnit::KilogramSquareMillimeter => value / T::from_f64(1000000.0),
+            MassMomentOfInertiaUnit::GramSquareDecimeter => T::div_ratio(value, 100000.0, 1.0),
+            MassMomentOfInertiaUnit::MilligramSquareDecimeter => {
+                T::div_ratio(value, 100000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::KilogramSquareDecimeter => T::div_ratio(value, 100.0, 1.0),
+            MassMomentOfInertiaUnit::GramSquareCentimeter => T::div_ratio(value, 10000000.0, 1.0),
+            MassMomentOfInertiaUnit::MilligramSquareCentimeter => {
+                T::div_ratio(value, 10000000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::KilogramSquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
+            MassMomentOfInertiaUnit::GramSquareMillimeter => T::div_ratio(value, 1000000000.0, 1.0),
+            MassMomentOfInertiaUnit::MilligramSquareMillimeter => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::KilogramSquareMillimeter => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
             MassMomentOfInertiaUnit::TonneSquareMeter => value * T::from_f64(1000.0),
             MassMomentOfInertiaUnit::KilotonneSquareMeter => value * T::from_f64(1000000.0),
             MassMomentOfInertiaUnit::MegatonneSquareMeter => value * T::from_f64(1e9),
             MassMomentOfInertiaUnit::TonneSquareDecimeter => value * T::from_f64(10.0),
             MassMomentOfInertiaUnit::KilotonneSquareDecimeter => value * T::from_f64(10000.0),
             MassMomentOfInertiaUnit::MegatonneSquareDecimeter => value * T::from_f64(1e7),
-            MassMomentOfInertiaUnit::TonneSquareCentimeter => value / T::from_f64(10.0),
+            MassMomentOfInertiaUnit::TonneSquareCentimeter => T::div_ratio(value, 10.0, 1.0),
             MassMomentOfInertiaUnit::KilotonneSquareCentimeter => value * T::from_f64(100.0),
             MassMomentOfInertiaUnit::MegatonneSquareCentimeter => value * T::from_f64(100000.0),
-            MassMomentOfInertiaUnit::TonneSquareMillimeter => value / T::from_f64(1000.0),
+            MassMomentOfInertiaUnit::TonneSquareMillimeter => T::div_ratio(value, 1000.0, 1.0),
             MassMomentOfInertiaUnit::KilotonneSquareMillimeter => value,
             MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value * T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::PoundSquareFoot => value * T::from_f64(0.0421401100938048),
-            MassMomentOfInertiaUnit::PoundSquareInch => value * T::from_f64(0.0002926396534292),
+            MassMomentOfInertiaUnit::PoundSquareFoot => {
+                T::mul_ratio(value, 6584392202157.0, 156250000000000.0)
+            }
+            MassMomentOfInertiaUnit::PoundSquareInch => {
+                T::mul_ratio(value, 731599133573.0, 2500000000000000.0)
+            }
             MassMomentOfInertiaUnit::SlugSquareFoot => {
                 T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
@@ -507,20 +519,28 @@ impl<T: Number> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUni
             MassMomentOfInertiaUnit::GramSquareMillimeter => value * T::from_f64(1e9),
             MassMomentOfInertiaUnit::MilligramSquareMillimeter => value * T::from_f64(1e12),
             MassMomentOfInertiaUnit::KilogramSquareMillimeter => value * T::from_f64(1000000.0),
-            MassMomentOfInertiaUnit::TonneSquareMeter => value / T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::KilotonneSquareMeter => value / T::from_f64(1000000.0),
-            MassMomentOfInertiaUnit::MegatonneSquareMeter => value / T::from_f64(1e9),
-            MassMomentOfInertiaUnit::TonneSquareDecimeter => value / T::from_f64(10.0),
-            MassMomentOfInertiaUnit::KilotonneSquareDecimeter => value / T::from_f64(10000.0),
-            MassMomentOfInertiaUnit::MegatonneSquareDecimeter => value / T::from_f64(1e7),
+            MassMomentOfInertiaUnit::TonneSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            MassMomentOfInertiaUnit::KilotonneSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
+            MassMomentOfInertiaUnit::MegatonneSquareMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            MassMomentOfInertiaUnit::TonneSquareDecimeter => T::div_ratio(value, 10.0, 1.0),
+            MassMomentOfInertiaUnit::KilotonneSquareDecimeter => T::div_ratio(value, 10000.0, 1.0),
+            MassMomentOfInertiaUnit::MegatonneSquareDecimeter => {
+                T::div_ratio(value, 10000000.0, 1.0)
+            }
             MassMomentOfInertiaUnit::TonneSquareCentimeter => value * T::from_f64(10.0),
-            MassMomentOfInertiaUnit::KilotonneSquareCentimeter => value / T::from_f64(100.0),
-            MassMomentOfInertiaUnit::MegatonneSquareCentimeter => value / T::from_f64(100000.0),
+            MassMomentOfInertiaUnit::KilotonneSquareCentimeter => T::div_ratio(value, 100.0, 1.0),
+            MassMomentOfInertiaUnit::MegatonneSquareCentimeter => {
+                T::div_ratio(value, 100000.0, 1.0)
+            }
             MassMomentOfInertiaUnit::TonneSquareMillimeter => value * T::from_f64(1000.0),
             MassMomentOfInertiaUnit::KilotonneSquareMillimeter => value,
-            MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value / T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::PoundSquareFoot => value / T::from_f64(0.0421401100938048),
-            MassMomentOfInertiaUnit::PoundSquareInch => value / T::from_f64(0.0002926396534292),
+            MassMomentOfInertiaUnit::MegatonneSquareMillimeter => T::div_ratio(value, 1000.0, 1.0),
+            MassMomentOfInertiaUnit::PoundSquareFoot => {
+                T::div_ratio(value, 6584392202157.0, 156250000000000.0)
+            }
+            MassMomentOfInertiaUnit::PoundSquareInch => {
+                T::div_ratio(value, 731599133573.0, 2500000000000000.0)
+            }
             MassMomentOfInertiaUnit::SlugSquareFoot => {
                 T::div_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
@@ -548,7 +568,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `g·m²`.
     #[inline]
     pub fn from_gram_square_meters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g·m²`.
@@ -560,7 +580,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `mg·m²`.
     #[inline]
     pub fn from_milligram_square_meters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg·m²`.
@@ -584,7 +604,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `g·dm²`.
     #[inline]
     pub fn from_gram_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `g·dm²`.
@@ -596,7 +616,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `mg·dm²`.
     #[inline]
     pub fn from_milligram_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `mg·dm²`.
@@ -608,7 +628,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `kg·dm²`.
     #[inline]
     pub fn from_kilogram_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `kg·dm²`.
@@ -620,7 +640,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `g·cm²`.
     #[inline]
     pub fn from_gram_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `g·cm²`.
@@ -632,7 +652,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `mg·cm²`.
     #[inline]
     pub fn from_milligram_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e10))
+        Self(T::div_ratio(value, 10000000000.0, 1.0))
     }
 
     /// The value in `mg·cm²`.
@@ -644,7 +664,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `kg·cm²`.
     #[inline]
     pub fn from_kilogram_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `kg·cm²`.
@@ -656,7 +676,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `g·mm²`.
     #[inline]
     pub fn from_gram_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `g·mm²`.
@@ -668,7 +688,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `mg·mm²`.
     #[inline]
     pub fn from_milligram_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `mg·mm²`.
@@ -680,7 +700,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `kg·mm²`.
     #[inline]
     pub fn from_kilogram_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `kg·mm²`.
@@ -698,7 +718,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `t·m²`.
     #[inline]
     pub fn as_tonne_square_meters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `kt·m²`.
@@ -710,7 +730,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `kt·m²`.
     #[inline]
     pub fn as_kilotonne_square_meters(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `Mt·m²`.
@@ -722,7 +742,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `Mt·m²`.
     #[inline]
     pub fn as_megatonne_square_meters(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `t·dm²`.
@@ -734,7 +754,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `t·dm²`.
     #[inline]
     pub fn as_tonne_square_decimeters(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `kt·dm²`.
@@ -746,7 +766,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `kt·dm²`.
     #[inline]
     pub fn as_kilotonne_square_decimeters(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `Mt·dm²`.
@@ -758,13 +778,13 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `Mt·dm²`.
     #[inline]
     pub fn as_megatonne_square_decimeters(self) -> T {
-        self.0 / T::from_f64(1e7)
+        T::div_ratio(self.0, 10000000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `t·cm²`.
     #[inline]
     pub fn from_tonne_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `t·cm²`.
@@ -782,7 +802,7 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `kt·cm²`.
     #[inline]
     pub fn as_kilotonne_square_centimeters(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `Mt·cm²`.
@@ -794,13 +814,13 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `Mt·cm²`.
     #[inline]
     pub fn as_megatonne_square_centimeters(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `t·mm²`.
     #[inline]
     pub fn from_tonne_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `t·mm²`.
@@ -830,31 +850,31 @@ impl<T: Number> MassMomentOfInertia<T> {
     /// The value in `Mt·mm²`.
     #[inline]
     pub fn as_megatonne_square_millimeters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `lb·ft²`.
     #[inline]
     pub fn from_pound_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.0421401100938048))
+        Self(T::mul_ratio(value, 6584392202157.0, 156250000000000.0))
     }
 
     /// The value in `lb·ft²`.
     #[inline]
     pub fn as_pound_square_feet(self) -> T {
-        self.0 / T::from_f64(0.0421401100938048)
+        T::div_ratio(self.0, 6584392202157.0, 156250000000000.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `lb·in²`.
     #[inline]
     pub fn from_pound_square_inches(value: T) -> Self {
-        Self(value * T::from_f64(0.0002926396534292))
+        Self(T::mul_ratio(value, 731599133573.0, 2500000000000000.0))
     }
 
     /// The value in `lb·in²`.
     #[inline]
     pub fn as_pound_square_inches(self) -> T {
-        self.0 / T::from_f64(0.0002926396534292)
+        T::div_ratio(self.0, 731599133573.0, 2500000000000000.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `slug·ft²`.
@@ -888,33 +908,63 @@ impl MassMomentOfInertia<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: MassMomentOfInertiaUnit) -> Self {
         Self(match unit {
-            MassMomentOfInertiaUnit::GramSquareMeter => value / 1000.0,
-            MassMomentOfInertiaUnit::MilligramSquareMeter => value / 1000000.0,
+            MassMomentOfInertiaUnit::GramSquareMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            MassMomentOfInertiaUnit::MilligramSquareMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
             MassMomentOfInertiaUnit::KilogramSquareMeter => value,
-            MassMomentOfInertiaUnit::GramSquareDecimeter => value / 100000.0,
-            MassMomentOfInertiaUnit::MilligramSquareDecimeter => value / 1e8,
-            MassMomentOfInertiaUnit::KilogramSquareDecimeter => value / 100.0,
-            MassMomentOfInertiaUnit::GramSquareCentimeter => value / 1e7,
-            MassMomentOfInertiaUnit::MilligramSquareCentimeter => value / 1e10,
-            MassMomentOfInertiaUnit::KilogramSquareCentimeter => value / 10000.0,
-            MassMomentOfInertiaUnit::GramSquareMillimeter => value / 1e9,
-            MassMomentOfInertiaUnit::MilligramSquareMillimeter => value / 1e12,
-            MassMomentOfInertiaUnit::KilogramSquareMillimeter => value / 1000000.0,
+            MassMomentOfInertiaUnit::GramSquareDecimeter => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::MilligramSquareDecimeter => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::KilogramSquareDecimeter => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::GramSquareCentimeter => {
+                crate::conv::div_ratio(value, 10000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::MilligramSquareCentimeter => {
+                crate::conv::div_ratio(value, 10000000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::KilogramSquareCentimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::GramSquareMillimeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::MilligramSquareMillimeter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            MassMomentOfInertiaUnit::KilogramSquareMillimeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
             MassMomentOfInertiaUnit::TonneSquareMeter => value * 1000.0,
             MassMomentOfInertiaUnit::KilotonneSquareMeter => value * 1000000.0,
             MassMomentOfInertiaUnit::MegatonneSquareMeter => value * 1e9,
             MassMomentOfInertiaUnit::TonneSquareDecimeter => value * 10.0,
             MassMomentOfInertiaUnit::KilotonneSquareDecimeter => value * 10000.0,
             MassMomentOfInertiaUnit::MegatonneSquareDecimeter => value * 1e7,
-            MassMomentOfInertiaUnit::TonneSquareCentimeter => value / 10.0,
+            MassMomentOfInertiaUnit::TonneSquareCentimeter => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
             MassMomentOfInertiaUnit::KilotonneSquareCentimeter => value * 100.0,
             MassMomentOfInertiaUnit::MegatonneSquareCentimeter => value * 100000.0,
-            MassMomentOfInertiaUnit::TonneSquareMillimeter => value / 1000.0,
+            MassMomentOfInertiaUnit::TonneSquareMillimeter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             MassMomentOfInertiaUnit::KilotonneSquareMillimeter => value,
             MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value * 1000.0,
-            MassMomentOfInertiaUnit::PoundSquareFoot => value * 0.0421401100938048,
-            MassMomentOfInertiaUnit::PoundSquareInch => value * 0.0002926396534292,
-            MassMomentOfInertiaUnit::SlugSquareFoot => value * 1.3558179483314003,
+            MassMomentOfInertiaUnit::PoundSquareFoot => {
+                crate::conv::mul_ratio(value, 6584392202157.0, 156250000000000.0)
+            }
+            MassMomentOfInertiaUnit::PoundSquareInch => {
+                crate::conv::mul_ratio(value, 731599133573.0, 2500000000000000.0)
+            }
+            MassMomentOfInertiaUnit::SlugSquareFoot => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
             MassMomentOfInertiaUnit::SlugSquareInch => value * 0.009415402418968058,
         })
     }

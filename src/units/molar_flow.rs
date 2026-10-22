@@ -213,11 +213,11 @@ impl<T: Number> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
         match self {
             MolarFlowUnit::MolePerSecond => value,
             MolarFlowUnit::KilomolePerSecond => value * T::from_f64(1000.0),
-            MolarFlowUnit::MolePerMinute => value / T::from_f64(60.0),
+            MolarFlowUnit::MolePerMinute => T::div_ratio(value, 60.0, 1.0),
             MolarFlowUnit::KilomolePerMinute => T::mul_ratio(value, 50.0, 3.0),
-            MolarFlowUnit::MolePerHour => value / T::from_f64(3600.0),
+            MolarFlowUnit::MolePerHour => T::div_ratio(value, 3600.0, 1.0),
             MolarFlowUnit::KilomolePerHour => T::mul_ratio(value, 5.0, 18.0),
-            MolarFlowUnit::PoundMolePerSecond => value * T::from_f64(453.59237),
+            MolarFlowUnit::PoundMolePerSecond => T::mul_ratio(value, 45359237.0, 100000.0),
             MolarFlowUnit::PoundMolePerMinute => T::mul_ratio(value, 45359237.0, 6000000.0),
             MolarFlowUnit::PoundMolePerHour => T::mul_ratio(value, 45359237.0, 360000000.0),
         }
@@ -227,12 +227,12 @@ impl<T: Number> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             MolarFlowUnit::MolePerSecond => value,
-            MolarFlowUnit::KilomolePerSecond => value / T::from_f64(1000.0),
+            MolarFlowUnit::KilomolePerSecond => T::div_ratio(value, 1000.0, 1.0),
             MolarFlowUnit::MolePerMinute => value * T::from_f64(60.0),
             MolarFlowUnit::KilomolePerMinute => T::div_ratio(value, 50.0, 3.0),
             MolarFlowUnit::MolePerHour => value * T::from_f64(3600.0),
             MolarFlowUnit::KilomolePerHour => T::div_ratio(value, 5.0, 18.0),
-            MolarFlowUnit::PoundMolePerSecond => value / T::from_f64(453.59237),
+            MolarFlowUnit::PoundMolePerSecond => T::div_ratio(value, 45359237.0, 100000.0),
             MolarFlowUnit::PoundMolePerMinute => T::div_ratio(value, 45359237.0, 6000000.0),
             MolarFlowUnit::PoundMolePerHour => T::div_ratio(value, 45359237.0, 360000000.0),
         }
@@ -275,13 +275,13 @@ impl<T: Number> MolarFlow<T> {
     /// The value in `kmol/s`.
     #[inline]
     pub fn as_kilomoles_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`MolarFlow`] from a value in `mol/min`.
     #[inline]
     pub fn from_moles_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `mol/min`.
@@ -305,7 +305,7 @@ impl<T: Number> MolarFlow<T> {
     /// A [`MolarFlow`] from a value in `mol/h`.
     #[inline]
     pub fn from_moles_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `mol/h`.
@@ -329,13 +329,13 @@ impl<T: Number> MolarFlow<T> {
     /// A [`MolarFlow`] from a value in `lbmol/s`.
     #[inline]
     pub fn from_pound_moles_per_second(value: T) -> Self {
-        Self(value * T::from_f64(453.59237))
+        Self(T::mul_ratio(value, 45359237.0, 100000.0))
     }
 
     /// The value in `lbmol/s`.
     #[inline]
     pub fn as_pound_moles_per_second(self) -> T {
-        self.0 / T::from_f64(453.59237)
+        T::div_ratio(self.0, 45359237.0, 100000.0)
     }
 
     /// A [`MolarFlow`] from a value in `lbmol/min`.
@@ -371,13 +371,19 @@ impl MolarFlow<f64> {
         Self(match unit {
             MolarFlowUnit::MolePerSecond => value,
             MolarFlowUnit::KilomolePerSecond => value * 1000.0,
-            MolarFlowUnit::MolePerMinute => value / 60.0,
-            MolarFlowUnit::KilomolePerMinute => value * 16.666666666666668,
-            MolarFlowUnit::MolePerHour => value / 3600.0,
-            MolarFlowUnit::KilomolePerHour => value * 0.2777777777777778,
-            MolarFlowUnit::PoundMolePerSecond => value * 453.59237,
-            MolarFlowUnit::PoundMolePerMinute => value * 7.559872833333333,
-            MolarFlowUnit::PoundMolePerHour => value * 0.12599788055555555,
+            MolarFlowUnit::MolePerMinute => crate::conv::div_ratio(value, 60.0, 1.0),
+            MolarFlowUnit::KilomolePerMinute => crate::conv::mul_ratio(value, 50.0, 3.0),
+            MolarFlowUnit::MolePerHour => crate::conv::div_ratio(value, 3600.0, 1.0),
+            MolarFlowUnit::KilomolePerHour => crate::conv::mul_ratio(value, 5.0, 18.0),
+            MolarFlowUnit::PoundMolePerSecond => {
+                crate::conv::mul_ratio(value, 45359237.0, 100000.0)
+            }
+            MolarFlowUnit::PoundMolePerMinute => {
+                crate::conv::mul_ratio(value, 45359237.0, 6000000.0)
+            }
+            MolarFlowUnit::PoundMolePerHour => {
+                crate::conv::mul_ratio(value, 45359237.0, 360000000.0)
+            }
         })
     }
 }

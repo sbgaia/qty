@@ -170,13 +170,13 @@ impl<T: Number> crate::UnitOf<CoefficientOfThermalExpansion<T>>
         match self {
             CoefficientOfThermalExpansionUnit::PerKelvin => value,
             CoefficientOfThermalExpansionUnit::PerDegreeCelsius => value,
-            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => value * T::from_f64(1.8),
-            CoefficientOfThermalExpansionUnit::PpmPerKelvin => value / T::from_f64(1000000.0),
+            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => T::mul_ratio(value, 9.0, 5.0),
+            CoefficientOfThermalExpansionUnit::PpmPerKelvin => T::div_ratio(value, 1000000.0, 1.0),
             CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => {
-                value / T::from_f64(1000000.0)
+                T::div_ratio(value, 1000000.0, 1.0)
             }
             CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => {
-                value * T::from_f64(1.8e-6)
+                T::mul_ratio(value, 9.0, 5000000.0)
             }
         }
     }
@@ -186,13 +186,13 @@ impl<T: Number> crate::UnitOf<CoefficientOfThermalExpansion<T>>
         match self {
             CoefficientOfThermalExpansionUnit::PerKelvin => value,
             CoefficientOfThermalExpansionUnit::PerDegreeCelsius => value,
-            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => value / T::from_f64(1.8),
+            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => T::div_ratio(value, 9.0, 5.0),
             CoefficientOfThermalExpansionUnit::PpmPerKelvin => value * T::from_f64(1000000.0),
             CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => {
                 value * T::from_f64(1000000.0)
             }
             CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => {
-                value / T::from_f64(1.8e-6)
+                T::div_ratio(value, 9.0, 5000000.0)
             }
         }
     }
@@ -236,19 +236,19 @@ impl<T: Number> CoefficientOfThermalExpansion<T> {
     /// A [`CoefficientOfThermalExpansion`] from a value in `°F⁻¹`.
     #[inline]
     pub fn from_per_degree_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(1.8))
+        Self(T::mul_ratio(value, 9.0, 5.0))
     }
 
     /// The value in `°F⁻¹`.
     #[inline]
     pub fn as_per_degree_fahrenheit(self) -> T {
-        self.0 / T::from_f64(1.8)
+        T::div_ratio(self.0, 9.0, 5.0)
     }
 
     /// A [`CoefficientOfThermalExpansion`] from a value in `ppm/K`.
     #[inline]
     pub fn from_ppm_per_kelvin(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ppm/K`.
@@ -260,7 +260,7 @@ impl<T: Number> CoefficientOfThermalExpansion<T> {
     /// A [`CoefficientOfThermalExpansion`] from a value in `ppm/°C`.
     #[inline]
     pub fn from_ppm_per_degree_celsius(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ppm/°C`.
@@ -272,13 +272,13 @@ impl<T: Number> CoefficientOfThermalExpansion<T> {
     /// A [`CoefficientOfThermalExpansion`] from a value in `ppm/°F`.
     #[inline]
     pub fn from_ppm_per_degree_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(1.8e-6))
+        Self(T::mul_ratio(value, 9.0, 5000000.0))
     }
 
     /// The value in `ppm/°F`.
     #[inline]
     pub fn as_ppm_per_degree_fahrenheit(self) -> T {
-        self.0 / T::from_f64(1.8e-6)
+        T::div_ratio(self.0, 9.0, 5000000.0)
     }
 }
 
@@ -290,10 +290,18 @@ impl CoefficientOfThermalExpansion<f64> {
         Self(match unit {
             CoefficientOfThermalExpansionUnit::PerKelvin => value,
             CoefficientOfThermalExpansionUnit::PerDegreeCelsius => value,
-            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => value * 1.8,
-            CoefficientOfThermalExpansionUnit::PpmPerKelvin => value / 1000000.0,
-            CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => value / 1000000.0,
-            CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => value * 1.8e-6,
+            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => {
+                crate::conv::mul_ratio(value, 9.0, 5.0)
+            }
+            CoefficientOfThermalExpansionUnit::PpmPerKelvin => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => {
+                crate::conv::mul_ratio(value, 9.0, 5000000.0)
+            }
         })
     }
 }

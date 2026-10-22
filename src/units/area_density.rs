@@ -171,8 +171,8 @@ impl<T: Number> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             AreaDensityUnit::KilogramPerSquareMeter => value,
-            AreaDensityUnit::GramPerSquareMeter => value / T::from_f64(1000.0),
-            AreaDensityUnit::MilligramPerSquareMeter => value / T::from_f64(1000000.0),
+            AreaDensityUnit::GramPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            AreaDensityUnit::MilligramPerSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
             AreaDensityUnit::PoundPerSquareFoot => T::mul_ratio(value, 45359237.0, 9290304.0),
             AreaDensityUnit::PoundPerThousandSquareFeet => {
                 T::mul_ratio(value, 45359237.0, 9290304000.0)
@@ -220,7 +220,7 @@ impl<T: Number> AreaDensity<T> {
     /// A [`AreaDensity`] from a value in `g/m²`.
     #[inline]
     pub fn from_grams_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `g/m²`.
@@ -232,7 +232,7 @@ impl<T: Number> AreaDensity<T> {
     /// A [`AreaDensity`] from a value in `mg/m²`.
     #[inline]
     pub fn from_milligrams_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mg/m²`.
@@ -273,10 +273,16 @@ impl AreaDensity<f64> {
     pub const fn const_new(value: f64, unit: AreaDensityUnit) -> Self {
         Self(match unit {
             AreaDensityUnit::KilogramPerSquareMeter => value,
-            AreaDensityUnit::GramPerSquareMeter => value / 1000.0,
-            AreaDensityUnit::MilligramPerSquareMeter => value / 1000000.0,
-            AreaDensityUnit::PoundPerSquareFoot => value * 4.88242763638305,
-            AreaDensityUnit::PoundPerThousandSquareFeet => value * 0.00488242763638305,
+            AreaDensityUnit::GramPerSquareMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            AreaDensityUnit::MilligramPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            AreaDensityUnit::PoundPerSquareFoot => {
+                crate::conv::mul_ratio(value, 45359237.0, 9290304.0)
+            }
+            AreaDensityUnit::PoundPerThousandSquareFeet => {
+                crate::conv::mul_ratio(value, 45359237.0, 9290304000.0)
+            }
         })
     }
 }

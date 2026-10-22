@@ -206,10 +206,10 @@ impl<T: Number> crate::UnitOf<RotationalStiffnessPerLength<T>>
         match self {
             RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter => value,
             RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter => {
-                value / T::from_f64(1000.0)
+                T::div_ratio(value, 1000.0, 1.0)
             }
             RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter => {
-                value / T::from_f64(1000000.0)
+                T::div_ratio(value, 1000000.0, 1.0)
             }
             RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot => {
                 value / T::from_f64(254.86432489329252)
@@ -267,7 +267,7 @@ impl<T: Number> RotationalStiffnessPerLength<T> {
     /// The value in `kN·m/rad/m`.
     #[inline]
     pub fn as_kilonewton_meters_per_radian_per_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`RotationalStiffnessPerLength`] from a value in `MN·m/rad/m`.
@@ -279,7 +279,7 @@ impl<T: Number> RotationalStiffnessPerLength<T> {
     /// The value in `MN·m/rad/m`.
     #[inline]
     pub fn as_meganewton_meters_per_radian_per_meter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`RotationalStiffnessPerLength`] from a value in `lbf·ft/deg/ft`.

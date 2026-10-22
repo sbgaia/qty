@@ -213,8 +213,8 @@ impl<T: Number> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
         match self {
             TemperatureDeltaUnit::Kelvin => value,
             TemperatureDeltaUnit::DegreeCelsius => value,
-            TemperatureDeltaUnit::MillidegreeCelsius => value / T::from_f64(1000.0),
-            TemperatureDeltaUnit::DegreeDelisle => value / T::from_f64(-1.5),
+            TemperatureDeltaUnit::MillidegreeCelsius => T::div_ratio(value, 1000.0, 1.0),
+            TemperatureDeltaUnit::DegreeDelisle => T::div_ratio(value, -3.0, 2.0),
             TemperatureDeltaUnit::DegreeFahrenheit => T::mul_ratio(value, 5.0, 9.0),
             TemperatureDeltaUnit::DegreeNewton => T::mul_ratio(value, 100.0, 33.0),
             TemperatureDeltaUnit::DegreeRankine => T::mul_ratio(value, 5.0, 9.0),
@@ -233,7 +233,7 @@ impl<T: Number> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
             TemperatureDeltaUnit::DegreeFahrenheit => T::div_ratio(value, 5.0, 9.0),
             TemperatureDeltaUnit::DegreeNewton => T::div_ratio(value, 100.0, 33.0),
             TemperatureDeltaUnit::DegreeRankine => T::div_ratio(value, 5.0, 9.0),
-            TemperatureDeltaUnit::DegreeReaumur => value / T::from_f64(1.25),
+            TemperatureDeltaUnit::DegreeReaumur => T::div_ratio(value, 5.0, 4.0),
             TemperatureDeltaUnit::DegreeRoemer => T::div_ratio(value, 40.0, 21.0),
         }
     }
@@ -277,7 +277,7 @@ impl<T: Number> TemperatureDelta<T> {
     /// A [`TemperatureDelta`] from a value in `m∆°C`.
     #[inline]
     pub fn from_millidegrees_celsius(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `m∆°C`.
@@ -289,7 +289,7 @@ impl<T: Number> TemperatureDelta<T> {
     /// A [`TemperatureDelta`] from a value in `∆°De`.
     #[inline]
     pub fn from_degrees_delisle(value: T) -> Self {
-        Self(value / T::from_f64(-1.5))
+        Self(T::div_ratio(value, -3.0, 2.0))
     }
 
     /// The value in `∆°De`.
@@ -343,7 +343,7 @@ impl<T: Number> TemperatureDelta<T> {
     /// The value in `∆°Ré`.
     #[inline]
     pub fn as_degrees_reaumur(self) -> T {
-        self.0 / T::from_f64(1.25)
+        T::div_ratio(self.0, 5.0, 4.0)
     }
 
     /// A [`TemperatureDelta`] from a value in `∆°Rø`.
@@ -367,13 +367,13 @@ impl TemperatureDelta<f64> {
         Self(match unit {
             TemperatureDeltaUnit::Kelvin => value,
             TemperatureDeltaUnit::DegreeCelsius => value,
-            TemperatureDeltaUnit::MillidegreeCelsius => value / 1000.0,
-            TemperatureDeltaUnit::DegreeDelisle => value / -1.5,
-            TemperatureDeltaUnit::DegreeFahrenheit => value * 0.5555555555555556,
-            TemperatureDeltaUnit::DegreeNewton => value * 3.0303030303030303,
-            TemperatureDeltaUnit::DegreeRankine => value * 0.5555555555555556,
+            TemperatureDeltaUnit::MillidegreeCelsius => crate::conv::div_ratio(value, 1000.0, 1.0),
+            TemperatureDeltaUnit::DegreeDelisle => crate::conv::div_ratio(value, -3.0, 2.0),
+            TemperatureDeltaUnit::DegreeFahrenheit => crate::conv::mul_ratio(value, 5.0, 9.0),
+            TemperatureDeltaUnit::DegreeNewton => crate::conv::mul_ratio(value, 100.0, 33.0),
+            TemperatureDeltaUnit::DegreeRankine => crate::conv::mul_ratio(value, 5.0, 9.0),
             TemperatureDeltaUnit::DegreeReaumur => value * 1.25,
-            TemperatureDeltaUnit::DegreeRoemer => value * 1.9047619047619047,
+            TemperatureDeltaUnit::DegreeRoemer => crate::conv::mul_ratio(value, 40.0, 21.0),
         })
     }
 }

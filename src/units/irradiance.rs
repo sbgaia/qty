@@ -277,16 +277,16 @@ impl<T: Number> crate::UnitOf<Irradiance<T>> for IrradianceUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             IrradianceUnit::WattPerSquareMeter => value,
-            IrradianceUnit::PicowattPerSquareMeter => value / T::from_f64(1e12),
-            IrradianceUnit::NanowattPerSquareMeter => value / T::from_f64(1e9),
-            IrradianceUnit::MicrowattPerSquareMeter => value / T::from_f64(1000000.0),
-            IrradianceUnit::MilliwattPerSquareMeter => value / T::from_f64(1000.0),
+            IrradianceUnit::PicowattPerSquareMeter => T::div_ratio(value, 1000000000000.0, 1.0),
+            IrradianceUnit::NanowattPerSquareMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            IrradianceUnit::MicrowattPerSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
+            IrradianceUnit::MilliwattPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
             IrradianceUnit::KilowattPerSquareMeter => value * T::from_f64(1000.0),
             IrradianceUnit::MegawattPerSquareMeter => value * T::from_f64(1000000.0),
             IrradianceUnit::WattPerSquareCentimeter => value * T::from_f64(10000.0),
-            IrradianceUnit::PicowattPerSquareCentimeter => value / T::from_f64(1e8),
-            IrradianceUnit::NanowattPerSquareCentimeter => value / T::from_f64(100000.0),
-            IrradianceUnit::MicrowattPerSquareCentimeter => value / T::from_f64(100.0),
+            IrradianceUnit::PicowattPerSquareCentimeter => T::div_ratio(value, 100000000.0, 1.0),
+            IrradianceUnit::NanowattPerSquareCentimeter => T::div_ratio(value, 100000.0, 1.0),
+            IrradianceUnit::MicrowattPerSquareCentimeter => T::div_ratio(value, 100.0, 1.0),
             IrradianceUnit::MilliwattPerSquareCentimeter => value * T::from_f64(10.0),
             IrradianceUnit::KilowattPerSquareCentimeter => value * T::from_f64(1e7),
             IrradianceUnit::MegawattPerSquareCentimeter => value * T::from_f64(1e10),
@@ -301,15 +301,15 @@ impl<T: Number> crate::UnitOf<Irradiance<T>> for IrradianceUnit {
             IrradianceUnit::NanowattPerSquareMeter => value * T::from_f64(1e9),
             IrradianceUnit::MicrowattPerSquareMeter => value * T::from_f64(1000000.0),
             IrradianceUnit::MilliwattPerSquareMeter => value * T::from_f64(1000.0),
-            IrradianceUnit::KilowattPerSquareMeter => value / T::from_f64(1000.0),
-            IrradianceUnit::MegawattPerSquareMeter => value / T::from_f64(1000000.0),
-            IrradianceUnit::WattPerSquareCentimeter => value / T::from_f64(10000.0),
+            IrradianceUnit::KilowattPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            IrradianceUnit::MegawattPerSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
+            IrradianceUnit::WattPerSquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
             IrradianceUnit::PicowattPerSquareCentimeter => value * T::from_f64(1e8),
             IrradianceUnit::NanowattPerSquareCentimeter => value * T::from_f64(100000.0),
             IrradianceUnit::MicrowattPerSquareCentimeter => value * T::from_f64(100.0),
-            IrradianceUnit::MilliwattPerSquareCentimeter => value / T::from_f64(10.0),
-            IrradianceUnit::KilowattPerSquareCentimeter => value / T::from_f64(1e7),
-            IrradianceUnit::MegawattPerSquareCentimeter => value / T::from_f64(1e10),
+            IrradianceUnit::MilliwattPerSquareCentimeter => T::div_ratio(value, 10.0, 1.0),
+            IrradianceUnit::KilowattPerSquareCentimeter => T::div_ratio(value, 10000000.0, 1.0),
+            IrradianceUnit::MegawattPerSquareCentimeter => T::div_ratio(value, 10000000000.0, 1.0),
         }
     }
 }
@@ -349,7 +349,7 @@ impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `pW/m²`.
     #[inline]
     pub fn from_picowatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pW/m²`.
@@ -361,7 +361,7 @@ impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `nW/m²`.
     #[inline]
     pub fn from_nanowatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nW/m²`.
@@ -373,7 +373,7 @@ impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `µW/m²`.
     #[inline]
     pub fn from_microwatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µW/m²`.
@@ -385,7 +385,7 @@ impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `mW/m²`.
     #[inline]
     pub fn from_milliwatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mW/m²`.
@@ -403,7 +403,7 @@ impl<T: Number> Irradiance<T> {
     /// The value in `kW/m²`.
     #[inline]
     pub fn as_kilowatts_per_square_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Irradiance`] from a value in `MW/m²`.
@@ -415,7 +415,7 @@ impl<T: Number> Irradiance<T> {
     /// The value in `MW/m²`.
     #[inline]
     pub fn as_megawatts_per_square_meter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Irradiance`] from a value in `W/cm²`.
@@ -427,13 +427,13 @@ impl<T: Number> Irradiance<T> {
     /// The value in `W/cm²`.
     #[inline]
     pub fn as_watts_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`Irradiance`] from a value in `pW/cm²`.
     #[inline]
     pub fn from_picowatts_per_square_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `pW/cm²`.
@@ -445,7 +445,7 @@ impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `nW/cm²`.
     #[inline]
     pub fn from_nanowatts_per_square_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `nW/cm²`.
@@ -457,7 +457,7 @@ impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `µW/cm²`.
     #[inline]
     pub fn from_microwatts_per_square_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `µW/cm²`.
@@ -475,7 +475,7 @@ impl<T: Number> Irradiance<T> {
     /// The value in `mW/cm²`.
     #[inline]
     pub fn as_milliwatts_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Irradiance`] from a value in `kW/cm²`.
@@ -487,7 +487,7 @@ impl<T: Number> Irradiance<T> {
     /// The value in `kW/cm²`.
     #[inline]
     pub fn as_kilowatts_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(1e7)
+        T::div_ratio(self.0, 10000000.0, 1.0)
     }
 
     /// A [`Irradiance`] from a value in `MW/cm²`.
@@ -499,7 +499,7 @@ impl<T: Number> Irradiance<T> {
     /// The value in `MW/cm²`.
     #[inline]
     pub fn as_megawatts_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(1e10)
+        T::div_ratio(self.0, 10000000000.0, 1.0)
     }
 }
 
@@ -510,16 +510,28 @@ impl Irradiance<f64> {
     pub const fn const_new(value: f64, unit: IrradianceUnit) -> Self {
         Self(match unit {
             IrradianceUnit::WattPerSquareMeter => value,
-            IrradianceUnit::PicowattPerSquareMeter => value / 1e12,
-            IrradianceUnit::NanowattPerSquareMeter => value / 1e9,
-            IrradianceUnit::MicrowattPerSquareMeter => value / 1000000.0,
-            IrradianceUnit::MilliwattPerSquareMeter => value / 1000.0,
+            IrradianceUnit::PicowattPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            IrradianceUnit::NanowattPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            IrradianceUnit::MicrowattPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            IrradianceUnit::MilliwattPerSquareMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             IrradianceUnit::KilowattPerSquareMeter => value * 1000.0,
             IrradianceUnit::MegawattPerSquareMeter => value * 1000000.0,
             IrradianceUnit::WattPerSquareCentimeter => value * 10000.0,
-            IrradianceUnit::PicowattPerSquareCentimeter => value / 1e8,
-            IrradianceUnit::NanowattPerSquareCentimeter => value / 100000.0,
-            IrradianceUnit::MicrowattPerSquareCentimeter => value / 100.0,
+            IrradianceUnit::PicowattPerSquareCentimeter => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            IrradianceUnit::NanowattPerSquareCentimeter => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
+            IrradianceUnit::MicrowattPerSquareCentimeter => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
             IrradianceUnit::MilliwattPerSquareCentimeter => value * 10.0,
             IrradianceUnit::KilowattPerSquareCentimeter => value * 1e7,
             IrradianceUnit::MegawattPerSquareCentimeter => value * 1e10,

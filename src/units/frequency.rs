@@ -244,16 +244,16 @@ impl<T: Number> crate::UnitOf<Frequency<T>> for FrequencyUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             FrequencyUnit::Hertz => value,
-            FrequencyUnit::Microhertz => value / T::from_f64(1000000.0),
-            FrequencyUnit::Millihertz => value / T::from_f64(1000.0),
+            FrequencyUnit::Microhertz => T::div_ratio(value, 1000000.0, 1.0),
+            FrequencyUnit::Millihertz => T::div_ratio(value, 1000.0, 1.0),
             FrequencyUnit::Kilohertz => value * T::from_f64(1000.0),
             FrequencyUnit::Megahertz => value * T::from_f64(1000000.0),
             FrequencyUnit::Gigahertz => value * T::from_f64(1e9),
             FrequencyUnit::Terahertz => value * T::from_f64(1e12),
             FrequencyUnit::RadianPerSecond => value * T::from_f64(0.15915494309189535),
-            FrequencyUnit::CyclePerMinute => value / T::from_f64(60.0),
-            FrequencyUnit::CyclePerHour => value / T::from_f64(3600.0),
-            FrequencyUnit::BeatPerMinute => value / T::from_f64(60.0),
+            FrequencyUnit::CyclePerMinute => T::div_ratio(value, 60.0, 1.0),
+            FrequencyUnit::CyclePerHour => T::div_ratio(value, 3600.0, 1.0),
+            FrequencyUnit::BeatPerMinute => T::div_ratio(value, 60.0, 1.0),
             FrequencyUnit::PerSecond => value,
         }
     }
@@ -264,10 +264,10 @@ impl<T: Number> crate::UnitOf<Frequency<T>> for FrequencyUnit {
             FrequencyUnit::Hertz => value,
             FrequencyUnit::Microhertz => value * T::from_f64(1000000.0),
             FrequencyUnit::Millihertz => value * T::from_f64(1000.0),
-            FrequencyUnit::Kilohertz => value / T::from_f64(1000.0),
-            FrequencyUnit::Megahertz => value / T::from_f64(1000000.0),
-            FrequencyUnit::Gigahertz => value / T::from_f64(1e9),
-            FrequencyUnit::Terahertz => value / T::from_f64(1e12),
+            FrequencyUnit::Kilohertz => T::div_ratio(value, 1000.0, 1.0),
+            FrequencyUnit::Megahertz => T::div_ratio(value, 1000000.0, 1.0),
+            FrequencyUnit::Gigahertz => T::div_ratio(value, 1000000000.0, 1.0),
+            FrequencyUnit::Terahertz => T::div_ratio(value, 1000000000000.0, 1.0),
             FrequencyUnit::RadianPerSecond => value / T::from_f64(0.15915494309189535),
             FrequencyUnit::CyclePerMinute => value * T::from_f64(60.0),
             FrequencyUnit::CyclePerHour => value * T::from_f64(3600.0),
@@ -312,7 +312,7 @@ impl<T: Number> Frequency<T> {
     /// A [`Frequency`] from a value in `µHz`.
     #[inline]
     pub fn from_microhertz(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µHz`.
@@ -324,7 +324,7 @@ impl<T: Number> Frequency<T> {
     /// A [`Frequency`] from a value in `mHz`.
     #[inline]
     pub fn from_millihertz(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mHz`.
@@ -342,7 +342,7 @@ impl<T: Number> Frequency<T> {
     /// The value in `kHz`.
     #[inline]
     pub fn as_kilohertz(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Frequency`] from a value in `MHz`.
@@ -354,7 +354,7 @@ impl<T: Number> Frequency<T> {
     /// The value in `MHz`.
     #[inline]
     pub fn as_megahertz(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Frequency`] from a value in `GHz`.
@@ -366,7 +366,7 @@ impl<T: Number> Frequency<T> {
     /// The value in `GHz`.
     #[inline]
     pub fn as_gigahertz(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Frequency`] from a value in `THz`.
@@ -378,7 +378,7 @@ impl<T: Number> Frequency<T> {
     /// The value in `THz`.
     #[inline]
     pub fn as_terahertz(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Frequency`] from a value in `rad/s`.
@@ -396,7 +396,7 @@ impl<T: Number> Frequency<T> {
     /// A [`Frequency`] from a value in `cpm`.
     #[inline]
     pub fn from_cycles_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `cpm`.
@@ -408,7 +408,7 @@ impl<T: Number> Frequency<T> {
     /// A [`Frequency`] from a value in `cph`.
     #[inline]
     pub fn from_cycles_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `cph`.
@@ -420,7 +420,7 @@ impl<T: Number> Frequency<T> {
     /// A [`Frequency`] from a value in `bpm`.
     #[inline]
     pub fn from_beats_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `bpm`.
@@ -449,16 +449,16 @@ impl Frequency<f64> {
     pub const fn const_new(value: f64, unit: FrequencyUnit) -> Self {
         Self(match unit {
             FrequencyUnit::Hertz => value,
-            FrequencyUnit::Microhertz => value / 1000000.0,
-            FrequencyUnit::Millihertz => value / 1000.0,
+            FrequencyUnit::Microhertz => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            FrequencyUnit::Millihertz => crate::conv::div_ratio(value, 1000.0, 1.0),
             FrequencyUnit::Kilohertz => value * 1000.0,
             FrequencyUnit::Megahertz => value * 1000000.0,
             FrequencyUnit::Gigahertz => value * 1e9,
             FrequencyUnit::Terahertz => value * 1e12,
             FrequencyUnit::RadianPerSecond => value * 0.15915494309189535,
-            FrequencyUnit::CyclePerMinute => value / 60.0,
-            FrequencyUnit::CyclePerHour => value / 3600.0,
-            FrequencyUnit::BeatPerMinute => value / 60.0,
+            FrequencyUnit::CyclePerMinute => crate::conv::div_ratio(value, 60.0, 1.0),
+            FrequencyUnit::CyclePerHour => crate::conv::div_ratio(value, 3600.0, 1.0),
+            FrequencyUnit::BeatPerMinute => crate::conv::div_ratio(value, 60.0, 1.0),
             FrequencyUnit::PerSecond => value,
         })
     }

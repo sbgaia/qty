@@ -117,7 +117,7 @@ impl<T: Number> crate::UnitOf<RatioChangeRate<T>> for RatioChangeRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            RatioChangeRateUnit::PercentPerSecond => value / T::from_f64(100.0),
+            RatioChangeRateUnit::PercentPerSecond => T::div_ratio(value, 100.0, 1.0),
             RatioChangeRateUnit::DecimalFractionPerSecond => value,
         }
     }
@@ -145,7 +145,7 @@ impl<T: Number> RatioChangeRate<T> {
     /// A [`RatioChangeRate`] from a value in `%/s`.
     #[inline]
     pub fn from_percents_per_second(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `%/s`.
@@ -173,7 +173,7 @@ impl RatioChangeRate<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: RatioChangeRateUnit) -> Self {
         Self(match unit {
-            RatioChangeRateUnit::PercentPerSecond => value / 100.0,
+            RatioChangeRateUnit::PercentPerSecond => crate::conv::div_ratio(value, 100.0, 1.0),
             RatioChangeRateUnit::DecimalFractionPerSecond => value,
         })
     }

@@ -648,11 +648,11 @@ impl<T: Number> crate::UnitOf<BitRate<T>> for BitRateUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             BitRateUnit::BitPerSecond => value,
-            BitRateUnit::KilobitPerSecond => value / T::from_f64(1000.0),
-            BitRateUnit::MegabitPerSecond => value / T::from_f64(1000000.0),
-            BitRateUnit::GigabitPerSecond => value / T::from_f64(1e9),
-            BitRateUnit::TerabitPerSecond => value / T::from_f64(1e12),
-            BitRateUnit::PetabitPerSecond => value / T::from_f64(1e15),
+            BitRateUnit::KilobitPerSecond => T::div_ratio(value, 1000.0, 1.0),
+            BitRateUnit::MegabitPerSecond => T::div_ratio(value, 1000000.0, 1.0),
+            BitRateUnit::GigabitPerSecond => T::div_ratio(value, 1000000000.0, 1.0),
+            BitRateUnit::TerabitPerSecond => T::div_ratio(value, 1000000000000.0, 1.0),
+            BitRateUnit::PetabitPerSecond => T::div_ratio(value, 1000000000000000.0, 1.0),
             BitRateUnit::ExabitPerSecond => value / T::from_f64(1e18),
             BitRateUnit::KibibitPerSecond => value * T::from_f64(0.0009765625),
             BitRateUnit::MebibitPerSecond => value * T::from_f64(9.5367431640625e-7),
@@ -661,11 +661,11 @@ impl<T: Number> crate::UnitOf<BitRate<T>> for BitRateUnit {
             BitRateUnit::PebibitPerSecond => value * T::from_ratio(1.0, 1125899906842624.0),
             BitRateUnit::ExbibitPerSecond => value * T::from_f64(8.673617379884035e-19),
             BitRateUnit::BytePerSecond => value * T::from_f64(0.125),
-            BitRateUnit::KilobytePerSecond => value / T::from_f64(8000.0),
-            BitRateUnit::MegabytePerSecond => value / T::from_f64(8000000.0),
-            BitRateUnit::GigabytePerSecond => value / T::from_f64(8e9),
-            BitRateUnit::TerabytePerSecond => value / T::from_f64(8e12),
-            BitRateUnit::PetabytePerSecond => value / T::from_f64(8e15),
+            BitRateUnit::KilobytePerSecond => T::div_ratio(value, 8000.0, 1.0),
+            BitRateUnit::MegabytePerSecond => T::div_ratio(value, 8000000.0, 1.0),
+            BitRateUnit::GigabytePerSecond => T::div_ratio(value, 8000000000.0, 1.0),
+            BitRateUnit::TerabytePerSecond => T::div_ratio(value, 8000000000000.0, 1.0),
+            BitRateUnit::PetabytePerSecond => T::div_ratio(value, 8000000000000000.0, 1.0),
             BitRateUnit::ExabytePerSecond => value / T::from_f64(8e18),
             BitRateUnit::KibibytePerSecond => value * T::from_f64(0.0001220703125),
             BitRateUnit::MebibytePerSecond => value * T::from_f64(1.1920928955078125e-7),
@@ -674,11 +674,11 @@ impl<T: Number> crate::UnitOf<BitRate<T>> for BitRateUnit {
             BitRateUnit::PebibytePerSecond => value * T::from_ratio(1.0, 9007199254740992.0),
             BitRateUnit::ExbibytePerSecond => value * T::from_f64(1.0842021724855044e-19),
             BitRateUnit::OctetPerSecond => value * T::from_f64(0.125),
-            BitRateUnit::KilooctetPerSecond => value / T::from_f64(8000.0),
-            BitRateUnit::MegaoctetPerSecond => value / T::from_f64(8000000.0),
-            BitRateUnit::GigaoctetPerSecond => value / T::from_f64(8e9),
-            BitRateUnit::TeraoctetPerSecond => value / T::from_f64(8e12),
-            BitRateUnit::PetaoctetPerSecond => value / T::from_f64(8e15),
+            BitRateUnit::KilooctetPerSecond => T::div_ratio(value, 8000.0, 1.0),
+            BitRateUnit::MegaoctetPerSecond => T::div_ratio(value, 8000000.0, 1.0),
+            BitRateUnit::GigaoctetPerSecond => T::div_ratio(value, 8000000000.0, 1.0),
+            BitRateUnit::TeraoctetPerSecond => T::div_ratio(value, 8000000000000.0, 1.0),
+            BitRateUnit::PetaoctetPerSecond => T::div_ratio(value, 8000000000000000.0, 1.0),
             BitRateUnit::ExaoctetPerSecond => value / T::from_f64(8e18),
             BitRateUnit::KibioctetPerSecond => value * T::from_f64(0.0001220703125),
             BitRateUnit::MebioctetPerSecond => value * T::from_f64(1.1920928955078125e-7),
@@ -731,7 +731,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `kbit/s`.
     #[inline]
     pub fn as_kilobits_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Mbit/s`.
@@ -743,7 +743,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Mbit/s`.
     #[inline]
     pub fn as_megabits_per_second(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Gbit/s`.
@@ -755,7 +755,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Gbit/s`.
     #[inline]
     pub fn as_gigabits_per_second(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Tbit/s`.
@@ -767,7 +767,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Tbit/s`.
     #[inline]
     pub fn as_terabits_per_second(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Pbit/s`.
@@ -779,7 +779,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Pbit/s`.
     #[inline]
     pub fn as_petabits_per_second(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Ebit/s`.
@@ -887,7 +887,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `kB/s`.
     #[inline]
     pub fn as_kilobytes_per_second(self) -> T {
-        self.0 / T::from_f64(8000.0)
+        T::div_ratio(self.0, 8000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `MB/s`.
@@ -899,7 +899,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `MB/s`.
     #[inline]
     pub fn as_megabytes_per_second(self) -> T {
-        self.0 / T::from_f64(8000000.0)
+        T::div_ratio(self.0, 8000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `GB/s`.
@@ -911,7 +911,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `GB/s`.
     #[inline]
     pub fn as_gigabytes_per_second(self) -> T {
-        self.0 / T::from_f64(8e9)
+        T::div_ratio(self.0, 8000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `TB/s`.
@@ -923,7 +923,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `TB/s`.
     #[inline]
     pub fn as_terabytes_per_second(self) -> T {
-        self.0 / T::from_f64(8e12)
+        T::div_ratio(self.0, 8000000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `PB/s`.
@@ -935,7 +935,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `PB/s`.
     #[inline]
     pub fn as_petabytes_per_second(self) -> T {
-        self.0 / T::from_f64(8e15)
+        T::div_ratio(self.0, 8000000000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `EB/s`.
@@ -1043,7 +1043,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `ko/s`.
     #[inline]
     pub fn as_kilooctets_per_second(self) -> T {
-        self.0 / T::from_f64(8000.0)
+        T::div_ratio(self.0, 8000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Mo/s`.
@@ -1055,7 +1055,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Mo/s`.
     #[inline]
     pub fn as_megaoctets_per_second(self) -> T {
-        self.0 / T::from_f64(8000000.0)
+        T::div_ratio(self.0, 8000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Go/s`.
@@ -1067,7 +1067,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Go/s`.
     #[inline]
     pub fn as_gigaoctets_per_second(self) -> T {
-        self.0 / T::from_f64(8e9)
+        T::div_ratio(self.0, 8000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `To/s`.
@@ -1079,7 +1079,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `To/s`.
     #[inline]
     pub fn as_teraoctets_per_second(self) -> T {
-        self.0 / T::from_f64(8e12)
+        T::div_ratio(self.0, 8000000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Po/s`.
@@ -1091,7 +1091,7 @@ impl<T: Number> BitRate<T> {
     /// The value in `Po/s`.
     #[inline]
     pub fn as_petaoctets_per_second(self) -> T {
-        self.0 / T::from_f64(8e15)
+        T::div_ratio(self.0, 8000000000000000.0, 1.0)
     }
 
     /// A [`BitRate`] from a value in `Eo/s`.

@@ -355,8 +355,10 @@ impl<T: Number> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotent
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricPotentialChangeRateUnit::VoltPerSecond => value,
-            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value / T::from_f64(1000000.0),
-            ElectricPotentialChangeRateUnit::MillivoltPerSecond => value / T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond => T::div_ratio(value, 1000.0, 1.0),
             ElectricPotentialChangeRateUnit::KilovoltPerSecond => value * T::from_f64(1000.0),
             ElectricPotentialChangeRateUnit::MegavoltPerSecond => value * T::from_f64(1000000.0),
             ElectricPotentialChangeRateUnit::VoltPerMicrosecond => value * T::from_f64(1000000.0),
@@ -364,14 +366,22 @@ impl<T: Number> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotent
             ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => value * T::from_f64(1000.0),
             ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => value * T::from_f64(1e9),
             ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => value * T::from_f64(1e12),
-            ElectricPotentialChangeRateUnit::VoltPerMinute => value / T::from_f64(60.0),
-            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value / T::from_f64(6e7),
-            ElectricPotentialChangeRateUnit::MillivoltPerMinute => value / T::from_f64(60000.0),
+            ElectricPotentialChangeRateUnit::VoltPerMinute => T::div_ratio(value, 60.0, 1.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => {
+                T::div_ratio(value, 60000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute => {
+                T::div_ratio(value, 60000.0, 1.0)
+            }
             ElectricPotentialChangeRateUnit::KilovoltPerMinute => T::mul_ratio(value, 50.0, 3.0),
             ElectricPotentialChangeRateUnit::MegavoltPerMinute => T::mul_ratio(value, 50000.0, 3.0),
-            ElectricPotentialChangeRateUnit::VoltPerHour => value / T::from_f64(3600.0),
-            ElectricPotentialChangeRateUnit::MicrovoltPerHour => value / T::from_f64(3.6e9),
-            ElectricPotentialChangeRateUnit::MillivoltPerHour => value / T::from_f64(3600000.0),
+            ElectricPotentialChangeRateUnit::VoltPerHour => T::div_ratio(value, 3600.0, 1.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour => {
+                T::div_ratio(value, 3600000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MillivoltPerHour => {
+                T::div_ratio(value, 3600000.0, 1.0)
+            }
             ElectricPotentialChangeRateUnit::KilovoltPerHour => T::mul_ratio(value, 5.0, 18.0),
             ElectricPotentialChangeRateUnit::MegavoltPerHour => T::mul_ratio(value, 2500.0, 9.0),
         }
@@ -383,13 +393,23 @@ impl<T: Number> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotent
             ElectricPotentialChangeRateUnit::VoltPerSecond => value,
             ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value * T::from_f64(1000000.0),
             ElectricPotentialChangeRateUnit::MillivoltPerSecond => value * T::from_f64(1000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerSecond => value / T::from_f64(1000.0),
-            ElectricPotentialChangeRateUnit::MegavoltPerSecond => value / T::from_f64(1000000.0),
-            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => value / T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerSecond => T::div_ratio(value, 1000.0, 1.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerSecond => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
             ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => value,
-            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => value / T::from_f64(1000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => value / T::from_f64(1e9),
-            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => value / T::from_f64(1e12),
+            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
             ElectricPotentialChangeRateUnit::VoltPerMinute => value * T::from_f64(60.0),
             ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value * T::from_f64(6e7),
             ElectricPotentialChangeRateUnit::MillivoltPerMinute => value * T::from_f64(60000.0),
@@ -440,7 +460,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `µV/s`.
     #[inline]
     pub fn from_microvolts_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µV/s`.
@@ -452,7 +472,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `mV/s`.
     #[inline]
     pub fn from_millivolts_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mV/s`.
@@ -470,7 +490,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// The value in `kV/s`.
     #[inline]
     pub fn as_kilovolts_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `MV/s`.
@@ -482,7 +502,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// The value in `MV/s`.
     #[inline]
     pub fn as_megavolts_per_second(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `V/μs`.
@@ -494,7 +514,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// The value in `V/μs`.
     #[inline]
     pub fn as_volts_per_microsecond(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `µV/μs`.
@@ -518,7 +538,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// The value in `mV/μs`.
     #[inline]
     pub fn as_millivolts_per_microsecond(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `kV/μs`.
@@ -530,7 +550,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// The value in `kV/μs`.
     #[inline]
     pub fn as_kilovolts_per_microsecond(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `MV/μs`.
@@ -542,13 +562,13 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// The value in `MV/μs`.
     #[inline]
     pub fn as_megavolts_per_microsecond(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `V/min`.
     #[inline]
     pub fn from_volts_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `V/min`.
@@ -560,7 +580,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `µV/min`.
     #[inline]
     pub fn from_microvolts_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(6e7))
+        Self(T::div_ratio(value, 60000000.0, 1.0))
     }
 
     /// The value in `µV/min`.
@@ -572,7 +592,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `mV/min`.
     #[inline]
     pub fn from_millivolts_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60000.0))
+        Self(T::div_ratio(value, 60000.0, 1.0))
     }
 
     /// The value in `mV/min`.
@@ -608,7 +628,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `V/h`.
     #[inline]
     pub fn from_volts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `V/h`.
@@ -620,7 +640,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `µV/h`.
     #[inline]
     pub fn from_microvolts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3.6e9))
+        Self(T::div_ratio(value, 3600000000.0, 1.0))
     }
 
     /// The value in `µV/h`.
@@ -632,7 +652,7 @@ impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `mV/h`.
     #[inline]
     pub fn from_millivolts_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600000.0))
+        Self(T::div_ratio(value, 3600000.0, 1.0))
     }
 
     /// The value in `mV/h`.
@@ -673,8 +693,12 @@ impl ElectricPotentialChangeRate<f64> {
     pub const fn const_new(value: f64, unit: ElectricPotentialChangeRateUnit) -> Self {
         Self(match unit {
             ElectricPotentialChangeRateUnit::VoltPerSecond => value,
-            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value / 1000000.0,
-            ElectricPotentialChangeRateUnit::MillivoltPerSecond => value / 1000.0,
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
             ElectricPotentialChangeRateUnit::KilovoltPerSecond => value * 1000.0,
             ElectricPotentialChangeRateUnit::MegavoltPerSecond => value * 1000000.0,
             ElectricPotentialChangeRateUnit::VoltPerMicrosecond => value * 1000000.0,
@@ -682,16 +706,36 @@ impl ElectricPotentialChangeRate<f64> {
             ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => value * 1000.0,
             ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => value * 1e9,
             ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => value * 1e12,
-            ElectricPotentialChangeRateUnit::VoltPerMinute => value / 60.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value / 6e7,
-            ElectricPotentialChangeRateUnit::MillivoltPerMinute => value / 60000.0,
-            ElectricPotentialChangeRateUnit::KilovoltPerMinute => value * 16.666666666666668,
-            ElectricPotentialChangeRateUnit::MegavoltPerMinute => value * 16666.666666666668,
-            ElectricPotentialChangeRateUnit::VoltPerHour => value / 3600.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerHour => value / 3.6e9,
-            ElectricPotentialChangeRateUnit::MillivoltPerHour => value / 3600000.0,
-            ElectricPotentialChangeRateUnit::KilovoltPerHour => value * 0.2777777777777778,
-            ElectricPotentialChangeRateUnit::MegavoltPerHour => value * 277.77777777777777,
+            ElectricPotentialChangeRateUnit::VoltPerMinute => {
+                crate::conv::div_ratio(value, 60.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => {
+                crate::conv::div_ratio(value, 60000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute => {
+                crate::conv::div_ratio(value, 60000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
+                crate::conv::mul_ratio(value, 50.0, 3.0)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
+                crate::conv::mul_ratio(value, 50000.0, 3.0)
+            }
+            ElectricPotentialChangeRateUnit::VoltPerHour => {
+                crate::conv::div_ratio(value, 3600.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour => {
+                crate::conv::div_ratio(value, 3600000000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::MillivoltPerHour => {
+                crate::conv::div_ratio(value, 3600000.0, 1.0)
+            }
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
+                crate::conv::mul_ratio(value, 5.0, 18.0)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
+                crate::conv::mul_ratio(value, 2500.0, 9.0)
+            }
         })
     }
 }

@@ -166,7 +166,9 @@ impl<T: Number> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsum
                 T::div_ratio(value, 50000000.0, 1765197.0)
             }
             SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => value,
-            SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => value / T::from_f64(1000.0),
+            SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
         }
     }
 }
@@ -234,7 +236,7 @@ impl<T: Number> SpecificFuelConsumption<T> {
     /// The value in `kg/(kN·s)`.
     #[inline]
     pub fn as_kilograms_per_kilonewton_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 }
 
@@ -244,8 +246,12 @@ impl SpecificFuelConsumption<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: SpecificFuelConsumptionUnit) -> Self {
         Self(match unit {
-            SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => value * 28.325450360498007,
-            SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour => value * 28.325450360498007,
+            SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => {
+                crate::conv::mul_ratio(value, 50000000.0, 1765197.0)
+            }
+            SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour => {
+                crate::conv::mul_ratio(value, 50000000.0, 1765197.0)
+            }
             SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => value,
             SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => value * 1000.0,
         })

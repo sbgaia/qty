@@ -134,7 +134,7 @@ impl<T: Number> crate::UnitOf<Molality<T>> for MolalityUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             MolalityUnit::MolePerKilogram => value,
-            MolalityUnit::MillimolePerKilogram => value / T::from_f64(1000.0),
+            MolalityUnit::MillimolePerKilogram => T::div_ratio(value, 1000.0, 1.0),
             MolalityUnit::MolePerGram => value * T::from_f64(1000.0),
         }
     }
@@ -144,7 +144,7 @@ impl<T: Number> crate::UnitOf<Molality<T>> for MolalityUnit {
         match self {
             MolalityUnit::MolePerKilogram => value,
             MolalityUnit::MillimolePerKilogram => value * T::from_f64(1000.0),
-            MolalityUnit::MolePerGram => value / T::from_f64(1000.0),
+            MolalityUnit::MolePerGram => T::div_ratio(value, 1000.0, 1.0),
         }
     }
 }
@@ -179,7 +179,7 @@ impl<T: Number> Molality<T> {
     /// A [`Molality`] from a value in `mmol/kg`.
     #[inline]
     pub fn from_millimoles_per_kilogram(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mmol/kg`.
@@ -197,7 +197,7 @@ impl<T: Number> Molality<T> {
     /// The value in `mol/g`.
     #[inline]
     pub fn as_moles_per_gram(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 }
 
@@ -208,7 +208,7 @@ impl Molality<f64> {
     pub const fn const_new(value: f64, unit: MolalityUnit) -> Self {
         Self(match unit {
             MolalityUnit::MolePerKilogram => value,
-            MolalityUnit::MillimolePerKilogram => value / 1000.0,
+            MolalityUnit::MillimolePerKilogram => crate::conv::div_ratio(value, 1000.0, 1.0),
             MolalityUnit::MolePerGram => value * 1000.0,
         })
     }

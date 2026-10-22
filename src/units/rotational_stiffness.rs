@@ -625,24 +625,32 @@ impl<T: Number> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUni
             RotationalStiffnessUnit::MeganewtonMeterPerDegree => {
                 value * T::from_f64(5.729577951308232e7)
             }
-            RotationalStiffnessUnit::NewtonMillimeterPerRadian => value / T::from_f64(1000.0),
-            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => value / T::from_f64(1e12),
-            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => value / T::from_f64(1e9),
+            RotationalStiffnessUnit::NewtonMillimeterPerRadian => T::div_ratio(value, 1000.0, 1.0),
+            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
             RotationalStiffnessUnit::MillinewtonMillimeterPerRadian => {
-                value / T::from_f64(1000000.0)
+                T::div_ratio(value, 1000000.0, 1.0)
             }
             RotationalStiffnessUnit::CentinewtonMillimeterPerRadian => {
-                value / T::from_f64(100000.0)
+                T::div_ratio(value, 100000.0, 1.0)
             }
-            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => value / T::from_f64(10000.0),
-            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => value / T::from_f64(100.0),
+            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => {
+                T::div_ratio(value, 10000.0, 1.0)
+            }
+            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => {
+                T::div_ratio(value, 100.0, 1.0)
+            }
             RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
             RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value * T::from_f64(1000.0),
             RotationalStiffnessUnit::PoundForceFeetPerRadian => {
                 T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
             RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
-                value * T::from_f64(1355.8179483314004)
+                T::mul_ratio(value, 3389544870828501.0, 2500000000000.0)
             }
         }
     }
@@ -651,8 +659,10 @@ impl<T: Number> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUni
     fn value_from_base(self, value: T) -> T {
         match self {
             RotationalStiffnessUnit::NewtonMeterPerRadian => value,
-            RotationalStiffnessUnit::KilonewtonMeterPerRadian => value / T::from_f64(1000.0),
-            RotationalStiffnessUnit::MeganewtonMeterPerRadian => value / T::from_f64(1000000.0),
+            RotationalStiffnessUnit::KilonewtonMeterPerRadian => T::div_ratio(value, 1000.0, 1.0),
+            RotationalStiffnessUnit::MeganewtonMeterPerRadian => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
             RotationalStiffnessUnit::PoundForceFootPerDegrees => {
                 value / T::from_f64(77.68264622747556)
             }
@@ -723,12 +733,14 @@ impl<T: Number> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUni
             RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => value * T::from_f64(10000.0),
             RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => value * T::from_f64(100.0),
             RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
-            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value / T::from_f64(1000.0),
+            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
             RotationalStiffnessUnit::PoundForceFeetPerRadian => {
                 T::div_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
             RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
-                value / T::from_f64(1355.8179483314004)
+                T::div_ratio(value, 3389544870828501.0, 2500000000000.0)
             }
         }
     }
@@ -771,7 +783,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// The value in `kN·m/rad`.
     #[inline]
     pub fn as_kilonewton_meters_per_radian(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`RotationalStiffness`] from a value in `MN·m/rad`.
@@ -783,7 +795,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// The value in `MN·m/rad`.
     #[inline]
     pub fn as_meganewton_meters_per_radian(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`RotationalStiffness`] from a value in `lbf·ft/deg`.
@@ -1029,7 +1041,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `N·mm/rad`.
     #[inline]
     pub fn from_newton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `N·mm/rad`.
@@ -1041,7 +1053,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `nN·mm/rad`.
     #[inline]
     pub fn from_nanonewton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `nN·mm/rad`.
@@ -1053,7 +1065,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `µN·mm/rad`.
     #[inline]
     pub fn from_micronewton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µN·mm/rad`.
@@ -1065,7 +1077,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `mN·mm/rad`.
     #[inline]
     pub fn from_millinewton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mN·mm/rad`.
@@ -1077,7 +1089,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `cN·mm/rad`.
     #[inline]
     pub fn from_centinewton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `cN·mm/rad`.
@@ -1089,7 +1101,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `dN·mm/rad`.
     #[inline]
     pub fn from_decinewton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `dN·mm/rad`.
@@ -1101,7 +1113,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `daN·mm/rad`.
     #[inline]
     pub fn from_decanewton_millimeters_per_radian(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `daN·mm/rad`.
@@ -1131,7 +1143,7 @@ impl<T: Number> RotationalStiffness<T> {
     /// The value in `MN·mm/rad`.
     #[inline]
     pub fn as_meganewton_millimeters_per_radian(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`RotationalStiffness`] from a value in `lbf·ft/rad`.
@@ -1149,13 +1161,13 @@ impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `kipf·ft/rad`.
     #[inline]
     pub fn from_kilopound_force_feet_per_radian(value: T) -> Self {
-        Self(value * T::from_f64(1355.8179483314004))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000000.0))
     }
 
     /// The value in `kipf·ft/rad`.
     #[inline]
     pub fn as_kilopound_force_feet_per_radian(self) -> T {
-        self.0 / T::from_f64(1355.8179483314004)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000000.0)
     }
 }
 
@@ -1192,17 +1204,35 @@ impl RotationalStiffness<f64> {
             RotationalStiffnessUnit::DecanewtonMeterPerDegree => value * 572.9577951308232,
             RotationalStiffnessUnit::KilonewtonMeterPerDegree => value * 57295.77951308232,
             RotationalStiffnessUnit::MeganewtonMeterPerDegree => value * 5.729577951308232e7,
-            RotationalStiffnessUnit::NewtonMillimeterPerRadian => value / 1000.0,
-            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => value / 1e12,
-            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => value / 1e9,
-            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian => value / 1000000.0,
-            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian => value / 100000.0,
-            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => value / 10000.0,
-            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => value / 100.0,
+            RotationalStiffnessUnit::NewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
+            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
             RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
             RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value * 1000.0,
-            RotationalStiffnessUnit::PoundForceFeetPerRadian => value * 1.3558179483314003,
-            RotationalStiffnessUnit::KilopoundForceFootPerRadian => value * 1355.8179483314004,
+            RotationalStiffnessUnit::PoundForceFeetPerRadian => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
+            RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000000.0)
+            }
         })
     }
 }

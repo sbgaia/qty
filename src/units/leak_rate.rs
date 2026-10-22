@@ -147,9 +147,9 @@ impl<T: Number> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             LeakRateUnit::PascalCubicMeterPerSecond => value,
-            LeakRateUnit::MillibarLiterPerSecond => value / T::from_f64(10.0),
-            LeakRateUnit::TorrLiterPerSecond => value / T::from_f64(7.5),
-            LeakRateUnit::AtmCubicCentimeterPerSecond => value * T::from_f64(0.101325),
+            LeakRateUnit::MillibarLiterPerSecond => T::div_ratio(value, 10.0, 1.0),
+            LeakRateUnit::TorrLiterPerSecond => T::div_ratio(value, 15.0, 2.0),
+            LeakRateUnit::AtmCubicCentimeterPerSecond => T::mul_ratio(value, 4053.0, 40000.0),
         }
     }
 
@@ -159,7 +159,7 @@ impl<T: Number> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
             LeakRateUnit::PascalCubicMeterPerSecond => value,
             LeakRateUnit::MillibarLiterPerSecond => value * T::from_f64(10.0),
             LeakRateUnit::TorrLiterPerSecond => value * T::from_f64(7.5),
-            LeakRateUnit::AtmCubicCentimeterPerSecond => value / T::from_f64(0.101325),
+            LeakRateUnit::AtmCubicCentimeterPerSecond => T::div_ratio(value, 4053.0, 40000.0),
         }
     }
 }
@@ -190,7 +190,7 @@ impl<T: Number> LeakRate<T> {
     /// A [`LeakRate`] from a value in `mbar·l/s`.
     #[inline]
     pub fn from_millibar_liters_per_second(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `mbar·l/s`.
@@ -202,7 +202,7 @@ impl<T: Number> LeakRate<T> {
     /// A [`LeakRate`] from a value in `Torr·l/s`.
     #[inline]
     pub fn from_torr_liters_per_second(value: T) -> Self {
-        Self(value / T::from_f64(7.5))
+        Self(T::div_ratio(value, 15.0, 2.0))
     }
 
     /// The value in `Torr·l/s`.
@@ -214,13 +214,13 @@ impl<T: Number> LeakRate<T> {
     /// A [`LeakRate`] from a value in `atm·cm³/s`.
     #[inline]
     pub fn from_atm_cubic_centimeters_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.101325))
+        Self(T::mul_ratio(value, 4053.0, 40000.0))
     }
 
     /// The value in `atm·cm³/s`.
     #[inline]
     pub fn as_atm_cubic_centimeters_per_second(self) -> T {
-        self.0 / T::from_f64(0.101325)
+        T::div_ratio(self.0, 4053.0, 40000.0)
     }
 }
 
@@ -231,9 +231,11 @@ impl LeakRate<f64> {
     pub const fn const_new(value: f64, unit: LeakRateUnit) -> Self {
         Self(match unit {
             LeakRateUnit::PascalCubicMeterPerSecond => value,
-            LeakRateUnit::MillibarLiterPerSecond => value / 10.0,
-            LeakRateUnit::TorrLiterPerSecond => value / 7.5,
-            LeakRateUnit::AtmCubicCentimeterPerSecond => value * 0.101325,
+            LeakRateUnit::MillibarLiterPerSecond => crate::conv::div_ratio(value, 10.0, 1.0),
+            LeakRateUnit::TorrLiterPerSecond => crate::conv::div_ratio(value, 15.0, 2.0),
+            LeakRateUnit::AtmCubicCentimeterPerSecond => {
+                crate::conv::mul_ratio(value, 4053.0, 40000.0)
+            }
         })
     }
 }

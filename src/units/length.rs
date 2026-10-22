@@ -665,36 +665,36 @@ impl<T: Number> crate::UnitOf<Length<T>> for LengthUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             LengthUnit::Meter => value,
-            LengthUnit::Femtometer => value / T::from_f64(1e15),
-            LengthUnit::Picometer => value / T::from_f64(1e12),
-            LengthUnit::Nanometer => value / T::from_f64(1e9),
-            LengthUnit::Micrometer => value / T::from_f64(1000000.0),
-            LengthUnit::Millimeter => value / T::from_f64(1000.0),
-            LengthUnit::Centimeter => value / T::from_f64(100.0),
-            LengthUnit::Decimeter => value / T::from_f64(10.0),
+            LengthUnit::Femtometer => T::div_ratio(value, 1000000000000000.0, 1.0),
+            LengthUnit::Picometer => T::div_ratio(value, 1000000000000.0, 1.0),
+            LengthUnit::Nanometer => T::div_ratio(value, 1000000000.0, 1.0),
+            LengthUnit::Micrometer => T::div_ratio(value, 1000000.0, 1.0),
+            LengthUnit::Millimeter => T::div_ratio(value, 1000.0, 1.0),
+            LengthUnit::Centimeter => T::div_ratio(value, 100.0, 1.0),
+            LengthUnit::Decimeter => T::div_ratio(value, 10.0, 1.0),
             LengthUnit::Decameter => value * T::from_f64(10.0),
             LengthUnit::Hectometer => value * T::from_f64(100.0),
             LengthUnit::Kilometer => value * T::from_f64(1000.0),
             LengthUnit::Megameter => value * T::from_f64(1000000.0),
             LengthUnit::Gigameter => value * T::from_f64(1e9),
-            LengthUnit::Mile => value * T::from_f64(1609.344),
-            LengthUnit::Yard => value * T::from_f64(0.9144),
-            LengthUnit::Kiloyard => value * T::from_f64(914.4),
-            LengthUnit::Foot => value * T::from_f64(0.3048),
-            LengthUnit::Kilofoot => value * T::from_f64(304.8),
+            LengthUnit::Mile => T::mul_ratio(value, 201168.0, 125.0),
+            LengthUnit::Yard => T::mul_ratio(value, 1143.0, 1250.0),
+            LengthUnit::Kiloyard => T::mul_ratio(value, 4572.0, 5.0),
+            LengthUnit::Foot => T::mul_ratio(value, 381.0, 1250.0),
+            LengthUnit::Kilofoot => T::mul_ratio(value, 1524.0, 5.0),
             LengthUnit::UsSurveyFoot => T::mul_ratio(value, 1200.0, 3937.0),
-            LengthUnit::Inch => value * T::from_f64(0.0254),
-            LengthUnit::Mil => value * T::from_f64(2.54e-5),
+            LengthUnit::Inch => T::mul_ratio(value, 127.0, 5000.0),
+            LengthUnit::Mil => T::mul_ratio(value, 127.0, 5000000.0),
             LengthUnit::NauticalMile => value * T::from_f64(1852.0),
-            LengthUnit::Fathom => value * T::from_f64(1.8288),
-            LengthUnit::Shackle => value * T::from_f64(27.432),
-            LengthUnit::Microinch => value * T::from_f64(2.54e-8),
+            LengthUnit::Fathom => T::mul_ratio(value, 1143.0, 625.0),
+            LengthUnit::Shackle => T::mul_ratio(value, 3429.0, 125.0),
+            LengthUnit::Microinch => T::mul_ratio(value, 127.0, 5000000000.0),
             LengthUnit::PrinterPoint => T::mul_ratio(value, 127.0, 361350.0),
             LengthUnit::DtpPoint => T::mul_ratio(value, 127.0, 360000.0),
             LengthUnit::PrinterPica => T::mul_ratio(value, 254.0, 60225.0),
             LengthUnit::DtpPica => T::mul_ratio(value, 127.0, 30000.0),
             LengthUnit::Twip => T::mul_ratio(value, 127.0, 7200000.0),
-            LengthUnit::Hand => value * T::from_f64(0.1016),
+            LengthUnit::Hand => T::mul_ratio(value, 127.0, 1250.0),
             LengthUnit::AstronomicalUnit => value * T::from_f64(1.495978707e11),
             LengthUnit::Parsec => value * T::from_f64(3.08567758128e16),
             LengthUnit::Kiloparsec => value * T::from_f64(3.08567758128e19),
@@ -703,9 +703,9 @@ impl<T: Number> crate::UnitOf<Length<T>> for LengthUnit {
             LengthUnit::KilolightYear => value * T::from_f64(9.46073047258e18),
             LengthUnit::MegalightYear => value * T::from_f64(9.46073047258e21),
             LengthUnit::SolarRadius => value * T::from_f64(6.957e8),
-            LengthUnit::Chain => value * T::from_f64(20.1168),
-            LengthUnit::Angstrom => value / T::from_f64(1e10),
-            LengthUnit::DataMile => value * T::from_f64(1828.8),
+            LengthUnit::Chain => T::mul_ratio(value, 12573.0, 625.0),
+            LengthUnit::Angstrom => T::div_ratio(value, 10000000000.0, 1.0),
+            LengthUnit::DataMile => T::mul_ratio(value, 9144.0, 5.0),
         }
     }
 
@@ -720,40 +720,40 @@ impl<T: Number> crate::UnitOf<Length<T>> for LengthUnit {
             LengthUnit::Millimeter => value * T::from_f64(1000.0),
             LengthUnit::Centimeter => value * T::from_f64(100.0),
             LengthUnit::Decimeter => value * T::from_f64(10.0),
-            LengthUnit::Decameter => value / T::from_f64(10.0),
-            LengthUnit::Hectometer => value / T::from_f64(100.0),
-            LengthUnit::Kilometer => value / T::from_f64(1000.0),
-            LengthUnit::Megameter => value / T::from_f64(1000000.0),
-            LengthUnit::Gigameter => value / T::from_f64(1e9),
-            LengthUnit::Mile => value / T::from_f64(1609.344),
-            LengthUnit::Yard => value / T::from_f64(0.9144),
-            LengthUnit::Kiloyard => value / T::from_f64(914.4),
-            LengthUnit::Foot => value / T::from_f64(0.3048),
-            LengthUnit::Kilofoot => value / T::from_f64(304.8),
+            LengthUnit::Decameter => T::div_ratio(value, 10.0, 1.0),
+            LengthUnit::Hectometer => T::div_ratio(value, 100.0, 1.0),
+            LengthUnit::Kilometer => T::div_ratio(value, 1000.0, 1.0),
+            LengthUnit::Megameter => T::div_ratio(value, 1000000.0, 1.0),
+            LengthUnit::Gigameter => T::div_ratio(value, 1000000000.0, 1.0),
+            LengthUnit::Mile => T::div_ratio(value, 201168.0, 125.0),
+            LengthUnit::Yard => T::div_ratio(value, 1143.0, 1250.0),
+            LengthUnit::Kiloyard => T::div_ratio(value, 4572.0, 5.0),
+            LengthUnit::Foot => T::div_ratio(value, 381.0, 1250.0),
+            LengthUnit::Kilofoot => T::div_ratio(value, 1524.0, 5.0),
             LengthUnit::UsSurveyFoot => T::div_ratio(value, 1200.0, 3937.0),
-            LengthUnit::Inch => value / T::from_f64(0.0254),
-            LengthUnit::Mil => value / T::from_f64(2.54e-5),
-            LengthUnit::NauticalMile => value / T::from_f64(1852.0),
-            LengthUnit::Fathom => value / T::from_f64(1.8288),
-            LengthUnit::Shackle => value / T::from_f64(27.432),
-            LengthUnit::Microinch => value / T::from_f64(2.54e-8),
+            LengthUnit::Inch => T::div_ratio(value, 127.0, 5000.0),
+            LengthUnit::Mil => T::div_ratio(value, 127.0, 5000000.0),
+            LengthUnit::NauticalMile => T::div_ratio(value, 1852.0, 1.0),
+            LengthUnit::Fathom => T::div_ratio(value, 1143.0, 625.0),
+            LengthUnit::Shackle => T::div_ratio(value, 3429.0, 125.0),
+            LengthUnit::Microinch => T::div_ratio(value, 127.0, 5000000000.0),
             LengthUnit::PrinterPoint => T::div_ratio(value, 127.0, 361350.0),
             LengthUnit::DtpPoint => T::div_ratio(value, 127.0, 360000.0),
             LengthUnit::PrinterPica => T::div_ratio(value, 254.0, 60225.0),
             LengthUnit::DtpPica => T::div_ratio(value, 127.0, 30000.0),
             LengthUnit::Twip => T::div_ratio(value, 127.0, 7200000.0),
-            LengthUnit::Hand => value / T::from_f64(0.1016),
-            LengthUnit::AstronomicalUnit => value / T::from_f64(1.495978707e11),
+            LengthUnit::Hand => T::div_ratio(value, 127.0, 1250.0),
+            LengthUnit::AstronomicalUnit => T::div_ratio(value, 149597870700.0, 1.0),
             LengthUnit::Parsec => value / T::from_f64(3.08567758128e16),
             LengthUnit::Kiloparsec => value / T::from_f64(3.08567758128e19),
             LengthUnit::Megaparsec => value / T::from_f64(3.08567758128e22),
             LengthUnit::LightYear => value / T::from_f64(9.46073047258e15),
             LengthUnit::KilolightYear => value / T::from_f64(9.46073047258e18),
             LengthUnit::MegalightYear => value / T::from_f64(9.46073047258e21),
-            LengthUnit::SolarRadius => value / T::from_f64(6.957e8),
-            LengthUnit::Chain => value / T::from_f64(20.1168),
+            LengthUnit::SolarRadius => T::div_ratio(value, 695700000.0, 1.0),
+            LengthUnit::Chain => T::div_ratio(value, 12573.0, 625.0),
             LengthUnit::Angstrom => value * T::from_f64(1e10),
-            LengthUnit::DataMile => value / T::from_f64(1828.8),
+            LengthUnit::DataMile => T::div_ratio(value, 9144.0, 5.0),
         }
     }
 }
@@ -795,7 +795,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `fm`.
     #[inline]
     pub fn from_femtometers(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fm`.
@@ -807,7 +807,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `pm`.
     #[inline]
     pub fn from_picometers(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pm`.
@@ -819,7 +819,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `nm`.
     #[inline]
     pub fn from_nanometers(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nm`.
@@ -831,7 +831,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `µm`.
     #[inline]
     pub fn from_micrometers(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µm`.
@@ -843,7 +843,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `mm`.
     #[inline]
     pub fn from_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mm`.
@@ -855,7 +855,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `cm`.
     #[inline]
     pub fn from_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cm`.
@@ -867,7 +867,7 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `dm`.
     #[inline]
     pub fn from_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dm`.
@@ -885,7 +885,7 @@ impl<T: Number> Length<T> {
     /// The value in `dam`.
     #[inline]
     pub fn as_decameters(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Length`] from a value in `hm`.
@@ -897,7 +897,7 @@ impl<T: Number> Length<T> {
     /// The value in `hm`.
     #[inline]
     pub fn as_hectometers(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`Length`] from a value in `km`.
@@ -909,7 +909,7 @@ impl<T: Number> Length<T> {
     /// The value in `km`.
     #[inline]
     pub fn as_kilometers(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Length`] from a value in `Mm`.
@@ -921,7 +921,7 @@ impl<T: Number> Length<T> {
     /// The value in `Mm`.
     #[inline]
     pub fn as_megameters(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Length`] from a value in `Gm`.
@@ -933,67 +933,67 @@ impl<T: Number> Length<T> {
     /// The value in `Gm`.
     #[inline]
     pub fn as_gigameters(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Length`] from a value in `mi`.
     #[inline]
     pub fn from_miles(value: T) -> Self {
-        Self(value * T::from_f64(1609.344))
+        Self(T::mul_ratio(value, 201168.0, 125.0))
     }
 
     /// The value in `mi`.
     #[inline]
     pub fn as_miles(self) -> T {
-        self.0 / T::from_f64(1609.344)
+        T::div_ratio(self.0, 201168.0, 125.0)
     }
 
     /// A [`Length`] from a value in `yd`.
     #[inline]
     pub fn from_yards(value: T) -> Self {
-        Self(value * T::from_f64(0.9144))
+        Self(T::mul_ratio(value, 1143.0, 1250.0))
     }
 
     /// The value in `yd`.
     #[inline]
     pub fn as_yards(self) -> T {
-        self.0 / T::from_f64(0.9144)
+        T::div_ratio(self.0, 1143.0, 1250.0)
     }
 
     /// A [`Length`] from a value in `kyd`.
     #[inline]
     pub fn from_kiloyards(value: T) -> Self {
-        Self(value * T::from_f64(914.4))
+        Self(T::mul_ratio(value, 4572.0, 5.0))
     }
 
     /// The value in `kyd`.
     #[inline]
     pub fn as_kiloyards(self) -> T {
-        self.0 / T::from_f64(914.4)
+        T::div_ratio(self.0, 4572.0, 5.0)
     }
 
     /// A [`Length`] from a value in `ft`.
     #[inline]
     pub fn from_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.3048))
+        Self(T::mul_ratio(value, 381.0, 1250.0))
     }
 
     /// The value in `ft`.
     #[inline]
     pub fn as_feet(self) -> T {
-        self.0 / T::from_f64(0.3048)
+        T::div_ratio(self.0, 381.0, 1250.0)
     }
 
     /// A [`Length`] from a value in `kft`.
     #[inline]
     pub fn from_kilofeet(value: T) -> Self {
-        Self(value * T::from_f64(304.8))
+        Self(T::mul_ratio(value, 1524.0, 5.0))
     }
 
     /// The value in `kft`.
     #[inline]
     pub fn as_kilofeet(self) -> T {
-        self.0 / T::from_f64(304.8)
+        T::div_ratio(self.0, 1524.0, 5.0)
     }
 
     /// A [`Length`] from a value in `ftUS`.
@@ -1011,25 +1011,25 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `in`.
     #[inline]
     pub fn from_inches(value: T) -> Self {
-        Self(value * T::from_f64(0.0254))
+        Self(T::mul_ratio(value, 127.0, 5000.0))
     }
 
     /// The value in `in`.
     #[inline]
     pub fn as_inches(self) -> T {
-        self.0 / T::from_f64(0.0254)
+        T::div_ratio(self.0, 127.0, 5000.0)
     }
 
     /// A [`Length`] from a value in `mil`.
     #[inline]
     pub fn from_mils(value: T) -> Self {
-        Self(value * T::from_f64(2.54e-5))
+        Self(T::mul_ratio(value, 127.0, 5000000.0))
     }
 
     /// The value in `mil`.
     #[inline]
     pub fn as_mils(self) -> T {
-        self.0 / T::from_f64(2.54e-5)
+        T::div_ratio(self.0, 127.0, 5000000.0)
     }
 
     /// A [`Length`] from a value in `NM`.
@@ -1041,43 +1041,43 @@ impl<T: Number> Length<T> {
     /// The value in `NM`.
     #[inline]
     pub fn as_nautical_miles(self) -> T {
-        self.0 / T::from_f64(1852.0)
+        T::div_ratio(self.0, 1852.0, 1.0)
     }
 
     /// A [`Length`] from a value in `fathom`.
     #[inline]
     pub fn from_fathoms(value: T) -> Self {
-        Self(value * T::from_f64(1.8288))
+        Self(T::mul_ratio(value, 1143.0, 625.0))
     }
 
     /// The value in `fathom`.
     #[inline]
     pub fn as_fathoms(self) -> T {
-        self.0 / T::from_f64(1.8288)
+        T::div_ratio(self.0, 1143.0, 625.0)
     }
 
     /// A [`Length`] from a value in `shackle`.
     #[inline]
     pub fn from_shackles(value: T) -> Self {
-        Self(value * T::from_f64(27.432))
+        Self(T::mul_ratio(value, 3429.0, 125.0))
     }
 
     /// The value in `shackle`.
     #[inline]
     pub fn as_shackles(self) -> T {
-        self.0 / T::from_f64(27.432)
+        T::div_ratio(self.0, 3429.0, 125.0)
     }
 
     /// A [`Length`] from a value in `µin`.
     #[inline]
     pub fn from_microinches(value: T) -> Self {
-        Self(value * T::from_f64(2.54e-8))
+        Self(T::mul_ratio(value, 127.0, 5000000000.0))
     }
 
     /// The value in `µin`.
     #[inline]
     pub fn as_microinches(self) -> T {
-        self.0 / T::from_f64(2.54e-8)
+        T::div_ratio(self.0, 127.0, 5000000000.0)
     }
 
     /// A [`Length`] from a value in `pt`.
@@ -1143,13 +1143,13 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `h`.
     #[inline]
     pub fn from_hands(value: T) -> Self {
-        Self(value * T::from_f64(0.1016))
+        Self(T::mul_ratio(value, 127.0, 1250.0))
     }
 
     /// The value in `h`.
     #[inline]
     pub fn as_hands(self) -> T {
-        self.0 / T::from_f64(0.1016)
+        T::div_ratio(self.0, 127.0, 1250.0)
     }
 
     /// A [`Length`] from a value in `au`.
@@ -1161,7 +1161,7 @@ impl<T: Number> Length<T> {
     /// The value in `au`.
     #[inline]
     pub fn as_astronomical_units(self) -> T {
-        self.0 / T::from_f64(1.495978707e11)
+        T::div_ratio(self.0, 149597870700.0, 1.0)
     }
 
     /// A [`Length`] from a value in `pc`.
@@ -1245,25 +1245,25 @@ impl<T: Number> Length<T> {
     /// The value in `R⊙`.
     #[inline]
     pub fn as_solar_radiuses(self) -> T {
-        self.0 / T::from_f64(6.957e8)
+        T::div_ratio(self.0, 695700000.0, 1.0)
     }
 
     /// A [`Length`] from a value in `ch`.
     #[inline]
     pub fn from_chains(value: T) -> Self {
-        Self(value * T::from_f64(20.1168))
+        Self(T::mul_ratio(value, 12573.0, 625.0))
     }
 
     /// The value in `ch`.
     #[inline]
     pub fn as_chains(self) -> T {
-        self.0 / T::from_f64(20.1168)
+        T::div_ratio(self.0, 12573.0, 625.0)
     }
 
     /// A [`Length`] from a value in `Å`.
     #[inline]
     pub fn from_angstroms(value: T) -> Self {
-        Self(value / T::from_f64(1e10))
+        Self(T::div_ratio(value, 10000000000.0, 1.0))
     }
 
     /// The value in `Å`.
@@ -1275,13 +1275,13 @@ impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `DM`.
     #[inline]
     pub fn from_data_miles(value: T) -> Self {
-        Self(value * T::from_f64(1828.8))
+        Self(T::mul_ratio(value, 9144.0, 5.0))
     }
 
     /// The value in `DM`.
     #[inline]
     pub fn as_data_miles(self) -> T {
-        self.0 / T::from_f64(1828.8)
+        T::div_ratio(self.0, 9144.0, 5.0)
     }
 }
 
@@ -1292,36 +1292,36 @@ impl Length<f64> {
     pub const fn const_new(value: f64, unit: LengthUnit) -> Self {
         Self(match unit {
             LengthUnit::Meter => value,
-            LengthUnit::Femtometer => value / 1e15,
-            LengthUnit::Picometer => value / 1e12,
-            LengthUnit::Nanometer => value / 1e9,
-            LengthUnit::Micrometer => value / 1000000.0,
-            LengthUnit::Millimeter => value / 1000.0,
-            LengthUnit::Centimeter => value / 100.0,
-            LengthUnit::Decimeter => value / 10.0,
+            LengthUnit::Femtometer => crate::conv::div_ratio(value, 1000000000000000.0, 1.0),
+            LengthUnit::Picometer => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            LengthUnit::Nanometer => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            LengthUnit::Micrometer => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            LengthUnit::Millimeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            LengthUnit::Centimeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            LengthUnit::Decimeter => crate::conv::div_ratio(value, 10.0, 1.0),
             LengthUnit::Decameter => value * 10.0,
             LengthUnit::Hectometer => value * 100.0,
             LengthUnit::Kilometer => value * 1000.0,
             LengthUnit::Megameter => value * 1000000.0,
             LengthUnit::Gigameter => value * 1e9,
-            LengthUnit::Mile => value * 1609.344,
-            LengthUnit::Yard => value * 0.9144,
-            LengthUnit::Kiloyard => value * 914.4,
-            LengthUnit::Foot => value * 0.3048,
-            LengthUnit::Kilofoot => value * 304.8,
-            LengthUnit::UsSurveyFoot => value * 0.3048006096012192,
-            LengthUnit::Inch => value * 0.0254,
-            LengthUnit::Mil => value * 2.54e-5,
+            LengthUnit::Mile => crate::conv::mul_ratio(value, 201168.0, 125.0),
+            LengthUnit::Yard => crate::conv::mul_ratio(value, 1143.0, 1250.0),
+            LengthUnit::Kiloyard => crate::conv::mul_ratio(value, 4572.0, 5.0),
+            LengthUnit::Foot => crate::conv::mul_ratio(value, 381.0, 1250.0),
+            LengthUnit::Kilofoot => crate::conv::mul_ratio(value, 1524.0, 5.0),
+            LengthUnit::UsSurveyFoot => crate::conv::mul_ratio(value, 1200.0, 3937.0),
+            LengthUnit::Inch => crate::conv::mul_ratio(value, 127.0, 5000.0),
+            LengthUnit::Mil => crate::conv::mul_ratio(value, 127.0, 5000000.0),
             LengthUnit::NauticalMile => value * 1852.0,
-            LengthUnit::Fathom => value * 1.8288,
-            LengthUnit::Shackle => value * 27.432,
-            LengthUnit::Microinch => value * 2.54e-8,
-            LengthUnit::PrinterPoint => value * 0.00035145980351459805,
-            LengthUnit::DtpPoint => value * 0.00035277777777777776,
-            LengthUnit::PrinterPica => value * 0.004217517642175176,
-            LengthUnit::DtpPica => value * 0.004233333333333334,
-            LengthUnit::Twip => value * 1.763888888888889e-5,
-            LengthUnit::Hand => value * 0.1016,
+            LengthUnit::Fathom => crate::conv::mul_ratio(value, 1143.0, 625.0),
+            LengthUnit::Shackle => crate::conv::mul_ratio(value, 3429.0, 125.0),
+            LengthUnit::Microinch => crate::conv::mul_ratio(value, 127.0, 5000000000.0),
+            LengthUnit::PrinterPoint => crate::conv::mul_ratio(value, 127.0, 361350.0),
+            LengthUnit::DtpPoint => crate::conv::mul_ratio(value, 127.0, 360000.0),
+            LengthUnit::PrinterPica => crate::conv::mul_ratio(value, 254.0, 60225.0),
+            LengthUnit::DtpPica => crate::conv::mul_ratio(value, 127.0, 30000.0),
+            LengthUnit::Twip => crate::conv::mul_ratio(value, 127.0, 7200000.0),
+            LengthUnit::Hand => crate::conv::mul_ratio(value, 127.0, 1250.0),
             LengthUnit::AstronomicalUnit => value * 1.495978707e11,
             LengthUnit::Parsec => value * 3.08567758128e16,
             LengthUnit::Kiloparsec => value * 3.08567758128e19,
@@ -1330,9 +1330,9 @@ impl Length<f64> {
             LengthUnit::KilolightYear => value * 9.46073047258e18,
             LengthUnit::MegalightYear => value * 9.46073047258e21,
             LengthUnit::SolarRadius => value * 6.957e8,
-            LengthUnit::Chain => value * 20.1168,
-            LengthUnit::Angstrom => value / 1e10,
-            LengthUnit::DataMile => value * 1828.8,
+            LengthUnit::Chain => crate::conv::mul_ratio(value, 12573.0, 625.0),
+            LengthUnit::Angstrom => crate::conv::div_ratio(value, 10000000000.0, 1.0),
+            LengthUnit::DataMile => crate::conv::mul_ratio(value, 9144.0, 5.0),
         })
     }
 }

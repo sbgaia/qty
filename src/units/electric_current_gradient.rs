@@ -187,9 +187,9 @@ impl<T: Number> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGra
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricCurrentGradientUnit::AmperePerSecond => value,
-            ElectricCurrentGradientUnit::MilliamperePerSecond => value / T::from_f64(1000.0),
-            ElectricCurrentGradientUnit::AmperePerMinute => value / T::from_f64(60.0),
-            ElectricCurrentGradientUnit::MilliamperePerMinute => value / T::from_f64(60000.0),
+            ElectricCurrentGradientUnit::MilliamperePerSecond => T::div_ratio(value, 1000.0, 1.0),
+            ElectricCurrentGradientUnit::AmperePerMinute => T::div_ratio(value, 60.0, 1.0),
+            ElectricCurrentGradientUnit::MilliamperePerMinute => T::div_ratio(value, 60000.0, 1.0),
             ElectricCurrentGradientUnit::AmperePerMillisecond => value * T::from_f64(1000.0),
             ElectricCurrentGradientUnit::AmperePerMicrosecond => value * T::from_f64(1000000.0),
             ElectricCurrentGradientUnit::AmperePerNanosecond => value * T::from_f64(1e9),
@@ -203,9 +203,13 @@ impl<T: Number> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGra
             ElectricCurrentGradientUnit::MilliamperePerSecond => value * T::from_f64(1000.0),
             ElectricCurrentGradientUnit::AmperePerMinute => value * T::from_f64(60.0),
             ElectricCurrentGradientUnit::MilliamperePerMinute => value * T::from_f64(60000.0),
-            ElectricCurrentGradientUnit::AmperePerMillisecond => value / T::from_f64(1000.0),
-            ElectricCurrentGradientUnit::AmperePerMicrosecond => value / T::from_f64(1000000.0),
-            ElectricCurrentGradientUnit::AmperePerNanosecond => value / T::from_f64(1e9),
+            ElectricCurrentGradientUnit::AmperePerMillisecond => T::div_ratio(value, 1000.0, 1.0),
+            ElectricCurrentGradientUnit::AmperePerMicrosecond => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            ElectricCurrentGradientUnit::AmperePerNanosecond => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
         }
     }
 }
@@ -240,7 +244,7 @@ impl<T: Number> ElectricCurrentGradient<T> {
     /// A [`ElectricCurrentGradient`] from a value in `mA/s`.
     #[inline]
     pub fn from_milliamperes_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mA/s`.
@@ -252,7 +256,7 @@ impl<T: Number> ElectricCurrentGradient<T> {
     /// A [`ElectricCurrentGradient`] from a value in `A/min`.
     #[inline]
     pub fn from_amperes_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `A/min`.
@@ -264,7 +268,7 @@ impl<T: Number> ElectricCurrentGradient<T> {
     /// A [`ElectricCurrentGradient`] from a value in `mA/min`.
     #[inline]
     pub fn from_milliamperes_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60000.0))
+        Self(T::div_ratio(value, 60000.0, 1.0))
     }
 
     /// The value in `mA/min`.
@@ -282,7 +286,7 @@ impl<T: Number> ElectricCurrentGradient<T> {
     /// The value in `A/ms`.
     #[inline]
     pub fn as_amperes_per_millisecond(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricCurrentGradient`] from a value in `A/μs`.
@@ -294,7 +298,7 @@ impl<T: Number> ElectricCurrentGradient<T> {
     /// The value in `A/μs`.
     #[inline]
     pub fn as_amperes_per_microsecond(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricCurrentGradient`] from a value in `A/ns`.
@@ -306,7 +310,7 @@ impl<T: Number> ElectricCurrentGradient<T> {
     /// The value in `A/ns`.
     #[inline]
     pub fn as_amperes_per_nanosecond(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 }
 
@@ -317,9 +321,15 @@ impl ElectricCurrentGradient<f64> {
     pub const fn const_new(value: f64, unit: ElectricCurrentGradientUnit) -> Self {
         Self(match unit {
             ElectricCurrentGradientUnit::AmperePerSecond => value,
-            ElectricCurrentGradientUnit::MilliamperePerSecond => value / 1000.0,
-            ElectricCurrentGradientUnit::AmperePerMinute => value / 60.0,
-            ElectricCurrentGradientUnit::MilliamperePerMinute => value / 60000.0,
+            ElectricCurrentGradientUnit::MilliamperePerSecond => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            ElectricCurrentGradientUnit::AmperePerMinute => {
+                crate::conv::div_ratio(value, 60.0, 1.0)
+            }
+            ElectricCurrentGradientUnit::MilliamperePerMinute => {
+                crate::conv::div_ratio(value, 60000.0, 1.0)
+            }
             ElectricCurrentGradientUnit::AmperePerMillisecond => value * 1000.0,
             ElectricCurrentGradientUnit::AmperePerMicrosecond => value * 1000000.0,
             ElectricCurrentGradientUnit::AmperePerNanosecond => value * 1e9,

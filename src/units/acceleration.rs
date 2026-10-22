@@ -277,19 +277,19 @@ impl<T: Number> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             AccelerationUnit::MeterPerSecondSquared => value,
-            AccelerationUnit::NanometerPerSecondSquared => value / T::from_f64(1e9),
-            AccelerationUnit::MicrometerPerSecondSquared => value / T::from_f64(1000000.0),
-            AccelerationUnit::MillimeterPerSecondSquared => value / T::from_f64(1000.0),
-            AccelerationUnit::CentimeterPerSecondSquared => value / T::from_f64(100.0),
-            AccelerationUnit::DecimeterPerSecondSquared => value / T::from_f64(10.0),
+            AccelerationUnit::NanometerPerSecondSquared => T::div_ratio(value, 1000000000.0, 1.0),
+            AccelerationUnit::MicrometerPerSecondSquared => T::div_ratio(value, 1000000.0, 1.0),
+            AccelerationUnit::MillimeterPerSecondSquared => T::div_ratio(value, 1000.0, 1.0),
+            AccelerationUnit::CentimeterPerSecondSquared => T::div_ratio(value, 100.0, 1.0),
+            AccelerationUnit::DecimeterPerSecondSquared => T::div_ratio(value, 10.0, 1.0),
             AccelerationUnit::KilometerPerSecondSquared => value * T::from_f64(1000.0),
-            AccelerationUnit::InchPerSecondSquared => value * T::from_f64(0.0254),
-            AccelerationUnit::FootPerSecondSquared => value * T::from_f64(0.3048),
+            AccelerationUnit::InchPerSecondSquared => T::mul_ratio(value, 127.0, 5000.0),
+            AccelerationUnit::FootPerSecondSquared => T::mul_ratio(value, 381.0, 1250.0),
             AccelerationUnit::KnotPerSecond => T::mul_ratio(value, 463.0, 900.0),
             AccelerationUnit::KnotPerMinute => T::mul_ratio(value, 463.0, 54000.0),
             AccelerationUnit::KnotPerHour => T::mul_ratio(value, 463.0, 3240000.0),
-            AccelerationUnit::StandardGravity => value * T::from_f64(9.80665),
-            AccelerationUnit::MillistandardGravity => value * T::from_f64(0.00980665),
+            AccelerationUnit::StandardGravity => T::mul_ratio(value, 196133.0, 20000.0),
+            AccelerationUnit::MillistandardGravity => T::mul_ratio(value, 196133.0, 20000000.0),
         }
     }
 
@@ -302,14 +302,14 @@ impl<T: Number> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
             AccelerationUnit::MillimeterPerSecondSquared => value * T::from_f64(1000.0),
             AccelerationUnit::CentimeterPerSecondSquared => value * T::from_f64(100.0),
             AccelerationUnit::DecimeterPerSecondSquared => value * T::from_f64(10.0),
-            AccelerationUnit::KilometerPerSecondSquared => value / T::from_f64(1000.0),
-            AccelerationUnit::InchPerSecondSquared => value / T::from_f64(0.0254),
-            AccelerationUnit::FootPerSecondSquared => value / T::from_f64(0.3048),
+            AccelerationUnit::KilometerPerSecondSquared => T::div_ratio(value, 1000.0, 1.0),
+            AccelerationUnit::InchPerSecondSquared => T::div_ratio(value, 127.0, 5000.0),
+            AccelerationUnit::FootPerSecondSquared => T::div_ratio(value, 381.0, 1250.0),
             AccelerationUnit::KnotPerSecond => T::div_ratio(value, 463.0, 900.0),
             AccelerationUnit::KnotPerMinute => T::div_ratio(value, 463.0, 54000.0),
             AccelerationUnit::KnotPerHour => T::div_ratio(value, 463.0, 3240000.0),
-            AccelerationUnit::StandardGravity => value / T::from_f64(9.80665),
-            AccelerationUnit::MillistandardGravity => value / T::from_f64(0.00980665),
+            AccelerationUnit::StandardGravity => T::div_ratio(value, 196133.0, 20000.0),
+            AccelerationUnit::MillistandardGravity => T::div_ratio(value, 196133.0, 20000000.0),
         }
     }
 }
@@ -347,7 +347,7 @@ impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `nm/s²`.
     #[inline]
     pub fn from_nanometers_per_second_squared(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nm/s²`.
@@ -359,7 +359,7 @@ impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `µm/s²`.
     #[inline]
     pub fn from_micrometers_per_second_squared(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µm/s²`.
@@ -371,7 +371,7 @@ impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `mm/s²`.
     #[inline]
     pub fn from_millimeters_per_second_squared(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mm/s²`.
@@ -383,7 +383,7 @@ impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `cm/s²`.
     #[inline]
     pub fn from_centimeters_per_second_squared(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cm/s²`.
@@ -395,7 +395,7 @@ impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `dm/s²`.
     #[inline]
     pub fn from_decimeters_per_second_squared(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dm/s²`.
@@ -413,31 +413,31 @@ impl<T: Number> Acceleration<T> {
     /// The value in `km/s²`.
     #[inline]
     pub fn as_kilometers_per_second_squared(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Acceleration`] from a value in `in/s²`.
     #[inline]
     pub fn from_inches_per_second_squared(value: T) -> Self {
-        Self(value * T::from_f64(0.0254))
+        Self(T::mul_ratio(value, 127.0, 5000.0))
     }
 
     /// The value in `in/s²`.
     #[inline]
     pub fn as_inches_per_second_squared(self) -> T {
-        self.0 / T::from_f64(0.0254)
+        T::div_ratio(self.0, 127.0, 5000.0)
     }
 
     /// A [`Acceleration`] from a value in `ft/s²`.
     #[inline]
     pub fn from_feet_per_second_squared(value: T) -> Self {
-        Self(value * T::from_f64(0.3048))
+        Self(T::mul_ratio(value, 381.0, 1250.0))
     }
 
     /// The value in `ft/s²`.
     #[inline]
     pub fn as_feet_per_second_squared(self) -> T {
-        self.0 / T::from_f64(0.3048)
+        T::div_ratio(self.0, 381.0, 1250.0)
     }
 
     /// A [`Acceleration`] from a value in `kn/s`.
@@ -479,25 +479,25 @@ impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `g`.
     #[inline]
     pub fn from_standard_gravity(value: T) -> Self {
-        Self(value * T::from_f64(9.80665))
+        Self(T::mul_ratio(value, 196133.0, 20000.0))
     }
 
     /// The value in `g`.
     #[inline]
     pub fn as_standard_gravity(self) -> T {
-        self.0 / T::from_f64(9.80665)
+        T::div_ratio(self.0, 196133.0, 20000.0)
     }
 
     /// A [`Acceleration`] from a value in `mg`.
     #[inline]
     pub fn from_millistandard_gravity(value: T) -> Self {
-        Self(value * T::from_f64(0.00980665))
+        Self(T::mul_ratio(value, 196133.0, 20000000.0))
     }
 
     /// The value in `mg`.
     #[inline]
     pub fn as_millistandard_gravity(self) -> T {
-        self.0 / T::from_f64(0.00980665)
+        T::div_ratio(self.0, 196133.0, 20000000.0)
     }
 }
 
@@ -508,19 +508,29 @@ impl Acceleration<f64> {
     pub const fn const_new(value: f64, unit: AccelerationUnit) -> Self {
         Self(match unit {
             AccelerationUnit::MeterPerSecondSquared => value,
-            AccelerationUnit::NanometerPerSecondSquared => value / 1e9,
-            AccelerationUnit::MicrometerPerSecondSquared => value / 1000000.0,
-            AccelerationUnit::MillimeterPerSecondSquared => value / 1000.0,
-            AccelerationUnit::CentimeterPerSecondSquared => value / 100.0,
-            AccelerationUnit::DecimeterPerSecondSquared => value / 10.0,
+            AccelerationUnit::NanometerPerSecondSquared => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            AccelerationUnit::MicrometerPerSecondSquared => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            AccelerationUnit::MillimeterPerSecondSquared => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            AccelerationUnit::CentimeterPerSecondSquared => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            AccelerationUnit::DecimeterPerSecondSquared => crate::conv::div_ratio(value, 10.0, 1.0),
             AccelerationUnit::KilometerPerSecondSquared => value * 1000.0,
-            AccelerationUnit::InchPerSecondSquared => value * 0.0254,
-            AccelerationUnit::FootPerSecondSquared => value * 0.3048,
-            AccelerationUnit::KnotPerSecond => value * 0.5144444444444445,
-            AccelerationUnit::KnotPerMinute => value * 0.008574074074074074,
-            AccelerationUnit::KnotPerHour => value * 0.00014290123456790123,
-            AccelerationUnit::StandardGravity => value * 9.80665,
-            AccelerationUnit::MillistandardGravity => value * 0.00980665,
+            AccelerationUnit::InchPerSecondSquared => crate::conv::mul_ratio(value, 127.0, 5000.0),
+            AccelerationUnit::FootPerSecondSquared => crate::conv::mul_ratio(value, 381.0, 1250.0),
+            AccelerationUnit::KnotPerSecond => crate::conv::mul_ratio(value, 463.0, 900.0),
+            AccelerationUnit::KnotPerMinute => crate::conv::mul_ratio(value, 463.0, 54000.0),
+            AccelerationUnit::KnotPerHour => crate::conv::mul_ratio(value, 463.0, 3240000.0),
+            AccelerationUnit::StandardGravity => crate::conv::mul_ratio(value, 196133.0, 20000.0),
+            AccelerationUnit::MillistandardGravity => {
+                crate::conv::mul_ratio(value, 196133.0, 20000000.0)
+            }
         })
     }
 }

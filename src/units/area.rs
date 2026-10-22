@@ -282,16 +282,16 @@ impl<T: Number> crate::UnitOf<Area<T>> for AreaUnit {
         match self {
             AreaUnit::SquareKilometer => value * T::from_f64(1000000.0),
             AreaUnit::SquareMeter => value,
-            AreaUnit::SquareDecimeter => value / T::from_f64(100.0),
-            AreaUnit::SquareCentimeter => value / T::from_f64(10000.0),
-            AreaUnit::SquareMillimeter => value / T::from_f64(1000000.0),
-            AreaUnit::SquareMicrometer => value / T::from_f64(1e12),
-            AreaUnit::SquareMile => value * T::from_f64(2589988.110336),
-            AreaUnit::SquareYard => value * T::from_f64(0.83612736),
-            AreaUnit::SquareFoot => value * T::from_f64(0.09290304),
+            AreaUnit::SquareDecimeter => T::div_ratio(value, 100.0, 1.0),
+            AreaUnit::SquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
+            AreaUnit::SquareMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            AreaUnit::SquareMicrometer => T::div_ratio(value, 1000000000000.0, 1.0),
+            AreaUnit::SquareMile => T::mul_ratio(value, 40468564224.0, 15625.0),
+            AreaUnit::SquareYard => T::mul_ratio(value, 1306449.0, 1562500.0),
+            AreaUnit::SquareFoot => T::mul_ratio(value, 145161.0, 1562500.0),
             AreaUnit::UsSurveySquareFoot => T::mul_ratio(value, 1440000.0, 15499969.0),
-            AreaUnit::SquareInch => value * T::from_f64(0.00064516),
-            AreaUnit::Acre => value * T::from_f64(4046.8564224),
+            AreaUnit::SquareInch => T::mul_ratio(value, 16129.0, 25000000.0),
+            AreaUnit::Acre => T::mul_ratio(value, 316160658.0, 78125.0),
             AreaUnit::Hectare => value * T::from_f64(10000.0),
             AreaUnit::SquareNauticalMile => value * T::from_f64(3429904.0),
         }
@@ -300,20 +300,20 @@ impl<T: Number> crate::UnitOf<Area<T>> for AreaUnit {
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            AreaUnit::SquareKilometer => value / T::from_f64(1000000.0),
+            AreaUnit::SquareKilometer => T::div_ratio(value, 1000000.0, 1.0),
             AreaUnit::SquareMeter => value,
             AreaUnit::SquareDecimeter => value * T::from_f64(100.0),
             AreaUnit::SquareCentimeter => value * T::from_f64(10000.0),
             AreaUnit::SquareMillimeter => value * T::from_f64(1000000.0),
             AreaUnit::SquareMicrometer => value * T::from_f64(1e12),
-            AreaUnit::SquareMile => value / T::from_f64(2589988.110336),
-            AreaUnit::SquareYard => value / T::from_f64(0.83612736),
-            AreaUnit::SquareFoot => value / T::from_f64(0.09290304),
+            AreaUnit::SquareMile => T::div_ratio(value, 40468564224.0, 15625.0),
+            AreaUnit::SquareYard => T::div_ratio(value, 1306449.0, 1562500.0),
+            AreaUnit::SquareFoot => T::div_ratio(value, 145161.0, 1562500.0),
             AreaUnit::UsSurveySquareFoot => T::div_ratio(value, 1440000.0, 15499969.0),
-            AreaUnit::SquareInch => value / T::from_f64(0.00064516),
-            AreaUnit::Acre => value / T::from_f64(4046.8564224),
-            AreaUnit::Hectare => value / T::from_f64(10000.0),
-            AreaUnit::SquareNauticalMile => value / T::from_f64(3429904.0),
+            AreaUnit::SquareInch => T::div_ratio(value, 16129.0, 25000000.0),
+            AreaUnit::Acre => T::div_ratio(value, 316160658.0, 78125.0),
+            AreaUnit::Hectare => T::div_ratio(value, 10000.0, 1.0),
+            AreaUnit::SquareNauticalMile => T::div_ratio(value, 3429904.0, 1.0),
         }
     }
 }
@@ -338,7 +338,7 @@ impl<T: Number> Area<T> {
     /// The value in `km²`.
     #[inline]
     pub fn as_square_kilometers(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Area`] from a value in `m²`.
@@ -356,7 +356,7 @@ impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `dm²`.
     #[inline]
     pub fn from_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `dm²`.
@@ -368,7 +368,7 @@ impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `cm²`.
     #[inline]
     pub fn from_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `cm²`.
@@ -380,7 +380,7 @@ impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `mm²`.
     #[inline]
     pub fn from_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `mm²`.
@@ -392,7 +392,7 @@ impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `µm²`.
     #[inline]
     pub fn from_square_micrometers(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `µm²`.
@@ -404,37 +404,37 @@ impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `mi²`.
     #[inline]
     pub fn from_square_miles(value: T) -> Self {
-        Self(value * T::from_f64(2589988.110336))
+        Self(T::mul_ratio(value, 40468564224.0, 15625.0))
     }
 
     /// The value in `mi²`.
     #[inline]
     pub fn as_square_miles(self) -> T {
-        self.0 / T::from_f64(2589988.110336)
+        T::div_ratio(self.0, 40468564224.0, 15625.0)
     }
 
     /// A [`Area`] from a value in `yd²`.
     #[inline]
     pub fn from_square_yards(value: T) -> Self {
-        Self(value * T::from_f64(0.83612736))
+        Self(T::mul_ratio(value, 1306449.0, 1562500.0))
     }
 
     /// The value in `yd²`.
     #[inline]
     pub fn as_square_yards(self) -> T {
-        self.0 / T::from_f64(0.83612736)
+        T::div_ratio(self.0, 1306449.0, 1562500.0)
     }
 
     /// A [`Area`] from a value in `ft²`.
     #[inline]
     pub fn from_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.09290304))
+        Self(T::mul_ratio(value, 145161.0, 1562500.0))
     }
 
     /// The value in `ft²`.
     #[inline]
     pub fn as_square_feet(self) -> T {
-        self.0 / T::from_f64(0.09290304)
+        T::div_ratio(self.0, 145161.0, 1562500.0)
     }
 
     /// A [`Area`] from a value in `ft² (US)`.
@@ -452,25 +452,25 @@ impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `in²`.
     #[inline]
     pub fn from_square_inches(value: T) -> Self {
-        Self(value * T::from_f64(0.00064516))
+        Self(T::mul_ratio(value, 16129.0, 25000000.0))
     }
 
     /// The value in `in²`.
     #[inline]
     pub fn as_square_inches(self) -> T {
-        self.0 / T::from_f64(0.00064516)
+        T::div_ratio(self.0, 16129.0, 25000000.0)
     }
 
     /// A [`Area`] from a value in `ac`.
     #[inline]
     pub fn from_acres(value: T) -> Self {
-        Self(value * T::from_f64(4046.8564224))
+        Self(T::mul_ratio(value, 316160658.0, 78125.0))
     }
 
     /// The value in `ac`.
     #[inline]
     pub fn as_acres(self) -> T {
-        self.0 / T::from_f64(4046.8564224)
+        T::div_ratio(self.0, 316160658.0, 78125.0)
     }
 
     /// A [`Area`] from a value in `ha`.
@@ -482,7 +482,7 @@ impl<T: Number> Area<T> {
     /// The value in `ha`.
     #[inline]
     pub fn as_hectares(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`Area`] from a value in `nmi²`.
@@ -494,7 +494,7 @@ impl<T: Number> Area<T> {
     /// The value in `nmi²`.
     #[inline]
     pub fn as_square_nautical_miles(self) -> T {
-        self.0 / T::from_f64(3429904.0)
+        T::div_ratio(self.0, 3429904.0, 1.0)
     }
 }
 
@@ -506,16 +506,16 @@ impl Area<f64> {
         Self(match unit {
             AreaUnit::SquareKilometer => value * 1000000.0,
             AreaUnit::SquareMeter => value,
-            AreaUnit::SquareDecimeter => value / 100.0,
-            AreaUnit::SquareCentimeter => value / 10000.0,
-            AreaUnit::SquareMillimeter => value / 1000000.0,
-            AreaUnit::SquareMicrometer => value / 1e12,
-            AreaUnit::SquareMile => value * 2589988.110336,
-            AreaUnit::SquareYard => value * 0.83612736,
-            AreaUnit::SquareFoot => value * 0.09290304,
-            AreaUnit::UsSurveySquareFoot => value * 0.09290341161327484,
-            AreaUnit::SquareInch => value * 0.00064516,
-            AreaUnit::Acre => value * 4046.8564224,
+            AreaUnit::SquareDecimeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            AreaUnit::SquareCentimeter => crate::conv::div_ratio(value, 10000.0, 1.0),
+            AreaUnit::SquareMillimeter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            AreaUnit::SquareMicrometer => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            AreaUnit::SquareMile => crate::conv::mul_ratio(value, 40468564224.0, 15625.0),
+            AreaUnit::SquareYard => crate::conv::mul_ratio(value, 1306449.0, 1562500.0),
+            AreaUnit::SquareFoot => crate::conv::mul_ratio(value, 145161.0, 1562500.0),
+            AreaUnit::UsSurveySquareFoot => crate::conv::mul_ratio(value, 1440000.0, 15499969.0),
+            AreaUnit::SquareInch => crate::conv::mul_ratio(value, 16129.0, 25000000.0),
+            AreaUnit::Acre => crate::conv::mul_ratio(value, 316160658.0, 78125.0),
             AreaUnit::Hectare => value * 10000.0,
             AreaUnit::SquareNauticalMile => value * 3429904.0,
         })

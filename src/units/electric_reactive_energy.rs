@@ -144,9 +144,11 @@ impl<T: Number> crate::UnitOf<ElectricReactiveEnergy<T>> for ElectricReactiveEne
     fn value_from_base(self, value: T) -> T {
         match self {
             ElectricReactiveEnergyUnit::VoltampereReactiveHour => value,
-            ElectricReactiveEnergyUnit::KilovoltampereReactiveHour => value / T::from_f64(1000.0),
+            ElectricReactiveEnergyUnit::KilovoltampereReactiveHour => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
             ElectricReactiveEnergyUnit::MegavoltampereReactiveHour => {
-                value / T::from_f64(1000000.0)
+                T::div_ratio(value, 1000000.0, 1.0)
             }
         }
     }
@@ -195,7 +197,7 @@ impl<T: Number> ElectricReactiveEnergy<T> {
     /// The value in `kvarh`.
     #[inline]
     pub fn as_kilovoltampere_reactive_hours(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricReactiveEnergy`] from a value in `Mvarh`.
@@ -207,7 +209,7 @@ impl<T: Number> ElectricReactiveEnergy<T> {
     /// The value in `Mvarh`.
     #[inline]
     pub fn as_megavoltampere_reactive_hours(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 

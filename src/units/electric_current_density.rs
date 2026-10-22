@@ -212,8 +212,12 @@ impl ElectricCurrentDensity<f64> {
     pub const fn const_new(value: f64, unit: ElectricCurrentDensityUnit) -> Self {
         Self(match unit {
             ElectricCurrentDensityUnit::AmperePerSquareMeter => value,
-            ElectricCurrentDensityUnit::AmperePerSquareInch => value * 1550.0031000062,
-            ElectricCurrentDensityUnit::AmperePerSquareFoot => value * 10.763910416709722,
+            ElectricCurrentDensityUnit::AmperePerSquareInch => {
+                crate::conv::mul_ratio(value, 25000000.0, 16129.0)
+            }
+            ElectricCurrentDensityUnit::AmperePerSquareFoot => {
+                crate::conv::mul_ratio(value, 1562500.0, 145161.0)
+            }
         })
     }
 }

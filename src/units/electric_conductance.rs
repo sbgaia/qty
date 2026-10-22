@@ -295,17 +295,17 @@ impl<T: Number> crate::UnitOf<ElectricConductance<T>> for ElectricConductanceUni
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricConductanceUnit::Siemens => value,
-            ElectricConductanceUnit::Nanosiemens => value / T::from_f64(1e9),
-            ElectricConductanceUnit::Microsiemens => value / T::from_f64(1000000.0),
-            ElectricConductanceUnit::Millisiemens => value / T::from_f64(1000.0),
+            ElectricConductanceUnit::Nanosiemens => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricConductanceUnit::Microsiemens => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricConductanceUnit::Millisiemens => T::div_ratio(value, 1000.0, 1.0),
             ElectricConductanceUnit::Kilosiemens => value * T::from_f64(1000.0),
             ElectricConductanceUnit::Megasiemens => value * T::from_f64(1000000.0),
             ElectricConductanceUnit::Gigasiemens => value * T::from_f64(1e9),
             ElectricConductanceUnit::Terasiemens => value * T::from_f64(1e12),
             ElectricConductanceUnit::Mho => value,
-            ElectricConductanceUnit::Nanomho => value / T::from_f64(1e9),
-            ElectricConductanceUnit::Micromho => value / T::from_f64(1000000.0),
-            ElectricConductanceUnit::Millimho => value / T::from_f64(1000.0),
+            ElectricConductanceUnit::Nanomho => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricConductanceUnit::Micromho => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricConductanceUnit::Millimho => T::div_ratio(value, 1000.0, 1.0),
             ElectricConductanceUnit::Kilomho => value * T::from_f64(1000.0),
             ElectricConductanceUnit::Megamho => value * T::from_f64(1000000.0),
             ElectricConductanceUnit::Gigamho => value * T::from_f64(1e9),
@@ -320,18 +320,18 @@ impl<T: Number> crate::UnitOf<ElectricConductance<T>> for ElectricConductanceUni
             ElectricConductanceUnit::Nanosiemens => value * T::from_f64(1e9),
             ElectricConductanceUnit::Microsiemens => value * T::from_f64(1000000.0),
             ElectricConductanceUnit::Millisiemens => value * T::from_f64(1000.0),
-            ElectricConductanceUnit::Kilosiemens => value / T::from_f64(1000.0),
-            ElectricConductanceUnit::Megasiemens => value / T::from_f64(1000000.0),
-            ElectricConductanceUnit::Gigasiemens => value / T::from_f64(1e9),
-            ElectricConductanceUnit::Terasiemens => value / T::from_f64(1e12),
+            ElectricConductanceUnit::Kilosiemens => T::div_ratio(value, 1000.0, 1.0),
+            ElectricConductanceUnit::Megasiemens => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricConductanceUnit::Gigasiemens => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricConductanceUnit::Terasiemens => T::div_ratio(value, 1000000000000.0, 1.0),
             ElectricConductanceUnit::Mho => value,
             ElectricConductanceUnit::Nanomho => value * T::from_f64(1e9),
             ElectricConductanceUnit::Micromho => value * T::from_f64(1000000.0),
             ElectricConductanceUnit::Millimho => value * T::from_f64(1000.0),
-            ElectricConductanceUnit::Kilomho => value / T::from_f64(1000.0),
-            ElectricConductanceUnit::Megamho => value / T::from_f64(1000000.0),
-            ElectricConductanceUnit::Gigamho => value / T::from_f64(1e9),
-            ElectricConductanceUnit::Teramho => value / T::from_f64(1e12),
+            ElectricConductanceUnit::Kilomho => T::div_ratio(value, 1000.0, 1.0),
+            ElectricConductanceUnit::Megamho => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricConductanceUnit::Gigamho => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricConductanceUnit::Teramho => T::div_ratio(value, 1000000000000.0, 1.0),
         }
     }
 }
@@ -372,7 +372,7 @@ impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `nS`.
     #[inline]
     pub fn from_nanosiemens(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nS`.
@@ -384,7 +384,7 @@ impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `µS`.
     #[inline]
     pub fn from_microsiemens(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µS`.
@@ -396,7 +396,7 @@ impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `mS`.
     #[inline]
     pub fn from_millisiemens(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mS`.
@@ -414,7 +414,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `kS`.
     #[inline]
     pub fn as_kilosiemens(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `MS`.
@@ -426,7 +426,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `MS`.
     #[inline]
     pub fn as_megasiemens(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `GS`.
@@ -438,7 +438,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `GS`.
     #[inline]
     pub fn as_gigasiemens(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `TS`.
@@ -450,7 +450,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `TS`.
     #[inline]
     pub fn as_terasiemens(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `℧`.
@@ -468,7 +468,7 @@ impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `n℧`.
     #[inline]
     pub fn from_nanomhos(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `n℧`.
@@ -480,7 +480,7 @@ impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `µ℧`.
     #[inline]
     pub fn from_micromhos(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µ℧`.
@@ -492,7 +492,7 @@ impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `m℧`.
     #[inline]
     pub fn from_millimhos(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `m℧`.
@@ -510,7 +510,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `k℧`.
     #[inline]
     pub fn as_kilomhos(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `M℧`.
@@ -522,7 +522,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `M℧`.
     #[inline]
     pub fn as_megamhos(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `G℧`.
@@ -534,7 +534,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `G℧`.
     #[inline]
     pub fn as_gigamhos(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`ElectricConductance`] from a value in `T℧`.
@@ -546,7 +546,7 @@ impl<T: Number> ElectricConductance<T> {
     /// The value in `T℧`.
     #[inline]
     pub fn as_teramhos(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 }
 
@@ -557,17 +557,19 @@ impl ElectricConductance<f64> {
     pub const fn const_new(value: f64, unit: ElectricConductanceUnit) -> Self {
         Self(match unit {
             ElectricConductanceUnit::Siemens => value,
-            ElectricConductanceUnit::Nanosiemens => value / 1e9,
-            ElectricConductanceUnit::Microsiemens => value / 1000000.0,
-            ElectricConductanceUnit::Millisiemens => value / 1000.0,
+            ElectricConductanceUnit::Nanosiemens => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            ElectricConductanceUnit::Microsiemens => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricConductanceUnit::Millisiemens => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricConductanceUnit::Kilosiemens => value * 1000.0,
             ElectricConductanceUnit::Megasiemens => value * 1000000.0,
             ElectricConductanceUnit::Gigasiemens => value * 1e9,
             ElectricConductanceUnit::Terasiemens => value * 1e12,
             ElectricConductanceUnit::Mho => value,
-            ElectricConductanceUnit::Nanomho => value / 1e9,
-            ElectricConductanceUnit::Micromho => value / 1000000.0,
-            ElectricConductanceUnit::Millimho => value / 1000.0,
+            ElectricConductanceUnit::Nanomho => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricConductanceUnit::Micromho => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricConductanceUnit::Millimho => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricConductanceUnit::Kilomho => value * 1000.0,
             ElectricConductanceUnit::Megamho => value * 1000000.0,
             ElectricConductanceUnit::Gigamho => value * 1e9,

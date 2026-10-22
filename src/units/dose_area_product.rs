@@ -420,30 +420,42 @@ impl<T: Number> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             DoseAreaProductUnit::GraySquareMeter => value,
-            DoseAreaProductUnit::MicrograySquareMeter => value / T::from_f64(1000000.0),
-            DoseAreaProductUnit::MilligraySquareMeter => value / T::from_f64(1000.0),
-            DoseAreaProductUnit::CentigraySquareMeter => value / T::from_f64(100.0),
-            DoseAreaProductUnit::DecigraySquareMeter => value / T::from_f64(10.0),
-            DoseAreaProductUnit::GraySquareDecimeter => value / T::from_f64(100.0),
-            DoseAreaProductUnit::MicrograySquareDecimeter => value / T::from_f64(1e8),
-            DoseAreaProductUnit::MilligraySquareDecimeter => value / T::from_f64(100000.0),
-            DoseAreaProductUnit::CentigraySquareDecimeter => value / T::from_f64(10000.0),
-            DoseAreaProductUnit::DecigraySquareDecimeter => value / T::from_f64(1000.0),
-            DoseAreaProductUnit::GraySquareCentimeter => value / T::from_f64(10000.0),
-            DoseAreaProductUnit::MicrograySquareCentimeter => value / T::from_f64(1e10),
-            DoseAreaProductUnit::MilligraySquareCentimeter => value / T::from_f64(1e7),
-            DoseAreaProductUnit::CentigraySquareCentimeter => value / T::from_f64(1000000.0),
-            DoseAreaProductUnit::DecigraySquareCentimeter => value / T::from_f64(100000.0),
-            DoseAreaProductUnit::GraySquareMillimeter => value / T::from_f64(1000000.0),
-            DoseAreaProductUnit::MicrograySquareMillimeter => value / T::from_f64(1e12),
-            DoseAreaProductUnit::MilligraySquareMillimeter => value / T::from_f64(1e9),
-            DoseAreaProductUnit::CentigraySquareMillimeter => value / T::from_f64(1e8),
-            DoseAreaProductUnit::DecigraySquareMillimeter => value / T::from_f64(1e7),
-            DoseAreaProductUnit::GraySquareMicrometer => value / T::from_f64(1e12),
+            DoseAreaProductUnit::MicrograySquareMeter => T::div_ratio(value, 1000000.0, 1.0),
+            DoseAreaProductUnit::MilligraySquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            DoseAreaProductUnit::CentigraySquareMeter => T::div_ratio(value, 100.0, 1.0),
+            DoseAreaProductUnit::DecigraySquareMeter => T::div_ratio(value, 10.0, 1.0),
+            DoseAreaProductUnit::GraySquareDecimeter => T::div_ratio(value, 100.0, 1.0),
+            DoseAreaProductUnit::MicrograySquareDecimeter => T::div_ratio(value, 100000000.0, 1.0),
+            DoseAreaProductUnit::MilligraySquareDecimeter => T::div_ratio(value, 100000.0, 1.0),
+            DoseAreaProductUnit::CentigraySquareDecimeter => T::div_ratio(value, 10000.0, 1.0),
+            DoseAreaProductUnit::DecigraySquareDecimeter => T::div_ratio(value, 1000.0, 1.0),
+            DoseAreaProductUnit::GraySquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
+            DoseAreaProductUnit::MicrograySquareCentimeter => {
+                T::div_ratio(value, 10000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MilligraySquareCentimeter => T::div_ratio(value, 10000000.0, 1.0),
+            DoseAreaProductUnit::CentigraySquareCentimeter => T::div_ratio(value, 1000000.0, 1.0),
+            DoseAreaProductUnit::DecigraySquareCentimeter => T::div_ratio(value, 100000.0, 1.0),
+            DoseAreaProductUnit::GraySquareMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            DoseAreaProductUnit::MicrograySquareMillimeter => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MilligraySquareMillimeter => {
+                T::div_ratio(value, 1000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::CentigraySquareMillimeter => T::div_ratio(value, 100000000.0, 1.0),
+            DoseAreaProductUnit::DecigraySquareMillimeter => T::div_ratio(value, 10000000.0, 1.0),
+            DoseAreaProductUnit::GraySquareMicrometer => T::div_ratio(value, 1000000000000.0, 1.0),
             DoseAreaProductUnit::MicrograySquareMicrometer => value / T::from_f64(1e18),
-            DoseAreaProductUnit::MilligraySquareMicrometer => value / T::from_f64(1e15),
-            DoseAreaProductUnit::CentigraySquareMicrometer => value / T::from_f64(1e14),
-            DoseAreaProductUnit::DecigraySquareMicrometer => value / T::from_f64(1e13),
+            DoseAreaProductUnit::MilligraySquareMicrometer => {
+                T::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::CentigraySquareMicrometer => {
+                T::div_ratio(value, 100000000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::DecigraySquareMicrometer => {
+                T::div_ratio(value, 10000000000000.0, 1.0)
+            }
         }
     }
 
@@ -510,7 +522,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `µGy·m²`.
     #[inline]
     pub fn from_microgray_square_meters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µGy·m²`.
@@ -522,7 +534,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `mGy·m²`.
     #[inline]
     pub fn from_milligray_square_meters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mGy·m²`.
@@ -534,7 +546,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `cGy·m²`.
     #[inline]
     pub fn from_centigray_square_meters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cGy·m²`.
@@ -546,7 +558,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `dGy·m²`.
     #[inline]
     pub fn from_decigray_square_meters(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dGy·m²`.
@@ -558,7 +570,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `Gy·dm²`.
     #[inline]
     pub fn from_gray_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `Gy·dm²`.
@@ -570,7 +582,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `µGy·dm²`.
     #[inline]
     pub fn from_microgray_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `µGy·dm²`.
@@ -582,7 +594,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `mGy·dm²`.
     #[inline]
     pub fn from_milligray_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `mGy·dm²`.
@@ -594,7 +606,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `cGy·dm²`.
     #[inline]
     pub fn from_centigray_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `cGy·dm²`.
@@ -606,7 +618,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `dGy·dm²`.
     #[inline]
     pub fn from_decigray_square_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `dGy·dm²`.
@@ -618,7 +630,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `Gy·cm²`.
     #[inline]
     pub fn from_gray_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `Gy·cm²`.
@@ -630,7 +642,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `µGy·cm²`.
     #[inline]
     pub fn from_microgray_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e10))
+        Self(T::div_ratio(value, 10000000000.0, 1.0))
     }
 
     /// The value in `µGy·cm²`.
@@ -642,7 +654,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `mGy·cm²`.
     #[inline]
     pub fn from_milligray_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `mGy·cm²`.
@@ -654,7 +666,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `cGy·cm²`.
     #[inline]
     pub fn from_centigray_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `cGy·cm²`.
@@ -666,7 +678,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `dGy·cm²`.
     #[inline]
     pub fn from_decigray_square_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `dGy·cm²`.
@@ -678,7 +690,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `Gy·mm²`.
     #[inline]
     pub fn from_gray_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `Gy·mm²`.
@@ -690,7 +702,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `µGy·mm²`.
     #[inline]
     pub fn from_microgray_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `µGy·mm²`.
@@ -702,7 +714,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `mGy·mm²`.
     #[inline]
     pub fn from_milligray_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `mGy·mm²`.
@@ -714,7 +726,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `cGy·mm²`.
     #[inline]
     pub fn from_centigray_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `cGy·mm²`.
@@ -726,7 +738,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `dGy·mm²`.
     #[inline]
     pub fn from_decigray_square_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `dGy·mm²`.
@@ -738,7 +750,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `Gy·μm²`.
     #[inline]
     pub fn from_gray_square_micrometers(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `Gy·μm²`.
@@ -762,7 +774,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `mGy·μm²`.
     #[inline]
     pub fn from_milligray_square_micrometers(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `mGy·μm²`.
@@ -774,7 +786,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `cGy·μm²`.
     #[inline]
     pub fn from_centigray_square_micrometers(value: T) -> Self {
-        Self(value / T::from_f64(1e14))
+        Self(T::div_ratio(value, 100000000000000.0, 1.0))
     }
 
     /// The value in `cGy·μm²`.
@@ -786,7 +798,7 @@ impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `dGy·μm²`.
     #[inline]
     pub fn from_decigray_square_micrometers(value: T) -> Self {
-        Self(value / T::from_f64(1e13))
+        Self(T::div_ratio(value, 10000000000000.0, 1.0))
     }
 
     /// The value in `dGy·μm²`.
@@ -803,30 +815,68 @@ impl DoseAreaProduct<f64> {
     pub const fn const_new(value: f64, unit: DoseAreaProductUnit) -> Self {
         Self(match unit {
             DoseAreaProductUnit::GraySquareMeter => value,
-            DoseAreaProductUnit::MicrograySquareMeter => value / 1000000.0,
-            DoseAreaProductUnit::MilligraySquareMeter => value / 1000.0,
-            DoseAreaProductUnit::CentigraySquareMeter => value / 100.0,
-            DoseAreaProductUnit::DecigraySquareMeter => value / 10.0,
-            DoseAreaProductUnit::GraySquareDecimeter => value / 100.0,
-            DoseAreaProductUnit::MicrograySquareDecimeter => value / 1e8,
-            DoseAreaProductUnit::MilligraySquareDecimeter => value / 100000.0,
-            DoseAreaProductUnit::CentigraySquareDecimeter => value / 10000.0,
-            DoseAreaProductUnit::DecigraySquareDecimeter => value / 1000.0,
-            DoseAreaProductUnit::GraySquareCentimeter => value / 10000.0,
-            DoseAreaProductUnit::MicrograySquareCentimeter => value / 1e10,
-            DoseAreaProductUnit::MilligraySquareCentimeter => value / 1e7,
-            DoseAreaProductUnit::CentigraySquareCentimeter => value / 1000000.0,
-            DoseAreaProductUnit::DecigraySquareCentimeter => value / 100000.0,
-            DoseAreaProductUnit::GraySquareMillimeter => value / 1000000.0,
-            DoseAreaProductUnit::MicrograySquareMillimeter => value / 1e12,
-            DoseAreaProductUnit::MilligraySquareMillimeter => value / 1e9,
-            DoseAreaProductUnit::CentigraySquareMillimeter => value / 1e8,
-            DoseAreaProductUnit::DecigraySquareMillimeter => value / 1e7,
-            DoseAreaProductUnit::GraySquareMicrometer => value / 1e12,
+            DoseAreaProductUnit::MicrograySquareMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MilligraySquareMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            DoseAreaProductUnit::CentigraySquareMeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            DoseAreaProductUnit::DecigraySquareMeter => crate::conv::div_ratio(value, 10.0, 1.0),
+            DoseAreaProductUnit::GraySquareDecimeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            DoseAreaProductUnit::MicrograySquareDecimeter => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MilligraySquareDecimeter => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
+            DoseAreaProductUnit::CentigraySquareDecimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            DoseAreaProductUnit::DecigraySquareDecimeter => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            DoseAreaProductUnit::GraySquareCentimeter => {
+                crate::conv::div_ratio(value, 10000.0, 1.0)
+            }
+            DoseAreaProductUnit::MicrograySquareCentimeter => {
+                crate::conv::div_ratio(value, 10000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MilligraySquareCentimeter => {
+                crate::conv::div_ratio(value, 10000000.0, 1.0)
+            }
+            DoseAreaProductUnit::CentigraySquareCentimeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            DoseAreaProductUnit::DecigraySquareCentimeter => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
+            DoseAreaProductUnit::GraySquareMillimeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MicrograySquareMillimeter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::MilligraySquareMillimeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::CentigraySquareMillimeter => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            DoseAreaProductUnit::DecigraySquareMillimeter => {
+                crate::conv::div_ratio(value, 10000000.0, 1.0)
+            }
+            DoseAreaProductUnit::GraySquareMicrometer => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
             DoseAreaProductUnit::MicrograySquareMicrometer => value / 1e18,
-            DoseAreaProductUnit::MilligraySquareMicrometer => value / 1e15,
-            DoseAreaProductUnit::CentigraySquareMicrometer => value / 1e14,
-            DoseAreaProductUnit::DecigraySquareMicrometer => value / 1e13,
+            DoseAreaProductUnit::MilligraySquareMicrometer => {
+                crate::conv::div_ratio(value, 1000000000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::CentigraySquareMicrometer => {
+                crate::conv::div_ratio(value, 100000000000000.0, 1.0)
+            }
+            DoseAreaProductUnit::DecigraySquareMicrometer => {
+                crate::conv::div_ratio(value, 10000000000000.0, 1.0)
+            }
         })
     }
 }

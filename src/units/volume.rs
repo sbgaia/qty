@@ -855,60 +855,60 @@ impl<T: Number> crate::UnitOf<Volume<T>> for VolumeUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            VolumeUnit::Liter => value / T::from_f64(1000.0),
-            VolumeUnit::Nanoliter => value / T::from_f64(1e12),
-            VolumeUnit::Microliter => value / T::from_f64(1e9),
-            VolumeUnit::Milliliter => value / T::from_f64(1000000.0),
-            VolumeUnit::Centiliter => value / T::from_f64(100000.0),
-            VolumeUnit::Deciliter => value / T::from_f64(10000.0),
-            VolumeUnit::Decaliter => value / T::from_f64(100.0),
-            VolumeUnit::Hectoliter => value / T::from_f64(10.0),
+            VolumeUnit::Liter => T::div_ratio(value, 1000.0, 1.0),
+            VolumeUnit::Nanoliter => T::div_ratio(value, 1000000000000.0, 1.0),
+            VolumeUnit::Microliter => T::div_ratio(value, 1000000000.0, 1.0),
+            VolumeUnit::Milliliter => T::div_ratio(value, 1000000.0, 1.0),
+            VolumeUnit::Centiliter => T::div_ratio(value, 100000.0, 1.0),
+            VolumeUnit::Deciliter => T::div_ratio(value, 10000.0, 1.0),
+            VolumeUnit::Decaliter => T::div_ratio(value, 100.0, 1.0),
+            VolumeUnit::Hectoliter => T::div_ratio(value, 10.0, 1.0),
             VolumeUnit::Kiloliter => value,
             VolumeUnit::Megaliter => value * T::from_f64(1000.0),
             VolumeUnit::CubicMeter => value,
             VolumeUnit::ThousandCubicMeter => value * T::from_f64(1000.0),
             VolumeUnit::CubicKilometer => value * T::from_f64(1e9),
             VolumeUnit::CubicHectometer => value * T::from_f64(1000000.0),
-            VolumeUnit::CubicDecimeter => value / T::from_f64(1000.0),
-            VolumeUnit::CubicCentimeter => value / T::from_f64(1000000.0),
-            VolumeUnit::CubicMillimeter => value / T::from_f64(1e9),
+            VolumeUnit::CubicDecimeter => T::div_ratio(value, 1000.0, 1.0),
+            VolumeUnit::CubicCentimeter => T::div_ratio(value, 1000000.0, 1.0),
+            VolumeUnit::CubicMillimeter => T::div_ratio(value, 1000000000.0, 1.0),
             VolumeUnit::CubicMicrometer => value / T::from_f64(1e18),
             VolumeUnit::CubicMile => T::mul_ratio(value, 8140980127813632.0, 1953125.0),
-            VolumeUnit::CubicYard => value * T::from_f64(0.764554857984),
-            VolumeUnit::CubicFoot => value * T::from_f64(0.028316846592),
-            VolumeUnit::HundredCubicFoot => value * T::from_f64(2.8316846592),
-            VolumeUnit::ThousandCubicFoot => value * T::from_f64(28.316846592),
-            VolumeUnit::MillionCubicFoot => value * T::from_f64(28316.846592),
-            VolumeUnit::CubicInch => value * T::from_f64(1.6387064e-5),
-            VolumeUnit::ImperialGallon => value * T::from_f64(0.00454609),
-            VolumeUnit::KiloimperialGallon => value * T::from_f64(4.54609),
-            VolumeUnit::MegaimperialGallon => value * T::from_f64(4546.09),
-            VolumeUnit::ImperialOunce => value * T::from_f64(2.84130625e-5),
-            VolumeUnit::UsGallon => value * T::from_f64(0.003785411784),
-            VolumeUnit::DecausGallon => value * T::from_f64(0.03785411784),
-            VolumeUnit::DeciusGallon => value * T::from_f64(0.0003785411784),
-            VolumeUnit::HectousGallon => value * T::from_f64(0.3785411784),
-            VolumeUnit::KilousGallon => value * T::from_f64(3.785411784),
-            VolumeUnit::MegausGallon => value * T::from_f64(3785.411784),
-            VolumeUnit::UsOunce => value * T::from_f64(2.95735295625e-5),
-            VolumeUnit::UsTablespoon => value * T::from_f64(1.478676478125e-5),
-            VolumeUnit::AuTablespoon => value / T::from_f64(50000.0),
-            VolumeUnit::MetricTablespoon => value * T::from_f64(1.5e-5),
-            VolumeUnit::UkTablespoon => value * T::from_f64(1.5e-5),
-            VolumeUnit::MetricTeaspoon => value / T::from_f64(200000.0),
-            VolumeUnit::UsTeaspoon => value * T::from_f64(4.92892159375e-6),
-            VolumeUnit::MetricCup => value / T::from_f64(4000.0),
-            VolumeUnit::UsCustomaryCup => value * T::from_f64(0.0002365882365),
-            VolumeUnit::UsLegalCup => value * T::from_f64(0.00024),
-            VolumeUnit::OilBarrel => value * T::from_f64(0.158987294928),
-            VolumeUnit::UsBeerBarrel => value * T::from_f64(0.117347765304),
-            VolumeUnit::ImperialBeerBarrel => value * T::from_f64(0.16365924),
-            VolumeUnit::UsQuart => value * T::from_f64(0.000946352946),
-            VolumeUnit::ImperialQuart => value * T::from_f64(0.0011365225),
-            VolumeUnit::UsPint => value * T::from_f64(0.000473176473),
-            VolumeUnit::AcreFoot => value * T::from_f64(1233.48183754752),
-            VolumeUnit::ImperialPint => value * T::from_f64(0.00056826125),
-            VolumeUnit::BoardFoot => value * T::from_f64(0.002359737216),
+            VolumeUnit::CubicYard => T::mul_ratio(value, 1493271207.0, 1953125000.0),
+            VolumeUnit::CubicFoot => T::mul_ratio(value, 55306341.0, 1953125000.0),
+            VolumeUnit::HundredCubicFoot => T::mul_ratio(value, 55306341.0, 19531250.0),
+            VolumeUnit::ThousandCubicFoot => T::mul_ratio(value, 55306341.0, 1953125.0),
+            VolumeUnit::MillionCubicFoot => T::mul_ratio(value, 442450728.0, 15625.0),
+            VolumeUnit::CubicInch => T::mul_ratio(value, 2048383.0, 125000000000.0),
+            VolumeUnit::ImperialGallon => T::mul_ratio(value, 454609.0, 100000000.0),
+            VolumeUnit::KiloimperialGallon => T::mul_ratio(value, 454609.0, 100000.0),
+            VolumeUnit::MegaimperialGallon => T::mul_ratio(value, 454609.0, 100.0),
+            VolumeUnit::ImperialOunce => T::mul_ratio(value, 454609.0, 16000000000.0),
+            VolumeUnit::UsGallon => T::mul_ratio(value, 473176473.0, 125000000000.0),
+            VolumeUnit::DecausGallon => T::mul_ratio(value, 473176473.0, 12500000000.0),
+            VolumeUnit::DeciusGallon => T::mul_ratio(value, 473176473.0, 1250000000000.0),
+            VolumeUnit::HectousGallon => T::mul_ratio(value, 473176473.0, 1250000000.0),
+            VolumeUnit::KilousGallon => T::mul_ratio(value, 473176473.0, 125000000.0),
+            VolumeUnit::MegausGallon => T::mul_ratio(value, 473176473.0, 125000.0),
+            VolumeUnit::UsOunce => T::mul_ratio(value, 473176473.0, 16000000000000.0),
+            VolumeUnit::UsTablespoon => T::mul_ratio(value, 473176473.0, 32000000000000.0),
+            VolumeUnit::AuTablespoon => T::div_ratio(value, 50000.0, 1.0),
+            VolumeUnit::MetricTablespoon => T::mul_ratio(value, 3.0, 200000.0),
+            VolumeUnit::UkTablespoon => T::mul_ratio(value, 3.0, 200000.0),
+            VolumeUnit::MetricTeaspoon => T::div_ratio(value, 200000.0, 1.0),
+            VolumeUnit::UsTeaspoon => T::mul_ratio(value, 157725491.0, 32000000000000.0),
+            VolumeUnit::MetricCup => T::div_ratio(value, 4000.0, 1.0),
+            VolumeUnit::UsCustomaryCup => T::mul_ratio(value, 473176473.0, 2000000000000.0),
+            VolumeUnit::UsLegalCup => T::mul_ratio(value, 3.0, 12500.0),
+            VolumeUnit::OilBarrel => T::mul_ratio(value, 9936705933.0, 62500000000.0),
+            VolumeUnit::UsBeerBarrel => T::mul_ratio(value, 14668470663.0, 125000000000.0),
+            VolumeUnit::ImperialBeerBarrel => T::mul_ratio(value, 4091481.0, 25000000.0),
+            VolumeUnit::UsQuart => T::mul_ratio(value, 473176473.0, 500000000000.0),
+            VolumeUnit::ImperialQuart => T::mul_ratio(value, 454609.0, 400000000.0),
+            VolumeUnit::UsPint => T::mul_ratio(value, 473176473.0, 1000000000000.0),
+            VolumeUnit::AcreFoot => T::mul_ratio(value, 60228605349.0, 48828125.0),
+            VolumeUnit::ImperialPint => T::mul_ratio(value, 454609.0, 800000000.0),
+            VolumeUnit::BoardFoot => T::mul_ratio(value, 18435447.0, 7812500000.0),
         }
     }
 
@@ -924,51 +924,51 @@ impl<T: Number> crate::UnitOf<Volume<T>> for VolumeUnit {
             VolumeUnit::Decaliter => value * T::from_f64(100.0),
             VolumeUnit::Hectoliter => value * T::from_f64(10.0),
             VolumeUnit::Kiloliter => value,
-            VolumeUnit::Megaliter => value / T::from_f64(1000.0),
+            VolumeUnit::Megaliter => T::div_ratio(value, 1000.0, 1.0),
             VolumeUnit::CubicMeter => value,
-            VolumeUnit::ThousandCubicMeter => value / T::from_f64(1000.0),
-            VolumeUnit::CubicKilometer => value / T::from_f64(1e9),
-            VolumeUnit::CubicHectometer => value / T::from_f64(1000000.0),
+            VolumeUnit::ThousandCubicMeter => T::div_ratio(value, 1000.0, 1.0),
+            VolumeUnit::CubicKilometer => T::div_ratio(value, 1000000000.0, 1.0),
+            VolumeUnit::CubicHectometer => T::div_ratio(value, 1000000.0, 1.0),
             VolumeUnit::CubicDecimeter => value * T::from_f64(1000.0),
             VolumeUnit::CubicCentimeter => value * T::from_f64(1000000.0),
             VolumeUnit::CubicMillimeter => value * T::from_f64(1e9),
             VolumeUnit::CubicMicrometer => value * T::from_f64(1e18),
             VolumeUnit::CubicMile => T::div_ratio(value, 8140980127813632.0, 1953125.0),
-            VolumeUnit::CubicYard => value / T::from_f64(0.764554857984),
-            VolumeUnit::CubicFoot => value / T::from_f64(0.028316846592),
-            VolumeUnit::HundredCubicFoot => value / T::from_f64(2.8316846592),
-            VolumeUnit::ThousandCubicFoot => value / T::from_f64(28.316846592),
-            VolumeUnit::MillionCubicFoot => value / T::from_f64(28316.846592),
-            VolumeUnit::CubicInch => value / T::from_f64(1.6387064e-5),
-            VolumeUnit::ImperialGallon => value / T::from_f64(0.00454609),
-            VolumeUnit::KiloimperialGallon => value / T::from_f64(4.54609),
-            VolumeUnit::MegaimperialGallon => value / T::from_f64(4546.09),
-            VolumeUnit::ImperialOunce => value / T::from_f64(2.84130625e-5),
-            VolumeUnit::UsGallon => value / T::from_f64(0.003785411784),
-            VolumeUnit::DecausGallon => value / T::from_f64(0.03785411784),
-            VolumeUnit::DeciusGallon => value / T::from_f64(0.0003785411784),
-            VolumeUnit::HectousGallon => value / T::from_f64(0.3785411784),
-            VolumeUnit::KilousGallon => value / T::from_f64(3.785411784),
-            VolumeUnit::MegausGallon => value / T::from_f64(3785.411784),
-            VolumeUnit::UsOunce => value / T::from_f64(2.95735295625e-5),
-            VolumeUnit::UsTablespoon => value / T::from_f64(1.478676478125e-5),
+            VolumeUnit::CubicYard => T::div_ratio(value, 1493271207.0, 1953125000.0),
+            VolumeUnit::CubicFoot => T::div_ratio(value, 55306341.0, 1953125000.0),
+            VolumeUnit::HundredCubicFoot => T::div_ratio(value, 55306341.0, 19531250.0),
+            VolumeUnit::ThousandCubicFoot => T::div_ratio(value, 55306341.0, 1953125.0),
+            VolumeUnit::MillionCubicFoot => T::div_ratio(value, 442450728.0, 15625.0),
+            VolumeUnit::CubicInch => T::div_ratio(value, 2048383.0, 125000000000.0),
+            VolumeUnit::ImperialGallon => T::div_ratio(value, 454609.0, 100000000.0),
+            VolumeUnit::KiloimperialGallon => T::div_ratio(value, 454609.0, 100000.0),
+            VolumeUnit::MegaimperialGallon => T::div_ratio(value, 454609.0, 100.0),
+            VolumeUnit::ImperialOunce => T::div_ratio(value, 454609.0, 16000000000.0),
+            VolumeUnit::UsGallon => T::div_ratio(value, 473176473.0, 125000000000.0),
+            VolumeUnit::DecausGallon => T::div_ratio(value, 473176473.0, 12500000000.0),
+            VolumeUnit::DeciusGallon => T::div_ratio(value, 473176473.0, 1250000000000.0),
+            VolumeUnit::HectousGallon => T::div_ratio(value, 473176473.0, 1250000000.0),
+            VolumeUnit::KilousGallon => T::div_ratio(value, 473176473.0, 125000000.0),
+            VolumeUnit::MegausGallon => T::div_ratio(value, 473176473.0, 125000.0),
+            VolumeUnit::UsOunce => T::div_ratio(value, 473176473.0, 16000000000000.0),
+            VolumeUnit::UsTablespoon => T::div_ratio(value, 473176473.0, 32000000000000.0),
             VolumeUnit::AuTablespoon => value * T::from_f64(50000.0),
-            VolumeUnit::MetricTablespoon => value / T::from_f64(1.5e-5),
-            VolumeUnit::UkTablespoon => value / T::from_f64(1.5e-5),
+            VolumeUnit::MetricTablespoon => T::div_ratio(value, 3.0, 200000.0),
+            VolumeUnit::UkTablespoon => T::div_ratio(value, 3.0, 200000.0),
             VolumeUnit::MetricTeaspoon => value * T::from_f64(200000.0),
-            VolumeUnit::UsTeaspoon => value / T::from_f64(4.92892159375e-6),
+            VolumeUnit::UsTeaspoon => T::div_ratio(value, 157725491.0, 32000000000000.0),
             VolumeUnit::MetricCup => value * T::from_f64(4000.0),
-            VolumeUnit::UsCustomaryCup => value / T::from_f64(0.0002365882365),
-            VolumeUnit::UsLegalCup => value / T::from_f64(0.00024),
-            VolumeUnit::OilBarrel => value / T::from_f64(0.158987294928),
-            VolumeUnit::UsBeerBarrel => value / T::from_f64(0.117347765304),
-            VolumeUnit::ImperialBeerBarrel => value / T::from_f64(0.16365924),
-            VolumeUnit::UsQuart => value / T::from_f64(0.000946352946),
-            VolumeUnit::ImperialQuart => value / T::from_f64(0.0011365225),
-            VolumeUnit::UsPint => value / T::from_f64(0.000473176473),
-            VolumeUnit::AcreFoot => value / T::from_f64(1233.48183754752),
-            VolumeUnit::ImperialPint => value / T::from_f64(0.00056826125),
-            VolumeUnit::BoardFoot => value / T::from_f64(0.002359737216),
+            VolumeUnit::UsCustomaryCup => T::div_ratio(value, 473176473.0, 2000000000000.0),
+            VolumeUnit::UsLegalCup => T::div_ratio(value, 3.0, 12500.0),
+            VolumeUnit::OilBarrel => T::div_ratio(value, 9936705933.0, 62500000000.0),
+            VolumeUnit::UsBeerBarrel => T::div_ratio(value, 14668470663.0, 125000000000.0),
+            VolumeUnit::ImperialBeerBarrel => T::div_ratio(value, 4091481.0, 25000000.0),
+            VolumeUnit::UsQuart => T::div_ratio(value, 473176473.0, 500000000000.0),
+            VolumeUnit::ImperialQuart => T::div_ratio(value, 454609.0, 400000000.0),
+            VolumeUnit::UsPint => T::div_ratio(value, 473176473.0, 1000000000000.0),
+            VolumeUnit::AcreFoot => T::div_ratio(value, 60228605349.0, 48828125.0),
+            VolumeUnit::ImperialPint => T::div_ratio(value, 454609.0, 800000000.0),
+            VolumeUnit::BoardFoot => T::div_ratio(value, 18435447.0, 7812500000.0),
         }
     }
 }
@@ -987,7 +987,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `l`.
     #[inline]
     pub fn from_liters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `l`.
@@ -999,7 +999,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `nl`.
     #[inline]
     pub fn from_nanoliters(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `nl`.
@@ -1011,7 +1011,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `µl`.
     #[inline]
     pub fn from_microliters(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `µl`.
@@ -1023,7 +1023,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `ml`.
     #[inline]
     pub fn from_milliliters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ml`.
@@ -1035,7 +1035,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `cl`.
     #[inline]
     pub fn from_centiliters(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `cl`.
@@ -1047,7 +1047,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `dl`.
     #[inline]
     pub fn from_deciliters(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `dl`.
@@ -1059,7 +1059,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `dal`.
     #[inline]
     pub fn from_decaliters(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `dal`.
@@ -1071,7 +1071,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `hl`.
     #[inline]
     pub fn from_hectoliters(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `hl`.
@@ -1101,7 +1101,7 @@ impl<T: Number> Volume<T> {
     /// The value in `Ml`.
     #[inline]
     pub fn as_megaliters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Volume`] from a value in `m³`.
@@ -1125,7 +1125,7 @@ impl<T: Number> Volume<T> {
     /// The value in `10³·m³`.
     #[inline]
     pub fn as_thousand_cubic_meters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Volume`] from a value in `km³`.
@@ -1137,7 +1137,7 @@ impl<T: Number> Volume<T> {
     /// The value in `km³`.
     #[inline]
     pub fn as_cubic_kilometers(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Volume`] from a value in `hm³`.
@@ -1149,13 +1149,13 @@ impl<T: Number> Volume<T> {
     /// The value in `hm³`.
     #[inline]
     pub fn as_cubic_hectometers(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Volume`] from a value in `dm³`.
     #[inline]
     pub fn from_cubic_decimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `dm³`.
@@ -1167,7 +1167,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `cm³`.
     #[inline]
     pub fn from_cubic_centimeters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `cm³`.
@@ -1179,7 +1179,7 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `mm³`.
     #[inline]
     pub fn from_cubic_millimeters(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `mm³`.
@@ -1215,223 +1215,223 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `yd³`.
     #[inline]
     pub fn from_cubic_yards(value: T) -> Self {
-        Self(value * T::from_f64(0.764554857984))
+        Self(T::mul_ratio(value, 1493271207.0, 1953125000.0))
     }
 
     /// The value in `yd³`.
     #[inline]
     pub fn as_cubic_yards(self) -> T {
-        self.0 / T::from_f64(0.764554857984)
+        T::div_ratio(self.0, 1493271207.0, 1953125000.0)
     }
 
     /// A [`Volume`] from a value in `ft³`.
     #[inline]
     pub fn from_cubic_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.028316846592))
+        Self(T::mul_ratio(value, 55306341.0, 1953125000.0))
     }
 
     /// The value in `ft³`.
     #[inline]
     pub fn as_cubic_feet(self) -> T {
-        self.0 / T::from_f64(0.028316846592)
+        T::div_ratio(self.0, 55306341.0, 1953125000.0)
     }
 
     /// A [`Volume`] from a value in `Ccf`.
     #[inline]
     pub fn from_hundred_cubic_feet(value: T) -> Self {
-        Self(value * T::from_f64(2.8316846592))
+        Self(T::mul_ratio(value, 55306341.0, 19531250.0))
     }
 
     /// The value in `Ccf`.
     #[inline]
     pub fn as_hundred_cubic_feet(self) -> T {
-        self.0 / T::from_f64(2.8316846592)
+        T::div_ratio(self.0, 55306341.0, 19531250.0)
     }
 
     /// A [`Volume`] from a value in `Mcf`.
     #[inline]
     pub fn from_thousand_cubic_feet(value: T) -> Self {
-        Self(value * T::from_f64(28.316846592))
+        Self(T::mul_ratio(value, 55306341.0, 1953125.0))
     }
 
     /// The value in `Mcf`.
     #[inline]
     pub fn as_thousand_cubic_feet(self) -> T {
-        self.0 / T::from_f64(28.316846592)
+        T::div_ratio(self.0, 55306341.0, 1953125.0)
     }
 
     /// A [`Volume`] from a value in `MMcf`.
     #[inline]
     pub fn from_million_cubic_feet(value: T) -> Self {
-        Self(value * T::from_f64(28316.846592))
+        Self(T::mul_ratio(value, 442450728.0, 15625.0))
     }
 
     /// The value in `MMcf`.
     #[inline]
     pub fn as_million_cubic_feet(self) -> T {
-        self.0 / T::from_f64(28316.846592)
+        T::div_ratio(self.0, 442450728.0, 15625.0)
     }
 
     /// A [`Volume`] from a value in `in³`.
     #[inline]
     pub fn from_cubic_inches(value: T) -> Self {
-        Self(value * T::from_f64(1.6387064e-5))
+        Self(T::mul_ratio(value, 2048383.0, 125000000000.0))
     }
 
     /// The value in `in³`.
     #[inline]
     pub fn as_cubic_inches(self) -> T {
-        self.0 / T::from_f64(1.6387064e-5)
+        T::div_ratio(self.0, 2048383.0, 125000000000.0)
     }
 
     /// A [`Volume`] from a value in `gal (imp.)`.
     #[inline]
     pub fn from_imperial_gallons(value: T) -> Self {
-        Self(value * T::from_f64(0.00454609))
+        Self(T::mul_ratio(value, 454609.0, 100000000.0))
     }
 
     /// The value in `gal (imp.)`.
     #[inline]
     pub fn as_imperial_gallons(self) -> T {
-        self.0 / T::from_f64(0.00454609)
+        T::div_ratio(self.0, 454609.0, 100000000.0)
     }
 
     /// A [`Volume`] from a value in `kgal (imp.)`.
     #[inline]
     pub fn from_kiloimperial_gallons(value: T) -> Self {
-        Self(value * T::from_f64(4.54609))
+        Self(T::mul_ratio(value, 454609.0, 100000.0))
     }
 
     /// The value in `kgal (imp.)`.
     #[inline]
     pub fn as_kiloimperial_gallons(self) -> T {
-        self.0 / T::from_f64(4.54609)
+        T::div_ratio(self.0, 454609.0, 100000.0)
     }
 
     /// A [`Volume`] from a value in `Mgal (imp.)`.
     #[inline]
     pub fn from_megaimperial_gallons(value: T) -> Self {
-        Self(value * T::from_f64(4546.09))
+        Self(T::mul_ratio(value, 454609.0, 100.0))
     }
 
     /// The value in `Mgal (imp.)`.
     #[inline]
     pub fn as_megaimperial_gallons(self) -> T {
-        self.0 / T::from_f64(4546.09)
+        T::div_ratio(self.0, 454609.0, 100.0)
     }
 
     /// A [`Volume`] from a value in `oz (imp.)`.
     #[inline]
     pub fn from_imperial_ounces(value: T) -> Self {
-        Self(value * T::from_f64(2.84130625e-5))
+        Self(T::mul_ratio(value, 454609.0, 16000000000.0))
     }
 
     /// The value in `oz (imp.)`.
     #[inline]
     pub fn as_imperial_ounces(self) -> T {
-        self.0 / T::from_f64(2.84130625e-5)
+        T::div_ratio(self.0, 454609.0, 16000000000.0)
     }
 
     /// A [`Volume`] from a value in `gal (U.S.)`.
     #[inline]
     pub fn from_us_gallons(value: T) -> Self {
-        Self(value * T::from_f64(0.003785411784))
+        Self(T::mul_ratio(value, 473176473.0, 125000000000.0))
     }
 
     /// The value in `gal (U.S.)`.
     #[inline]
     pub fn as_us_gallons(self) -> T {
-        self.0 / T::from_f64(0.003785411784)
+        T::div_ratio(self.0, 473176473.0, 125000000000.0)
     }
 
     /// A [`Volume`] from a value in `dagal (U.S.)`.
     #[inline]
     pub fn from_decaus_gallons(value: T) -> Self {
-        Self(value * T::from_f64(0.03785411784))
+        Self(T::mul_ratio(value, 473176473.0, 12500000000.0))
     }
 
     /// The value in `dagal (U.S.)`.
     #[inline]
     pub fn as_decaus_gallons(self) -> T {
-        self.0 / T::from_f64(0.03785411784)
+        T::div_ratio(self.0, 473176473.0, 12500000000.0)
     }
 
     /// A [`Volume`] from a value in `dgal (U.S.)`.
     #[inline]
     pub fn from_decius_gallons(value: T) -> Self {
-        Self(value * T::from_f64(0.0003785411784))
+        Self(T::mul_ratio(value, 473176473.0, 1250000000000.0))
     }
 
     /// The value in `dgal (U.S.)`.
     #[inline]
     pub fn as_decius_gallons(self) -> T {
-        self.0 / T::from_f64(0.0003785411784)
+        T::div_ratio(self.0, 473176473.0, 1250000000000.0)
     }
 
     /// A [`Volume`] from a value in `hgal (U.S.)`.
     #[inline]
     pub fn from_hectous_gallons(value: T) -> Self {
-        Self(value * T::from_f64(0.3785411784))
+        Self(T::mul_ratio(value, 473176473.0, 1250000000.0))
     }
 
     /// The value in `hgal (U.S.)`.
     #[inline]
     pub fn as_hectous_gallons(self) -> T {
-        self.0 / T::from_f64(0.3785411784)
+        T::div_ratio(self.0, 473176473.0, 1250000000.0)
     }
 
     /// A [`Volume`] from a value in `kgal (U.S.)`.
     #[inline]
     pub fn from_kilous_gallons(value: T) -> Self {
-        Self(value * T::from_f64(3.785411784))
+        Self(T::mul_ratio(value, 473176473.0, 125000000.0))
     }
 
     /// The value in `kgal (U.S.)`.
     #[inline]
     pub fn as_kilous_gallons(self) -> T {
-        self.0 / T::from_f64(3.785411784)
+        T::div_ratio(self.0, 473176473.0, 125000000.0)
     }
 
     /// A [`Volume`] from a value in `Mgal (U.S.)`.
     #[inline]
     pub fn from_megaus_gallons(value: T) -> Self {
-        Self(value * T::from_f64(3785.411784))
+        Self(T::mul_ratio(value, 473176473.0, 125000.0))
     }
 
     /// The value in `Mgal (U.S.)`.
     #[inline]
     pub fn as_megaus_gallons(self) -> T {
-        self.0 / T::from_f64(3785.411784)
+        T::div_ratio(self.0, 473176473.0, 125000.0)
     }
 
     /// A [`Volume`] from a value in `oz (U.S.)`.
     #[inline]
     pub fn from_us_ounces(value: T) -> Self {
-        Self(value * T::from_f64(2.95735295625e-5))
+        Self(T::mul_ratio(value, 473176473.0, 16000000000000.0))
     }
 
     /// The value in `oz (U.S.)`.
     #[inline]
     pub fn as_us_ounces(self) -> T {
-        self.0 / T::from_f64(2.95735295625e-5)
+        T::div_ratio(self.0, 473176473.0, 16000000000000.0)
     }
 
     /// A [`Volume`] from a value in `tablespoon (U.S.)`.
     #[inline]
     pub fn from_us_tablespoons(value: T) -> Self {
-        Self(value * T::from_f64(1.478676478125e-5))
+        Self(T::mul_ratio(value, 473176473.0, 32000000000000.0))
     }
 
     /// The value in `tablespoon (U.S.)`.
     #[inline]
     pub fn as_us_tablespoons(self) -> T {
-        self.0 / T::from_f64(1.478676478125e-5)
+        T::div_ratio(self.0, 473176473.0, 32000000000000.0)
     }
 
     /// A [`Volume`] from a value in `tablespoon (A.U.)`.
     #[inline]
     pub fn from_au_tablespoons(value: T) -> Self {
-        Self(value / T::from_f64(50000.0))
+        Self(T::div_ratio(value, 50000.0, 1.0))
     }
 
     /// The value in `tablespoon (A.U.)`.
@@ -1443,31 +1443,31 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `tablespoon`.
     #[inline]
     pub fn from_metric_tablespoons(value: T) -> Self {
-        Self(value * T::from_f64(1.5e-5))
+        Self(T::mul_ratio(value, 3.0, 200000.0))
     }
 
     /// The value in `tablespoon`.
     #[inline]
     pub fn as_metric_tablespoons(self) -> T {
-        self.0 / T::from_f64(1.5e-5)
+        T::div_ratio(self.0, 3.0, 200000.0)
     }
 
     /// A [`Volume`] from a value in `tablespoon (U.K.)`.
     #[inline]
     pub fn from_uk_tablespoons(value: T) -> Self {
-        Self(value * T::from_f64(1.5e-5))
+        Self(T::mul_ratio(value, 3.0, 200000.0))
     }
 
     /// The value in `tablespoon (U.K.)`.
     #[inline]
     pub fn as_uk_tablespoons(self) -> T {
-        self.0 / T::from_f64(1.5e-5)
+        T::div_ratio(self.0, 3.0, 200000.0)
     }
 
     /// A [`Volume`] from a value in `tsp`.
     #[inline]
     pub fn from_metric_teaspoons(value: T) -> Self {
-        Self(value / T::from_f64(200000.0))
+        Self(T::div_ratio(value, 200000.0, 1.0))
     }
 
     /// The value in `tsp`.
@@ -1479,19 +1479,19 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `teaspoon (U.S.)`.
     #[inline]
     pub fn from_us_teaspoons(value: T) -> Self {
-        Self(value * T::from_f64(4.92892159375e-6))
+        Self(T::mul_ratio(value, 157725491.0, 32000000000000.0))
     }
 
     /// The value in `teaspoon (U.S.)`.
     #[inline]
     pub fn as_us_teaspoons(self) -> T {
-        self.0 / T::from_f64(4.92892159375e-6)
+        T::div_ratio(self.0, 157725491.0, 32000000000000.0)
     }
 
     /// A [`Volume`] from a value in `metric cup`.
     #[inline]
     pub fn from_metric_cups(value: T) -> Self {
-        Self(value / T::from_f64(4000.0))
+        Self(T::div_ratio(value, 4000.0, 1.0))
     }
 
     /// The value in `metric cup`.
@@ -1503,133 +1503,133 @@ impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `cup (U.S. customary)`.
     #[inline]
     pub fn from_us_customary_cups(value: T) -> Self {
-        Self(value * T::from_f64(0.0002365882365))
+        Self(T::mul_ratio(value, 473176473.0, 2000000000000.0))
     }
 
     /// The value in `cup (U.S. customary)`.
     #[inline]
     pub fn as_us_customary_cups(self) -> T {
-        self.0 / T::from_f64(0.0002365882365)
+        T::div_ratio(self.0, 473176473.0, 2000000000000.0)
     }
 
     /// A [`Volume`] from a value in `cup (U.S.)`.
     #[inline]
     pub fn from_us_legal_cups(value: T) -> Self {
-        Self(value * T::from_f64(0.00024))
+        Self(T::mul_ratio(value, 3.0, 12500.0))
     }
 
     /// The value in `cup (U.S.)`.
     #[inline]
     pub fn as_us_legal_cups(self) -> T {
-        self.0 / T::from_f64(0.00024)
+        T::div_ratio(self.0, 3.0, 12500.0)
     }
 
     /// A [`Volume`] from a value in `bbl`.
     #[inline]
     pub fn from_oil_barrels(value: T) -> Self {
-        Self(value * T::from_f64(0.158987294928))
+        Self(T::mul_ratio(value, 9936705933.0, 62500000000.0))
     }
 
     /// The value in `bbl`.
     #[inline]
     pub fn as_oil_barrels(self) -> T {
-        self.0 / T::from_f64(0.158987294928)
+        T::div_ratio(self.0, 9936705933.0, 62500000000.0)
     }
 
     /// A [`Volume`] from a value in `bl (U.S.)`.
     #[inline]
     pub fn from_us_beer_barrels(value: T) -> Self {
-        Self(value * T::from_f64(0.117347765304))
+        Self(T::mul_ratio(value, 14668470663.0, 125000000000.0))
     }
 
     /// The value in `bl (U.S.)`.
     #[inline]
     pub fn as_us_beer_barrels(self) -> T {
-        self.0 / T::from_f64(0.117347765304)
+        T::div_ratio(self.0, 14668470663.0, 125000000000.0)
     }
 
     /// A [`Volume`] from a value in `bl (imp.)`.
     #[inline]
     pub fn from_imperial_beer_barrels(value: T) -> Self {
-        Self(value * T::from_f64(0.16365924))
+        Self(T::mul_ratio(value, 4091481.0, 25000000.0))
     }
 
     /// The value in `bl (imp.)`.
     #[inline]
     pub fn as_imperial_beer_barrels(self) -> T {
-        self.0 / T::from_f64(0.16365924)
+        T::div_ratio(self.0, 4091481.0, 25000000.0)
     }
 
     /// A [`Volume`] from a value in `qt (U.S.)`.
     #[inline]
     pub fn from_us_quarts(value: T) -> Self {
-        Self(value * T::from_f64(0.000946352946))
+        Self(T::mul_ratio(value, 473176473.0, 500000000000.0))
     }
 
     /// The value in `qt (U.S.)`.
     #[inline]
     pub fn as_us_quarts(self) -> T {
-        self.0 / T::from_f64(0.000946352946)
+        T::div_ratio(self.0, 473176473.0, 500000000000.0)
     }
 
     /// A [`Volume`] from a value in `qt (imp.)`.
     #[inline]
     pub fn from_imperial_quarts(value: T) -> Self {
-        Self(value * T::from_f64(0.0011365225))
+        Self(T::mul_ratio(value, 454609.0, 400000000.0))
     }
 
     /// The value in `qt (imp.)`.
     #[inline]
     pub fn as_imperial_quarts(self) -> T {
-        self.0 / T::from_f64(0.0011365225)
+        T::div_ratio(self.0, 454609.0, 400000000.0)
     }
 
     /// A [`Volume`] from a value in `pt (U.S.)`.
     #[inline]
     pub fn from_us_pints(value: T) -> Self {
-        Self(value * T::from_f64(0.000473176473))
+        Self(T::mul_ratio(value, 473176473.0, 1000000000000.0))
     }
 
     /// The value in `pt (U.S.)`.
     #[inline]
     pub fn as_us_pints(self) -> T {
-        self.0 / T::from_f64(0.000473176473)
+        T::div_ratio(self.0, 473176473.0, 1000000000000.0)
     }
 
     /// A [`Volume`] from a value in `ac-ft`.
     #[inline]
     pub fn from_acre_feet(value: T) -> Self {
-        Self(value * T::from_f64(1233.48183754752))
+        Self(T::mul_ratio(value, 60228605349.0, 48828125.0))
     }
 
     /// The value in `ac-ft`.
     #[inline]
     pub fn as_acre_feet(self) -> T {
-        self.0 / T::from_f64(1233.48183754752)
+        T::div_ratio(self.0, 60228605349.0, 48828125.0)
     }
 
     /// A [`Volume`] from a value in `pt (imp.)`.
     #[inline]
     pub fn from_imperial_pints(value: T) -> Self {
-        Self(value * T::from_f64(0.00056826125))
+        Self(T::mul_ratio(value, 454609.0, 800000000.0))
     }
 
     /// The value in `pt (imp.)`.
     #[inline]
     pub fn as_imperial_pints(self) -> T {
-        self.0 / T::from_f64(0.00056826125)
+        T::div_ratio(self.0, 454609.0, 800000000.0)
     }
 
     /// A [`Volume`] from a value in `bf`.
     #[inline]
     pub fn from_board_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.002359737216))
+        Self(T::mul_ratio(value, 18435447.0, 7812500000.0))
     }
 
     /// The value in `bf`.
     #[inline]
     pub fn as_board_feet(self) -> T {
-        self.0 / T::from_f64(0.002359737216)
+        T::div_ratio(self.0, 18435447.0, 7812500000.0)
     }
 }
 
@@ -1639,60 +1639,66 @@ impl Volume<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: VolumeUnit) -> Self {
         Self(match unit {
-            VolumeUnit::Liter => value / 1000.0,
-            VolumeUnit::Nanoliter => value / 1e12,
-            VolumeUnit::Microliter => value / 1e9,
-            VolumeUnit::Milliliter => value / 1000000.0,
-            VolumeUnit::Centiliter => value / 100000.0,
-            VolumeUnit::Deciliter => value / 10000.0,
-            VolumeUnit::Decaliter => value / 100.0,
-            VolumeUnit::Hectoliter => value / 10.0,
+            VolumeUnit::Liter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            VolumeUnit::Nanoliter => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            VolumeUnit::Microliter => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            VolumeUnit::Milliliter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            VolumeUnit::Centiliter => crate::conv::div_ratio(value, 100000.0, 1.0),
+            VolumeUnit::Deciliter => crate::conv::div_ratio(value, 10000.0, 1.0),
+            VolumeUnit::Decaliter => crate::conv::div_ratio(value, 100.0, 1.0),
+            VolumeUnit::Hectoliter => crate::conv::div_ratio(value, 10.0, 1.0),
             VolumeUnit::Kiloliter => value,
             VolumeUnit::Megaliter => value * 1000.0,
             VolumeUnit::CubicMeter => value,
             VolumeUnit::ThousandCubicMeter => value * 1000.0,
             VolumeUnit::CubicKilometer => value * 1e9,
             VolumeUnit::CubicHectometer => value * 1000000.0,
-            VolumeUnit::CubicDecimeter => value / 1000.0,
-            VolumeUnit::CubicCentimeter => value / 1000000.0,
-            VolumeUnit::CubicMillimeter => value / 1e9,
+            VolumeUnit::CubicDecimeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            VolumeUnit::CubicCentimeter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            VolumeUnit::CubicMillimeter => crate::conv::div_ratio(value, 1000000000.0, 1.0),
             VolumeUnit::CubicMicrometer => value / 1e18,
-            VolumeUnit::CubicMile => value * 4.1681818254405794e9,
-            VolumeUnit::CubicYard => value * 0.764554857984,
-            VolumeUnit::CubicFoot => value * 0.028316846592,
-            VolumeUnit::HundredCubicFoot => value * 2.8316846592,
-            VolumeUnit::ThousandCubicFoot => value * 28.316846592,
-            VolumeUnit::MillionCubicFoot => value * 28316.846592,
-            VolumeUnit::CubicInch => value * 1.6387064e-5,
-            VolumeUnit::ImperialGallon => value * 0.00454609,
-            VolumeUnit::KiloimperialGallon => value * 4.54609,
-            VolumeUnit::MegaimperialGallon => value * 4546.09,
-            VolumeUnit::ImperialOunce => value * 2.84130625e-5,
-            VolumeUnit::UsGallon => value * 0.003785411784,
-            VolumeUnit::DecausGallon => value * 0.03785411784,
-            VolumeUnit::DeciusGallon => value * 0.0003785411784,
-            VolumeUnit::HectousGallon => value * 0.3785411784,
-            VolumeUnit::KilousGallon => value * 3.785411784,
-            VolumeUnit::MegausGallon => value * 3785.411784,
-            VolumeUnit::UsOunce => value * 2.95735295625e-5,
-            VolumeUnit::UsTablespoon => value * 1.478676478125e-5,
-            VolumeUnit::AuTablespoon => value / 50000.0,
-            VolumeUnit::MetricTablespoon => value * 1.5e-5,
-            VolumeUnit::UkTablespoon => value * 1.5e-5,
-            VolumeUnit::MetricTeaspoon => value / 200000.0,
-            VolumeUnit::UsTeaspoon => value * 4.92892159375e-6,
-            VolumeUnit::MetricCup => value / 4000.0,
-            VolumeUnit::UsCustomaryCup => value * 0.0002365882365,
-            VolumeUnit::UsLegalCup => value * 0.00024,
-            VolumeUnit::OilBarrel => value * 0.158987294928,
-            VolumeUnit::UsBeerBarrel => value * 0.117347765304,
-            VolumeUnit::ImperialBeerBarrel => value * 0.16365924,
-            VolumeUnit::UsQuart => value * 0.000946352946,
-            VolumeUnit::ImperialQuart => value * 0.0011365225,
-            VolumeUnit::UsPint => value * 0.000473176473,
-            VolumeUnit::AcreFoot => value * 1233.48183754752,
-            VolumeUnit::ImperialPint => value * 0.00056826125,
-            VolumeUnit::BoardFoot => value * 0.002359737216,
+            VolumeUnit::CubicMile => crate::conv::mul_ratio(value, 8140980127813632.0, 1953125.0),
+            VolumeUnit::CubicYard => crate::conv::mul_ratio(value, 1493271207.0, 1953125000.0),
+            VolumeUnit::CubicFoot => crate::conv::mul_ratio(value, 55306341.0, 1953125000.0),
+            VolumeUnit::HundredCubicFoot => crate::conv::mul_ratio(value, 55306341.0, 19531250.0),
+            VolumeUnit::ThousandCubicFoot => crate::conv::mul_ratio(value, 55306341.0, 1953125.0),
+            VolumeUnit::MillionCubicFoot => crate::conv::mul_ratio(value, 442450728.0, 15625.0),
+            VolumeUnit::CubicInch => crate::conv::mul_ratio(value, 2048383.0, 125000000000.0),
+            VolumeUnit::ImperialGallon => crate::conv::mul_ratio(value, 454609.0, 100000000.0),
+            VolumeUnit::KiloimperialGallon => crate::conv::mul_ratio(value, 454609.0, 100000.0),
+            VolumeUnit::MegaimperialGallon => crate::conv::mul_ratio(value, 454609.0, 100.0),
+            VolumeUnit::ImperialOunce => crate::conv::mul_ratio(value, 454609.0, 16000000000.0),
+            VolumeUnit::UsGallon => crate::conv::mul_ratio(value, 473176473.0, 125000000000.0),
+            VolumeUnit::DecausGallon => crate::conv::mul_ratio(value, 473176473.0, 12500000000.0),
+            VolumeUnit::DeciusGallon => crate::conv::mul_ratio(value, 473176473.0, 1250000000000.0),
+            VolumeUnit::HectousGallon => crate::conv::mul_ratio(value, 473176473.0, 1250000000.0),
+            VolumeUnit::KilousGallon => crate::conv::mul_ratio(value, 473176473.0, 125000000.0),
+            VolumeUnit::MegausGallon => crate::conv::mul_ratio(value, 473176473.0, 125000.0),
+            VolumeUnit::UsOunce => crate::conv::mul_ratio(value, 473176473.0, 16000000000000.0),
+            VolumeUnit::UsTablespoon => {
+                crate::conv::mul_ratio(value, 473176473.0, 32000000000000.0)
+            }
+            VolumeUnit::AuTablespoon => crate::conv::div_ratio(value, 50000.0, 1.0),
+            VolumeUnit::MetricTablespoon => crate::conv::mul_ratio(value, 3.0, 200000.0),
+            VolumeUnit::UkTablespoon => crate::conv::mul_ratio(value, 3.0, 200000.0),
+            VolumeUnit::MetricTeaspoon => crate::conv::div_ratio(value, 200000.0, 1.0),
+            VolumeUnit::UsTeaspoon => crate::conv::mul_ratio(value, 157725491.0, 32000000000000.0),
+            VolumeUnit::MetricCup => crate::conv::div_ratio(value, 4000.0, 1.0),
+            VolumeUnit::UsCustomaryCup => {
+                crate::conv::mul_ratio(value, 473176473.0, 2000000000000.0)
+            }
+            VolumeUnit::UsLegalCup => crate::conv::mul_ratio(value, 3.0, 12500.0),
+            VolumeUnit::OilBarrel => crate::conv::mul_ratio(value, 9936705933.0, 62500000000.0),
+            VolumeUnit::UsBeerBarrel => {
+                crate::conv::mul_ratio(value, 14668470663.0, 125000000000.0)
+            }
+            VolumeUnit::ImperialBeerBarrel => crate::conv::mul_ratio(value, 4091481.0, 25000000.0),
+            VolumeUnit::UsQuart => crate::conv::mul_ratio(value, 473176473.0, 500000000000.0),
+            VolumeUnit::ImperialQuart => crate::conv::mul_ratio(value, 454609.0, 400000000.0),
+            VolumeUnit::UsPint => crate::conv::mul_ratio(value, 473176473.0, 1000000000000.0),
+            VolumeUnit::AcreFoot => crate::conv::mul_ratio(value, 60228605349.0, 48828125.0),
+            VolumeUnit::ImperialPint => crate::conv::mul_ratio(value, 454609.0, 800000000.0),
+            VolumeUnit::BoardFoot => crate::conv::mul_ratio(value, 18435447.0, 7812500000.0),
         })
     }
 }

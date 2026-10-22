@@ -225,10 +225,10 @@ impl<T: Number> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
         match self {
             DynamicViscosityUnit::NewtonSecondPerMeterSquared => value,
             DynamicViscosityUnit::PascalSecond => value,
-            DynamicViscosityUnit::MillipascalSecond => value / T::from_f64(1000.0),
-            DynamicViscosityUnit::MicropascalSecond => value / T::from_f64(1000000.0),
-            DynamicViscosityUnit::Poise => value / T::from_f64(10.0),
-            DynamicViscosityUnit::Centipoise => value / T::from_f64(1000.0),
+            DynamicViscosityUnit::MillipascalSecond => T::div_ratio(value, 1000.0, 1.0),
+            DynamicViscosityUnit::MicropascalSecond => T::div_ratio(value, 1000000.0, 1.0),
+            DynamicViscosityUnit::Poise => T::div_ratio(value, 10.0, 1.0),
+            DynamicViscosityUnit::Centipoise => T::div_ratio(value, 1000.0, 1.0),
             DynamicViscosityUnit::Reyn => T::mul_ratio(value, 8896443230521.0, 1290320000.0),
             DynamicViscosityUnit::PoundForceSecondPerSquareInch => {
                 T::mul_ratio(value, 8896443230521.0, 1290320000.0)
@@ -299,7 +299,7 @@ impl<T: Number> DynamicViscosity<T> {
     /// A [`DynamicViscosity`] from a value in `mPa·s`.
     #[inline]
     pub fn from_millipascal_seconds(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mPa·s`.
@@ -311,7 +311,7 @@ impl<T: Number> DynamicViscosity<T> {
     /// A [`DynamicViscosity`] from a value in `µPa·s`.
     #[inline]
     pub fn from_micropascal_seconds(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µPa·s`.
@@ -323,7 +323,7 @@ impl<T: Number> DynamicViscosity<T> {
     /// A [`DynamicViscosity`] from a value in `P`.
     #[inline]
     pub fn from_poise(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `P`.
@@ -335,7 +335,7 @@ impl<T: Number> DynamicViscosity<T> {
     /// A [`DynamicViscosity`] from a value in `cP`.
     #[inline]
     pub fn from_centipoise(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `cP`.
@@ -401,14 +401,24 @@ impl DynamicViscosity<f64> {
         Self(match unit {
             DynamicViscosityUnit::NewtonSecondPerMeterSquared => value,
             DynamicViscosityUnit::PascalSecond => value,
-            DynamicViscosityUnit::MillipascalSecond => value / 1000.0,
-            DynamicViscosityUnit::MicropascalSecond => value / 1000000.0,
-            DynamicViscosityUnit::Poise => value / 10.0,
-            DynamicViscosityUnit::Centipoise => value / 1000.0,
-            DynamicViscosityUnit::Reyn => value * 6894.757293168362,
-            DynamicViscosityUnit::PoundForceSecondPerSquareInch => value * 6894.757293168362,
-            DynamicViscosityUnit::PoundForceSecondPerSquareFoot => value * 47.880258980335846,
-            DynamicViscosityUnit::PoundPerFootSecond => value * 1.4881639435695537,
+            DynamicViscosityUnit::MillipascalSecond => crate::conv::div_ratio(value, 1000.0, 1.0),
+            DynamicViscosityUnit::MicropascalSecond => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            DynamicViscosityUnit::Poise => crate::conv::div_ratio(value, 10.0, 1.0),
+            DynamicViscosityUnit::Centipoise => crate::conv::div_ratio(value, 1000.0, 1.0),
+            DynamicViscosityUnit::Reyn => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 1290320000.0)
+            }
+            DynamicViscosityUnit::PoundForceSecondPerSquareInch => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 1290320000.0)
+            }
+            DynamicViscosityUnit::PoundForceSecondPerSquareFoot => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 185806080000.0)
+            }
+            DynamicViscosityUnit::PoundPerFootSecond => {
+                crate::conv::mul_ratio(value, 45359237.0, 30480000.0)
+            }
         })
     }
 }

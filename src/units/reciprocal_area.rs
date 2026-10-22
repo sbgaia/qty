@@ -238,7 +238,7 @@ impl<T: Number> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             ReciprocalAreaUnit::InverseSquareMeter => value,
-            ReciprocalAreaUnit::InverseSquareKilometer => value / T::from_f64(1000000.0),
+            ReciprocalAreaUnit::InverseSquareKilometer => T::div_ratio(value, 1000000.0, 1.0),
             ReciprocalAreaUnit::InverseSquareDecimeter => value * T::from_f64(100.0),
             ReciprocalAreaUnit::InverseSquareCentimeter => value * T::from_f64(10000.0),
             ReciprocalAreaUnit::InverseSquareMillimeter => value * T::from_f64(1000000.0),
@@ -258,10 +258,12 @@ impl<T: Number> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
         match self {
             ReciprocalAreaUnit::InverseSquareMeter => value,
             ReciprocalAreaUnit::InverseSquareKilometer => value * T::from_f64(1000000.0),
-            ReciprocalAreaUnit::InverseSquareDecimeter => value / T::from_f64(100.0),
-            ReciprocalAreaUnit::InverseSquareCentimeter => value / T::from_f64(10000.0),
-            ReciprocalAreaUnit::InverseSquareMillimeter => value / T::from_f64(1000000.0),
-            ReciprocalAreaUnit::InverseSquareMicrometer => value / T::from_f64(1e12),
+            ReciprocalAreaUnit::InverseSquareDecimeter => T::div_ratio(value, 100.0, 1.0),
+            ReciprocalAreaUnit::InverseSquareCentimeter => T::div_ratio(value, 10000.0, 1.0),
+            ReciprocalAreaUnit::InverseSquareMillimeter => T::div_ratio(value, 1000000.0, 1.0),
+            ReciprocalAreaUnit::InverseSquareMicrometer => {
+                T::div_ratio(value, 1000000000000.0, 1.0)
+            }
             ReciprocalAreaUnit::InverseSquareMile => T::div_ratio(value, 15625.0, 40468564224.0),
             ReciprocalAreaUnit::InverseSquareYard => T::div_ratio(value, 1562500.0, 1306449.0),
             ReciprocalAreaUnit::InverseSquareFoot => T::div_ratio(value, 1562500.0, 145161.0),
@@ -299,7 +301,7 @@ impl<T: Number> ReciprocalArea<T> {
     /// A [`ReciprocalArea`] from a value in `km⁻²`.
     #[inline]
     pub fn from_inverse_square_kilometers(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `km⁻²`.
@@ -317,7 +319,7 @@ impl<T: Number> ReciprocalArea<T> {
     /// The value in `dm⁻²`.
     #[inline]
     pub fn as_inverse_square_decimeters(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `cm⁻²`.
@@ -329,7 +331,7 @@ impl<T: Number> ReciprocalArea<T> {
     /// The value in `cm⁻²`.
     #[inline]
     pub fn as_inverse_square_centimeters(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `mm⁻²`.
@@ -341,7 +343,7 @@ impl<T: Number> ReciprocalArea<T> {
     /// The value in `mm⁻²`.
     #[inline]
     pub fn as_inverse_square_millimeters(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `µm⁻²`.
@@ -353,7 +355,7 @@ impl<T: Number> ReciprocalArea<T> {
     /// The value in `µm⁻²`.
     #[inline]
     pub fn as_inverse_square_micrometers(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `mi⁻²`.
@@ -424,16 +426,28 @@ impl ReciprocalArea<f64> {
     pub const fn const_new(value: f64, unit: ReciprocalAreaUnit) -> Self {
         Self(match unit {
             ReciprocalAreaUnit::InverseSquareMeter => value,
-            ReciprocalAreaUnit::InverseSquareKilometer => value / 1000000.0,
+            ReciprocalAreaUnit::InverseSquareKilometer => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
             ReciprocalAreaUnit::InverseSquareDecimeter => value * 100.0,
             ReciprocalAreaUnit::InverseSquareCentimeter => value * 10000.0,
             ReciprocalAreaUnit::InverseSquareMillimeter => value * 1000000.0,
             ReciprocalAreaUnit::InverseSquareMicrometer => value * 1e12,
-            ReciprocalAreaUnit::InverseSquareMile => value * 3.8610215854244587e-7,
-            ReciprocalAreaUnit::InverseSquareYard => value * 1.1959900463010802,
-            ReciprocalAreaUnit::InverseSquareFoot => value * 10.763910416709722,
-            ReciprocalAreaUnit::InverseUsSurveySquareFoot => value * 10.763867361111112,
-            ReciprocalAreaUnit::InverseSquareInch => value * 1550.0031000062,
+            ReciprocalAreaUnit::InverseSquareMile => {
+                crate::conv::mul_ratio(value, 15625.0, 40468564224.0)
+            }
+            ReciprocalAreaUnit::InverseSquareYard => {
+                crate::conv::mul_ratio(value, 1562500.0, 1306449.0)
+            }
+            ReciprocalAreaUnit::InverseSquareFoot => {
+                crate::conv::mul_ratio(value, 1562500.0, 145161.0)
+            }
+            ReciprocalAreaUnit::InverseUsSurveySquareFoot => {
+                crate::conv::mul_ratio(value, 15499969.0, 1440000.0)
+            }
+            ReciprocalAreaUnit::InverseSquareInch => {
+                crate::conv::mul_ratio(value, 25000000.0, 16129.0)
+            }
         })
     }
 }

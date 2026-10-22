@@ -205,14 +205,14 @@ impl<T: Number> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit 
     fn value_to_base(self, value: T) -> T {
         match self {
             KinematicViscosityUnit::SquareMeterPerSecond => value,
-            KinematicViscosityUnit::Stokes => value / T::from_f64(10000.0),
-            KinematicViscosityUnit::Nanostokes => value / T::from_f64(1e13),
-            KinematicViscosityUnit::Microstokes => value / T::from_f64(1e10),
-            KinematicViscosityUnit::Millistokes => value / T::from_f64(1e7),
-            KinematicViscosityUnit::Centistokes => value / T::from_f64(1000000.0),
-            KinematicViscosityUnit::Decistokes => value / T::from_f64(100000.0),
-            KinematicViscosityUnit::Kilostokes => value / T::from_f64(10.0),
-            KinematicViscosityUnit::SquareFootPerSecond => value * T::from_f64(0.09290304),
+            KinematicViscosityUnit::Stokes => T::div_ratio(value, 10000.0, 1.0),
+            KinematicViscosityUnit::Nanostokes => T::div_ratio(value, 10000000000000.0, 1.0),
+            KinematicViscosityUnit::Microstokes => T::div_ratio(value, 10000000000.0, 1.0),
+            KinematicViscosityUnit::Millistokes => T::div_ratio(value, 10000000.0, 1.0),
+            KinematicViscosityUnit::Centistokes => T::div_ratio(value, 1000000.0, 1.0),
+            KinematicViscosityUnit::Decistokes => T::div_ratio(value, 100000.0, 1.0),
+            KinematicViscosityUnit::Kilostokes => T::div_ratio(value, 10.0, 1.0),
+            KinematicViscosityUnit::SquareFootPerSecond => T::mul_ratio(value, 145161.0, 1562500.0),
         }
     }
 
@@ -227,7 +227,7 @@ impl<T: Number> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit 
             KinematicViscosityUnit::Centistokes => value * T::from_f64(1000000.0),
             KinematicViscosityUnit::Decistokes => value * T::from_f64(100000.0),
             KinematicViscosityUnit::Kilostokes => value * T::from_f64(10.0),
-            KinematicViscosityUnit::SquareFootPerSecond => value / T::from_f64(0.09290304),
+            KinematicViscosityUnit::SquareFootPerSecond => T::div_ratio(value, 145161.0, 1562500.0),
         }
     }
 }
@@ -258,7 +258,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `St`.
     #[inline]
     pub fn from_stokes(value: T) -> Self {
-        Self(value / T::from_f64(10000.0))
+        Self(T::div_ratio(value, 10000.0, 1.0))
     }
 
     /// The value in `St`.
@@ -270,7 +270,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `nSt`.
     #[inline]
     pub fn from_nanostokes(value: T) -> Self {
-        Self(value / T::from_f64(1e13))
+        Self(T::div_ratio(value, 10000000000000.0, 1.0))
     }
 
     /// The value in `nSt`.
@@ -282,7 +282,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `µSt`.
     #[inline]
     pub fn from_microstokes(value: T) -> Self {
-        Self(value / T::from_f64(1e10))
+        Self(T::div_ratio(value, 10000000000.0, 1.0))
     }
 
     /// The value in `µSt`.
@@ -294,7 +294,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `mSt`.
     #[inline]
     pub fn from_millistokes(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `mSt`.
@@ -306,7 +306,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `cSt`.
     #[inline]
     pub fn from_centistokes(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `cSt`.
@@ -318,7 +318,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `dSt`.
     #[inline]
     pub fn from_decistokes(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `dSt`.
@@ -330,7 +330,7 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `kSt`.
     #[inline]
     pub fn from_kilostokes(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `kSt`.
@@ -342,13 +342,13 @@ impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `ft²/s`.
     #[inline]
     pub fn from_square_feet_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.09290304))
+        Self(T::mul_ratio(value, 145161.0, 1562500.0))
     }
 
     /// The value in `ft²/s`.
     #[inline]
     pub fn as_square_feet_per_second(self) -> T {
-        self.0 / T::from_f64(0.09290304)
+        T::div_ratio(self.0, 145161.0, 1562500.0)
     }
 }
 
@@ -359,14 +359,20 @@ impl KinematicViscosity<f64> {
     pub const fn const_new(value: f64, unit: KinematicViscosityUnit) -> Self {
         Self(match unit {
             KinematicViscosityUnit::SquareMeterPerSecond => value,
-            KinematicViscosityUnit::Stokes => value / 10000.0,
-            KinematicViscosityUnit::Nanostokes => value / 1e13,
-            KinematicViscosityUnit::Microstokes => value / 1e10,
-            KinematicViscosityUnit::Millistokes => value / 1e7,
-            KinematicViscosityUnit::Centistokes => value / 1000000.0,
-            KinematicViscosityUnit::Decistokes => value / 100000.0,
-            KinematicViscosityUnit::Kilostokes => value / 10.0,
-            KinematicViscosityUnit::SquareFootPerSecond => value * 0.09290304,
+            KinematicViscosityUnit::Stokes => crate::conv::div_ratio(value, 10000.0, 1.0),
+            KinematicViscosityUnit::Nanostokes => {
+                crate::conv::div_ratio(value, 10000000000000.0, 1.0)
+            }
+            KinematicViscosityUnit::Microstokes => {
+                crate::conv::div_ratio(value, 10000000000.0, 1.0)
+            }
+            KinematicViscosityUnit::Millistokes => crate::conv::div_ratio(value, 10000000.0, 1.0),
+            KinematicViscosityUnit::Centistokes => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            KinematicViscosityUnit::Decistokes => crate::conv::div_ratio(value, 100000.0, 1.0),
+            KinematicViscosityUnit::Kilostokes => crate::conv::div_ratio(value, 10.0, 1.0),
+            KinematicViscosityUnit::SquareFootPerSecond => {
+                crate::conv::mul_ratio(value, 145161.0, 1562500.0)
+            }
         })
     }
 }

@@ -447,20 +447,22 @@ impl<T: Number> crate::UnitOf<Power<T>> for PowerUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             PowerUnit::Watt => value,
-            PowerUnit::Femtowatt => value / T::from_f64(1e15),
-            PowerUnit::Picowatt => value / T::from_f64(1e12),
-            PowerUnit::Nanowatt => value / T::from_f64(1e9),
-            PowerUnit::Microwatt => value / T::from_f64(1000000.0),
-            PowerUnit::Milliwatt => value / T::from_f64(1000.0),
-            PowerUnit::Deciwatt => value / T::from_f64(10.0),
+            PowerUnit::Femtowatt => T::div_ratio(value, 1000000000000000.0, 1.0),
+            PowerUnit::Picowatt => T::div_ratio(value, 1000000000000.0, 1.0),
+            PowerUnit::Nanowatt => T::div_ratio(value, 1000000000.0, 1.0),
+            PowerUnit::Microwatt => T::div_ratio(value, 1000000.0, 1.0),
+            PowerUnit::Milliwatt => T::div_ratio(value, 1000.0, 1.0),
+            PowerUnit::Deciwatt => T::div_ratio(value, 10.0, 1.0),
             PowerUnit::Decawatt => value * T::from_f64(10.0),
             PowerUnit::Kilowatt => value * T::from_f64(1000.0),
             PowerUnit::Megawatt => value * T::from_f64(1000000.0),
             PowerUnit::Gigawatt => value * T::from_f64(1e9),
             PowerUnit::Terawatt => value * T::from_f64(1e12),
             PowerUnit::Petawatt => value * T::from_f64(1e15),
-            PowerUnit::MechanicalHorsepower => value * T::from_f64(745.699871515585),
-            PowerUnit::MetricHorsepower => value * T::from_f64(735.49875),
+            PowerUnit::MechanicalHorsepower => {
+                T::mul_ratio(value, 149139974303117.0, 200000000000.0)
+            }
+            PowerUnit::MetricHorsepower => T::mul_ratio(value, 588399.0, 800.0),
             PowerUnit::ElectricalHorsepower => value * T::from_f64(746.0),
             PowerUnit::BoilerHorsepower => value * T::from_f64(9812.5),
             PowerUnit::HydraulicHorsepower => value * T::from_f64(745.6998715822702),
@@ -473,12 +475,12 @@ impl<T: Number> crate::UnitOf<Power<T>> for PowerUnit {
             PowerUnit::MegabritishThermalUnitPerHour => {
                 T::mul_ratio(value, 52752792631.0, 180000.0)
             }
-            PowerUnit::JoulePerHour => value / T::from_f64(3600.0),
-            PowerUnit::MillijoulePerHour => value / T::from_f64(3600000.0),
+            PowerUnit::JoulePerHour => T::div_ratio(value, 3600.0, 1.0),
+            PowerUnit::MillijoulePerHour => T::div_ratio(value, 3600000.0, 1.0),
             PowerUnit::KilojoulePerHour => T::mul_ratio(value, 5.0, 18.0),
             PowerUnit::MegajoulePerHour => T::mul_ratio(value, 2500.0, 9.0),
             PowerUnit::GigajoulePerHour => T::mul_ratio(value, 2500000.0, 9.0),
-            PowerUnit::TonOfRefrigeration => value * T::from_f64(3516.853),
+            PowerUnit::TonOfRefrigeration => T::mul_ratio(value, 3516853.0, 1000.0),
         }
     }
 
@@ -492,16 +494,18 @@ impl<T: Number> crate::UnitOf<Power<T>> for PowerUnit {
             PowerUnit::Microwatt => value * T::from_f64(1000000.0),
             PowerUnit::Milliwatt => value * T::from_f64(1000.0),
             PowerUnit::Deciwatt => value * T::from_f64(10.0),
-            PowerUnit::Decawatt => value / T::from_f64(10.0),
-            PowerUnit::Kilowatt => value / T::from_f64(1000.0),
-            PowerUnit::Megawatt => value / T::from_f64(1000000.0),
-            PowerUnit::Gigawatt => value / T::from_f64(1e9),
-            PowerUnit::Terawatt => value / T::from_f64(1e12),
-            PowerUnit::Petawatt => value / T::from_f64(1e15),
-            PowerUnit::MechanicalHorsepower => value / T::from_f64(745.699871515585),
-            PowerUnit::MetricHorsepower => value / T::from_f64(735.49875),
-            PowerUnit::ElectricalHorsepower => value / T::from_f64(746.0),
-            PowerUnit::BoilerHorsepower => value / T::from_f64(9812.5),
+            PowerUnit::Decawatt => T::div_ratio(value, 10.0, 1.0),
+            PowerUnit::Kilowatt => T::div_ratio(value, 1000.0, 1.0),
+            PowerUnit::Megawatt => T::div_ratio(value, 1000000.0, 1.0),
+            PowerUnit::Gigawatt => T::div_ratio(value, 1000000000.0, 1.0),
+            PowerUnit::Terawatt => T::div_ratio(value, 1000000000000.0, 1.0),
+            PowerUnit::Petawatt => T::div_ratio(value, 1000000000000000.0, 1.0),
+            PowerUnit::MechanicalHorsepower => {
+                T::div_ratio(value, 149139974303117.0, 200000000000.0)
+            }
+            PowerUnit::MetricHorsepower => T::div_ratio(value, 588399.0, 800.0),
+            PowerUnit::ElectricalHorsepower => T::div_ratio(value, 746.0, 1.0),
+            PowerUnit::BoilerHorsepower => T::div_ratio(value, 19625.0, 2.0),
             PowerUnit::HydraulicHorsepower => value / T::from_f64(745.6998715822702),
             PowerUnit::BritishThermalUnitPerHour => {
                 T::div_ratio(value, 52752792631.0, 180000000000.0)
@@ -517,7 +521,7 @@ impl<T: Number> crate::UnitOf<Power<T>> for PowerUnit {
             PowerUnit::KilojoulePerHour => T::div_ratio(value, 5.0, 18.0),
             PowerUnit::MegajoulePerHour => T::div_ratio(value, 2500.0, 9.0),
             PowerUnit::GigajoulePerHour => T::div_ratio(value, 2500000.0, 9.0),
-            PowerUnit::TonOfRefrigeration => value / T::from_f64(3516.853),
+            PowerUnit::TonOfRefrigeration => T::div_ratio(value, 3516853.0, 1000.0),
         }
     }
 }
@@ -561,7 +565,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `fW`.
     #[inline]
     pub fn from_femtowatts(value: T) -> Self {
-        Self(value / T::from_f64(1e15))
+        Self(T::div_ratio(value, 1000000000000000.0, 1.0))
     }
 
     /// The value in `fW`.
@@ -573,7 +577,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `pW`.
     #[inline]
     pub fn from_picowatts(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pW`.
@@ -585,7 +589,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `nW`.
     #[inline]
     pub fn from_nanowatts(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nW`.
@@ -597,7 +601,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `µW`.
     #[inline]
     pub fn from_microwatts(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µW`.
@@ -609,7 +613,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `mW`.
     #[inline]
     pub fn from_milliwatts(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mW`.
@@ -621,7 +625,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `dW`.
     #[inline]
     pub fn from_deciwatts(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dW`.
@@ -639,7 +643,7 @@ impl<T: Number> Power<T> {
     /// The value in `daW`.
     #[inline]
     pub fn as_decawatts(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`Power`] from a value in `kW`.
@@ -651,7 +655,7 @@ impl<T: Number> Power<T> {
     /// The value in `kW`.
     #[inline]
     pub fn as_kilowatts(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Power`] from a value in `MW`.
@@ -663,7 +667,7 @@ impl<T: Number> Power<T> {
     /// The value in `MW`.
     #[inline]
     pub fn as_megawatts(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Power`] from a value in `GW`.
@@ -675,7 +679,7 @@ impl<T: Number> Power<T> {
     /// The value in `GW`.
     #[inline]
     pub fn as_gigawatts(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Power`] from a value in `TW`.
@@ -687,7 +691,7 @@ impl<T: Number> Power<T> {
     /// The value in `TW`.
     #[inline]
     pub fn as_terawatts(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Power`] from a value in `PW`.
@@ -699,31 +703,31 @@ impl<T: Number> Power<T> {
     /// The value in `PW`.
     #[inline]
     pub fn as_petawatts(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`Power`] from a value in `hp(I)`.
     #[inline]
     pub fn from_mechanical_horsepower(value: T) -> Self {
-        Self(value * T::from_f64(745.699871515585))
+        Self(T::mul_ratio(value, 149139974303117.0, 200000000000.0))
     }
 
     /// The value in `hp(I)`.
     #[inline]
     pub fn as_mechanical_horsepower(self) -> T {
-        self.0 / T::from_f64(745.699871515585)
+        T::div_ratio(self.0, 149139974303117.0, 200000000000.0)
     }
 
     /// A [`Power`] from a value in `hp(M)`.
     #[inline]
     pub fn from_metric_horsepower(value: T) -> Self {
-        Self(value * T::from_f64(735.49875))
+        Self(T::mul_ratio(value, 588399.0, 800.0))
     }
 
     /// The value in `hp(M)`.
     #[inline]
     pub fn as_metric_horsepower(self) -> T {
-        self.0 / T::from_f64(735.49875)
+        T::div_ratio(self.0, 588399.0, 800.0)
     }
 
     /// A [`Power`] from a value in `hp(E)`.
@@ -735,7 +739,7 @@ impl<T: Number> Power<T> {
     /// The value in `hp(E)`.
     #[inline]
     pub fn as_electrical_horsepower(self) -> T {
-        self.0 / T::from_f64(746.0)
+        T::div_ratio(self.0, 746.0, 1.0)
     }
 
     /// A [`Power`] from a value in `hp(S)`.
@@ -747,7 +751,7 @@ impl<T: Number> Power<T> {
     /// The value in `hp(S)`.
     #[inline]
     pub fn as_boiler_horsepower(self) -> T {
-        self.0 / T::from_f64(9812.5)
+        T::div_ratio(self.0, 19625.0, 2.0)
     }
 
     /// A [`Power`] from a value in `hp(H)`.
@@ -801,7 +805,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `J/h`.
     #[inline]
     pub fn from_joules_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `J/h`.
@@ -813,7 +817,7 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `mJ/h`.
     #[inline]
     pub fn from_millijoules_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600000.0))
+        Self(T::div_ratio(value, 3600000.0, 1.0))
     }
 
     /// The value in `mJ/h`.
@@ -861,13 +865,13 @@ impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `TR`.
     #[inline]
     pub fn from_tons_of_refrigeration(value: T) -> Self {
-        Self(value * T::from_f64(3516.853))
+        Self(T::mul_ratio(value, 3516853.0, 1000.0))
     }
 
     /// The value in `TR`.
     #[inline]
     pub fn as_tons_of_refrigeration(self) -> T {
-        self.0 / T::from_f64(3516.853)
+        T::div_ratio(self.0, 3516853.0, 1000.0)
     }
 }
 
@@ -878,32 +882,40 @@ impl Power<f64> {
     pub const fn const_new(value: f64, unit: PowerUnit) -> Self {
         Self(match unit {
             PowerUnit::Watt => value,
-            PowerUnit::Femtowatt => value / 1e15,
-            PowerUnit::Picowatt => value / 1e12,
-            PowerUnit::Nanowatt => value / 1e9,
-            PowerUnit::Microwatt => value / 1000000.0,
-            PowerUnit::Milliwatt => value / 1000.0,
-            PowerUnit::Deciwatt => value / 10.0,
+            PowerUnit::Femtowatt => crate::conv::div_ratio(value, 1000000000000000.0, 1.0),
+            PowerUnit::Picowatt => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
+            PowerUnit::Nanowatt => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            PowerUnit::Microwatt => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            PowerUnit::Milliwatt => crate::conv::div_ratio(value, 1000.0, 1.0),
+            PowerUnit::Deciwatt => crate::conv::div_ratio(value, 10.0, 1.0),
             PowerUnit::Decawatt => value * 10.0,
             PowerUnit::Kilowatt => value * 1000.0,
             PowerUnit::Megawatt => value * 1000000.0,
             PowerUnit::Gigawatt => value * 1e9,
             PowerUnit::Terawatt => value * 1e12,
             PowerUnit::Petawatt => value * 1e15,
-            PowerUnit::MechanicalHorsepower => value * 745.699871515585,
-            PowerUnit::MetricHorsepower => value * 735.49875,
+            PowerUnit::MechanicalHorsepower => {
+                crate::conv::mul_ratio(value, 149139974303117.0, 200000000000.0)
+            }
+            PowerUnit::MetricHorsepower => crate::conv::mul_ratio(value, 588399.0, 800.0),
             PowerUnit::ElectricalHorsepower => value * 746.0,
             PowerUnit::BoilerHorsepower => value * 9812.5,
             PowerUnit::HydraulicHorsepower => value * 745.6998715822702,
-            PowerUnit::BritishThermalUnitPerHour => value * 0.2930710701722222,
-            PowerUnit::KilobritishThermalUnitPerHour => value * 293.0710701722222,
-            PowerUnit::MegabritishThermalUnitPerHour => value * 293071.0701722222,
-            PowerUnit::JoulePerHour => value / 3600.0,
-            PowerUnit::MillijoulePerHour => value / 3600000.0,
-            PowerUnit::KilojoulePerHour => value * 0.2777777777777778,
-            PowerUnit::MegajoulePerHour => value * 277.77777777777777,
-            PowerUnit::GigajoulePerHour => value * 277777.77777777775,
-            PowerUnit::TonOfRefrigeration => value * 3516.853,
+            PowerUnit::BritishThermalUnitPerHour => {
+                crate::conv::mul_ratio(value, 52752792631.0, 180000000000.0)
+            }
+            PowerUnit::KilobritishThermalUnitPerHour => {
+                crate::conv::mul_ratio(value, 52752792631.0, 180000000.0)
+            }
+            PowerUnit::MegabritishThermalUnitPerHour => {
+                crate::conv::mul_ratio(value, 52752792631.0, 180000.0)
+            }
+            PowerUnit::JoulePerHour => crate::conv::div_ratio(value, 3600.0, 1.0),
+            PowerUnit::MillijoulePerHour => crate::conv::div_ratio(value, 3600000.0, 1.0),
+            PowerUnit::KilojoulePerHour => crate::conv::mul_ratio(value, 5.0, 18.0),
+            PowerUnit::MegajoulePerHour => crate::conv::mul_ratio(value, 2500.0, 9.0),
+            PowerUnit::GigajoulePerHour => crate::conv::mul_ratio(value, 2500000.0, 9.0),
+            PowerUnit::TonOfRefrigeration => crate::conv::mul_ratio(value, 3516853.0, 1000.0),
         })
     }
 }

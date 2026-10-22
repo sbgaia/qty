@@ -208,6 +208,12 @@ assert_eq!(Length::from_feet(Ratio::from_integer(1)).as_meters(), Ratio::new(381
 # }
 ```
 
+With `f32` and `f64`, a conversion is one or two operations and no
+division where the target has an FMA instruction (every aarch64 target,
+x86-64 with `-C target-cpu=x86-64-v3` or `native`). It is then correctly
+rounded: `Length::from_feet(12.0)` is exactly 3.6576 m. Elsewhere it
+multiplies or divides once by the rounded constant, which is within an ulp.
+
 Complex storage suits AC circuits: a current phasor times a complex
 impedance, `ElectricCurrent<Complex64> * ElectricResistance<Complex64>`, is
 the voltage phasor.

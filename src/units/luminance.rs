@@ -223,11 +223,11 @@ impl<T: Number> crate::UnitOf<Luminance<T>> for LuminanceUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             LuminanceUnit::CandelaPerSquareMeter => value,
-            LuminanceUnit::NanocandelaPerSquareMeter => value / T::from_f64(1e9),
-            LuminanceUnit::MicrocandelaPerSquareMeter => value / T::from_f64(1000000.0),
-            LuminanceUnit::MillicandelaPerSquareMeter => value / T::from_f64(1000.0),
-            LuminanceUnit::CenticandelaPerSquareMeter => value / T::from_f64(100.0),
-            LuminanceUnit::DecicandelaPerSquareMeter => value / T::from_f64(10.0),
+            LuminanceUnit::NanocandelaPerSquareMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            LuminanceUnit::MicrocandelaPerSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
+            LuminanceUnit::MillicandelaPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            LuminanceUnit::CenticandelaPerSquareMeter => T::div_ratio(value, 100.0, 1.0),
+            LuminanceUnit::DecicandelaPerSquareMeter => T::div_ratio(value, 10.0, 1.0),
             LuminanceUnit::KilocandelaPerSquareMeter => value * T::from_f64(1000.0),
             LuminanceUnit::CandelaPerSquareFoot => T::mul_ratio(value, 1562500.0, 145161.0),
             LuminanceUnit::CandelaPerSquareInch => T::mul_ratio(value, 25000000.0, 16129.0),
@@ -244,7 +244,7 @@ impl<T: Number> crate::UnitOf<Luminance<T>> for LuminanceUnit {
             LuminanceUnit::MillicandelaPerSquareMeter => value * T::from_f64(1000.0),
             LuminanceUnit::CenticandelaPerSquareMeter => value * T::from_f64(100.0),
             LuminanceUnit::DecicandelaPerSquareMeter => value * T::from_f64(10.0),
-            LuminanceUnit::KilocandelaPerSquareMeter => value / T::from_f64(1000.0),
+            LuminanceUnit::KilocandelaPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
             LuminanceUnit::CandelaPerSquareFoot => T::div_ratio(value, 1562500.0, 145161.0),
             LuminanceUnit::CandelaPerSquareInch => T::div_ratio(value, 25000000.0, 16129.0),
             LuminanceUnit::Nit => value,
@@ -285,7 +285,7 @@ impl<T: Number> Luminance<T> {
     /// A [`Luminance`] from a value in `nCd/m²`.
     #[inline]
     pub fn from_nanocandelas_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nCd/m²`.
@@ -297,7 +297,7 @@ impl<T: Number> Luminance<T> {
     /// A [`Luminance`] from a value in `µCd/m²`.
     #[inline]
     pub fn from_microcandelas_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µCd/m²`.
@@ -309,7 +309,7 @@ impl<T: Number> Luminance<T> {
     /// A [`Luminance`] from a value in `mCd/m²`.
     #[inline]
     pub fn from_millicandelas_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mCd/m²`.
@@ -321,7 +321,7 @@ impl<T: Number> Luminance<T> {
     /// A [`Luminance`] from a value in `cCd/m²`.
     #[inline]
     pub fn from_centicandelas_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cCd/m²`.
@@ -333,7 +333,7 @@ impl<T: Number> Luminance<T> {
     /// A [`Luminance`] from a value in `dCd/m²`.
     #[inline]
     pub fn from_decicandelas_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dCd/m²`.
@@ -351,7 +351,7 @@ impl<T: Number> Luminance<T> {
     /// The value in `kCd/m²`.
     #[inline]
     pub fn as_kilocandelas_per_square_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Luminance`] from a value in `Cd/ft²`.
@@ -398,14 +398,22 @@ impl Luminance<f64> {
     pub const fn const_new(value: f64, unit: LuminanceUnit) -> Self {
         Self(match unit {
             LuminanceUnit::CandelaPerSquareMeter => value,
-            LuminanceUnit::NanocandelaPerSquareMeter => value / 1e9,
-            LuminanceUnit::MicrocandelaPerSquareMeter => value / 1000000.0,
-            LuminanceUnit::MillicandelaPerSquareMeter => value / 1000.0,
-            LuminanceUnit::CenticandelaPerSquareMeter => value / 100.0,
-            LuminanceUnit::DecicandelaPerSquareMeter => value / 10.0,
+            LuminanceUnit::NanocandelaPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            LuminanceUnit::MicrocandelaPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            LuminanceUnit::MillicandelaPerSquareMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            LuminanceUnit::CenticandelaPerSquareMeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            LuminanceUnit::DecicandelaPerSquareMeter => crate::conv::div_ratio(value, 10.0, 1.0),
             LuminanceUnit::KilocandelaPerSquareMeter => value * 1000.0,
-            LuminanceUnit::CandelaPerSquareFoot => value * 10.763910416709722,
-            LuminanceUnit::CandelaPerSquareInch => value * 1550.0031000062,
+            LuminanceUnit::CandelaPerSquareFoot => {
+                crate::conv::mul_ratio(value, 1562500.0, 145161.0)
+            }
+            LuminanceUnit::CandelaPerSquareInch => {
+                crate::conv::mul_ratio(value, 25000000.0, 16129.0)
+            }
             LuminanceUnit::Nit => value,
         })
     }

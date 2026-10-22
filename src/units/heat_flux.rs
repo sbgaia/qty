@@ -425,14 +425,14 @@ impl<T: Number> crate::UnitOf<HeatFlux<T>> for HeatFluxUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             HeatFluxUnit::WattPerSquareMeter => value,
-            HeatFluxUnit::NanowattPerSquareMeter => value / T::from_f64(1e9),
-            HeatFluxUnit::MicrowattPerSquareMeter => value / T::from_f64(1000000.0),
-            HeatFluxUnit::MilliwattPerSquareMeter => value / T::from_f64(1000.0),
-            HeatFluxUnit::CentiwattPerSquareMeter => value / T::from_f64(100.0),
-            HeatFluxUnit::DeciwattPerSquareMeter => value / T::from_f64(10.0),
+            HeatFluxUnit::NanowattPerSquareMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            HeatFluxUnit::MicrowattPerSquareMeter => T::div_ratio(value, 1000000.0, 1.0),
+            HeatFluxUnit::MilliwattPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            HeatFluxUnit::CentiwattPerSquareMeter => T::div_ratio(value, 100.0, 1.0),
+            HeatFluxUnit::DeciwattPerSquareMeter => T::div_ratio(value, 10.0, 1.0),
             HeatFluxUnit::KilowattPerSquareMeter => value * T::from_f64(1000.0),
             HeatFluxUnit::WattPerSquareMillimeter => value * T::from_f64(1000000.0),
-            HeatFluxUnit::NanowattPerSquareMillimeter => value / T::from_f64(1000.0),
+            HeatFluxUnit::NanowattPerSquareMillimeter => T::div_ratio(value, 1000.0, 1.0),
             HeatFluxUnit::MicrowattPerSquareMillimeter => value,
             HeatFluxUnit::MilliwattPerSquareMillimeter => value * T::from_f64(1000.0),
             HeatFluxUnit::CentiwattPerSquareMillimeter => value * T::from_f64(10000.0),
@@ -450,7 +450,7 @@ impl<T: Number> crate::UnitOf<HeatFlux<T>> for HeatFluxUnit {
             HeatFluxUnit::PoundForcePerFootSecond => {
                 T::mul_ratio(value, 8896443230521.0, 609600000000.0)
             }
-            HeatFluxUnit::PoundPerSecondCubed => value * T::from_f64(0.45359237),
+            HeatFluxUnit::PoundPerSecondCubed => T::mul_ratio(value, 45359237.0, 100000000.0),
         }
     }
 
@@ -463,27 +463,29 @@ impl<T: Number> crate::UnitOf<HeatFlux<T>> for HeatFluxUnit {
             HeatFluxUnit::MilliwattPerSquareMeter => value * T::from_f64(1000.0),
             HeatFluxUnit::CentiwattPerSquareMeter => value * T::from_f64(100.0),
             HeatFluxUnit::DeciwattPerSquareMeter => value * T::from_f64(10.0),
-            HeatFluxUnit::KilowattPerSquareMeter => value / T::from_f64(1000.0),
-            HeatFluxUnit::WattPerSquareMillimeter => value / T::from_f64(1000000.0),
+            HeatFluxUnit::KilowattPerSquareMeter => T::div_ratio(value, 1000.0, 1.0),
+            HeatFluxUnit::WattPerSquareMillimeter => T::div_ratio(value, 1000000.0, 1.0),
             HeatFluxUnit::NanowattPerSquareMillimeter => value * T::from_f64(1000.0),
             HeatFluxUnit::MicrowattPerSquareMillimeter => value,
-            HeatFluxUnit::MilliwattPerSquareMillimeter => value / T::from_f64(1000.0),
-            HeatFluxUnit::CentiwattPerSquareMillimeter => value / T::from_f64(10000.0),
-            HeatFluxUnit::DeciwattPerSquareMillimeter => value / T::from_f64(100000.0),
-            HeatFluxUnit::KilowattPerSquareMillimeter => value / T::from_f64(1e9),
+            HeatFluxUnit::MilliwattPerSquareMillimeter => T::div_ratio(value, 1000.0, 1.0),
+            HeatFluxUnit::CentiwattPerSquareMillimeter => T::div_ratio(value, 10000.0, 1.0),
+            HeatFluxUnit::DeciwattPerSquareMillimeter => T::div_ratio(value, 100000.0, 1.0),
+            HeatFluxUnit::KilowattPerSquareMillimeter => T::div_ratio(value, 1000000000.0, 1.0),
             HeatFluxUnit::WattPerSquareInch => T::div_ratio(value, 25000000.0, 16129.0),
             HeatFluxUnit::WattPerSquareFoot => T::div_ratio(value, 1562500.0, 145161.0),
             HeatFluxUnit::BtuPerSecondSquareInch => T::div_ratio(value, 52752792631.0, 32258.0),
             HeatFluxUnit::BtuPerSecondSquareFoot => T::div_ratio(value, 52752792631.0, 4645152.0),
             HeatFluxUnit::BtuPerMinuteSquareFoot => T::div_ratio(value, 52752792631.0, 278709120.0),
             HeatFluxUnit::BtuPerHourSquareFoot => T::div_ratio(value, 52752792631.0, 16722547200.0),
-            HeatFluxUnit::CaloriePerSecondSquareCentimeter => value / T::from_f64(41840.0),
-            HeatFluxUnit::KilocaloriePerSecondSquareCentimeter => value / T::from_f64(4.184e7),
+            HeatFluxUnit::CaloriePerSecondSquareCentimeter => T::div_ratio(value, 41840.0, 1.0),
+            HeatFluxUnit::KilocaloriePerSecondSquareCentimeter => {
+                T::div_ratio(value, 41840000.0, 1.0)
+            }
             HeatFluxUnit::KilocaloriePerHourSquareMeter => T::div_ratio(value, 523.0, 450.0),
             HeatFluxUnit::PoundForcePerFootSecond => {
                 T::div_ratio(value, 8896443230521.0, 609600000000.0)
             }
-            HeatFluxUnit::PoundPerSecondCubed => value / T::from_f64(0.45359237),
+            HeatFluxUnit::PoundPerSecondCubed => T::div_ratio(value, 45359237.0, 100000000.0),
         }
     }
 }
@@ -521,7 +523,7 @@ impl<T: Number> HeatFlux<T> {
     /// A [`HeatFlux`] from a value in `nW/m²`.
     #[inline]
     pub fn from_nanowatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nW/m²`.
@@ -533,7 +535,7 @@ impl<T: Number> HeatFlux<T> {
     /// A [`HeatFlux`] from a value in `µW/m²`.
     #[inline]
     pub fn from_microwatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µW/m²`.
@@ -545,7 +547,7 @@ impl<T: Number> HeatFlux<T> {
     /// A [`HeatFlux`] from a value in `mW/m²`.
     #[inline]
     pub fn from_milliwatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mW/m²`.
@@ -557,7 +559,7 @@ impl<T: Number> HeatFlux<T> {
     /// A [`HeatFlux`] from a value in `cW/m²`.
     #[inline]
     pub fn from_centiwatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `cW/m²`.
@@ -569,7 +571,7 @@ impl<T: Number> HeatFlux<T> {
     /// A [`HeatFlux`] from a value in `dW/m²`.
     #[inline]
     pub fn from_deciwatts_per_square_meter(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `dW/m²`.
@@ -587,7 +589,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `kW/m²`.
     #[inline]
     pub fn as_kilowatts_per_square_meter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `W/mm²`.
@@ -599,13 +601,13 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `W/mm²`.
     #[inline]
     pub fn as_watts_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `nW/mm²`.
     #[inline]
     pub fn from_nanowatts_per_square_millimeter(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `nW/mm²`.
@@ -635,7 +637,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `mW/mm²`.
     #[inline]
     pub fn as_milliwatts_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `cW/mm²`.
@@ -647,7 +649,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `cW/mm²`.
     #[inline]
     pub fn as_centiwatts_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `dW/mm²`.
@@ -659,7 +661,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `dW/mm²`.
     #[inline]
     pub fn as_deciwatts_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(100000.0)
+        T::div_ratio(self.0, 100000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `kW/mm²`.
@@ -671,7 +673,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `kW/mm²`.
     #[inline]
     pub fn as_kilowatts_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `W/in²`.
@@ -755,7 +757,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `cal/(s·cm²)`.
     #[inline]
     pub fn as_calories_per_second_square_centimeter(self) -> T {
-        self.0 / T::from_f64(41840.0)
+        T::div_ratio(self.0, 41840.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `kcal/(s·cm²)`.
@@ -767,7 +769,7 @@ impl<T: Number> HeatFlux<T> {
     /// The value in `kcal/(s·cm²)`.
     #[inline]
     pub fn as_kilocalories_per_second_square_centimeter(self) -> T {
-        self.0 / T::from_f64(4.184e7)
+        T::div_ratio(self.0, 41840000.0, 1.0)
     }
 
     /// A [`HeatFlux`] from a value in `kcal/(h·m²)`.
@@ -797,13 +799,13 @@ impl<T: Number> HeatFlux<T> {
     /// A [`HeatFlux`] from a value in `lb/s³`.
     #[inline]
     pub fn from_pounds_per_second_cubed(value: T) -> Self {
-        Self(value * T::from_f64(0.45359237))
+        Self(T::mul_ratio(value, 45359237.0, 100000000.0))
     }
 
     /// The value in `lb/s³`.
     #[inline]
     pub fn as_pounds_per_second_cubed(self) -> T {
-        self.0 / T::from_f64(0.45359237)
+        T::div_ratio(self.0, 45359237.0, 100000000.0)
     }
 }
 
@@ -814,30 +816,46 @@ impl HeatFlux<f64> {
     pub const fn const_new(value: f64, unit: HeatFluxUnit) -> Self {
         Self(match unit {
             HeatFluxUnit::WattPerSquareMeter => value,
-            HeatFluxUnit::NanowattPerSquareMeter => value / 1e9,
-            HeatFluxUnit::MicrowattPerSquareMeter => value / 1000000.0,
-            HeatFluxUnit::MilliwattPerSquareMeter => value / 1000.0,
-            HeatFluxUnit::CentiwattPerSquareMeter => value / 100.0,
-            HeatFluxUnit::DeciwattPerSquareMeter => value / 10.0,
+            HeatFluxUnit::NanowattPerSquareMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            HeatFluxUnit::MicrowattPerSquareMeter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            HeatFluxUnit::MilliwattPerSquareMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
+            HeatFluxUnit::CentiwattPerSquareMeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            HeatFluxUnit::DeciwattPerSquareMeter => crate::conv::div_ratio(value, 10.0, 1.0),
             HeatFluxUnit::KilowattPerSquareMeter => value * 1000.0,
             HeatFluxUnit::WattPerSquareMillimeter => value * 1000000.0,
-            HeatFluxUnit::NanowattPerSquareMillimeter => value / 1000.0,
+            HeatFluxUnit::NanowattPerSquareMillimeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             HeatFluxUnit::MicrowattPerSquareMillimeter => value,
             HeatFluxUnit::MilliwattPerSquareMillimeter => value * 1000.0,
             HeatFluxUnit::CentiwattPerSquareMillimeter => value * 10000.0,
             HeatFluxUnit::DeciwattPerSquareMillimeter => value * 100000.0,
             HeatFluxUnit::KilowattPerSquareMillimeter => value * 1e9,
-            HeatFluxUnit::WattPerSquareInch => value * 1550.0031000062,
-            HeatFluxUnit::WattPerSquareFoot => value * 10.763910416709722,
-            HeatFluxUnit::BtuPerSecondSquareInch => value * 1635339.8422406844,
-            HeatFluxUnit::BtuPerSecondSquareFoot => value * 11356.526682226975,
-            HeatFluxUnit::BtuPerMinuteSquareFoot => value * 189.27544470378294,
-            HeatFluxUnit::BtuPerHourSquareFoot => value * 3.154590745063049,
+            HeatFluxUnit::WattPerSquareInch => crate::conv::mul_ratio(value, 25000000.0, 16129.0),
+            HeatFluxUnit::WattPerSquareFoot => crate::conv::mul_ratio(value, 1562500.0, 145161.0),
+            HeatFluxUnit::BtuPerSecondSquareInch => {
+                crate::conv::mul_ratio(value, 52752792631.0, 32258.0)
+            }
+            HeatFluxUnit::BtuPerSecondSquareFoot => {
+                crate::conv::mul_ratio(value, 52752792631.0, 4645152.0)
+            }
+            HeatFluxUnit::BtuPerMinuteSquareFoot => {
+                crate::conv::mul_ratio(value, 52752792631.0, 278709120.0)
+            }
+            HeatFluxUnit::BtuPerHourSquareFoot => {
+                crate::conv::mul_ratio(value, 52752792631.0, 16722547200.0)
+            }
             HeatFluxUnit::CaloriePerSecondSquareCentimeter => value * 41840.0,
             HeatFluxUnit::KilocaloriePerSecondSquareCentimeter => value * 4.184e7,
-            HeatFluxUnit::KilocaloriePerHourSquareMeter => value * 1.1622222222222223,
-            HeatFluxUnit::PoundForcePerFootSecond => value * 14.593902937206364,
-            HeatFluxUnit::PoundPerSecondCubed => value * 0.45359237,
+            HeatFluxUnit::KilocaloriePerHourSquareMeter => {
+                crate::conv::mul_ratio(value, 523.0, 450.0)
+            }
+            HeatFluxUnit::PoundForcePerFootSecond => {
+                crate::conv::mul_ratio(value, 8896443230521.0, 609600000000.0)
+            }
+            HeatFluxUnit::PoundPerSecondCubed => {
+                crate::conv::mul_ratio(value, 45359237.0, 100000000.0)
+            }
         })
     }
 }

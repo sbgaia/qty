@@ -35,6 +35,23 @@ follow [Semantic Versioning](https://semver.org/).
   quantity's base unit and dimensions out as literals, so the compiler no
   longer parses the base unit's abbreviation for every quantity. Nothing
   else changes.
+- Unit conversions with `f32` and `f64` storage are correctly rounded and
+  no longer divide where the target has an FMA instruction: every aarch64
+  target, and x86-64 built with `-C target-cpu=x86-64-v3`, `haswell`,
+  `native` or later (with `std`). The conversion constant is used in two
+  parts, about 106 bits, by a multiplication and a fused multiply-add. 12 ft
+  is now exactly 3.6576 m instead of 3.6576000000000004, and converting
+  arrays is faster (7 to 12 % in the `convert_10k` benchmark). Other targets
+  give the same values as before. Constants involving π and the few whose
+  fraction doesn't fit in 53 bits (exa prefixes, pound-force inch) still
+  use one rounded constant. `const_new` gives the same bits as `new` on
+  every target.
+- `Number::mul_ratio` and `div_ratio` now get every conversion constant that
+  isn't exact in binary, as an exact fraction: feet to metres is
+  `mul_ratio(381.0, 1250.0)` rather than `* from_f64(0.3048)`, and metres
+  to kilometres `div_ratio(1000.0, 1.0)`. Rational and decimal storage give
+  the same values as before. `Complex` storage scales both parts like real
+  storage.
 
 ## [0.4.0] - 2026-10-22
 

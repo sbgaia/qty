@@ -622,28 +622,28 @@ impl<T: Number> crate::UnitOf<Energy<T>> for EnergyUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             EnergyUnit::Joule => value,
-            EnergyUnit::Nanojoule => value / T::from_f64(1e9),
-            EnergyUnit::Microjoule => value / T::from_f64(1000000.0),
-            EnergyUnit::Millijoule => value / T::from_f64(1000.0),
+            EnergyUnit::Nanojoule => T::div_ratio(value, 1000000000.0, 1.0),
+            EnergyUnit::Microjoule => T::div_ratio(value, 1000000.0, 1.0),
+            EnergyUnit::Millijoule => T::div_ratio(value, 1000.0, 1.0),
             EnergyUnit::Kilojoule => value * T::from_f64(1000.0),
             EnergyUnit::Megajoule => value * T::from_f64(1000000.0),
             EnergyUnit::Gigajoule => value * T::from_f64(1e9),
             EnergyUnit::Terajoule => value * T::from_f64(1e12),
             EnergyUnit::Petajoule => value * T::from_f64(1e15),
-            EnergyUnit::Calorie => value * T::from_f64(4.184),
+            EnergyUnit::Calorie => T::mul_ratio(value, 523.0, 125.0),
             EnergyUnit::Kilocalorie => value * T::from_f64(4184.0),
             EnergyUnit::Megacalorie => value * T::from_f64(4184000.0),
-            EnergyUnit::BritishThermalUnit => value * T::from_f64(1055.05585262),
-            EnergyUnit::KilobritishThermalUnit => value * T::from_f64(1055055.85262),
-            EnergyUnit::MegabritishThermalUnit => value * T::from_f64(1.05505585262e9),
+            EnergyUnit::BritishThermalUnit => T::mul_ratio(value, 52752792631.0, 50000000.0),
+            EnergyUnit::KilobritishThermalUnit => T::mul_ratio(value, 52752792631.0, 50000.0),
+            EnergyUnit::MegabritishThermalUnit => T::mul_ratio(value, 52752792631.0, 50.0),
             EnergyUnit::GigabritishThermalUnit => value * T::from_f64(1.05505585262e12),
             EnergyUnit::ElectronVolt => value * T::from_f64(1.602176634e-19),
             EnergyUnit::KiloelectronVolt => value * T::from_f64(1.602176634e-16),
             EnergyUnit::MegaelectronVolt => value * T::from_f64(1.602176634e-13),
             EnergyUnit::GigaelectronVolt => value * T::from_f64(1.602176634e-10),
-            EnergyUnit::TeraelectronVolt => value * T::from_f64(1.602176634e-7),
+            EnergyUnit::TeraelectronVolt => T::mul_ratio(value, 801088317.0, 5000000000000000.0),
             EnergyUnit::FootPound => T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0),
-            EnergyUnit::Erg => value / T::from_f64(1e7),
+            EnergyUnit::Erg => T::div_ratio(value, 10000000.0, 1.0),
             EnergyUnit::WattHour => value * T::from_f64(3600.0),
             EnergyUnit::KilowattHour => value * T::from_f64(3600000.0),
             EnergyUnit::MegawattHour => value * T::from_f64(3.6e9),
@@ -654,13 +654,13 @@ impl<T: Number> crate::UnitOf<Energy<T>> for EnergyUnit {
             EnergyUnit::MegawattDay => value * T::from_f64(8.64e10),
             EnergyUnit::GigawattDay => value * T::from_f64(8.64e13),
             EnergyUnit::TerawattDay => value * T::from_f64(8.64e16),
-            EnergyUnit::ThermEc => value * T::from_f64(1.05505585262e8),
-            EnergyUnit::DecathermEc => value * T::from_f64(1.05505585262e9),
+            EnergyUnit::ThermEc => T::mul_ratio(value, 52752792631.0, 500.0),
+            EnergyUnit::DecathermEc => T::mul_ratio(value, 52752792631.0, 50.0),
             EnergyUnit::ThermUs => value * T::from_f64(1.054804e8),
             EnergyUnit::DecathermUs => value * T::from_f64(1.054804e9),
-            EnergyUnit::ThermImperial => value * T::from_f64(1.05505585257348e8),
-            EnergyUnit::DecathermImperial => value * T::from_f64(1.05505585257348e9),
-            EnergyUnit::HorsepowerHour => value * T::from_f64(2684519.537456106),
+            EnergyUnit::ThermImperial => T::mul_ratio(value, 26376396314337.0, 250000.0),
+            EnergyUnit::DecathermImperial => T::mul_ratio(value, 26376396314337.0, 25000.0),
+            EnergyUnit::HorsepowerHour => T::mul_ratio(value, 1342259768728053.0, 500000000.0),
         }
     }
 
@@ -671,42 +671,42 @@ impl<T: Number> crate::UnitOf<Energy<T>> for EnergyUnit {
             EnergyUnit::Nanojoule => value * T::from_f64(1e9),
             EnergyUnit::Microjoule => value * T::from_f64(1000000.0),
             EnergyUnit::Millijoule => value * T::from_f64(1000.0),
-            EnergyUnit::Kilojoule => value / T::from_f64(1000.0),
-            EnergyUnit::Megajoule => value / T::from_f64(1000000.0),
-            EnergyUnit::Gigajoule => value / T::from_f64(1e9),
-            EnergyUnit::Terajoule => value / T::from_f64(1e12),
-            EnergyUnit::Petajoule => value / T::from_f64(1e15),
-            EnergyUnit::Calorie => value / T::from_f64(4.184),
-            EnergyUnit::Kilocalorie => value / T::from_f64(4184.0),
-            EnergyUnit::Megacalorie => value / T::from_f64(4184000.0),
-            EnergyUnit::BritishThermalUnit => value / T::from_f64(1055.05585262),
-            EnergyUnit::KilobritishThermalUnit => value / T::from_f64(1055055.85262),
-            EnergyUnit::MegabritishThermalUnit => value / T::from_f64(1.05505585262e9),
-            EnergyUnit::GigabritishThermalUnit => value / T::from_f64(1.05505585262e12),
+            EnergyUnit::Kilojoule => T::div_ratio(value, 1000.0, 1.0),
+            EnergyUnit::Megajoule => T::div_ratio(value, 1000000.0, 1.0),
+            EnergyUnit::Gigajoule => T::div_ratio(value, 1000000000.0, 1.0),
+            EnergyUnit::Terajoule => T::div_ratio(value, 1000000000000.0, 1.0),
+            EnergyUnit::Petajoule => T::div_ratio(value, 1000000000000000.0, 1.0),
+            EnergyUnit::Calorie => T::div_ratio(value, 523.0, 125.0),
+            EnergyUnit::Kilocalorie => T::div_ratio(value, 4184.0, 1.0),
+            EnergyUnit::Megacalorie => T::div_ratio(value, 4184000.0, 1.0),
+            EnergyUnit::BritishThermalUnit => T::div_ratio(value, 52752792631.0, 50000000.0),
+            EnergyUnit::KilobritishThermalUnit => T::div_ratio(value, 52752792631.0, 50000.0),
+            EnergyUnit::MegabritishThermalUnit => T::div_ratio(value, 52752792631.0, 50.0),
+            EnergyUnit::GigabritishThermalUnit => T::div_ratio(value, 1055055852620.0, 1.0),
             EnergyUnit::ElectronVolt => value / T::from_f64(1.602176634e-19),
             EnergyUnit::KiloelectronVolt => value / T::from_f64(1.602176634e-16),
             EnergyUnit::MegaelectronVolt => value / T::from_f64(1.602176634e-13),
             EnergyUnit::GigaelectronVolt => value / T::from_f64(1.602176634e-10),
-            EnergyUnit::TeraelectronVolt => value / T::from_f64(1.602176634e-7),
+            EnergyUnit::TeraelectronVolt => T::div_ratio(value, 801088317.0, 5000000000000000.0),
             EnergyUnit::FootPound => T::div_ratio(value, 3389544870828501.0, 2500000000000000.0),
             EnergyUnit::Erg => value * T::from_f64(1e7),
-            EnergyUnit::WattHour => value / T::from_f64(3600.0),
-            EnergyUnit::KilowattHour => value / T::from_f64(3600000.0),
-            EnergyUnit::MegawattHour => value / T::from_f64(3.6e9),
-            EnergyUnit::GigawattHour => value / T::from_f64(3.6e12),
-            EnergyUnit::TerawattHour => value / T::from_f64(3.6e15),
-            EnergyUnit::WattDay => value / T::from_f64(86400.0),
-            EnergyUnit::KilowattDay => value / T::from_f64(8.64e7),
-            EnergyUnit::MegawattDay => value / T::from_f64(8.64e10),
-            EnergyUnit::GigawattDay => value / T::from_f64(8.64e13),
+            EnergyUnit::WattHour => T::div_ratio(value, 3600.0, 1.0),
+            EnergyUnit::KilowattHour => T::div_ratio(value, 3600000.0, 1.0),
+            EnergyUnit::MegawattHour => T::div_ratio(value, 3600000000.0, 1.0),
+            EnergyUnit::GigawattHour => T::div_ratio(value, 3600000000000.0, 1.0),
+            EnergyUnit::TerawattHour => T::div_ratio(value, 3600000000000000.0, 1.0),
+            EnergyUnit::WattDay => T::div_ratio(value, 86400.0, 1.0),
+            EnergyUnit::KilowattDay => T::div_ratio(value, 86400000.0, 1.0),
+            EnergyUnit::MegawattDay => T::div_ratio(value, 86400000000.0, 1.0),
+            EnergyUnit::GigawattDay => T::div_ratio(value, 86400000000000.0, 1.0),
             EnergyUnit::TerawattDay => value / T::from_f64(8.64e16),
-            EnergyUnit::ThermEc => value / T::from_f64(1.05505585262e8),
-            EnergyUnit::DecathermEc => value / T::from_f64(1.05505585262e9),
-            EnergyUnit::ThermUs => value / T::from_f64(1.054804e8),
-            EnergyUnit::DecathermUs => value / T::from_f64(1.054804e9),
-            EnergyUnit::ThermImperial => value / T::from_f64(1.05505585257348e8),
-            EnergyUnit::DecathermImperial => value / T::from_f64(1.05505585257348e9),
-            EnergyUnit::HorsepowerHour => value / T::from_f64(2684519.537456106),
+            EnergyUnit::ThermEc => T::div_ratio(value, 52752792631.0, 500.0),
+            EnergyUnit::DecathermEc => T::div_ratio(value, 52752792631.0, 50.0),
+            EnergyUnit::ThermUs => T::div_ratio(value, 105480400.0, 1.0),
+            EnergyUnit::DecathermUs => T::div_ratio(value, 1054804000.0, 1.0),
+            EnergyUnit::ThermImperial => T::div_ratio(value, 26376396314337.0, 250000.0),
+            EnergyUnit::DecathermImperial => T::div_ratio(value, 26376396314337.0, 25000.0),
+            EnergyUnit::HorsepowerHour => T::div_ratio(value, 1342259768728053.0, 500000000.0),
         }
     }
 }
@@ -748,7 +748,7 @@ impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `nJ`.
     #[inline]
     pub fn from_nanojoules(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nJ`.
@@ -760,7 +760,7 @@ impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `µJ`.
     #[inline]
     pub fn from_microjoules(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µJ`.
@@ -772,7 +772,7 @@ impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `mJ`.
     #[inline]
     pub fn from_millijoules(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mJ`.
@@ -790,7 +790,7 @@ impl<T: Number> Energy<T> {
     /// The value in `kJ`.
     #[inline]
     pub fn as_kilojoules(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `MJ`.
@@ -802,7 +802,7 @@ impl<T: Number> Energy<T> {
     /// The value in `MJ`.
     #[inline]
     pub fn as_megajoules(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `GJ`.
@@ -814,7 +814,7 @@ impl<T: Number> Energy<T> {
     /// The value in `GJ`.
     #[inline]
     pub fn as_gigajoules(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `TJ`.
@@ -826,7 +826,7 @@ impl<T: Number> Energy<T> {
     /// The value in `TJ`.
     #[inline]
     pub fn as_terajoules(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `PJ`.
@@ -838,19 +838,19 @@ impl<T: Number> Energy<T> {
     /// The value in `PJ`.
     #[inline]
     pub fn as_petajoules(self) -> T {
-        self.0 / T::from_f64(1e15)
+        T::div_ratio(self.0, 1000000000000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `cal`.
     #[inline]
     pub fn from_calories(value: T) -> Self {
-        Self(value * T::from_f64(4.184))
+        Self(T::mul_ratio(value, 523.0, 125.0))
     }
 
     /// The value in `cal`.
     #[inline]
     pub fn as_calories(self) -> T {
-        self.0 / T::from_f64(4.184)
+        T::div_ratio(self.0, 523.0, 125.0)
     }
 
     /// A [`Energy`] from a value in `kcal`.
@@ -862,7 +862,7 @@ impl<T: Number> Energy<T> {
     /// The value in `kcal`.
     #[inline]
     pub fn as_kilocalories(self) -> T {
-        self.0 / T::from_f64(4184.0)
+        T::div_ratio(self.0, 4184.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `Mcal`.
@@ -874,43 +874,43 @@ impl<T: Number> Energy<T> {
     /// The value in `Mcal`.
     #[inline]
     pub fn as_megacalories(self) -> T {
-        self.0 / T::from_f64(4184000.0)
+        T::div_ratio(self.0, 4184000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `BTU`.
     #[inline]
     pub fn from_british_thermal_units(value: T) -> Self {
-        Self(value * T::from_f64(1055.05585262))
+        Self(T::mul_ratio(value, 52752792631.0, 50000000.0))
     }
 
     /// The value in `BTU`.
     #[inline]
     pub fn as_british_thermal_units(self) -> T {
-        self.0 / T::from_f64(1055.05585262)
+        T::div_ratio(self.0, 52752792631.0, 50000000.0)
     }
 
     /// A [`Energy`] from a value in `kBTU`.
     #[inline]
     pub fn from_kilobritish_thermal_units(value: T) -> Self {
-        Self(value * T::from_f64(1055055.85262))
+        Self(T::mul_ratio(value, 52752792631.0, 50000.0))
     }
 
     /// The value in `kBTU`.
     #[inline]
     pub fn as_kilobritish_thermal_units(self) -> T {
-        self.0 / T::from_f64(1055055.85262)
+        T::div_ratio(self.0, 52752792631.0, 50000.0)
     }
 
     /// A [`Energy`] from a value in `MBTU`.
     #[inline]
     pub fn from_megabritish_thermal_units(value: T) -> Self {
-        Self(value * T::from_f64(1.05505585262e9))
+        Self(T::mul_ratio(value, 52752792631.0, 50.0))
     }
 
     /// The value in `MBTU`.
     #[inline]
     pub fn as_megabritish_thermal_units(self) -> T {
-        self.0 / T::from_f64(1.05505585262e9)
+        T::div_ratio(self.0, 52752792631.0, 50.0)
     }
 
     /// A [`Energy`] from a value in `GBTU`.
@@ -922,7 +922,7 @@ impl<T: Number> Energy<T> {
     /// The value in `GBTU`.
     #[inline]
     pub fn as_gigabritish_thermal_units(self) -> T {
-        self.0 / T::from_f64(1.05505585262e12)
+        T::div_ratio(self.0, 1055055852620.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `eV`.
@@ -976,13 +976,13 @@ impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `TeV`.
     #[inline]
     pub fn from_teraelectron_volts(value: T) -> Self {
-        Self(value * T::from_f64(1.602176634e-7))
+        Self(T::mul_ratio(value, 801088317.0, 5000000000000000.0))
     }
 
     /// The value in `TeV`.
     #[inline]
     pub fn as_teraelectron_volts(self) -> T {
-        self.0 / T::from_f64(1.602176634e-7)
+        T::div_ratio(self.0, 801088317.0, 5000000000000000.0)
     }
 
     /// A [`Energy`] from a value in `ft·lb`.
@@ -1000,7 +1000,7 @@ impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `erg`.
     #[inline]
     pub fn from_ergs(value: T) -> Self {
-        Self(value / T::from_f64(1e7))
+        Self(T::div_ratio(value, 10000000.0, 1.0))
     }
 
     /// The value in `erg`.
@@ -1018,7 +1018,7 @@ impl<T: Number> Energy<T> {
     /// The value in `Wh`.
     #[inline]
     pub fn as_watt_hours(self) -> T {
-        self.0 / T::from_f64(3600.0)
+        T::div_ratio(self.0, 3600.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `kWh`.
@@ -1030,7 +1030,7 @@ impl<T: Number> Energy<T> {
     /// The value in `kWh`.
     #[inline]
     pub fn as_kilowatt_hours(self) -> T {
-        self.0 / T::from_f64(3600000.0)
+        T::div_ratio(self.0, 3600000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `MWh`.
@@ -1042,7 +1042,7 @@ impl<T: Number> Energy<T> {
     /// The value in `MWh`.
     #[inline]
     pub fn as_megawatt_hours(self) -> T {
-        self.0 / T::from_f64(3.6e9)
+        T::div_ratio(self.0, 3600000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `GWh`.
@@ -1054,7 +1054,7 @@ impl<T: Number> Energy<T> {
     /// The value in `GWh`.
     #[inline]
     pub fn as_gigawatt_hours(self) -> T {
-        self.0 / T::from_f64(3.6e12)
+        T::div_ratio(self.0, 3600000000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `TWh`.
@@ -1066,7 +1066,7 @@ impl<T: Number> Energy<T> {
     /// The value in `TWh`.
     #[inline]
     pub fn as_terawatt_hours(self) -> T {
-        self.0 / T::from_f64(3.6e15)
+        T::div_ratio(self.0, 3600000000000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `Wd`.
@@ -1078,7 +1078,7 @@ impl<T: Number> Energy<T> {
     /// The value in `Wd`.
     #[inline]
     pub fn as_watt_days(self) -> T {
-        self.0 / T::from_f64(86400.0)
+        T::div_ratio(self.0, 86400.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `kWd`.
@@ -1090,7 +1090,7 @@ impl<T: Number> Energy<T> {
     /// The value in `kWd`.
     #[inline]
     pub fn as_kilowatt_days(self) -> T {
-        self.0 / T::from_f64(8.64e7)
+        T::div_ratio(self.0, 86400000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `MWd`.
@@ -1102,7 +1102,7 @@ impl<T: Number> Energy<T> {
     /// The value in `MWd`.
     #[inline]
     pub fn as_megawatt_days(self) -> T {
-        self.0 / T::from_f64(8.64e10)
+        T::div_ratio(self.0, 86400000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `GWd`.
@@ -1114,7 +1114,7 @@ impl<T: Number> Energy<T> {
     /// The value in `GWd`.
     #[inline]
     pub fn as_gigawatt_days(self) -> T {
-        self.0 / T::from_f64(8.64e13)
+        T::div_ratio(self.0, 86400000000000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `TWd`.
@@ -1132,25 +1132,25 @@ impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `th (E.C.)`.
     #[inline]
     pub fn from_therms_ec(value: T) -> Self {
-        Self(value * T::from_f64(1.05505585262e8))
+        Self(T::mul_ratio(value, 52752792631.0, 500.0))
     }
 
     /// The value in `th (E.C.)`.
     #[inline]
     pub fn as_therms_ec(self) -> T {
-        self.0 / T::from_f64(1.05505585262e8)
+        T::div_ratio(self.0, 52752792631.0, 500.0)
     }
 
     /// A [`Energy`] from a value in `dath (E.C.)`.
     #[inline]
     pub fn from_decatherms_ec(value: T) -> Self {
-        Self(value * T::from_f64(1.05505585262e9))
+        Self(T::mul_ratio(value, 52752792631.0, 50.0))
     }
 
     /// The value in `dath (E.C.)`.
     #[inline]
     pub fn as_decatherms_ec(self) -> T {
-        self.0 / T::from_f64(1.05505585262e9)
+        T::div_ratio(self.0, 52752792631.0, 50.0)
     }
 
     /// A [`Energy`] from a value in `th (U.S.)`.
@@ -1162,7 +1162,7 @@ impl<T: Number> Energy<T> {
     /// The value in `th (U.S.)`.
     #[inline]
     pub fn as_therms_us(self) -> T {
-        self.0 / T::from_f64(1.054804e8)
+        T::div_ratio(self.0, 105480400.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `dath (U.S.)`.
@@ -1174,43 +1174,43 @@ impl<T: Number> Energy<T> {
     /// The value in `dath (U.S.)`.
     #[inline]
     pub fn as_decatherms_us(self) -> T {
-        self.0 / T::from_f64(1.054804e9)
+        T::div_ratio(self.0, 1054804000.0, 1.0)
     }
 
     /// A [`Energy`] from a value in `th (imp.)`.
     #[inline]
     pub fn from_therms_imperial(value: T) -> Self {
-        Self(value * T::from_f64(1.05505585257348e8))
+        Self(T::mul_ratio(value, 26376396314337.0, 250000.0))
     }
 
     /// The value in `th (imp.)`.
     #[inline]
     pub fn as_therms_imperial(self) -> T {
-        self.0 / T::from_f64(1.05505585257348e8)
+        T::div_ratio(self.0, 26376396314337.0, 250000.0)
     }
 
     /// A [`Energy`] from a value in `dath (imp.)`.
     #[inline]
     pub fn from_decatherms_imperial(value: T) -> Self {
-        Self(value * T::from_f64(1.05505585257348e9))
+        Self(T::mul_ratio(value, 26376396314337.0, 25000.0))
     }
 
     /// The value in `dath (imp.)`.
     #[inline]
     pub fn as_decatherms_imperial(self) -> T {
-        self.0 / T::from_f64(1.05505585257348e9)
+        T::div_ratio(self.0, 26376396314337.0, 25000.0)
     }
 
     /// A [`Energy`] from a value in `hp·h`.
     #[inline]
     pub fn from_horsepower_hours(value: T) -> Self {
-        Self(value * T::from_f64(2684519.537456106))
+        Self(T::mul_ratio(value, 1342259768728053.0, 500000000.0))
     }
 
     /// The value in `hp·h`.
     #[inline]
     pub fn as_horsepower_hours(self) -> T {
-        self.0 / T::from_f64(2684519.537456106)
+        T::div_ratio(self.0, 1342259768728053.0, 500000000.0)
     }
 }
 
@@ -1221,28 +1221,38 @@ impl Energy<f64> {
     pub const fn const_new(value: f64, unit: EnergyUnit) -> Self {
         Self(match unit {
             EnergyUnit::Joule => value,
-            EnergyUnit::Nanojoule => value / 1e9,
-            EnergyUnit::Microjoule => value / 1000000.0,
-            EnergyUnit::Millijoule => value / 1000.0,
+            EnergyUnit::Nanojoule => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            EnergyUnit::Microjoule => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            EnergyUnit::Millijoule => crate::conv::div_ratio(value, 1000.0, 1.0),
             EnergyUnit::Kilojoule => value * 1000.0,
             EnergyUnit::Megajoule => value * 1000000.0,
             EnergyUnit::Gigajoule => value * 1e9,
             EnergyUnit::Terajoule => value * 1e12,
             EnergyUnit::Petajoule => value * 1e15,
-            EnergyUnit::Calorie => value * 4.184,
+            EnergyUnit::Calorie => crate::conv::mul_ratio(value, 523.0, 125.0),
             EnergyUnit::Kilocalorie => value * 4184.0,
             EnergyUnit::Megacalorie => value * 4184000.0,
-            EnergyUnit::BritishThermalUnit => value * 1055.05585262,
-            EnergyUnit::KilobritishThermalUnit => value * 1055055.85262,
-            EnergyUnit::MegabritishThermalUnit => value * 1.05505585262e9,
+            EnergyUnit::BritishThermalUnit => {
+                crate::conv::mul_ratio(value, 52752792631.0, 50000000.0)
+            }
+            EnergyUnit::KilobritishThermalUnit => {
+                crate::conv::mul_ratio(value, 52752792631.0, 50000.0)
+            }
+            EnergyUnit::MegabritishThermalUnit => {
+                crate::conv::mul_ratio(value, 52752792631.0, 50.0)
+            }
             EnergyUnit::GigabritishThermalUnit => value * 1.05505585262e12,
             EnergyUnit::ElectronVolt => value * 1.602176634e-19,
             EnergyUnit::KiloelectronVolt => value * 1.602176634e-16,
             EnergyUnit::MegaelectronVolt => value * 1.602176634e-13,
             EnergyUnit::GigaelectronVolt => value * 1.602176634e-10,
-            EnergyUnit::TeraelectronVolt => value * 1.602176634e-7,
-            EnergyUnit::FootPound => value * 1.3558179483314003,
-            EnergyUnit::Erg => value / 1e7,
+            EnergyUnit::TeraelectronVolt => {
+                crate::conv::mul_ratio(value, 801088317.0, 5000000000000000.0)
+            }
+            EnergyUnit::FootPound => {
+                crate::conv::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
+            EnergyUnit::Erg => crate::conv::div_ratio(value, 10000000.0, 1.0),
             EnergyUnit::WattHour => value * 3600.0,
             EnergyUnit::KilowattHour => value * 3600000.0,
             EnergyUnit::MegawattHour => value * 3.6e9,
@@ -1253,13 +1263,17 @@ impl Energy<f64> {
             EnergyUnit::MegawattDay => value * 8.64e10,
             EnergyUnit::GigawattDay => value * 8.64e13,
             EnergyUnit::TerawattDay => value * 8.64e16,
-            EnergyUnit::ThermEc => value * 1.05505585262e8,
-            EnergyUnit::DecathermEc => value * 1.05505585262e9,
+            EnergyUnit::ThermEc => crate::conv::mul_ratio(value, 52752792631.0, 500.0),
+            EnergyUnit::DecathermEc => crate::conv::mul_ratio(value, 52752792631.0, 50.0),
             EnergyUnit::ThermUs => value * 1.054804e8,
             EnergyUnit::DecathermUs => value * 1.054804e9,
-            EnergyUnit::ThermImperial => value * 1.05505585257348e8,
-            EnergyUnit::DecathermImperial => value * 1.05505585257348e9,
-            EnergyUnit::HorsepowerHour => value * 2684519.537456106,
+            EnergyUnit::ThermImperial => crate::conv::mul_ratio(value, 26376396314337.0, 250000.0),
+            EnergyUnit::DecathermImperial => {
+                crate::conv::mul_ratio(value, 26376396314337.0, 25000.0)
+            }
+            EnergyUnit::HorsepowerHour => {
+                crate::conv::mul_ratio(value, 1342259768728053.0, 500000000.0)
+            }
         })
     }
 }

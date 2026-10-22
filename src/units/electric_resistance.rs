@@ -199,9 +199,9 @@ impl<T: Number> crate::UnitOf<ElectricResistance<T>> for ElectricResistanceUnit 
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricResistanceUnit::Ohm => value,
-            ElectricResistanceUnit::Nanoohm => value / T::from_f64(1e9),
-            ElectricResistanceUnit::Microohm => value / T::from_f64(1000000.0),
-            ElectricResistanceUnit::Milliohm => value / T::from_f64(1000.0),
+            ElectricResistanceUnit::Nanoohm => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricResistanceUnit::Microohm => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricResistanceUnit::Milliohm => T::div_ratio(value, 1000.0, 1.0),
             ElectricResistanceUnit::Kiloohm => value * T::from_f64(1000.0),
             ElectricResistanceUnit::Megaohm => value * T::from_f64(1000000.0),
             ElectricResistanceUnit::Gigaohm => value * T::from_f64(1e9),
@@ -216,10 +216,10 @@ impl<T: Number> crate::UnitOf<ElectricResistance<T>> for ElectricResistanceUnit 
             ElectricResistanceUnit::Nanoohm => value * T::from_f64(1e9),
             ElectricResistanceUnit::Microohm => value * T::from_f64(1000000.0),
             ElectricResistanceUnit::Milliohm => value * T::from_f64(1000.0),
-            ElectricResistanceUnit::Kiloohm => value / T::from_f64(1000.0),
-            ElectricResistanceUnit::Megaohm => value / T::from_f64(1000000.0),
-            ElectricResistanceUnit::Gigaohm => value / T::from_f64(1e9),
-            ElectricResistanceUnit::Teraohm => value / T::from_f64(1e12),
+            ElectricResistanceUnit::Kiloohm => T::div_ratio(value, 1000.0, 1.0),
+            ElectricResistanceUnit::Megaohm => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricResistanceUnit::Gigaohm => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricResistanceUnit::Teraohm => T::div_ratio(value, 1000000000000.0, 1.0),
         }
     }
 }
@@ -260,7 +260,7 @@ impl<T: Number> ElectricResistance<T> {
     /// A [`ElectricResistance`] from a value in `nΩ`.
     #[inline]
     pub fn from_nanoohms(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nΩ`.
@@ -272,7 +272,7 @@ impl<T: Number> ElectricResistance<T> {
     /// A [`ElectricResistance`] from a value in `µΩ`.
     #[inline]
     pub fn from_microohms(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µΩ`.
@@ -284,7 +284,7 @@ impl<T: Number> ElectricResistance<T> {
     /// A [`ElectricResistance`] from a value in `mΩ`.
     #[inline]
     pub fn from_milliohms(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mΩ`.
@@ -302,7 +302,7 @@ impl<T: Number> ElectricResistance<T> {
     /// The value in `kΩ`.
     #[inline]
     pub fn as_kiloohms(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricResistance`] from a value in `MΩ`.
@@ -314,7 +314,7 @@ impl<T: Number> ElectricResistance<T> {
     /// The value in `MΩ`.
     #[inline]
     pub fn as_megaohms(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricResistance`] from a value in `GΩ`.
@@ -326,7 +326,7 @@ impl<T: Number> ElectricResistance<T> {
     /// The value in `GΩ`.
     #[inline]
     pub fn as_gigaohms(self) -> T {
-        self.0 / T::from_f64(1e9)
+        T::div_ratio(self.0, 1000000000.0, 1.0)
     }
 
     /// A [`ElectricResistance`] from a value in `TΩ`.
@@ -338,7 +338,7 @@ impl<T: Number> ElectricResistance<T> {
     /// The value in `TΩ`.
     #[inline]
     pub fn as_teraohms(self) -> T {
-        self.0 / T::from_f64(1e12)
+        T::div_ratio(self.0, 1000000000000.0, 1.0)
     }
 }
 
@@ -349,9 +349,9 @@ impl ElectricResistance<f64> {
     pub const fn const_new(value: f64, unit: ElectricResistanceUnit) -> Self {
         Self(match unit {
             ElectricResistanceUnit::Ohm => value,
-            ElectricResistanceUnit::Nanoohm => value / 1e9,
-            ElectricResistanceUnit::Microohm => value / 1000000.0,
-            ElectricResistanceUnit::Milliohm => value / 1000.0,
+            ElectricResistanceUnit::Nanoohm => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricResistanceUnit::Microohm => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricResistanceUnit::Milliohm => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricResistanceUnit::Kiloohm => value * 1000.0,
             ElectricResistanceUnit::Megaohm => value * 1000000.0,
             ElectricResistanceUnit::Gigaohm => value * 1e9,

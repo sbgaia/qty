@@ -161,10 +161,10 @@ impl<T: Number> crate::UnitOf<ElectricInductance<T>> for ElectricInductanceUnit 
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricInductanceUnit::Henry => value,
-            ElectricInductanceUnit::Picohenry => value / T::from_f64(1e12),
-            ElectricInductanceUnit::Nanohenry => value / T::from_f64(1e9),
-            ElectricInductanceUnit::Microhenry => value / T::from_f64(1000000.0),
-            ElectricInductanceUnit::Millihenry => value / T::from_f64(1000.0),
+            ElectricInductanceUnit::Picohenry => T::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricInductanceUnit::Nanohenry => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricInductanceUnit::Microhenry => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricInductanceUnit::Millihenry => T::div_ratio(value, 1000.0, 1.0),
         }
     }
 
@@ -213,7 +213,7 @@ impl<T: Number> ElectricInductance<T> {
     /// A [`ElectricInductance`] from a value in `pH`.
     #[inline]
     pub fn from_picohenries(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pH`.
@@ -225,7 +225,7 @@ impl<T: Number> ElectricInductance<T> {
     /// A [`ElectricInductance`] from a value in `nH`.
     #[inline]
     pub fn from_nanohenries(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nH`.
@@ -237,7 +237,7 @@ impl<T: Number> ElectricInductance<T> {
     /// A [`ElectricInductance`] from a value in `µH`.
     #[inline]
     pub fn from_microhenries(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µH`.
@@ -249,7 +249,7 @@ impl<T: Number> ElectricInductance<T> {
     /// A [`ElectricInductance`] from a value in `mH`.
     #[inline]
     pub fn from_millihenries(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mH`.
@@ -266,10 +266,12 @@ impl ElectricInductance<f64> {
     pub const fn const_new(value: f64, unit: ElectricInductanceUnit) -> Self {
         Self(match unit {
             ElectricInductanceUnit::Henry => value,
-            ElectricInductanceUnit::Picohenry => value / 1e12,
-            ElectricInductanceUnit::Nanohenry => value / 1e9,
-            ElectricInductanceUnit::Microhenry => value / 1000000.0,
-            ElectricInductanceUnit::Millihenry => value / 1000.0,
+            ElectricInductanceUnit::Picohenry => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            ElectricInductanceUnit::Nanohenry => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            ElectricInductanceUnit::Microhenry => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricInductanceUnit::Millihenry => crate::conv::div_ratio(value, 1000.0, 1.0),
         })
     }
 }

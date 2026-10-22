@@ -247,9 +247,9 @@ impl<T: Number> crate::UnitOf<Temperature<T>> for TemperatureUnit {
             TemperatureUnit::Kelvin => value,
             TemperatureUnit::DegreeCelsius => value + T::from_f64(273.15),
             TemperatureUnit::MillidegreeCelsius => {
-                value / T::from_f64(1000.0) + T::from_f64(273.15)
+                T::div_ratio(value, 1000.0, 1.0) + T::from_f64(273.15)
             }
-            TemperatureUnit::DegreeDelisle => value / T::from_f64(-1.5) + T::from_f64(373.15),
+            TemperatureUnit::DegreeDelisle => T::div_ratio(value, -3.0, 2.0) + T::from_f64(373.15),
             TemperatureUnit::DegreeFahrenheit => {
                 T::mul_ratio(value, 5.0, 9.0) + T::from_ratio(45967.0, 180.0)
             }
@@ -277,11 +277,11 @@ impl<T: Number> crate::UnitOf<Temperature<T>> for TemperatureUnit {
             }
             TemperatureUnit::DegreeNewton => T::div_ratio(value - T::from_f64(273.15), 100.0, 33.0),
             TemperatureUnit::DegreeRankine => T::div_ratio(value, 5.0, 9.0),
-            TemperatureUnit::DegreeReaumur => (value - T::from_f64(273.15)) / T::from_f64(1.25),
+            TemperatureUnit::DegreeReaumur => T::div_ratio(value - T::from_f64(273.15), 5.0, 4.0),
             TemperatureUnit::DegreeRoemer => {
                 T::div_ratio(value - T::from_ratio(36241.0, 140.0), 40.0, 21.0)
             }
-            TemperatureUnit::SolarTemperature => value / T::from_f64(5778.0),
+            TemperatureUnit::SolarTemperature => T::div_ratio(value, 5778.0, 1.0),
         }
     }
 }
@@ -324,7 +324,7 @@ impl<T: Number> Temperature<T> {
     /// A [`Temperature`] from a value in `m°C`.
     #[inline]
     pub fn from_millidegrees_celsius(value: T) -> Self {
-        Self(value / T::from_f64(1000.0) + T::from_f64(273.15))
+        Self(T::div_ratio(value, 1000.0, 1.0) + T::from_f64(273.15))
     }
 
     /// The value in `m°C`.
@@ -336,7 +336,7 @@ impl<T: Number> Temperature<T> {
     /// A [`Temperature`] from a value in `°De`.
     #[inline]
     pub fn from_degrees_delisle(value: T) -> Self {
-        Self(value / T::from_f64(-1.5) + T::from_f64(373.15))
+        Self(T::div_ratio(value, -3.0, 2.0) + T::from_f64(373.15))
     }
 
     /// The value in `°De`.
@@ -390,7 +390,7 @@ impl<T: Number> Temperature<T> {
     /// The value in `°Ré`.
     #[inline]
     pub fn as_degrees_reaumur(self) -> T {
-        (self.0 - T::from_f64(273.15)) / T::from_f64(1.25)
+        T::div_ratio(self.0 - T::from_f64(273.15), 5.0, 4.0)
     }
 
     /// A [`Temperature`] from a value in `°Rø`.
@@ -414,7 +414,7 @@ impl<T: Number> Temperature<T> {
     /// The value in `T⊙`.
     #[inline]
     pub fn as_solar_temperatures(self) -> T {
-        self.0 / T::from_f64(5778.0)
+        T::div_ratio(self.0, 5778.0, 1.0)
     }
 }
 
@@ -426,13 +426,19 @@ impl Temperature<f64> {
         Self(match unit {
             TemperatureUnit::Kelvin => value,
             TemperatureUnit::DegreeCelsius => value + 273.15,
-            TemperatureUnit::MillidegreeCelsius => value / 1000.0 + 273.15,
-            TemperatureUnit::DegreeDelisle => value / -1.5 + 373.15,
-            TemperatureUnit::DegreeFahrenheit => value * 0.5555555555555556 + 255.37222222222223,
-            TemperatureUnit::DegreeNewton => value * 3.0303030303030303 + 273.15,
-            TemperatureUnit::DegreeRankine => value * 0.5555555555555556,
+            TemperatureUnit::MillidegreeCelsius => {
+                crate::conv::div_ratio(value, 1000.0, 1.0) + 273.15
+            }
+            TemperatureUnit::DegreeDelisle => crate::conv::div_ratio(value, -3.0, 2.0) + 373.15,
+            TemperatureUnit::DegreeFahrenheit => {
+                crate::conv::mul_ratio(value, 5.0, 9.0) + 255.37222222222223
+            }
+            TemperatureUnit::DegreeNewton => crate::conv::mul_ratio(value, 100.0, 33.0) + 273.15,
+            TemperatureUnit::DegreeRankine => crate::conv::mul_ratio(value, 5.0, 9.0),
             TemperatureUnit::DegreeReaumur => value * 1.25 + 273.15,
-            TemperatureUnit::DegreeRoemer => value * 1.9047619047619047 + 258.8642857142857,
+            TemperatureUnit::DegreeRoemer => {
+                crate::conv::mul_ratio(value, 40.0, 21.0) + 258.8642857142857
+            }
             TemperatureUnit::SolarTemperature => value * 5778.0,
         })
     }

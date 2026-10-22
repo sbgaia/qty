@@ -171,11 +171,11 @@ impl<T: Number> crate::UnitOf<Ratio<T>> for RatioUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             RatioUnit::DecimalFraction => value,
-            RatioUnit::Percent => value / T::from_f64(100.0),
-            RatioUnit::PartPerThousand => value / T::from_f64(1000.0),
-            RatioUnit::PartPerMillion => value / T::from_f64(1000000.0),
-            RatioUnit::PartPerBillion => value / T::from_f64(1e9),
-            RatioUnit::PartPerTrillion => value / T::from_f64(1e12),
+            RatioUnit::Percent => T::div_ratio(value, 100.0, 1.0),
+            RatioUnit::PartPerThousand => T::div_ratio(value, 1000.0, 1.0),
+            RatioUnit::PartPerMillion => T::div_ratio(value, 1000000.0, 1.0),
+            RatioUnit::PartPerBillion => T::div_ratio(value, 1000000000.0, 1.0),
+            RatioUnit::PartPerTrillion => T::div_ratio(value, 1000000000000.0, 1.0),
         }
     }
 
@@ -218,7 +218,7 @@ impl<T: Number> Ratio<T> {
     /// A [`Ratio`] from a value in `%`.
     #[inline]
     pub fn from_percent(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `%`.
@@ -230,7 +230,7 @@ impl<T: Number> Ratio<T> {
     /// A [`Ratio`] from a value in `‰`.
     #[inline]
     pub fn from_parts_per_thousand(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `‰`.
@@ -242,7 +242,7 @@ impl<T: Number> Ratio<T> {
     /// A [`Ratio`] from a value in `ppm`.
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `ppm`.
@@ -254,7 +254,7 @@ impl<T: Number> Ratio<T> {
     /// A [`Ratio`] from a value in `ppb`.
     #[inline]
     pub fn from_parts_per_billion(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `ppb`.
@@ -266,7 +266,7 @@ impl<T: Number> Ratio<T> {
     /// A [`Ratio`] from a value in `ppt`.
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `ppt`.
@@ -283,11 +283,11 @@ impl Ratio<f64> {
     pub const fn const_new(value: f64, unit: RatioUnit) -> Self {
         Self(match unit {
             RatioUnit::DecimalFraction => value,
-            RatioUnit::Percent => value / 100.0,
-            RatioUnit::PartPerThousand => value / 1000.0,
-            RatioUnit::PartPerMillion => value / 1000000.0,
-            RatioUnit::PartPerBillion => value / 1e9,
-            RatioUnit::PartPerTrillion => value / 1e12,
+            RatioUnit::Percent => crate::conv::div_ratio(value, 100.0, 1.0),
+            RatioUnit::PartPerThousand => crate::conv::div_ratio(value, 1000.0, 1.0),
+            RatioUnit::PartPerMillion => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            RatioUnit::PartPerBillion => crate::conv::div_ratio(value, 1000000000.0, 1.0),
+            RatioUnit::PartPerTrillion => crate::conv::div_ratio(value, 1000000000000.0, 1.0),
         })
     }
 }

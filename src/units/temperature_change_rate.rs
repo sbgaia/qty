@@ -316,24 +316,30 @@ impl<T: Number> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRat
     fn value_to_base(self, value: T) -> T {
         match self {
             TemperatureChangeRateUnit::DegreeCelsiusPerSecond => value,
-            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => value / T::from_f64(1e9),
-            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
-                value / T::from_f64(1000000.0)
+            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => {
+                T::div_ratio(value, 1000000000.0, 1.0)
             }
-            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => value / T::from_f64(1000.0),
-            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => value / T::from_f64(100.0),
-            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => value / T::from_f64(10.0),
+            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
+                T::div_ratio(value, 1000000.0, 1.0)
+            }
+            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
+            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => {
+                T::div_ratio(value, 100.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => T::div_ratio(value, 10.0, 1.0),
             TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => value * T::from_f64(10.0),
             TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => value * T::from_f64(100.0),
             TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => value * T::from_f64(1000.0),
-            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value / T::from_f64(60.0),
-            TemperatureChangeRateUnit::DegreeKelvinPerMinute => value / T::from_f64(60.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value / T::from_f64(108.0),
+            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => T::div_ratio(value, 60.0, 1.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerMinute => T::div_ratio(value, 60.0, 1.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => T::div_ratio(value, 108.0, 1.0),
             TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => T::mul_ratio(value, 5.0, 9.0),
             TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
-            TemperatureChangeRateUnit::DegreeCelsiusPerHour => value / T::from_f64(3600.0),
-            TemperatureChangeRateUnit::DegreeKelvinPerHour => value / T::from_f64(3600.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => value / T::from_f64(6480.0),
+            TemperatureChangeRateUnit::DegreeCelsiusPerHour => T::div_ratio(value, 3600.0, 1.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerHour => T::div_ratio(value, 3600.0, 1.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => T::div_ratio(value, 6480.0, 1.0),
         }
     }
 
@@ -348,9 +354,13 @@ impl<T: Number> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRat
             TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => value * T::from_f64(1000.0),
             TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => value * T::from_f64(100.0),
             TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => value * T::from_f64(10.0),
-            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => value / T::from_f64(10.0),
-            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => value / T::from_f64(100.0),
-            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => value / T::from_f64(1000.0),
+            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => T::div_ratio(value, 10.0, 1.0),
+            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => {
+                T::div_ratio(value, 100.0, 1.0)
+            }
+            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => {
+                T::div_ratio(value, 1000.0, 1.0)
+            }
             TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value * T::from_f64(60.0),
             TemperatureChangeRateUnit::DegreeKelvinPerMinute => value * T::from_f64(60.0),
             TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value * T::from_f64(108.0),
@@ -402,7 +412,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `n°C/s`.
     #[inline]
     pub fn from_nanodegrees_celsius_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `n°C/s`.
@@ -414,7 +424,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `µ°C/s`.
     #[inline]
     pub fn from_microdegrees_celsius_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µ°C/s`.
@@ -426,7 +436,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `m°C/s`.
     #[inline]
     pub fn from_millidegrees_celsius_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `m°C/s`.
@@ -438,7 +448,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `c°C/s`.
     #[inline]
     pub fn from_centidegrees_celsius_per_second(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `c°C/s`.
@@ -450,7 +460,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `d°C/s`.
     #[inline]
     pub fn from_decidegrees_celsius_per_second(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(T::div_ratio(value, 10.0, 1.0))
     }
 
     /// The value in `d°C/s`.
@@ -468,7 +478,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// The value in `da°C/s`.
     #[inline]
     pub fn as_decadegrees_celsius_per_second(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`TemperatureChangeRate`] from a value in `h°C/s`.
@@ -480,7 +490,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// The value in `h°C/s`.
     #[inline]
     pub fn as_hectodegrees_celsius_per_second(self) -> T {
-        self.0 / T::from_f64(100.0)
+        T::div_ratio(self.0, 100.0, 1.0)
     }
 
     /// A [`TemperatureChangeRate`] from a value in `k°C/s`.
@@ -492,13 +502,13 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// The value in `k°C/s`.
     #[inline]
     pub fn as_kilodegrees_celsius_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`TemperatureChangeRate`] from a value in `°C/min`.
     #[inline]
     pub fn from_degrees_celsius_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `°C/min`.
@@ -510,7 +520,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `K/min`.
     #[inline]
     pub fn from_degrees_kelvin_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(60.0))
+        Self(T::div_ratio(value, 60.0, 1.0))
     }
 
     /// The value in `K/min`.
@@ -522,7 +532,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `°F/min`.
     #[inline]
     pub fn from_degrees_fahrenheit_per_minute(value: T) -> Self {
-        Self(value / T::from_f64(108.0))
+        Self(T::div_ratio(value, 108.0, 1.0))
     }
 
     /// The value in `°F/min`.
@@ -558,7 +568,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `°C/h`.
     #[inline]
     pub fn from_degrees_celsius_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `°C/h`.
@@ -570,7 +580,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `K/h`.
     #[inline]
     pub fn from_degrees_kelvin_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(T::div_ratio(value, 3600.0, 1.0))
     }
 
     /// The value in `K/h`.
@@ -582,7 +592,7 @@ impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `°F/h`.
     #[inline]
     pub fn from_degrees_fahrenheit_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(6480.0))
+        Self(T::div_ratio(value, 6480.0, 1.0))
     }
 
     /// The value in `°F/h`.
@@ -599,22 +609,46 @@ impl TemperatureChangeRate<f64> {
     pub const fn const_new(value: f64, unit: TemperatureChangeRateUnit) -> Self {
         Self(match unit {
             TemperatureChangeRateUnit::DegreeCelsiusPerSecond => value,
-            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => value / 1e9,
-            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => value / 1000000.0,
-            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => value / 1000.0,
-            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => value / 100.0,
-            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => value / 10.0,
+            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
+                crate::conv::div_ratio(value, 1000000.0, 1.0)
+            }
+            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => {
+                crate::conv::div_ratio(value, 1000.0, 1.0)
+            }
+            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => {
+                crate::conv::div_ratio(value, 100.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => {
+                crate::conv::div_ratio(value, 10.0, 1.0)
+            }
             TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => value * 10.0,
             TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => value * 100.0,
             TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => value * 1000.0,
-            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value / 60.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerMinute => value / 60.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value / 108.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => value * 0.5555555555555556,
+            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => {
+                crate::conv::div_ratio(value, 60.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DegreeKelvinPerMinute => {
+                crate::conv::div_ratio(value, 60.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => {
+                crate::conv::div_ratio(value, 108.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
+                crate::conv::mul_ratio(value, 5.0, 9.0)
+            }
             TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
-            TemperatureChangeRateUnit::DegreeCelsiusPerHour => value / 3600.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerHour => value / 3600.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => value / 6480.0,
+            TemperatureChangeRateUnit::DegreeCelsiusPerHour => {
+                crate::conv::div_ratio(value, 3600.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DegreeKelvinPerHour => {
+                crate::conv::div_ratio(value, 3600.0, 1.0)
+            }
+            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => {
+                crate::conv::div_ratio(value, 6480.0, 1.0)
+            }
         })
     }
 }

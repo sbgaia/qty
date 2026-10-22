@@ -119,7 +119,9 @@ impl<T: Number> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
     fn value_to_base(self, value: T) -> T {
         match self {
             VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter => value,
-            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => value * T::from_f64(0.00508),
+            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => {
+                T::mul_ratio(value, 127.0, 25000.0)
+            }
         }
     }
 
@@ -127,7 +129,9 @@ impl<T: Number> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter => value,
-            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => value / T::from_f64(0.00508),
+            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => {
+                T::div_ratio(value, 127.0, 25000.0)
+            }
         }
     }
 }
@@ -158,13 +162,13 @@ impl<T: Number> VolumeFlowPerArea<T> {
     /// A [`VolumeFlowPerArea`] from a value in `CFM/ft²`.
     #[inline]
     pub fn from_cubic_feet_per_minute_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.00508))
+        Self(T::mul_ratio(value, 127.0, 25000.0))
     }
 
     /// The value in `CFM/ft²`.
     #[inline]
     pub fn as_cubic_feet_per_minute_per_square_foot(self) -> T {
-        self.0 / T::from_f64(0.00508)
+        T::div_ratio(self.0, 127.0, 25000.0)
     }
 }
 
@@ -175,7 +179,9 @@ impl VolumeFlowPerArea<f64> {
     pub const fn const_new(value: f64, unit: VolumeFlowPerAreaUnit) -> Self {
         Self(match unit {
             VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter => value,
-            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => value * 0.00508,
+            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => {
+                crate::conv::mul_ratio(value, 127.0, 25000.0)
+            }
         })
     }
 }

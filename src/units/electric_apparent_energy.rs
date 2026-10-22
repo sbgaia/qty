@@ -142,8 +142,8 @@ impl<T: Number> crate::UnitOf<ElectricApparentEnergy<T>> for ElectricApparentEne
     fn value_from_base(self, value: T) -> T {
         match self {
             ElectricApparentEnergyUnit::VoltampereHour => value,
-            ElectricApparentEnergyUnit::KilovoltampereHour => value / T::from_f64(1000.0),
-            ElectricApparentEnergyUnit::MegavoltampereHour => value / T::from_f64(1000000.0),
+            ElectricApparentEnergyUnit::KilovoltampereHour => T::div_ratio(value, 1000.0, 1.0),
+            ElectricApparentEnergyUnit::MegavoltampereHour => T::div_ratio(value, 1000000.0, 1.0),
         }
     }
 }
@@ -185,7 +185,7 @@ impl<T: Number> ElectricApparentEnergy<T> {
     /// The value in `kVAh`.
     #[inline]
     pub fn as_kilovoltampere_hours(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricApparentEnergy`] from a value in `MVAh`.
@@ -197,7 +197,7 @@ impl<T: Number> ElectricApparentEnergy<T> {
     /// The value in `MVAh`.
     #[inline]
     pub fn as_megavoltampere_hours(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 }
 

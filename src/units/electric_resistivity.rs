@@ -277,17 +277,19 @@ impl<T: Number> crate::UnitOf<ElectricResistivity<T>> for ElectricResistivityUni
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricResistivityUnit::OhmMeter => value,
-            ElectricResistivityUnit::PicoohmMeter => value / T::from_f64(1e12),
-            ElectricResistivityUnit::NanoohmMeter => value / T::from_f64(1e9),
-            ElectricResistivityUnit::MicroohmMeter => value / T::from_f64(1000000.0),
-            ElectricResistivityUnit::MilliohmMeter => value / T::from_f64(1000.0),
+            ElectricResistivityUnit::PicoohmMeter => T::div_ratio(value, 1000000000000.0, 1.0),
+            ElectricResistivityUnit::NanoohmMeter => T::div_ratio(value, 1000000000.0, 1.0),
+            ElectricResistivityUnit::MicroohmMeter => T::div_ratio(value, 1000000.0, 1.0),
+            ElectricResistivityUnit::MilliohmMeter => T::div_ratio(value, 1000.0, 1.0),
             ElectricResistivityUnit::KiloohmMeter => value * T::from_f64(1000.0),
             ElectricResistivityUnit::MegaohmMeter => value * T::from_f64(1000000.0),
-            ElectricResistivityUnit::OhmCentimeter => value / T::from_f64(100.0),
-            ElectricResistivityUnit::PicoohmCentimeter => value / T::from_f64(1e14),
-            ElectricResistivityUnit::NanoohmCentimeter => value / T::from_f64(1e11),
-            ElectricResistivityUnit::MicroohmCentimeter => value / T::from_f64(1e8),
-            ElectricResistivityUnit::MilliohmCentimeter => value / T::from_f64(100000.0),
+            ElectricResistivityUnit::OhmCentimeter => T::div_ratio(value, 100.0, 1.0),
+            ElectricResistivityUnit::PicoohmCentimeter => {
+                T::div_ratio(value, 100000000000000.0, 1.0)
+            }
+            ElectricResistivityUnit::NanoohmCentimeter => T::div_ratio(value, 100000000000.0, 1.0),
+            ElectricResistivityUnit::MicroohmCentimeter => T::div_ratio(value, 100000000.0, 1.0),
+            ElectricResistivityUnit::MilliohmCentimeter => T::div_ratio(value, 100000.0, 1.0),
             ElectricResistivityUnit::KiloohmCentimeter => value * T::from_f64(10.0),
             ElectricResistivityUnit::MegaohmCentimeter => value * T::from_f64(10000.0),
         }
@@ -301,15 +303,15 @@ impl<T: Number> crate::UnitOf<ElectricResistivity<T>> for ElectricResistivityUni
             ElectricResistivityUnit::NanoohmMeter => value * T::from_f64(1e9),
             ElectricResistivityUnit::MicroohmMeter => value * T::from_f64(1000000.0),
             ElectricResistivityUnit::MilliohmMeter => value * T::from_f64(1000.0),
-            ElectricResistivityUnit::KiloohmMeter => value / T::from_f64(1000.0),
-            ElectricResistivityUnit::MegaohmMeter => value / T::from_f64(1000000.0),
+            ElectricResistivityUnit::KiloohmMeter => T::div_ratio(value, 1000.0, 1.0),
+            ElectricResistivityUnit::MegaohmMeter => T::div_ratio(value, 1000000.0, 1.0),
             ElectricResistivityUnit::OhmCentimeter => value * T::from_f64(100.0),
             ElectricResistivityUnit::PicoohmCentimeter => value * T::from_f64(1e14),
             ElectricResistivityUnit::NanoohmCentimeter => value * T::from_f64(1e11),
             ElectricResistivityUnit::MicroohmCentimeter => value * T::from_f64(1e8),
             ElectricResistivityUnit::MilliohmCentimeter => value * T::from_f64(100000.0),
-            ElectricResistivityUnit::KiloohmCentimeter => value / T::from_f64(10.0),
-            ElectricResistivityUnit::MegaohmCentimeter => value / T::from_f64(10000.0),
+            ElectricResistivityUnit::KiloohmCentimeter => T::div_ratio(value, 10.0, 1.0),
+            ElectricResistivityUnit::MegaohmCentimeter => T::div_ratio(value, 10000.0, 1.0),
         }
     }
 }
@@ -349,7 +351,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `pΩ·m`.
     #[inline]
     pub fn from_picoohm_meters(value: T) -> Self {
-        Self(value / T::from_f64(1e12))
+        Self(T::div_ratio(value, 1000000000000.0, 1.0))
     }
 
     /// The value in `pΩ·m`.
@@ -361,7 +363,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `nΩ·m`.
     #[inline]
     pub fn from_nanoohm_meters(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(T::div_ratio(value, 1000000000.0, 1.0))
     }
 
     /// The value in `nΩ·m`.
@@ -373,7 +375,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `µΩ·m`.
     #[inline]
     pub fn from_microohm_meters(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(T::div_ratio(value, 1000000.0, 1.0))
     }
 
     /// The value in `µΩ·m`.
@@ -385,7 +387,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `mΩ·m`.
     #[inline]
     pub fn from_milliohm_meters(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(T::div_ratio(value, 1000.0, 1.0))
     }
 
     /// The value in `mΩ·m`.
@@ -403,7 +405,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// The value in `kΩ·m`.
     #[inline]
     pub fn as_kiloohm_meters(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        T::div_ratio(self.0, 1000.0, 1.0)
     }
 
     /// A [`ElectricResistivity`] from a value in `MΩ·m`.
@@ -415,13 +417,13 @@ impl<T: Number> ElectricResistivity<T> {
     /// The value in `MΩ·m`.
     #[inline]
     pub fn as_megaohm_meters(self) -> T {
-        self.0 / T::from_f64(1000000.0)
+        T::div_ratio(self.0, 1000000.0, 1.0)
     }
 
     /// A [`ElectricResistivity`] from a value in `Ω·cm`.
     #[inline]
     pub fn from_ohms_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(T::div_ratio(value, 100.0, 1.0))
     }
 
     /// The value in `Ω·cm`.
@@ -433,7 +435,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `pΩ·cm`.
     #[inline]
     pub fn from_picoohms_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(1e14))
+        Self(T::div_ratio(value, 100000000000000.0, 1.0))
     }
 
     /// The value in `pΩ·cm`.
@@ -445,7 +447,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `nΩ·cm`.
     #[inline]
     pub fn from_nanoohms_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(1e11))
+        Self(T::div_ratio(value, 100000000000.0, 1.0))
     }
 
     /// The value in `nΩ·cm`.
@@ -457,7 +459,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `µΩ·cm`.
     #[inline]
     pub fn from_microohms_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(1e8))
+        Self(T::div_ratio(value, 100000000.0, 1.0))
     }
 
     /// The value in `µΩ·cm`.
@@ -469,7 +471,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `mΩ·cm`.
     #[inline]
     pub fn from_milliohms_centimeter(value: T) -> Self {
-        Self(value / T::from_f64(100000.0))
+        Self(T::div_ratio(value, 100000.0, 1.0))
     }
 
     /// The value in `mΩ·cm`.
@@ -487,7 +489,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// The value in `kΩ·cm`.
     #[inline]
     pub fn as_kiloohms_centimeter(self) -> T {
-        self.0 / T::from_f64(10.0)
+        T::div_ratio(self.0, 10.0, 1.0)
     }
 
     /// A [`ElectricResistivity`] from a value in `MΩ·cm`.
@@ -499,7 +501,7 @@ impl<T: Number> ElectricResistivity<T> {
     /// The value in `MΩ·cm`.
     #[inline]
     pub fn as_megaohms_centimeter(self) -> T {
-        self.0 / T::from_f64(10000.0)
+        T::div_ratio(self.0, 10000.0, 1.0)
     }
 }
 
@@ -510,17 +512,29 @@ impl ElectricResistivity<f64> {
     pub const fn const_new(value: f64, unit: ElectricResistivityUnit) -> Self {
         Self(match unit {
             ElectricResistivityUnit::OhmMeter => value,
-            ElectricResistivityUnit::PicoohmMeter => value / 1e12,
-            ElectricResistivityUnit::NanoohmMeter => value / 1e9,
-            ElectricResistivityUnit::MicroohmMeter => value / 1000000.0,
-            ElectricResistivityUnit::MilliohmMeter => value / 1000.0,
+            ElectricResistivityUnit::PicoohmMeter => {
+                crate::conv::div_ratio(value, 1000000000000.0, 1.0)
+            }
+            ElectricResistivityUnit::NanoohmMeter => {
+                crate::conv::div_ratio(value, 1000000000.0, 1.0)
+            }
+            ElectricResistivityUnit::MicroohmMeter => crate::conv::div_ratio(value, 1000000.0, 1.0),
+            ElectricResistivityUnit::MilliohmMeter => crate::conv::div_ratio(value, 1000.0, 1.0),
             ElectricResistivityUnit::KiloohmMeter => value * 1000.0,
             ElectricResistivityUnit::MegaohmMeter => value * 1000000.0,
-            ElectricResistivityUnit::OhmCentimeter => value / 100.0,
-            ElectricResistivityUnit::PicoohmCentimeter => value / 1e14,
-            ElectricResistivityUnit::NanoohmCentimeter => value / 1e11,
-            ElectricResistivityUnit::MicroohmCentimeter => value / 1e8,
-            ElectricResistivityUnit::MilliohmCentimeter => value / 100000.0,
+            ElectricResistivityUnit::OhmCentimeter => crate::conv::div_ratio(value, 100.0, 1.0),
+            ElectricResistivityUnit::PicoohmCentimeter => {
+                crate::conv::div_ratio(value, 100000000000000.0, 1.0)
+            }
+            ElectricResistivityUnit::NanoohmCentimeter => {
+                crate::conv::div_ratio(value, 100000000000.0, 1.0)
+            }
+            ElectricResistivityUnit::MicroohmCentimeter => {
+                crate::conv::div_ratio(value, 100000000.0, 1.0)
+            }
+            ElectricResistivityUnit::MilliohmCentimeter => {
+                crate::conv::div_ratio(value, 100000.0, 1.0)
+            }
             ElectricResistivityUnit::KiloohmCentimeter => value * 10.0,
             ElectricResistivityUnit::MegaohmCentimeter => value * 10000.0,
         })
