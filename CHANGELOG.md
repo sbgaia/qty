@@ -6,6 +6,20 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-22
+
+### Migrating from 0.3
+
+- A quantity times or over a plain number of a storage type of your own
+  needs an impl of `Number` for that type. The built-in storage types all
+  have one.
+- An `Expr` times or over a quantity is now the quantity with those
+  dimensions: `mass * STANDARD_GRAVITY` is a `Force`. Where you annotated
+  the result as an `Expr`, take the quantity, or keep the `Expr` with
+  `expr!(mass * STANDARD_GRAVITY)`.
+- Minutes print as `min`, so text and `serde_str` output that showed `m`
+  for minutes now shows `min`. Both versions parse either.
+
 ### Added
 
 - `*` and `/` between any two quantities. The result is the quantity with
