@@ -978,11 +978,14 @@ impl SpecificEnergy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(SpecificEnergy, JoulePerKilogram);
 
 /// Units for counting [`SpecificEnergy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::specific_energy`](crate::unit::specific_energy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::JoulePerKilogram, base JoulePerKilogram, 1 / 1, pi^0, from_joules_per_kilogram, as_joules_per_kilogram, additive);
     fixed_unit!(KilojoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::KilojoulePerKilogram, base JoulePerKilogram, 1000 / 1, pi^0, from_kilojoules_per_kilogram, as_kilojoules_per_kilogram, additive);

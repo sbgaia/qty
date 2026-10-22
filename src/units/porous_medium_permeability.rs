@@ -265,11 +265,14 @@ impl PorousMediumPermeability<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(PorousMediumPermeability, SquareMeter);
 
 /// Units for counting [`PorousMediumPermeability`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::porous_medium_permeability`](crate::unit::porous_medium_permeability).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Darcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Darcy, base SquareMeter, 9869233 / 10000000000000000000, pi^0, from_darcys, as_darcys, additive);
     fixed_unit!(Microdarcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Microdarcy, base SquareMeter, 9869233 / 10000000000000000000000000, pi^0, from_microdarcys, as_microdarcys, additive);

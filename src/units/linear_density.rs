@@ -636,11 +636,14 @@ impl LinearDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(LinearDensity, KilogramPerMeter);
 
 /// Units for counting [`LinearDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::linear_density`](crate::unit::linear_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GramPerMillimeter: LinearDensity, LinearDensityUnit::GramPerMillimeter, base KilogramPerMeter, 1 / 1, pi^0, from_grams_per_millimeter, as_grams_per_millimeter, additive);
     fixed_unit!(MicrogramPerMillimeter: LinearDensity, LinearDensityUnit::MicrogramPerMillimeter, base KilogramPerMeter, 1 / 1000000, pi^0, from_micrograms_per_millimeter, as_micrograms_per_millimeter, additive);

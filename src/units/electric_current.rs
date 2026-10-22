@@ -388,11 +388,14 @@ impl ElectricCurrent<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricCurrent, Ampere);
 
 /// Units for counting [`ElectricCurrent`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_current`](crate::unit::electric_current).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Ampere: ElectricCurrent, ElectricCurrentUnit::Ampere, base Ampere, 1 / 1, pi^0, from_amperes, as_amperes, additive);
     fixed_unit!(Femtoampere: ElectricCurrent, ElectricCurrentUnit::Femtoampere, base Ampere, 1 / 1000000000000000, pi^0, from_femtoamperes, as_femtoamperes, additive);

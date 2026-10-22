@@ -437,11 +437,14 @@ impl Jerk<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Jerk, MeterPerSecondCubed);
 
 /// Units for counting [`Jerk`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::jerk`](crate::unit::jerk).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MeterPerSecondCubed: Jerk, JerkUnit::MeterPerSecondCubed, base MeterPerSecondCubed, 1 / 1, pi^0, from_meters_per_second_cubed, as_meters_per_second_cubed, additive);
     fixed_unit!(NanometerPerSecondCubed: Jerk, JerkUnit::NanometerPerSecondCubed, base MeterPerSecondCubed, 1 / 1000000000, pi^0, from_nanometers_per_second_cubed, as_nanometers_per_second_cubed, additive);

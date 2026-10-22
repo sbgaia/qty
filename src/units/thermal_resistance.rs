@@ -179,11 +179,14 @@ impl ThermalResistance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ThermalResistance, KelvinPerWatt);
 
 /// Units for counting [`ThermalResistance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::thermal_resistance`](crate::unit::thermal_resistance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(KelvinPerWatt: ThermalResistance, ThermalResistanceUnit::KelvinPerWatt, base KelvinPerWatt, 1 / 1, pi^0, from_kelvins_per_watt, as_kelvins_per_watt, additive);
     fixed_unit!(DegreeCelsiusPerWatt: ThermalResistance, ThermalResistanceUnit::DegreeCelsiusPerWatt, base KelvinPerWatt, 1 / 1, pi^0, from_degrees_celsius_per_watt, as_degrees_celsius_per_watt, additive);

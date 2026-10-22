@@ -149,11 +149,14 @@ impl VitaminA<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(VitaminA, InternationalUnit);
 
 /// Units for counting [`VitaminA`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::vitamin_a`](crate::unit::vitamin_a).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(InternationalUnit: VitaminA, VitaminAUnit::InternationalUnit, base InternationalUnit, 1 / 1, pi^0, from_international_units, as_international_units, additive);
 }

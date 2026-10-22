@@ -438,11 +438,14 @@ impl ReciprocalArea<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ReciprocalArea, InverseSquareMeter);
 
 /// Units for counting [`ReciprocalArea`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::reciprocal_area`](crate::unit::reciprocal_area).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(InverseSquareMeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMeter, base InverseSquareMeter, 1 / 1, pi^0, from_inverse_square_meters, as_inverse_square_meters, additive);
     fixed_unit!(InverseSquareKilometer: ReciprocalArea, ReciprocalAreaUnit::InverseSquareKilometer, base InverseSquareMeter, 1 / 1000000, pi^0, from_inverse_square_kilometers, as_inverse_square_kilometers, additive);

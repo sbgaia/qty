@@ -1715,11 +1715,14 @@ impl Density<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Density, KilogramPerCubicMeter);
 
 /// Units for counting [`Density`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::density`](crate::unit::density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GramPerCubicMillimeter: Density, DensityUnit::GramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000 / 1, pi^0, from_grams_per_cubic_millimeter, as_grams_per_cubic_millimeter, additive);
     fixed_unit!(KilogramPerCubicMillimeter: Density, DensityUnit::KilogramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000000 / 1, pi^0, from_kilograms_per_cubic_millimeter, as_kilograms_per_cubic_millimeter, additive);

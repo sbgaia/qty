@@ -10,6 +10,7 @@ const F32_TOL: f64 = 1e-6;
 
 /// Checks a `Fixed` unit marker: the float bridge, and that exact integer
 /// rescaling to and from the base unit agrees with float arithmetic.
+#[cfg(feature = "fixed")]
 fn check_fixed<U: qty::FixedUnit>() {
     use qty::{Fixed, Rounding, Unit};
     let f = Fixed::<U>::new(7);
@@ -28,6 +29,7 @@ fn check_fixed<U: qty::FixedUnit>() {
 /// Checks that exact integer rescaling between a `Fixed` unit and its base
 /// unit agrees with float arithmetic. (Not for units related to the base by
 /// a power of π: that ratio is irrational and refused at compile time.)
+#[cfg(feature = "fixed")]
 fn check_fixed_rescale<U: qty::FixedUnit>() {
     use qty::{Fixed, Quantity, RoundError, Rounding};
     let f = Fixed::<U>::new(7);

@@ -715,11 +715,14 @@ impl FluidResistance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(FluidResistance, PascalSecondPerCubicMeter);
 
 /// Units for counting [`FluidResistance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::fluid_resistance`](crate::unit::fluid_resistance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(PascalSecondPerLiter: FluidResistance, FluidResistanceUnit::PascalSecondPerLiter, base PascalSecondPerCubicMeter, 1000 / 1, pi^0, from_pascal_seconds_per_liter, as_pascal_seconds_per_liter, additive);
     fixed_unit!(PascalMinutePerLiter: FluidResistance, FluidResistanceUnit::PascalMinutePerLiter, base PascalSecondPerCubicMeter, 60000 / 1, pi^0, from_pascal_minutes_per_liter, as_pascal_minutes_per_liter, additive);

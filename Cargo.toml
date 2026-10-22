@@ -89,6 +89,10 @@ num-complex = ["dep:num-complex"]
 rust_decimal = ["dep:rust_decimal"]
 ## Rational storage, `Length<Ratio<i64>>`, for exact arithmetic.
 num-rational = ["dep:num-rational"]
+## `Fixed`: integer counts in any unit, such as `Fixed<Millimeter>`, with
+## exact conversions and products, and its unit markers in `unit`
+## (adds about 20 % to the crate's compile time).
+fixed = []
 ## Quantities whose kind is known only at runtime: `AnyQuantity`, `AnyUnit`,
 ## `QuantityKind` (adds about 15 % to the crate's compile time).
 dynamic = []
@@ -119,6 +123,10 @@ required-features = ["std", "mechanics"]
 [[example]]
 name = "config"
 required-features = ["serde"]
+
+[[example]]
+name = "sensor"
+required-features = ["fixed"]
 
 [dev-dependencies]
 schemars = { version = "1", default-features = false, features = ["derive", "std"] }

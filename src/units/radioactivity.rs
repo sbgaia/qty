@@ -953,11 +953,14 @@ impl Radioactivity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Radioactivity, Becquerel);
 
 /// Units for counting [`Radioactivity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::radioactivity`](crate::unit::radioactivity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Becquerel: Radioactivity, RadioactivityUnit::Becquerel, base Becquerel, 1 / 1, pi^0, from_becquerels, as_becquerels, additive);
     fixed_unit!(Picobecquerel: Radioactivity, RadioactivityUnit::Picobecquerel, base Becquerel, 1 / 1000000000000, pi^0, from_picobecquerels, as_picobecquerels, additive);

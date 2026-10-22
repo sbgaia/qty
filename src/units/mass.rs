@@ -1018,11 +1018,14 @@ impl Mass<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Mass, Kilogram);
 
 /// Units for counting [`Mass`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::mass`](crate::unit::mass).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Gram: Mass, MassUnit::Gram, base Kilogram, 1 / 1000, pi^0, from_grams, as_grams, additive);
     fixed_unit!(Femtogram: Mass, MassUnit::Femtogram, base Kilogram, 1 / 1000000000000000000, pi^0, from_femtograms, as_femtograms, additive);

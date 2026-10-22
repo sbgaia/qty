@@ -612,11 +612,14 @@ impl AmountOfSubstance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(AmountOfSubstance, Mole);
 
 /// Units for counting [`AmountOfSubstance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::amount_of_substance`](crate::unit::amount_of_substance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Mole: AmountOfSubstance, AmountOfSubstanceUnit::Mole, base Mole, 1 / 1, pi^0, from_moles, as_moles, additive);
     fixed_unit!(Femtomole: AmountOfSubstance, AmountOfSubstanceUnit::Femtomole, base Mole, 1 / 1000000000000000, pi^0, from_femtomoles, as_femtomoles, additive);

@@ -1697,11 +1697,14 @@ impl Volume<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Volume, CubicMeter);
 
 /// Units for counting [`Volume`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::volume`](crate::unit::volume).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Liter: Volume, VolumeUnit::Liter, base CubicMeter, 1 / 1000, pi^0, from_liters, as_liters, additive);
     fixed_unit!(Nanoliter: Volume, VolumeUnit::Nanoliter, base CubicMeter, 1 / 1000000000000, pi^0, from_nanoliters, as_nanoliters, additive);

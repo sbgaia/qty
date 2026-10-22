@@ -388,11 +388,14 @@ impl SpecificEntropy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(SpecificEntropy, JoulePerKilogramKelvin);
 
 /// Units for counting [`SpecificEntropy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::specific_entropy`](crate::unit::specific_entropy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerKilogramKelvin: SpecificEntropy, SpecificEntropyUnit::JoulePerKilogramKelvin, base JoulePerKilogramKelvin, 1 / 1, pi^0, from_joules_per_kilogram_kelvin, as_joules_per_kilogram_kelvin, additive);
     fixed_unit!(KilojoulePerKilogramKelvin: SpecificEntropy, SpecificEntropyUnit::KilojoulePerKilogramKelvin, base JoulePerKilogramKelvin, 1000 / 1, pi^0, from_kilojoules_per_kilogram_kelvin, as_kilojoules_per_kilogram_kelvin, additive);

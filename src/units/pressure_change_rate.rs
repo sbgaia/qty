@@ -689,11 +689,14 @@ impl PressureChangeRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(PressureChangeRate, PascalPerSecond);
 
 /// Units for counting [`PressureChangeRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::pressure_change_rate`](crate::unit::pressure_change_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(PascalPerSecond: PressureChangeRate, PressureChangeRateUnit::PascalPerSecond, base PascalPerSecond, 1 / 1, pi^0, from_pascals_per_second, as_pascals_per_second, additive);
     fixed_unit!(KilopascalPerSecond: PressureChangeRate, PressureChangeRateUnit::KilopascalPerSecond, base PascalPerSecond, 1000 / 1, pi^0, from_kilopascals_per_second, as_kilopascals_per_second, additive);

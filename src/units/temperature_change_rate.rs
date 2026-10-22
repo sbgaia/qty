@@ -619,11 +619,14 @@ impl TemperatureChangeRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(TemperatureChangeRate, DegreeCelsiusPerSecond);
 
 /// Units for counting [`TemperatureChangeRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::temperature_change_rate`](crate::unit::temperature_change_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(DegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1, pi^0, from_degrees_celsius_per_second, as_degrees_celsius_per_second, additive);
     fixed_unit!(NanodegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1000000000, pi^0, from_nanodegrees_celsius_per_second, as_nanodegrees_celsius_per_second, additive);

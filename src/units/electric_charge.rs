@@ -444,11 +444,14 @@ impl ElectricCharge<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricCharge, Coulomb);
 
 /// Units for counting [`ElectricCharge`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_charge`](crate::unit::electric_charge).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Coulomb: ElectricCharge, ElectricChargeUnit::Coulomb, base Coulomb, 1 / 1, pi^0, from_coulombs, as_coulombs, additive);
     fixed_unit!(Picocoulomb: ElectricCharge, ElectricChargeUnit::Picocoulomb, base Coulomb, 1 / 1000000000000, pi^0, from_picocoulombs, as_picocoulombs, additive);

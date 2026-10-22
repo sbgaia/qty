@@ -150,11 +150,14 @@ impl SolidAngle<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(SolidAngle, Steradian);
 
 /// Units for counting [`SolidAngle`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::solid_angle`](crate::unit::solid_angle).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Steradian: SolidAngle, SolidAngleUnit::Steradian, base Steradian, 1 / 1, pi^0, from_steradians, as_steradians, additive);
 }

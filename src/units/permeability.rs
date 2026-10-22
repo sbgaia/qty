@@ -150,11 +150,14 @@ impl Permeability<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Permeability, HenryPerMeter);
 
 /// Units for counting [`Permeability`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::permeability`](crate::unit::permeability).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(HenryPerMeter: Permeability, PermeabilityUnit::HenryPerMeter, base HenryPerMeter, 1 / 1, pi^0, from_henries_per_meter, as_henries_per_meter, additive);
 }

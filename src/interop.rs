@@ -1,7 +1,9 @@
 //! Conversions with other crates, each behind a feature of the same name.
 
 #[allow(unused_imports)]
-use crate::{Duration, Fixed, Quantity, RoundError};
+use crate::{Duration, Quantity, RoundError};
+#[cfg(all(feature = "fixed", any(feature = "chrono", feature = "time")))]
+use crate::{Fixed, Integer};
 
 /// Splits a float number of seconds into whole seconds and nanoseconds,
 /// rounded to the nearest nanosecond, with `0 ≤ nanos < 10⁹`. Fails when
@@ -30,8 +32,8 @@ fn split_seconds(seconds: f64) -> Result<(i64, u32), RoundError> {
 
 /// Splits a nanosecond count into seconds and nanoseconds, with
 /// `0 ≤ nanoseconds < 10⁹`.
-#[cfg(any(feature = "chrono", feature = "time"))]
-fn split_nanos<I: crate::Integer>(
+#[cfg(all(feature = "fixed", any(feature = "chrono", feature = "time")))]
+fn split_nanos<I: Integer>(
     n: Fixed<crate::unit::duration::Nanosecond, I>,
 ) -> Result<(i64, u32), RoundError> {
     let n = n.count().to_i128().ok_or(RoundError::Overflow)?;
@@ -43,8 +45,8 @@ fn split_nanos<I: crate::Integer>(
 #[cfg(feature = "chrono")]
 mod chrono_impls {
     use super::*;
+    #[cfg(feature = "fixed")]
     use crate::unit::duration::Nanosecond;
-    use crate::Integer;
     use chrono::TimeDelta;
 
     /// Rounds to the nearest `f64` second.
@@ -65,6 +67,7 @@ mod chrono_impls {
     }
 
     /// Exact. [`RoundError::Overflow`] if the count doesn't fit in `I`.
+    #[cfg(feature = "fixed")]
     impl<I: Integer> TryFrom<TimeDelta> for Fixed<Nanosecond, I> {
         type Error = RoundError;
         fn try_from(d: TimeDelta) -> Result<Self, RoundError> {
@@ -74,6 +77,7 @@ mod chrono_impls {
     }
 
     /// Exact. [`RoundError::Overflow`] outside `TimeDelta`'s range.
+    #[cfg(feature = "fixed")]
     impl<I: Integer> TryFrom<Fixed<Nanosecond, I>> for TimeDelta {
         type Error = RoundError;
         fn try_from(n: Fixed<Nanosecond, I>) -> Result<Self, RoundError> {
@@ -86,8 +90,8 @@ mod chrono_impls {
 #[cfg(feature = "time")]
 mod time_impls {
     use super::*;
+    #[cfg(feature = "fixed")]
     use crate::unit::duration::Nanosecond;
-    use crate::Integer;
 
     /// Rounds to the nearest `f64` second.
     impl From<time::Duration> for Duration<f64> {
@@ -108,6 +112,7 @@ mod time_impls {
     }
 
     /// Exact. [`RoundError::Overflow`] if the count doesn't fit in `I`.
+    #[cfg(feature = "fixed")]
     impl<I: Integer> TryFrom<time::Duration> for Fixed<Nanosecond, I> {
         type Error = RoundError;
         fn try_from(d: time::Duration) -> Result<Self, RoundError> {
@@ -118,6 +123,7 @@ mod time_impls {
     }
 
     /// Exact. [`RoundError::Overflow`] outside `time::Duration`'s range.
+    #[cfg(feature = "fixed")]
     impl<I: Integer> TryFrom<Fixed<Nanosecond, I>> for time::Duration {
         type Error = RoundError;
         fn try_from(n: Fixed<Nanosecond, I>) -> Result<Self, RoundError> {

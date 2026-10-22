@@ -214,11 +214,14 @@ impl Molality<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Molality, MolePerKilogram);
 
 /// Units for counting [`Molality`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::molality`](crate::unit::molality).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MolePerKilogram: Molality, MolalityUnit::MolePerKilogram, base MolePerKilogram, 1 / 1, pi^0, from_moles_per_kilogram, as_moles_per_kilogram, additive);
     fixed_unit!(MillimolePerKilogram: Molality, MolalityUnit::MillimolePerKilogram, base MolePerKilogram, 1 / 1000, pi^0, from_millimoles_per_kilogram, as_millimoles_per_kilogram, additive);

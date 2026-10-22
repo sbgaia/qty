@@ -416,11 +416,14 @@ impl ReciprocalLength<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ReciprocalLength, InverseMeter);
 
 /// Units for counting [`ReciprocalLength`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::reciprocal_length`](crate::unit::reciprocal_length).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(InverseMeter: ReciprocalLength, ReciprocalLengthUnit::InverseMeter, base InverseMeter, 1 / 1, pi^0, from_inverse_meters, as_inverse_meters, additive);
     fixed_unit!(InverseCentimeter: ReciprocalLength, ReciprocalLengthUnit::InverseCentimeter, base InverseMeter, 100 / 1, pi^0, from_inverse_centimeters, as_inverse_centimeters, additive);

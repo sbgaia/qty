@@ -238,11 +238,14 @@ impl LeakRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(LeakRate, PascalCubicMeterPerSecond);
 
 /// Units for counting [`LeakRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::leak_rate`](crate::unit::leak_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(PascalCubicMeterPerSecond: LeakRate, LeakRateUnit::PascalCubicMeterPerSecond, base PascalCubicMeterPerSecond, 1 / 1, pi^0, from_pascal_cubic_meters_per_second, as_pascal_cubic_meters_per_second, additive);
     fixed_unit!(MillibarLiterPerSecond: LeakRate, LeakRateUnit::MillibarLiterPerSecond, base PascalCubicMeterPerSecond, 1 / 10, pi^0, from_millibar_liters_per_second, as_millibar_liters_per_second, additive);

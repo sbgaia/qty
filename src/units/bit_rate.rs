@@ -1228,11 +1228,14 @@ impl BitRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(BitRate, BitPerSecond);
 
 /// Units for counting [`BitRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::bit_rate`](crate::unit::bit_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(BitPerSecond: BitRate, BitRateUnit::BitPerSecond, base BitPerSecond, 1 / 1, pi^0, from_bits_per_second, as_bits_per_second, additive);
     fixed_unit!(KilobitPerSecond: BitRate, BitRateUnit::KilobitPerSecond, base BitPerSecond, 1000 / 1, pi^0, from_kilobits_per_second, as_kilobits_per_second, additive);

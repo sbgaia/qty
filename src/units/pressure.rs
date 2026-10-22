@@ -1575,11 +1575,14 @@ impl Pressure<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Pressure, Pascal);
 
 /// Units for counting [`Pressure`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::pressure`](crate::unit::pressure).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Pascal: Pressure, PressureUnit::Pascal, base Pascal, 1 / 1, pi^0, from_pascals, as_pascals, additive);
     fixed_unit!(Micropascal: Pressure, PressureUnit::Micropascal, base Pascal, 1 / 1000000, pi^0, from_micropascals, as_micropascals, additive);

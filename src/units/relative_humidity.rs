@@ -148,11 +148,14 @@ impl RelativeHumidity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(RelativeHumidity, Percent);
 
 /// Units for counting [`RelativeHumidity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::relative_humidity`](crate::unit::relative_humidity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Percent: RelativeHumidity, RelativeHumidityUnit::Percent, base Percent, 1 / 1, pi^0, from_percent, as_percent, additive);
 }

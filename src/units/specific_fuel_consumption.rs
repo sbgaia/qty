@@ -252,11 +252,14 @@ impl SpecificFuelConsumption<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(SpecificFuelConsumption, GramPerKilonewtonSecond);
 
 /// Units for counting [`SpecificFuelConsumption`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::specific_fuel_consumption`](crate::unit::specific_fuel_consumption).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(PoundMassPerPoundForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_pounds_mass_per_pound_force_hour, as_pounds_mass_per_pound_force_hour, additive);
     fixed_unit!(KilogramPerKilogramForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_kilograms_per_kilogram_force_hour, as_kilograms_per_kilogram_force_hour, additive);

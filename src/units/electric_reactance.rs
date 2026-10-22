@@ -360,11 +360,14 @@ impl ElectricReactance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricReactance, Ohm);
 
 /// Units for counting [`ElectricReactance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_reactance`](crate::unit::electric_reactance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Ohm: ElectricReactance, ElectricReactanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms, additive);
     fixed_unit!(Nanoohm: ElectricReactance, ElectricReactanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms, additive);

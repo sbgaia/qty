@@ -831,11 +831,14 @@ impl DoseAreaProduct<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(DoseAreaProduct, GraySquareMeter);
 
 /// Units for counting [`DoseAreaProduct`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::dose_area_product`](crate::unit::dose_area_product).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareMeter, base GraySquareMeter, 1 / 1, pi^0, from_gray_square_meters, as_gray_square_meters, additive);
     fixed_unit!(MicrograySquareMeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareMeter, base GraySquareMeter, 1 / 1000000, pi^0, from_microgray_square_meters, as_microgray_square_meters, additive);

@@ -281,11 +281,14 @@ impl AreaDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(AreaDensity, KilogramPerSquareMeter);
 
 /// Units for counting [`AreaDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::area_density`](crate::unit::area_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(KilogramPerSquareMeter: AreaDensity, AreaDensityUnit::KilogramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_square_meter, as_kilograms_per_square_meter, additive);
     fixed_unit!(GramPerSquareMeter: AreaDensity, AreaDensityUnit::GramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1000, pi^0, from_grams_per_square_meter, as_grams_per_square_meter, additive);

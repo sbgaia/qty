@@ -906,11 +906,14 @@ impl Torque<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Torque, NewtonMeter);
 
 /// Units for counting [`Torque`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::torque`](crate::unit::torque).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(NewtonMillimeter: Torque, TorqueUnit::NewtonMillimeter, base NewtonMeter, 1 / 1000, pi^0, from_newton_millimeters, as_newton_millimeters, additive);
     fixed_unit!(KilonewtonMillimeter: Torque, TorqueUnit::KilonewtonMillimeter, base NewtonMeter, 1 / 1, pi^0, from_kilonewton_millimeters, as_kilonewton_millimeters, additive);

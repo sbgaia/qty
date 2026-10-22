@@ -373,11 +373,14 @@ impl HeatTransferCoefficient<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(HeatTransferCoefficient, WattPerSquareMeterKelvin);
 
 /// Units for counting [`HeatTransferCoefficient`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::heat_transfer_coefficient`](crate::unit::heat_transfer_coefficient).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(WattPerSquareMeterKelvin: HeatTransferCoefficient, HeatTransferCoefficientUnit::WattPerSquareMeterKelvin, base WattPerSquareMeterKelvin, 1 / 1, pi^0, from_watts_per_square_meter_kelvin, as_watts_per_square_meter_kelvin, additive);
     fixed_unit!(WattPerSquareMeterCelsius: HeatTransferCoefficient, HeatTransferCoefficientUnit::WattPerSquareMeterCelsius, base WattPerSquareMeterKelvin, 1 / 1, pi^0, from_watts_per_square_meter_celsius, as_watts_per_square_meter_celsius, additive);

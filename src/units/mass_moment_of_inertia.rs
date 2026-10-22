@@ -920,11 +920,14 @@ impl MassMomentOfInertia<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MassMomentOfInertia, KilogramSquareMeter);
 
 /// Units for counting [`MassMomentOfInertia`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::mass_moment_of_inertia`](crate::unit::mass_moment_of_inertia).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GramSquareMeter: MassMomentOfInertia, MassMomentOfInertiaUnit::GramSquareMeter, base KilogramSquareMeter, 1 / 1000, pi^0, from_gram_square_meters, as_gram_square_meters, additive);
     fixed_unit!(MilligramSquareMeter: MassMomentOfInertia, MassMomentOfInertiaUnit::MilligramSquareMeter, base KilogramSquareMeter, 1 / 1000000, pi^0, from_milligram_square_meters, as_milligram_square_meters, additive);

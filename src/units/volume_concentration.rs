@@ -685,11 +685,14 @@ impl VolumeConcentration<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(VolumeConcentration, DecimalFraction);
 
 /// Units for counting [`VolumeConcentration`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::volume_concentration`](crate::unit::volume_concentration).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(DecimalFraction: VolumeConcentration, VolumeConcentrationUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
     fixed_unit!(LiterPerLiter: VolumeConcentration, VolumeConcentrationUnit::LiterPerLiter, base DecimalFraction, 1 / 1, pi^0, from_liters_per_liter, as_liters_per_liter, additive);

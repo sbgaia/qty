@@ -331,11 +331,14 @@ impl Compressibility<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Compressibility, InversePascal);
 
 /// Units for counting [`Compressibility`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::compressibility`](crate::unit::compressibility).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(InversePascal: Compressibility, CompressibilityUnit::InversePascal, base InversePascal, 1 / 1, pi^0, from_inverse_pascals, as_inverse_pascals, additive);
     fixed_unit!(InverseKilopascal: Compressibility, CompressibilityUnit::InverseKilopascal, base InversePascal, 1 / 1000, pi^0, from_inverse_kilopascals, as_inverse_kilopascals, additive);

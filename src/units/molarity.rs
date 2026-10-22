@@ -443,11 +443,14 @@ impl Molarity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Molarity, MolePerCubicMeter);
 
 /// Units for counting [`Molarity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::molarity`](crate::unit::molarity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MolePerCubicMeter: Molarity, MolarityUnit::MolePerCubicMeter, base MolePerCubicMeter, 1 / 1, pi^0, from_moles_per_cubic_meter, as_moles_per_cubic_meter, additive);
     fixed_unit!(KilomolePerCubicMeter: Molarity, MolarityUnit::KilomolePerCubicMeter, base MolePerCubicMeter, 1000 / 1, pi^0, from_kilomoles_per_cubic_meter, as_kilomoles_per_cubic_meter, additive);

@@ -178,11 +178,14 @@ impl Level<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Level, Decibel);
 
 /// Units for counting [`Level`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::level`](crate::unit::level).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Decibel: Level, LevelUnit::Decibel, base Decibel, 1 / 1, pi^0, from_decibels, as_decibels, additive);
     fixed_unit!(Neper: Level, LevelUnit::Neper, base Decibel, 500000000 / 57564627, pi^0, from_nepers, as_nepers, additive);

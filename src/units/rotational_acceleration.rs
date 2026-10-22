@@ -251,11 +251,14 @@ impl RotationalAcceleration<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(RotationalAcceleration, RadianPerSecondSquared);
 
 /// Units for counting [`RotationalAcceleration`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::rotational_acceleration`](crate::unit::rotational_acceleration).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(RadianPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RadianPerSecondSquared, base RadianPerSecondSquared, 1 / 1, pi^0, from_radians_per_second_squared, as_radians_per_second_squared, additive);
     fixed_unit!(DegreePerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::DegreePerSecondSquared, base RadianPerSecondSquared, 1 / 180, pi^1, from_degrees_per_second_squared, as_degrees_per_second_squared, additive);

@@ -236,11 +236,14 @@ impl TemperatureGradient<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(TemperatureGradient, KelvinPerMeter);
 
 /// Units for counting [`TemperatureGradient`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::temperature_gradient`](crate::unit::temperature_gradient).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(KelvinPerMeter: TemperatureGradient, TemperatureGradientUnit::KelvinPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_kelvins_per_meter, as_kelvins_per_meter, additive);
     fixed_unit!(DegreeCelsiusPerMeter: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_degrees_celsius_per_meter, as_degrees_celsius_per_meter, additive);

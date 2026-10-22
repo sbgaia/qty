@@ -283,11 +283,12 @@ assert_eq!(format!("{:.1}", ream.in_unit(MassUnit::Kilogram)), "2.5 kg");
 
 ## Integers in a fixed unit
 
-`Fixed<U, I>` counts whole units of `U` in an integer, which is what most
-sensors and file formats deliver. Operations that are exact just work;
-anything that would round asks how:
+With the `fixed` feature, `Fixed<U, I>` counts whole units of `U` in an
+integer, which is what most sensors and file formats deliver. Operations
+that are exact just work; anything that would round asks how:
 
 ```rust
+# #[cfg(feature = "fixed")] {
 use qty::*;
 use qty::unit::length::{Meter, Millimeter};
 use qty::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
@@ -301,10 +302,13 @@ assert_eq!(rounded.count(), 2);
 let reading = Fixed::<MillidegreeCelsius, i32>::new(21_375);
 assert!(reading > Fixed::<DegreeCelsius, i32>::new(21));
 assert_eq!(reading.display_in::<DegreeCelsius>().to_string(), "21.375 °C");
+# }
 ```
 
 Mixing units where the result would not be exact, such as
-`Fixed<Meter> + Fixed<Millimeter>`, does not compile.
+`Fixed<Meter> + Fixed<Millimeter>`, does not compile. Without the feature,
+integer storage in the base unit (`Length<i64>`) and `round_from` are
+still there.
 
 ## Also included
 
@@ -328,6 +332,7 @@ Mixing units where the result would not be exact, such as
 | `full` | yes | All quantity groups below |
 | `mechanics`, `fluids`, `electrical`, `thermal`, `chemistry`, `light`, `radiation`, `information`, `misc` | through `full` | The quantities of each group |
 | `serde` | | Serialization |
+| `fixed` | | `Fixed` integer counts in any unit |
 | `dynamic` | | `AnyQuantity` and friends |
 | `approx` | | `approx` traits, for `assert_relative_eq!` |
 | `bytemuck` | | Zero-copy casts to and from bytes |

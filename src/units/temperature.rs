@@ -438,11 +438,14 @@ impl Temperature<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Temperature, Kelvin);
 
 /// Units for counting [`Temperature`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::temperature`](crate::unit::temperature).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Kelvin: Temperature, TemperatureUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins, point crate::units::temperature_delta::unit::Kelvin);
     fixed_unit!(DegreeCelsius: Temperature, TemperatureUnit::DegreeCelsius, base Kelvin, 1 / 1, pi^0, from_degrees_celsius, as_degrees_celsius, offset(5463, 20), point crate::units::temperature_delta::unit::DegreeCelsius);

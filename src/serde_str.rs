@@ -8,21 +8,20 @@
 //! `"0.5 min"` or `"2 minutes"`. Writing uses the base unit at full
 //! precision (`"30 s"`), so values round-trip exactly.
 //!
-//! It works for anything that displays and parses: float quantities,
-//! [`Fixed`](crate::Fixed) counts (`"12 mm"`) and unit enums. Use
+//! It works for anything that displays and parses: float quantities, unit
+//! enums and, with the `fixed` feature, `Fixed` counts (`"12 mm"`). Use
 //! [`option`] for optional fields.
 //!
 //! ```rust
 //! use serde::{Deserialize, Serialize};
 //! use qty::*;
-//! use qty::unit::length::Millimeter;
 //!
 //! #[derive(Serialize, Deserialize, Debug, PartialEq)]
 //! struct Config {
 //!     #[serde(with = "qty::serde_str")]
 //!     timeout: Duration,
 //!     #[serde(with = "qty::serde_str")]
-//!     gap: Fixed<Millimeter>,
+//!     gap: Length,
 //!     #[serde(with = "qty::serde_str::option", default)]
 //!     max_speed: Option<Speed>,
 //! }
@@ -33,7 +32,7 @@
 //! assert_eq!(config.max_speed, Some(Speed::from_meters_per_second(10.0)));
 //! assert_eq!(
 //!     serde_json::to_string(&config).unwrap(),
-//!     r#"{"timeout":"120 s","gap":"12 mm","max_speed":"10 m/s"}"#
+//!     r#"{"timeout":"120 s","gap":"0.012 m","max_speed":"10 m/s"}"#
 //! );
 //!
 //! let err = serde_json::from_str::<Config>(r#"{ "timeout": "2 parsecs", "gap": "1 mm" }"#).unwrap_err();

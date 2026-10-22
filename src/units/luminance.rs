@@ -411,11 +411,14 @@ impl Luminance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Luminance, CandelaPerSquareMeter);
 
 /// Units for counting [`Luminance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::luminance`](crate::unit::luminance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(CandelaPerSquareMeter: Luminance, LuminanceUnit::CandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1, pi^0, from_candelas_per_square_meter, as_candelas_per_square_meter, additive);
     fixed_unit!(NanocandelaPerSquareMeter: Luminance, LuminanceUnit::NanocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000000, pi^0, from_nanocandelas_per_square_meter, as_nanocandelas_per_square_meter, additive);

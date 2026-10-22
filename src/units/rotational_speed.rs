@@ -499,11 +499,14 @@ impl RotationalSpeed<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(RotationalSpeed, RadianPerSecond);
 
 /// Units for counting [`RotationalSpeed`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::rotational_speed`](crate::unit::rotational_speed).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(RadianPerSecond: RotationalSpeed, RotationalSpeedUnit::RadianPerSecond, base RadianPerSecond, 1 / 1, pi^0, from_radians_per_second, as_radians_per_second, additive);
     fixed_unit!(NanoradianPerSecond: RotationalSpeed, RotationalSpeedUnit::NanoradianPerSecond, base RadianPerSecond, 1 / 1000000000, pi^0, from_nanoradians_per_second, as_nanoradians_per_second, additive);

@@ -1226,11 +1226,14 @@ impl Information<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Information, Bit);
 
 /// Units for counting [`Information`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::information`](crate::unit::information).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Byte: Information, InformationUnit::Byte, base Bit, 8 / 1, pi^0, from_bytes, as_bytes, additive);
     fixed_unit!(Kilobyte: Information, InformationUnit::Kilobyte, base Bit, 8000 / 1, pi^0, from_kilobytes, as_kilobytes, additive);

@@ -292,11 +292,14 @@ impl Ratio<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Ratio, DecimalFraction);
 
 /// Units for counting [`Ratio`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::ratio`](crate::unit::ratio).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(DecimalFraction: Ratio, RatioUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
     fixed_unit!(Percent: Ratio, RatioUnit::Percent, base DecimalFraction, 1 / 100, pi^0, from_percent, as_percent, additive);

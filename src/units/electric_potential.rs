@@ -302,11 +302,14 @@ impl ElectricPotential<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricPotential, Volt);
 
 /// Units for counting [`ElectricPotential`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_potential`](crate::unit::electric_potential).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Volt: ElectricPotential, ElectricPotentialUnit::Volt, base Volt, 1 / 1, pi^0, from_volts, as_volts, additive);
     fixed_unit!(Nanovolt: ElectricPotential, ElectricPotentialUnit::Nanovolt, base Volt, 1 / 1000000000, pi^0, from_nanovolts, as_nanovolts, additive);

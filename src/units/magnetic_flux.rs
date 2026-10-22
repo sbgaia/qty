@@ -150,11 +150,14 @@ impl MagneticFlux<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MagneticFlux, Weber);
 
 /// Units for counting [`MagneticFlux`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::magnetic_flux`](crate::unit::magnetic_flux).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Weber: MagneticFlux, MagneticFluxUnit::Weber, base Weber, 1 / 1, pi^0, from_webers, as_webers, additive);
 }

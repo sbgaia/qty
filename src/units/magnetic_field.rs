@@ -299,11 +299,14 @@ impl MagneticField<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MagneticField, Tesla);
 
 /// Units for counting [`MagneticField`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::magnetic_field`](crate::unit::magnetic_field).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Tesla: MagneticField, MagneticFieldUnit::Tesla, base Tesla, 1 / 1, pi^0, from_teslas, as_teslas, additive);
     fixed_unit!(Nanotesla: MagneticField, MagneticFieldUnit::Nanotesla, base Tesla, 1 / 1000000000, pi^0, from_nanoteslas, as_nanoteslas, additive);

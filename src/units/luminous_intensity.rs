@@ -149,11 +149,14 @@ impl LuminousIntensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(LuminousIntensity, Candela);
 
 /// Units for counting [`LuminousIntensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::luminous_intensity`](crate::unit::luminous_intensity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Candela: LuminousIntensity, LuminousIntensityUnit::Candela, base Candela, 1 / 1, pi^0, from_candela, as_candela, additive);
 }

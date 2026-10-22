@@ -593,11 +593,14 @@ impl Force<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Force, Newton);
 
 /// Units for counting [`Force`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::force`](crate::unit::force).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Dyn: Force, ForceUnit::Dyn, base Newton, 1 / 100000, pi^0, from_dyne, as_dyne, additive);
     fixed_unit!(GramForce: Force, ForceUnit::GramForce, base Newton, 196133 / 20000000, pi^0, from_grams_force, as_grams_force, additive);

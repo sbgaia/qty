@@ -298,11 +298,14 @@ impl CoefficientOfThermalExpansion<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(CoefficientOfThermalExpansion, PerKelvin);
 
 /// Units for counting [`CoefficientOfThermalExpansion`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::coefficient_of_thermal_expansion`](crate::unit::coefficient_of_thermal_expansion).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(PerKelvin: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerKelvin, base PerKelvin, 1 / 1, pi^0, from_per_kelvin, as_per_kelvin, additive);
     fixed_unit!(PerDegreeCelsius: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerDegreeCelsius, base PerKelvin, 1 / 1, pi^0, from_per_degree_celsius, as_per_degree_celsius, additive);

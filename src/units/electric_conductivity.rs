@@ -288,11 +288,14 @@ impl ElectricConductivity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricConductivity, SiemensPerMeter);
 
 /// Units for counting [`ElectricConductivity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_conductivity`](crate::unit::electric_conductivity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(SiemensPerMeter: ElectricConductivity, ElectricConductivityUnit::SiemensPerMeter, base SiemensPerMeter, 1 / 1, pi^0, from_siemens_per_meter, as_siemens_per_meter, additive);
     fixed_unit!(SiemensPerInch: ElectricConductivity, ElectricConductivityUnit::SiemensPerInch, base SiemensPerMeter, 5000 / 127, pi^0, from_siemens_per_inch, as_siemens_per_inch, additive);

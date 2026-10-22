@@ -4,7 +4,7 @@ use qty::*;
 
 /// Checks `Fixed::mul_to_rounded` and `div_to` against the float operators:
 /// within half a unit, or an overflow when the result is huge.
-#[allow(dead_code)]
+#[cfg(feature = "fixed")]
 fn check_fixed_relation(fixed: Result<i64, RoundError>, float: f64) {
     match fixed {
         Ok(n) => assert!(
@@ -30,6 +30,7 @@ fn mul_absorbed_dose_of_ionizing_radiation_area() {
     let b = Area::<i32>::from_base(2);
     let c: DoseAreaProduct<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -65,6 +66,7 @@ fn mul_acceleration_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -96,6 +98,7 @@ fn mul_acceleration_density() {
     let b = Density::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -130,6 +133,7 @@ fn mul_acceleration_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Speed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -161,6 +165,7 @@ fn mul_acceleration_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -195,6 +200,7 @@ fn mul_acceleration_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -226,6 +232,7 @@ fn mul_amount_of_substance_molar_energy() {
     let b = MolarEnergy::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -257,6 +264,7 @@ fn mul_amount_of_substance_molar_entropy() {
     let b = MolarEntropy::<i32>::from_base(2);
     let c: Entropy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -288,6 +296,7 @@ fn mul_amount_of_substance_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -319,6 +328,7 @@ fn mul_angle_rotational_stiffness() {
     let b = RotationalStiffness::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -350,6 +360,7 @@ fn mul_area_absorbed_dose_of_ionizing_radiation() {
     let b = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(2);
     let c: DoseAreaProduct<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -385,6 +396,7 @@ fn mul_area_area() {
     let b = Area::<i32>::from_base(2);
     let c: AreaMomentOfInertia<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -420,6 +432,7 @@ fn mul_area_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -451,6 +464,7 @@ fn mul_area_density() {
     let b = Density::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -486,6 +500,7 @@ fn mul_area_electric_current_density() {
     let b = ElectricCurrentDensity::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -517,6 +532,7 @@ fn mul_area_electric_surface_charge_density() {
     let b = ElectricSurfaceChargeDensity::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -548,6 +564,7 @@ fn mul_area_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -579,6 +596,7 @@ fn mul_area_heat_flux() {
     let b = HeatFlux::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -610,6 +628,7 @@ fn mul_area_illuminance() {
     let b = Illuminance::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -640,6 +659,7 @@ fn mul_area_length() {
     let b = Length::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -671,6 +691,7 @@ fn mul_area_luminance() {
     let b = Luminance::<i32>::from_base(2);
     let c: LuminousIntensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -706,6 +727,7 @@ fn mul_area_magnetic_field() {
     let b = MagneticField::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -732,6 +754,7 @@ fn mul_area_mass_flux() {
     let b = MassFlux::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -762,6 +785,7 @@ fn mul_area_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -793,6 +817,7 @@ fn mul_area_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -824,6 +849,7 @@ fn mul_area_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -859,6 +885,7 @@ fn mul_area_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -894,6 +921,7 @@ fn mul_area_volume_flow_per_area() {
     let b = VolumeFlowPerArea::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -929,6 +957,7 @@ fn mul_area_density_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -960,6 +989,7 @@ fn mul_area_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -991,6 +1021,7 @@ fn mul_area_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1026,6 +1057,7 @@ fn mul_bit_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Information<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1052,6 +1084,7 @@ fn mul_brake_specific_fuel_consumption_power() {
     let b = Power::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1083,6 +1116,7 @@ fn mul_coefficient_of_thermal_expansion_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1114,6 +1148,7 @@ fn mul_compressibility_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1145,6 +1180,7 @@ fn mul_density_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1180,6 +1216,7 @@ fn mul_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1215,6 +1252,7 @@ fn mul_density_kinematic_viscosity() {
     let b = KinematicViscosity::<i32>::from_base(2);
     let c: DynamicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1250,6 +1288,7 @@ fn mul_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: AreaDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1285,6 +1324,7 @@ fn mul_density_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: MassFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1319,6 +1359,7 @@ fn mul_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1350,6 +1391,7 @@ fn mul_density_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1380,6 +1422,7 @@ fn mul_density_volume_flow() {
     let b = VolumeFlow::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1410,6 +1453,7 @@ fn mul_duration_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Speed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1441,6 +1485,7 @@ fn mul_duration_bit_rate() {
     let b = BitRate::<i32>::from_base(2);
     let c: Information<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1467,6 +1512,7 @@ fn mul_duration_electric_apparent_power() {
     let b = ElectricApparentPower::from_base(2.0);
     let c: ElectricApparentEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1502,6 +1548,7 @@ fn mul_duration_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1533,6 +1580,7 @@ fn mul_duration_electric_current_gradient() {
     let b = ElectricCurrentGradient::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1564,6 +1612,7 @@ fn mul_duration_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1595,6 +1644,7 @@ fn mul_duration_electric_potential_change_rate() {
     let b = ElectricPotentialChangeRate::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1621,6 +1671,7 @@ fn mul_duration_electric_reactive_power() {
     let b = ElectricReactivePower::from_base(2.0);
     let c: ElectricReactiveEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1656,6 +1707,7 @@ fn mul_duration_force() {
     let b = Force::<i32>::from_base(2);
     let c: Impulse<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1687,6 +1739,7 @@ fn mul_duration_force_change_rate() {
     let b = ForceChangeRate::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1718,6 +1771,7 @@ fn mul_duration_irradiance() {
     let b = Irradiance::<i32>::from_base(2);
     let c: Irradiation<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1753,6 +1807,7 @@ fn mul_duration_jerk() {
     let b = Jerk::<i32>::from_base(2);
     let c: Acceleration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1788,6 +1843,7 @@ fn mul_duration_kinematic_viscosity() {
     let b = KinematicViscosity::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1814,6 +1870,7 @@ fn mul_duration_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: Mass = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1845,6 +1902,7 @@ fn mul_duration_molar_flow() {
     let b = MolarFlow::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1879,6 +1937,7 @@ fn mul_duration_power() {
     let b = Power::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1910,6 +1969,7 @@ fn mul_duration_pressure_change_rate() {
     let b = PressureChangeRate::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1941,6 +2001,7 @@ fn mul_duration_radiation_equivalent_dose_rate() {
     let b = RadiationEquivalentDoseRate::<i32>::from_base(2);
     let c: RadiationEquivalentDose<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -1976,6 +2037,7 @@ fn mul_duration_ratio_change_rate() {
     let b = RatioChangeRate::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2007,6 +2069,7 @@ fn mul_duration_rotational_acceleration() {
     let b = RotationalAcceleration::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2042,6 +2105,7 @@ fn mul_duration_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Angle<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2072,6 +2136,7 @@ fn mul_duration_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2103,6 +2168,7 @@ fn mul_duration_temperature_change_rate() {
     let b = TemperatureChangeRate::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2138,6 +2204,7 @@ fn mul_duration_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2164,6 +2231,7 @@ fn mul_electric_apparent_power_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricApparentEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2199,6 +2267,7 @@ fn mul_electric_capacitance_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2230,6 +2299,7 @@ fn mul_electric_capacitance_electric_potential_change_rate() {
     let b = ElectricPotentialChangeRate::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2261,6 +2331,7 @@ fn mul_electric_capacitance_electric_resistance() {
     let b = ElectricResistance::<i32>::from_base(2);
     let c: Duration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2292,6 +2363,7 @@ fn mul_electric_charge_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2323,6 +2395,7 @@ fn mul_electric_charge_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2354,6 +2427,7 @@ fn mul_electric_conductance_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2385,6 +2459,7 @@ fn mul_electric_conductivity_electric_field() {
     let b = ElectricField::<i32>::from_base(2);
     let c: ElectricCurrentDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2420,6 +2495,7 @@ fn mul_electric_current_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2451,6 +2527,7 @@ fn mul_electric_current_electric_inductance() {
     let b = ElectricInductance::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2482,6 +2559,7 @@ fn mul_electric_current_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2513,6 +2591,7 @@ fn mul_electric_current_electric_resistance() {
     let b = ElectricResistance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2544,6 +2623,7 @@ fn mul_electric_current_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2575,6 +2655,7 @@ fn mul_electric_current_density_electric_resistivity() {
     let b = ElectricResistivity::<i32>::from_base(2);
     let c: ElectricField<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2610,6 +2691,7 @@ fn mul_electric_current_gradient_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2641,6 +2723,7 @@ fn mul_electric_current_gradient_electric_inductance() {
     let b = ElectricInductance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2672,6 +2755,7 @@ fn mul_electric_field_electric_conductivity() {
     let b = ElectricConductivity::<i32>::from_base(2);
     let c: ElectricCurrentDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2707,6 +2791,7 @@ fn mul_electric_field_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2738,6 +2823,7 @@ fn mul_electric_inductance_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2769,6 +2855,7 @@ fn mul_electric_inductance_electric_current_gradient() {
     let b = ElectricCurrentGradient::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2800,6 +2887,7 @@ fn mul_electric_potential_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2831,6 +2919,7 @@ fn mul_electric_potential_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2862,6 +2951,7 @@ fn mul_electric_potential_electric_charge() {
     let b = ElectricCharge::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2893,6 +2983,7 @@ fn mul_electric_potential_electric_conductance() {
     let b = ElectricConductance::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2924,6 +3015,7 @@ fn mul_electric_potential_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2955,6 +3047,7 @@ fn mul_electric_potential_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -2986,6 +3079,7 @@ fn mul_electric_potential_change_rate_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3012,6 +3106,7 @@ fn mul_electric_reactive_power_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricReactiveEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3047,6 +3142,7 @@ fn mul_electric_resistance_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: Duration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3078,6 +3174,7 @@ fn mul_electric_resistance_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3109,6 +3206,7 @@ fn mul_electric_resistivity_electric_current_density() {
     let b = ElectricCurrentDensity::<i32>::from_base(2);
     let c: ElectricField<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3144,6 +3242,7 @@ fn mul_electric_surface_charge_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3174,6 +3273,7 @@ fn mul_energy_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3205,6 +3305,7 @@ fn mul_energy_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3236,6 +3337,7 @@ fn mul_entropy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3267,6 +3369,7 @@ fn mul_fluid_resistance_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3298,6 +3401,7 @@ fn mul_force_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Impulse<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3328,6 +3432,7 @@ fn mul_force_length() {
     let b = Length::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3359,6 +3464,7 @@ fn mul_force_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3390,6 +3496,7 @@ fn mul_force_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3424,6 +3531,7 @@ fn mul_force_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3455,6 +3563,7 @@ fn mul_force_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3486,6 +3595,7 @@ fn mul_force_per_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3517,6 +3627,7 @@ fn mul_force_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3548,6 +3659,7 @@ fn mul_force_per_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3578,6 +3690,7 @@ fn mul_frequency_energy() {
     let b = Energy::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3609,6 +3722,7 @@ fn mul_frequency_information() {
     let b = Information::<i32>::from_base(2);
     let c: BitRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3640,6 +3754,7 @@ fn mul_heat_flux_area() {
     let b = Area::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3666,6 +3781,7 @@ fn mul_heat_flux_thermal_insulance() {
     let b = ThermalInsulance::from_base(2.0);
     let c: TemperatureDelta = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3701,6 +3817,7 @@ fn mul_heat_transfer_coefficient_length() {
     let b = Length::<i32>::from_base(2);
     let c: ThermalConductivity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3736,6 +3853,7 @@ fn mul_heat_transfer_coefficient_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: HeatFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3771,6 +3889,7 @@ fn mul_illuminance_area() {
     let b = Area::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3802,6 +3921,7 @@ fn mul_information_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: BitRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3833,6 +3953,7 @@ fn mul_irradiance_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Irradiation<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3868,6 +3989,7 @@ fn mul_jerk_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Acceleration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3903,6 +4025,7 @@ fn mul_kinematic_viscosity_density() {
     let b = Density::<i32>::from_base(2);
     let c: DynamicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3938,6 +4061,7 @@ fn mul_kinematic_viscosity_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3968,6 +4092,7 @@ fn mul_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -3999,6 +4124,7 @@ fn mul_length_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4034,6 +4160,7 @@ fn mul_length_density() {
     let b = Density::<i32>::from_base(2);
     let c: AreaDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4069,6 +4196,7 @@ fn mul_length_electric_field() {
     let b = ElectricField::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4099,6 +4227,7 @@ fn mul_length_force() {
     let b = Force::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4130,6 +4259,7 @@ fn mul_length_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4161,6 +4291,7 @@ fn mul_length_heat_transfer_coefficient() {
     let b = HeatTransferCoefficient::<i32>::from_base(2);
     let c: ThermalConductivity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4195,6 +4326,7 @@ fn mul_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4226,6 +4358,7 @@ fn mul_length_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4257,6 +4390,7 @@ fn mul_length_linear_power_density() {
     let b = LinearPowerDensity::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4288,6 +4422,7 @@ fn mul_length_magnetization() {
     let b = Magnetization::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4319,6 +4454,7 @@ fn mul_length_permeability() {
     let b = Permeability::<i32>::from_base(2);
     let c: ElectricInductance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4354,6 +4490,7 @@ fn mul_length_permittivity() {
     let b = Permittivity::<i32>::from_base(2);
     let c: ElectricCapacitance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4389,6 +4526,7 @@ fn mul_length_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4424,6 +4562,7 @@ fn mul_length_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4459,6 +4598,7 @@ fn mul_length_rotational_stiffness_per_length() {
     let b = RotationalStiffnessPerLength::<i32>::from_base(2);
     let c: RotationalStiffness<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4494,6 +4634,7 @@ fn mul_length_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4525,6 +4666,7 @@ fn mul_length_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: KinematicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4560,6 +4702,7 @@ fn mul_length_temperature_gradient() {
     let b = TemperatureGradient::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4595,6 +4738,7 @@ fn mul_length_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: AreaMomentOfInertia<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4630,6 +4774,7 @@ fn mul_length_volume_per_length() {
     let b = VolumePerLength::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4661,6 +4806,7 @@ fn mul_linear_density_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4696,6 +4842,7 @@ fn mul_linear_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4727,6 +4874,7 @@ fn mul_linear_power_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4758,6 +4906,7 @@ fn mul_luminance_area() {
     let b = Area::<i32>::from_base(2);
     let c: LuminousIntensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4793,6 +4942,7 @@ fn mul_luminous_intensity_solid_angle() {
     let b = SolidAngle::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4824,6 +4974,7 @@ fn mul_magnetic_field_area() {
     let b = Area::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4855,6 +5006,7 @@ fn mul_magnetization_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4886,6 +5038,7 @@ fn mul_magnetization_permeability() {
     let b = Permeability::<i32>::from_base(2);
     let c: MagneticField<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4916,6 +5069,7 @@ fn mul_mass_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4947,6 +5101,7 @@ fn mul_mass_mass_fraction() {
     let b = MassFraction::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -4978,6 +5133,7 @@ fn mul_mass_molality() {
     let b = Molality::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5013,6 +5169,7 @@ fn mul_mass_specific_energy() {
     let b = SpecificEnergy::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5044,6 +5201,7 @@ fn mul_mass_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: Entropy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5075,6 +5233,7 @@ fn mul_mass_specific_volume() {
     let b = SpecificVolume::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5106,6 +5265,7 @@ fn mul_mass_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Impulse<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5137,6 +5297,7 @@ fn mul_mass_concentration_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5163,6 +5324,7 @@ fn mul_mass_flow_duration() {
     let b = Duration::from_base(2.0);
     let c: Mass = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5189,6 +5351,7 @@ fn mul_mass_flow_specific_energy() {
     let b = SpecificEnergy::from_base(2.0);
     let c: Power = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5215,6 +5378,7 @@ fn mul_mass_flux_area() {
     let b = Area::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5246,6 +5410,7 @@ fn mul_mass_fraction_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5277,6 +5442,7 @@ fn mul_molality_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5312,6 +5478,7 @@ fn mul_molar_energy_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5343,6 +5510,7 @@ fn mul_molar_entropy_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: Entropy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5374,6 +5542,7 @@ fn mul_molar_flow_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5404,6 +5573,7 @@ fn mul_molar_flow_molar_mass() {
     let b = MolarMass::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5435,6 +5605,7 @@ fn mul_molar_mass_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5461,6 +5632,7 @@ fn mul_molar_mass_molar_flow() {
     let b = MolarFlow::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5492,6 +5664,7 @@ fn mul_molar_mass_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5527,6 +5700,7 @@ fn mul_molarity_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5562,6 +5736,7 @@ fn mul_molarity_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5597,6 +5772,7 @@ fn mul_molarity_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: Molarity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5632,6 +5808,7 @@ fn mul_molarity_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: MolarFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5667,6 +5844,7 @@ fn mul_permeability_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricInductance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5702,6 +5880,7 @@ fn mul_permeability_magnetization() {
     let b = Magnetization::<i32>::from_base(2);
     let c: MagneticField<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5733,6 +5912,7 @@ fn mul_permittivity_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricCapacitance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5763,6 +5943,7 @@ fn mul_power_brake_specific_fuel_consumption() {
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5793,6 +5974,7 @@ fn mul_power_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5824,6 +6006,7 @@ fn mul_power_thermal_resistance() {
     let b = ThermalResistance::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5859,6 +6042,7 @@ fn mul_power_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5889,6 +6073,7 @@ fn mul_pressure_area() {
     let b = Area::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5920,6 +6105,7 @@ fn mul_pressure_compressibility() {
     let b = Compressibility::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5951,6 +6137,7 @@ fn mul_pressure_length() {
     let b = Length::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -5986,6 +6173,7 @@ fn mul_pressure_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: LeakRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6021,6 +6209,7 @@ fn mul_pressure_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6052,6 +6241,7 @@ fn mul_radiation_equivalent_dose_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RadiationEquivalentDose<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6087,6 +6277,7 @@ fn mul_ratio_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6118,6 +6309,7 @@ fn mul_reciprocal_area_force() {
     let b = Force::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6149,6 +6341,7 @@ fn mul_reciprocal_area_length() {
     let b = Length::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6184,6 +6377,7 @@ fn mul_reciprocal_area_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6215,6 +6409,7 @@ fn mul_reciprocal_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6246,6 +6441,7 @@ fn mul_reciprocal_length_force() {
     let b = Force::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6281,6 +6477,7 @@ fn mul_reciprocal_length_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6312,6 +6509,7 @@ fn mul_reciprocal_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6347,6 +6545,7 @@ fn mul_reciprocal_length_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6378,6 +6577,7 @@ fn mul_rotational_acceleration_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6413,6 +6613,7 @@ fn mul_rotational_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Angle<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6444,6 +6645,7 @@ fn mul_rotational_speed_torque() {
     let b = Torque::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6475,6 +6677,7 @@ fn mul_rotational_stiffness_angle() {
     let b = Angle::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6506,6 +6709,7 @@ fn mul_rotational_stiffness_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: RotationalStiffness<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6541,6 +6745,7 @@ fn mul_solid_angle_luminous_intensity() {
     let b = LuminousIntensity::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6572,6 +6777,7 @@ fn mul_specific_energy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6598,6 +6804,7 @@ fn mul_specific_energy_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: Power = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6629,6 +6836,7 @@ fn mul_specific_entropy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Entropy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6660,6 +6868,7 @@ fn mul_specific_entropy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6695,6 +6904,7 @@ fn mul_specific_volume_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6726,6 +6936,7 @@ fn mul_specific_weight_area() {
     let b = Area::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6761,6 +6972,7 @@ fn mul_specific_weight_length() {
     let b = Length::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6792,6 +7004,7 @@ fn mul_specific_weight_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6823,6 +7036,7 @@ fn mul_speed_area() {
     let b = Area::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6858,6 +7072,7 @@ fn mul_speed_density() {
     let b = Density::<i32>::from_base(2);
     let c: MassFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6892,6 +7107,7 @@ fn mul_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6922,6 +7138,7 @@ fn mul_speed_force() {
     let b = Force::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6953,6 +7170,7 @@ fn mul_speed_length() {
     let b = Length::<i32>::from_base(2);
     let c: KinematicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -6988,6 +7206,7 @@ fn mul_speed_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Impulse<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7019,6 +7238,7 @@ fn mul_speed_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7054,6 +7274,7 @@ fn mul_temperature_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7089,6 +7310,7 @@ fn mul_temperature_delta_coefficient_of_thermal_expansion() {
     let b = CoefficientOfThermalExpansion::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7120,6 +7342,7 @@ fn mul_temperature_delta_entropy() {
     let b = Entropy::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7151,6 +7374,7 @@ fn mul_temperature_delta_heat_transfer_coefficient() {
     let b = HeatTransferCoefficient::<i32>::from_base(2);
     let c: HeatFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7186,6 +7410,7 @@ fn mul_temperature_delta_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7221,6 +7446,7 @@ fn mul_temperature_delta_volumetric_heat_capacity() {
     let b = VolumetricHeatCapacity::<i32>::from_base(2);
     let c: EnergyDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7256,6 +7482,7 @@ fn mul_temperature_gradient_length() {
     let b = Length::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7286,6 +7513,7 @@ fn mul_thermal_insulance_heat_flux() {
     let b = HeatFlux::from_base(2.0);
     let c: TemperatureDelta = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7321,6 +7549,7 @@ fn mul_thermal_resistance_power() {
     let b = Power::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7356,6 +7585,7 @@ fn mul_torque_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7386,6 +7616,7 @@ fn mul_volume_density() {
     let b = Density::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7417,6 +7648,7 @@ fn mul_volume_electric_charge_density() {
     let b = ElectricChargeDensity::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7448,6 +7680,7 @@ fn mul_volume_energy_density() {
     let b = EnergyDensity::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7479,6 +7712,7 @@ fn mul_volume_length() {
     let b = Length::<i32>::from_base(2);
     let c: AreaMomentOfInertia<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7514,6 +7748,7 @@ fn mul_volume_mass_concentration() {
     let b = MassConcentration::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7545,6 +7780,7 @@ fn mul_volume_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7580,6 +7816,7 @@ fn mul_volume_power_density() {
     let b = PowerDensity::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7611,6 +7848,7 @@ fn mul_volume_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7642,6 +7880,7 @@ fn mul_volume_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7673,6 +7912,7 @@ fn mul_volume_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7704,6 +7944,7 @@ fn mul_volume_concentration_density() {
     let b = Density::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7739,6 +7980,7 @@ fn mul_volume_concentration_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: Molarity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7769,6 +8011,7 @@ fn mul_volume_flow_density() {
     let b = Density::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7800,6 +8043,7 @@ fn mul_volume_flow_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7831,6 +8075,7 @@ fn mul_volume_flow_fluid_resistance() {
     let b = FluidResistance::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7862,6 +8107,7 @@ fn mul_volume_flow_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: MolarFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7897,6 +8143,7 @@ fn mul_volume_flow_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: LeakRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7932,6 +8179,7 @@ fn mul_volume_flow_per_area_area() {
     let b = Area::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7967,6 +8215,7 @@ fn mul_volume_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -7998,6 +8247,7 @@ fn mul_volumetric_heat_capacity_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: EnergyDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8033,6 +8283,7 @@ fn div_acceleration_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Jerk<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8068,6 +8319,7 @@ fn div_acceleration_jerk() {
     let b = Jerk::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8099,6 +8351,7 @@ fn div_amount_of_substance_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: MolarFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8134,6 +8387,7 @@ fn div_amount_of_substance_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Molality<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8169,6 +8423,7 @@ fn div_amount_of_substance_molality() {
     let b = Molality::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8200,6 +8455,7 @@ fn div_amount_of_substance_molar_flow() {
     let b = MolarFlow::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8231,6 +8487,7 @@ fn div_amount_of_substance_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8262,6 +8519,7 @@ fn div_amount_of_substance_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8297,6 +8555,7 @@ fn div_angle_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8332,6 +8591,7 @@ fn div_angle_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8362,6 +8622,7 @@ fn div_area_length() {
     let b = Length::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8393,6 +8654,7 @@ fn div_area_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8424,6 +8686,7 @@ fn div_area_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8459,6 +8722,7 @@ fn div_area_density_density() {
     let b = Density::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8490,6 +8754,7 @@ fn div_area_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8525,6 +8790,7 @@ fn div_area_moment_of_inertia_area() {
     let b = Area::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8556,6 +8822,7 @@ fn div_area_moment_of_inertia_length() {
     let b = Length::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8587,6 +8854,7 @@ fn div_area_moment_of_inertia_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8618,6 +8886,7 @@ fn div_bit_rate_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: Information<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8649,6 +8918,7 @@ fn div_bit_rate_information() {
     let b = Information::<i32>::from_base(2);
     let c: Frequency<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8680,6 +8950,7 @@ fn div_dose_area_product_absorbed_dose_of_ionizing_radiation() {
     let b = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8711,6 +8982,7 @@ fn div_dose_area_product_area() {
     let b = Area::<i32>::from_base(2);
     let c: AbsorbedDoseOfIonizingRadiation<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8746,6 +9018,7 @@ fn div_duration_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8777,6 +9050,7 @@ fn div_duration_electric_resistance() {
     let b = ElectricResistance::<i32>::from_base(2);
     let c: ElectricCapacitance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8812,6 +9086,7 @@ fn div_dynamic_viscosity_density() {
     let b = Density::<i32>::from_base(2);
     let c: KinematicViscosity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8847,6 +9122,7 @@ fn div_dynamic_viscosity_kinematic_viscosity() {
     let b = KinematicViscosity::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8877,6 +9153,7 @@ fn div_electric_apparent_energy_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricApparentPower = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8907,6 +9184,7 @@ fn div_electric_apparent_energy_electric_apparent_power() {
     let b = ElectricApparentPower::from_base(2.0);
     let c: Duration = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8938,6 +9216,7 @@ fn div_electric_capacitance_length() {
     let b = Length::<i32>::from_base(2);
     let c: Permittivity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -8973,6 +9252,7 @@ fn div_electric_capacitance_permittivity() {
     let b = Permittivity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9004,6 +9284,7 @@ fn div_electric_charge_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricSurfaceChargeDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9039,6 +9320,7 @@ fn div_electric_charge_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9070,6 +9352,7 @@ fn div_electric_charge_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9101,6 +9384,7 @@ fn div_electric_charge_electric_charge_density() {
     let b = ElectricChargeDensity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9132,6 +9416,7 @@ fn div_electric_charge_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9163,6 +9448,7 @@ fn div_electric_charge_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCapacitance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9198,6 +9484,7 @@ fn div_electric_charge_electric_surface_charge_density() {
     let b = ElectricSurfaceChargeDensity::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9229,6 +9516,7 @@ fn div_electric_charge_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ElectricChargeDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9264,6 +9552,7 @@ fn div_electric_current_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricCurrentDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9299,6 +9588,7 @@ fn div_electric_current_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCurrentGradient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9334,6 +9624,7 @@ fn div_electric_current_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricPotentialChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9369,6 +9660,7 @@ fn div_electric_current_electric_conductance() {
     let b = ElectricConductance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9400,6 +9692,7 @@ fn div_electric_current_electric_current_density() {
     let b = ElectricCurrentDensity::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9431,6 +9724,7 @@ fn div_electric_current_electric_current_gradient() {
     let b = ElectricCurrentGradient::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9462,6 +9756,7 @@ fn div_electric_current_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricConductance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9497,6 +9792,7 @@ fn div_electric_current_electric_potential_change_rate() {
     let b = ElectricPotentialChangeRate::<i32>::from_base(2);
     let c: ElectricCapacitance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9532,6 +9828,7 @@ fn div_electric_current_length() {
     let b = Length::<i32>::from_base(2);
     let c: Magnetization<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9567,6 +9864,7 @@ fn div_electric_current_magnetization() {
     let b = Magnetization::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9598,6 +9896,7 @@ fn div_electric_current_density_electric_conductivity() {
     let b = ElectricConductivity::<i32>::from_base(2);
     let c: ElectricField<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9633,6 +9932,7 @@ fn div_electric_current_density_electric_field() {
     let b = ElectricField::<i32>::from_base(2);
     let c: ElectricConductivity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9668,6 +9968,7 @@ fn div_electric_field_electric_current_density() {
     let b = ElectricCurrentDensity::<i32>::from_base(2);
     let c: ElectricResistivity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9703,6 +10004,7 @@ fn div_electric_field_electric_resistivity() {
     let b = ElectricResistivity::<i32>::from_base(2);
     let c: ElectricCurrentDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9738,6 +10040,7 @@ fn div_electric_inductance_length() {
     let b = Length::<i32>::from_base(2);
     let c: Permeability<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9773,6 +10076,7 @@ fn div_electric_inductance_permeability() {
     let b = Permeability::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9804,6 +10108,7 @@ fn div_electric_potential_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricPotentialChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9839,6 +10144,7 @@ fn div_electric_potential_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9870,6 +10176,7 @@ fn div_electric_potential_electric_current_gradient() {
     let b = ElectricCurrentGradient::<i32>::from_base(2);
     let c: ElectricInductance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9905,6 +10212,7 @@ fn div_electric_potential_electric_field() {
     let b = ElectricField::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9936,6 +10244,7 @@ fn div_electric_potential_electric_inductance() {
     let b = ElectricInductance::<i32>::from_base(2);
     let c: ElectricCurrentGradient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -9971,6 +10280,7 @@ fn div_electric_potential_electric_potential_change_rate() {
     let b = ElectricPotentialChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10002,6 +10312,7 @@ fn div_electric_potential_electric_resistance() {
     let b = ElectricResistance::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10033,6 +10344,7 @@ fn div_electric_potential_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricField<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10063,6 +10375,7 @@ fn div_electric_reactive_energy_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricReactivePower = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10093,6 +10406,7 @@ fn div_electric_reactive_energy_electric_reactive_power() {
     let b = ElectricReactivePower::from_base(2.0);
     let c: Duration = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10124,6 +10438,7 @@ fn div_energy_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: MolarEnergy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10158,6 +10473,7 @@ fn div_energy_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Power<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10189,6 +10505,7 @@ fn div_energy_electric_charge() {
     let b = ElectricCharge::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10220,6 +10537,7 @@ fn div_energy_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10251,6 +10569,7 @@ fn div_energy_energy_density() {
     let b = EnergyDensity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10282,6 +10601,7 @@ fn div_energy_entropy() {
     let b = Entropy::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10316,6 +10636,7 @@ fn div_energy_force() {
     let b = Force::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10346,6 +10667,7 @@ fn div_energy_length() {
     let b = Length::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10377,6 +10699,7 @@ fn div_energy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10412,6 +10735,7 @@ fn div_energy_molar_energy() {
     let b = MolarEnergy::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10446,6 +10770,7 @@ fn div_energy_power() {
     let b = Power::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10477,6 +10802,7 @@ fn div_energy_specific_energy() {
     let b = SpecificEnergy::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10508,6 +10834,7 @@ fn div_energy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: Entropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10539,6 +10866,7 @@ fn div_energy_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: EnergyDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10574,6 +10902,7 @@ fn div_energy_density_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: VolumetricHeatCapacity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10609,6 +10938,7 @@ fn div_energy_density_volumetric_heat_capacity() {
     let b = VolumetricHeatCapacity::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10644,6 +10974,7 @@ fn div_entropy_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: MolarEntropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10679,6 +11010,7 @@ fn div_entropy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: SpecificEntropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10714,6 +11046,7 @@ fn div_entropy_molar_entropy() {
     let b = MolarEntropy::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10749,6 +11082,7 @@ fn div_entropy_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10779,6 +11113,7 @@ fn div_force_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10809,6 +11144,7 @@ fn div_force_area() {
     let b = Area::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10840,6 +11176,7 @@ fn div_force_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ForceChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10875,6 +11212,7 @@ fn div_force_force_change_rate() {
     let b = ForceChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10906,6 +11244,7 @@ fn div_force_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10937,6 +11276,7 @@ fn div_force_length() {
     let b = Length::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -10971,6 +11311,7 @@ fn div_force_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11005,6 +11346,7 @@ fn div_force_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11036,6 +11378,7 @@ fn div_force_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11067,6 +11410,7 @@ fn div_force_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11102,6 +11446,7 @@ fn div_force_per_length_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: LinearDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11137,6 +11482,7 @@ fn div_force_per_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11172,6 +11518,7 @@ fn div_force_per_length_force() {
     let b = Force::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11207,6 +11554,7 @@ fn div_force_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11238,6 +11586,7 @@ fn div_force_per_length_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11273,6 +11622,7 @@ fn div_force_per_length_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11304,6 +11654,7 @@ fn div_force_per_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11335,6 +11686,7 @@ fn div_force_per_length_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11366,6 +11718,7 @@ fn div_heat_flux_heat_transfer_coefficient() {
     let b = HeatTransferCoefficient::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11401,6 +11754,7 @@ fn div_heat_flux_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: HeatTransferCoefficient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11436,6 +11790,7 @@ fn div_impulse_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11467,6 +11822,7 @@ fn div_impulse_force() {
     let b = Force::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11498,6 +11854,7 @@ fn div_impulse_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11529,6 +11886,7 @@ fn div_impulse_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11560,6 +11918,7 @@ fn div_information_bit_rate() {
     let b = BitRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11591,6 +11950,7 @@ fn div_information_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: BitRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11622,6 +11982,7 @@ fn div_irradiation_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Irradiance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11657,6 +12018,7 @@ fn div_irradiation_irradiance() {
     let b = Irradiance::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11688,6 +12050,7 @@ fn div_kinematic_viscosity_length() {
     let b = Length::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11719,6 +12082,7 @@ fn div_kinematic_viscosity_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11750,6 +12114,7 @@ fn div_leak_rate_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11785,6 +12150,7 @@ fn div_leak_rate_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11816,6 +12182,7 @@ fn div_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11850,6 +12217,7 @@ fn div_length_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11881,6 +12249,7 @@ fn div_length_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11912,6 +12281,7 @@ fn div_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11942,6 +12312,7 @@ fn div_length_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -11973,6 +12344,7 @@ fn div_length_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12008,6 +12380,7 @@ fn div_linear_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12043,6 +12416,7 @@ fn div_linear_density_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12074,6 +12448,7 @@ fn div_linear_density_density() {
     let b = Density::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12105,6 +12480,7 @@ fn div_linear_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: AreaDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12140,6 +12516,7 @@ fn div_luminous_flux_area() {
     let b = Area::<i32>::from_base(2);
     let c: Illuminance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12171,6 +12548,7 @@ fn div_luminous_flux_illuminance() {
     let b = Illuminance::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12202,6 +12580,7 @@ fn div_luminous_flux_luminous_intensity() {
     let b = LuminousIntensity::<i32>::from_base(2);
     let c: SolidAngle<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12233,6 +12612,7 @@ fn div_luminous_flux_solid_angle() {
     let b = SolidAngle::<i32>::from_base(2);
     let c: LuminousIntensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12268,6 +12648,7 @@ fn div_luminous_intensity_area() {
     let b = Area::<i32>::from_base(2);
     let c: Luminance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12303,6 +12684,7 @@ fn div_luminous_intensity_luminance() {
     let b = Luminance::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12334,6 +12716,7 @@ fn div_magnetic_field_magnetization() {
     let b = Magnetization::<i32>::from_base(2);
     let c: Permeability<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12369,6 +12752,7 @@ fn div_magnetic_field_permeability() {
     let b = Permeability::<i32>::from_base(2);
     let c: Magnetization<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12404,6 +12788,7 @@ fn div_magnetic_flux_area() {
     let b = Area::<i32>::from_base(2);
     let c: MagneticField<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12435,6 +12820,7 @@ fn div_magnetic_flux_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12466,6 +12852,7 @@ fn div_magnetic_flux_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricInductance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12501,6 +12888,7 @@ fn div_magnetic_flux_electric_inductance() {
     let b = ElectricInductance::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12532,6 +12920,7 @@ fn div_magnetic_flux_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12563,6 +12952,7 @@ fn div_magnetic_flux_magnetic_field() {
     let b = MagneticField::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12594,6 +12984,7 @@ fn div_mass_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: MolarMass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12629,6 +13020,7 @@ fn div_mass_area() {
     let b = Area::<i32>::from_base(2);
     let c: AreaDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12664,6 +13056,7 @@ fn div_mass_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12694,6 +13087,7 @@ fn div_mass_density() {
     let b = Density::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12720,6 +13114,7 @@ fn div_mass_duration() {
     let b = Duration::from_base(2.0);
     let c: MassFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12751,6 +13146,7 @@ fn div_mass_length() {
     let b = Length::<i32>::from_base(2);
     let c: LinearDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12786,6 +13182,7 @@ fn div_mass_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12812,6 +13209,7 @@ fn div_mass_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: Duration = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12843,6 +13241,7 @@ fn div_mass_mass_fraction() {
     let b = MassFraction::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12874,6 +13273,7 @@ fn div_mass_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12908,6 +13308,7 @@ fn div_mass_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12943,6 +13344,7 @@ fn div_mass_concentration_density() {
     let b = Density::<i32>::from_base(2);
     let c: VolumeConcentration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -12978,6 +13380,7 @@ fn div_mass_concentration_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13013,6 +13416,7 @@ fn div_mass_concentration_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: MolarMass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13048,6 +13452,7 @@ fn div_mass_concentration_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13078,6 +13483,7 @@ fn div_mass_flow_area() {
     let b = Area::from_base(2.0);
     let c: MassFlux = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13108,6 +13514,7 @@ fn div_mass_flow_brake_specific_fuel_consumption() {
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: Power = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13134,6 +13541,7 @@ fn div_mass_flow_density() {
     let b = Density::from_base(2.0);
     let c: VolumeFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13164,6 +13572,7 @@ fn div_mass_flow_mass_flux() {
     let b = MassFlux::from_base(2.0);
     let c: Area = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13190,6 +13599,7 @@ fn div_mass_flow_molar_flow() {
     let b = MolarFlow::from_base(2.0);
     let c: MolarMass = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13220,6 +13630,7 @@ fn div_mass_flow_molar_mass() {
     let b = MolarMass::from_base(2.0);
     let c: MolarFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13250,6 +13661,7 @@ fn div_mass_flow_power() {
     let b = Power::from_base(2.0);
     let c: BrakeSpecificFuelConsumption = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13280,6 +13692,7 @@ fn div_mass_flow_volume_flow() {
     let b = VolumeFlow::from_base(2.0);
     let c: Density = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13315,6 +13728,7 @@ fn div_mass_flux_density() {
     let b = Density::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13346,6 +13760,7 @@ fn div_mass_flux_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13381,6 +13796,7 @@ fn div_molar_flow_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13416,6 +13832,7 @@ fn div_molar_flow_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13451,6 +13868,7 @@ fn div_molarity_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13486,6 +13904,7 @@ fn div_power_area() {
     let b = Area::<i32>::from_base(2);
     let c: HeatFlux<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13521,6 +13940,7 @@ fn div_power_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13552,6 +13972,7 @@ fn div_power_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13582,6 +14003,7 @@ fn div_power_energy() {
     let b = Energy::<i32>::from_base(2);
     let c: Frequency<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13612,6 +14034,7 @@ fn div_power_force() {
     let b = Force::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13642,6 +14065,7 @@ fn div_power_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: Energy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13673,6 +14097,7 @@ fn div_power_heat_flux() {
     let b = HeatFlux::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13704,6 +14129,7 @@ fn div_power_length() {
     let b = Length::<i32>::from_base(2);
     let c: LinearPowerDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13739,6 +14165,7 @@ fn div_power_linear_power_density() {
     let b = LinearPowerDensity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13765,6 +14192,7 @@ fn div_power_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: SpecificEnergy = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13800,6 +14228,7 @@ fn div_power_power_density() {
     let b = PowerDensity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13831,6 +14260,7 @@ fn div_power_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Torque<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13857,6 +14287,7 @@ fn div_power_specific_energy() {
     let b = SpecificEnergy::from_base(2.0);
     let c: MassFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13887,6 +14318,7 @@ fn div_power_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13918,6 +14350,7 @@ fn div_power_torque() {
     let b = Torque::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13953,6 +14386,7 @@ fn div_power_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: PowerDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -13988,6 +14422,7 @@ fn div_pressure_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: AreaDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14023,6 +14458,7 @@ fn div_pressure_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14058,6 +14494,7 @@ fn div_pressure_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: PressureChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14093,6 +14530,7 @@ fn div_pressure_fluid_resistance() {
     let b = FluidResistance::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14128,6 +14566,7 @@ fn div_pressure_force() {
     let b = Force::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14163,6 +14602,7 @@ fn div_pressure_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14198,6 +14638,7 @@ fn div_pressure_length() {
     let b = Length::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14233,6 +14674,7 @@ fn div_pressure_pressure_change_rate() {
     let b = PressureChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14264,6 +14706,7 @@ fn div_pressure_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14295,6 +14738,7 @@ fn div_pressure_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14330,6 +14774,7 @@ fn div_pressure_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14361,6 +14806,7 @@ fn div_pressure_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: FluidResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14396,6 +14842,7 @@ fn div_radiation_equivalent_dose_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RadiationEquivalentDoseRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14431,6 +14878,7 @@ fn div_radiation_equivalent_dose_radiation_equivalent_dose_rate() {
     let b = RadiationEquivalentDoseRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14462,6 +14910,7 @@ fn div_ratio_compressibility() {
     let b = Compressibility::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14493,6 +14942,7 @@ fn div_ratio_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RatioChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14528,6 +14978,7 @@ fn div_ratio_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Compressibility<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14563,6 +15014,7 @@ fn div_ratio_ratio_change_rate() {
     let b = RatioChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14594,6 +15046,7 @@ fn div_reciprocal_area_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14629,6 +15082,7 @@ fn div_reciprocal_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14664,6 +15118,7 @@ fn div_reciprocal_length_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14695,6 +15150,7 @@ fn div_rotational_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RotationalAcceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14730,6 +15186,7 @@ fn div_rotational_speed_rotational_acceleration() {
     let b = RotationalAcceleration::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14761,6 +15218,7 @@ fn div_rotational_stiffness_length() {
     let b = Length::<i32>::from_base(2);
     let c: RotationalStiffnessPerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14796,6 +15254,7 @@ fn div_rotational_stiffness_rotational_stiffness_per_length() {
     let b = RotationalStiffnessPerLength::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14827,6 +15286,7 @@ fn div_specific_energy_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14862,6 +15322,7 @@ fn div_specific_energy_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14893,6 +15354,7 @@ fn div_specific_energy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: SpecificEntropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14928,6 +15390,7 @@ fn div_specific_weight_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14963,6 +15426,7 @@ fn div_specific_weight_density() {
     let b = Density::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -14997,6 +15461,7 @@ fn div_speed_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15027,6 +15492,7 @@ fn div_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15062,6 +15528,7 @@ fn div_temperature_delta_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: TemperatureChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15092,6 +15559,7 @@ fn div_temperature_delta_heat_flux() {
     let b = HeatFlux::from_base(2.0);
     let c: ThermalInsulance = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15127,6 +15595,7 @@ fn div_temperature_delta_length() {
     let b = Length::<i32>::from_base(2);
     let c: TemperatureGradient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15162,6 +15631,7 @@ fn div_temperature_delta_power() {
     let b = Power::<i32>::from_base(2);
     let c: ThermalResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15197,6 +15667,7 @@ fn div_temperature_delta_temperature_change_rate() {
     let b = TemperatureChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15228,6 +15699,7 @@ fn div_temperature_delta_temperature_gradient() {
     let b = TemperatureGradient::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15254,6 +15726,7 @@ fn div_temperature_delta_thermal_insulance() {
     let b = ThermalInsulance::from_base(2.0);
     let c: HeatFlux = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15289,6 +15762,7 @@ fn div_temperature_delta_thermal_resistance() {
     let b = ThermalResistance::<i32>::from_base(2);
     let c: Power<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15320,6 +15794,7 @@ fn div_thermal_conductivity_heat_transfer_coefficient() {
     let b = HeatTransferCoefficient::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15351,6 +15826,7 @@ fn div_thermal_conductivity_length() {
     let b = Length::<i32>::from_base(2);
     let c: HeatTransferCoefficient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15386,6 +15862,7 @@ fn div_torque_angle() {
     let b = Angle::<i32>::from_base(2);
     let c: RotationalStiffness<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15421,6 +15898,7 @@ fn div_torque_area() {
     let b = Area::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15456,6 +15934,7 @@ fn div_torque_force() {
     let b = Force::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15487,6 +15966,7 @@ fn div_torque_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15518,6 +15998,7 @@ fn div_torque_length() {
     let b = Length::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15549,6 +16030,7 @@ fn div_torque_rotational_stiffness() {
     let b = RotationalStiffness::<i32>::from_base(2);
     let c: Angle<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15579,6 +16061,7 @@ fn div_volume_area() {
     let b = Area::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15610,6 +16093,7 @@ fn div_volume_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15644,6 +16128,7 @@ fn div_volume_length() {
     let b = Length::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15675,6 +16160,7 @@ fn div_volume_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: SpecificVolume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15710,6 +16196,7 @@ fn div_volume_specific_volume() {
     let b = SpecificVolume::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15741,6 +16228,7 @@ fn div_volume_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15772,6 +16260,7 @@ fn div_volume_flow_area() {
     let b = Area::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),
@@ -15803,6 +16292,7 @@ fn div_volume_flow_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
         (-1234, 567),

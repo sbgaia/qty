@@ -561,11 +561,14 @@ impl ForceChangeRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ForceChangeRate, NewtonPerSecond);
 
 /// Units for counting [`ForceChangeRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::force_change_rate`](crate::unit::force_change_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(NewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::NewtonPerMinute, base NewtonPerSecond, 1 / 60, pi^0, from_newtons_per_minute, as_newtons_per_minute, additive);
     fixed_unit!(DecanewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerMinute, base NewtonPerSecond, 1 / 6, pi^0, from_decanewtons_per_minute, as_decanewtons_per_minute, additive);

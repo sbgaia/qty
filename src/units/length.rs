@@ -1337,11 +1337,14 @@ impl Length<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Length, Meter);
 
 /// Units for counting [`Length`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::length`](crate::unit::length).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Meter: Length, LengthUnit::Meter, base Meter, 1 / 1, pi^0, from_meters, as_meters, additive);
     fixed_unit!(Femtometer: Length, LengthUnit::Femtometer, base Meter, 1 / 1000000000000000, pi^0, from_femtometers, as_femtometers, additive);

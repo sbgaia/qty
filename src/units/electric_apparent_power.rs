@@ -302,11 +302,14 @@ impl ElectricApparentPower<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricApparentPower, Voltampere);
 
 /// Units for counting [`ElectricApparentPower`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_apparent_power`](crate::unit::electric_apparent_power).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Voltampere: ElectricApparentPower, ElectricApparentPowerUnit::Voltampere, base Voltampere, 1 / 1, pi^0, from_voltamperes, as_voltamperes, additive);
     fixed_unit!(Microvoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Microvoltampere, base Voltampere, 1 / 1000000, pi^0, from_microvoltamperes, as_microvoltamperes, additive);

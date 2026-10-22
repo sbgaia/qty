@@ -215,11 +215,14 @@ impl SpecificVolume<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(SpecificVolume, CubicMeterPerKilogram);
 
 /// Units for counting [`SpecificVolume`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::specific_volume`](crate::unit::specific_volume).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(CubicMeterPerKilogram: SpecificVolume, SpecificVolumeUnit::CubicMeterPerKilogram, base CubicMeterPerKilogram, 1 / 1, pi^0, from_cubic_meters_per_kilogram, as_cubic_meters_per_kilogram, additive);
     fixed_unit!(CubicMillimeterPerKilogram: SpecificVolume, SpecificVolumeUnit::CubicMillimeterPerKilogram, base CubicMeterPerKilogram, 1 / 1000000000, pi^0, from_cubic_millimeters_per_kilogram, as_cubic_millimeters_per_kilogram, additive);

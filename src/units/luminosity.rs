@@ -532,11 +532,14 @@ impl Luminosity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Luminosity, Watt);
 
 /// Units for counting [`Luminosity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::luminosity`](crate::unit::luminosity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Watt: Luminosity, LuminosityUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts, additive);
     fixed_unit!(Femtowatt: Luminosity, LuminosityUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts, additive);

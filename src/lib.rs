@@ -9,13 +9,14 @@
 //!   about one ulp.
 //! - Floats have no total order, so sort with
 //!   [`total_cmp`](Length::total_cmp) and wrap map keys in [`Ordered`].
-//!   Integer storage and [`Fixed`] are `Eq + Ord + Hash` as they are.
+//!   Integer storage is `Eq + Ord + Hash` as it is.
 //! - [`Length::const_new`] builds a value in any unit at compile time, with
 //!   the same result as `new`.
 //! - [`Length::from_base_slice`] views a `&[f64]` of metres as `&[Length]`
 //!   without copying; `as_base_slice` goes back.
-//! - The units for [`Fixed`] are in [`unit`](mod@unit), one module per
-//!   quantity (`unit::length::Millimeter`). Lossy mixes such as
+//! - With the `fixed` feature, `Fixed` counts a quantity in integers of any
+//!   unit, such as `Fixed<Millimeter>`. Its units are in `unit`, one module
+//!   per quantity (`unit::length::Millimeter`). Lossy mixes such as
 //!   `Fixed<Meter> + Fixed<Millimeter>` are rejected by `cargo build` and
 //!   `cargo test`; `cargo check` does not evaluate the unit ratio and lets
 //!   them through.
@@ -959,21 +960,20 @@ macro_rules! __qty_common {
 }
 
 /// For built-in quantities: [`__qty_common!`] plus what only they have
-/// (`Fixed`, defmt, schemars).
+/// (integer rounding, `Fixed`, defmt, schemars).
 macro_rules! quantity_core {
     ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident, si: $si:expr) => {
         $crate::__qty_common!($Q, $U, $base, exprs: $exprs, si: $si);
 
         impl<I: $crate::Integer> $Q<I> {
             /// Rounds a float quantity to a whole number of base units.
-            /// For other units, see [`Fixed`](crate::Fixed).
+            /// For other units, see `Fixed` (with the `fixed` feature).
             #[inline]
             pub fn round_from<F: $crate::Float>(
                 quantity: $Q<F>,
                 mode: $crate::Rounding,
             ) -> Result<Self, $crate::RoundError> {
-                $crate::Fixed::<<$Q<f64> as $crate::HasFixedBase>::Base, I>::round_from(quantity, mode)
-                    .map(Self::from)
+                $crate::rounding::round_to::<F, I>(quantity.into_base(), mode).map(Self::from_base)
             }
         }
 
@@ -1429,6 +1429,7 @@ macro_rules! cross_recip {
 /// Declares the [`FixedUnit`] marker for one unit. `$from` and `$as` name
 /// the unit's conversion methods; the marker doesn't call them, as the
 /// provided `to_quantity` and `from_quantity` reach the same code via `UNIT`.
+#[cfg(feature = "fixed")]
 macro_rules! fixed_unit {
     // Units of ordinary quantities: counts can be added.
     ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
@@ -1513,6 +1514,7 @@ macro_rules! fixed_unit {
 
 /// The relation between three quantities' unit enums, for `Fixed::mul_to`
 /// and `Fixed::div_to`.
+#[cfg(feature = "fixed")]
 macro_rules! fixed_relation {
     ($Tr:ident: $A:ident, $B:ident => $C:ident; $num:literal / $den:literal, pi^$pi:literal) => {
         impl $crate::$Tr<$B> for $A {
@@ -1524,6 +1526,7 @@ macro_rules! fixed_relation {
 
 /// Links a quantity with its base-unit marker: `Length<I>` and
 /// `Fixed<Meter, I>` are the same thing and convert freely.
+#[cfg(feature = "fixed")]
 macro_rules! fixed_base {
     ($Q:ident, $B:ident) => {
         impl<T> $crate::HasFixedBase for $Q<T> {
@@ -1545,22 +1548,31 @@ macro_rules! fixed_base {
 }
 
 /// Maps a quantity type to the [`FixedUnit`] marker of its base unit.
+#[cfg(feature = "fixed")]
 #[doc(hidden)]
 pub trait HasFixedBase {
     type Base: FixedUnit;
 }
 
+mod rounding;
+pub use rounding::{Integer, RoundError, Rounding, ToFloat};
+
+mod ordered;
+pub use ordered::Ordered;
+
+#[cfg(feature = "fixed")]
 mod fixed;
-pub use fixed::{
-    AdditiveUnit, Decimal, Fixed, FixedUnit, Integer, Ordered, PointUnit, RoundError, Rounding,
-    ToFloat, UnitDiv, UnitMul,
-};
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
+pub use fixed::{AdditiveUnit, Decimal, Fixed, FixedUnit, PointUnit, UnitDiv, UnitMul};
 
 // The generated quantity modules, each with a quantity and its unit enum.
 pub mod units;
 pub use units::*;
 
 // Generated: `unit::<quantity>::<Unit>` markers for `Fixed`.
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit;
 
 // Trigonometry on `Angle`.

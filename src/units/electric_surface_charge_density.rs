@@ -220,11 +220,14 @@ impl ElectricSurfaceChargeDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricSurfaceChargeDensity, CoulombPerSquareMeter);
 
 /// Units for counting [`ElectricSurfaceChargeDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_surface_charge_density`](crate::unit::electric_surface_charge_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(CoulombPerSquareMeter: ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter, base CoulombPerSquareMeter, 1 / 1, pi^0, from_coulombs_per_square_meter, as_coulombs_per_square_meter, additive);
     fixed_unit!(CoulombPerSquareCentimeter: ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter, base CoulombPerSquareMeter, 10000 / 1, pi^0, from_coulombs_per_square_centimeter, as_coulombs_per_square_centimeter, additive);
