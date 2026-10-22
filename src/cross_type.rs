@@ -108,7 +108,7 @@ mod fixed_relations {
     #[cfg(feature = "electrical")]
     fixed_relation!(UnitMul: AreaUnit, MagneticFieldUnit => MagneticFluxUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitMul: AreaUnit, MassFluxUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: AreaUnit, MassFluxUnit => MassFlowUnit; 1 / 1, pi^0);
     fixed_relation!(UnitMul: AreaUnit, PressureUnit => ForceUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitMul: AreaUnit, ReciprocalLengthUnit => LengthUnit; 1 / 1, pi^0);
@@ -127,7 +127,7 @@ mod fixed_relations {
     #[cfg(feature = "information")]
     fixed_relation!(UnitMul: BitRateUnit, DurationUnit => InformationUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "misc"))]
-    fixed_relation!(UnitMul: BrakeSpecificFuelConsumptionUnit, PowerUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: BrakeSpecificFuelConsumptionUnit, PowerUnit => MassFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: CoefficientOfThermalExpansionUnit, TemperatureDeltaUnit => RatioUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
@@ -146,7 +146,7 @@ mod fixed_relations {
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: DensityUnit, VolumeConcentrationUnit => MassConcentrationUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitMul: DensityUnit, VolumeFlowUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: DensityUnit, VolumeFlowUnit => MassFlowUnit; 1 / 1, pi^0);
     fixed_relation!(UnitMul: DurationUnit, AccelerationUnit => SpeedUnit; 1 / 1, pi^0);
     #[cfg(feature = "information")]
     fixed_relation!(UnitMul: DurationUnit, BitRateUnit => InformationUnit; 1 / 1, pi^0);
@@ -173,7 +173,7 @@ mod fixed_relations {
     #[cfg(feature = "fluids")]
     fixed_relation!(UnitMul: DurationUnit, KinematicViscosityUnit => AreaUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitMul: DurationUnit, MassFlowUnit => MassUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitMul: DurationUnit, MassFlowUnit => MassUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: DurationUnit, MolarFlowUnit => AmountOfSubstanceUnit; 1 / 1, pi^0);
     fixed_relation!(UnitMul: DurationUnit, PowerUnit => EnergyUnit; 1 / 1, pi^0);
@@ -285,7 +285,7 @@ mod fixed_relations {
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: HeatFluxUnit, AreaUnit => PowerUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
-    fixed_relation!(UnitMul: HeatFluxUnit, ThermalInsulanceUnit => TemperatureDeltaUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitMul: HeatFluxUnit, ThermalInsulanceUnit => TemperatureDeltaUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: HeatTransferCoefficientUnit, LengthUnit => ThermalConductivityUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
@@ -373,11 +373,11 @@ mod fixed_relations {
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: MassConcentrationUnit, VolumeUnit => MassUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitMul: MassFlowUnit, DurationUnit => MassUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitMul: MassFlowUnit, DurationUnit => MassUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "mechanics"))]
-    fixed_relation!(UnitMul: MassFlowUnit, SpecificEnergyUnit => PowerUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitMul: MassFlowUnit, SpecificEnergyUnit => PowerUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitMul: MassFluxUnit, AreaUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: MassFluxUnit, AreaUnit => MassFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: MassFractionUnit, MassUnit => MassUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
@@ -389,11 +389,11 @@ mod fixed_relations {
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: MolarFlowUnit, DurationUnit => AmountOfSubstanceUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "chemistry", feature = "fluids"))]
-    fixed_relation!(UnitMul: MolarFlowUnit, MolarMassUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: MolarFlowUnit, MolarMassUnit => MassFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: MolarMassUnit, AmountOfSubstanceUnit => MassUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "chemistry", feature = "fluids"))]
-    fixed_relation!(UnitMul: MolarMassUnit, MolarFlowUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: MolarMassUnit, MolarFlowUnit => MassFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: MolarMassUnit, MolarityUnit => MassConcentrationUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
@@ -411,7 +411,7 @@ mod fixed_relations {
     #[cfg(feature = "electrical")]
     fixed_relation!(UnitMul: PermittivityUnit, LengthUnit => ElectricCapacitanceUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "misc"))]
-    fixed_relation!(UnitMul: PowerUnit, BrakeSpecificFuelConsumptionUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: PowerUnit, BrakeSpecificFuelConsumptionUnit => MassFlowUnit; 1 / 1, pi^0);
     fixed_relation!(UnitMul: PowerUnit, DurationUnit => EnergyUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: PowerUnit, ThermalResistanceUnit => TemperatureDeltaUnit; 1 / 1, pi^0);
@@ -461,7 +461,7 @@ mod fixed_relations {
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitMul: SpecificEnergyUnit, MassUnit => EnergyUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "mechanics"))]
-    fixed_relation!(UnitMul: SpecificEnergyUnit, MassFlowUnit => PowerUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitMul: SpecificEnergyUnit, MassFlowUnit => PowerUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: SpecificEntropyUnit, MassUnit => EntropyUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -501,7 +501,7 @@ mod fixed_relations {
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: TemperatureGradientUnit, LengthUnit => TemperatureDeltaUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
-    fixed_relation!(UnitMul: ThermalInsulanceUnit, HeatFluxUnit => TemperatureDeltaUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitMul: ThermalInsulanceUnit, HeatFluxUnit => TemperatureDeltaUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitMul: ThermalResistanceUnit, PowerUnit => TemperatureDeltaUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
@@ -530,7 +530,7 @@ mod fixed_relations {
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitMul: VolumeConcentrationUnit, MolarityUnit => MolarityUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitMul: VolumeFlowUnit, DensityUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitMul: VolumeFlowUnit, DensityUnit => MassFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
     fixed_relation!(UnitMul: VolumeFlowUnit, DurationUnit => VolumeUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
@@ -822,13 +822,13 @@ mod fixed_relations {
     fixed_relation!(UnitDiv: MassUnit, AreaDensityUnit => AreaUnit; 1 / 1, pi^0);
     fixed_relation!(UnitDiv: MassUnit, DensityUnit => VolumeUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitDiv: MassUnit, DurationUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitDiv: MassUnit, DurationUnit => MassFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitDiv: MassUnit, LengthUnit => LinearDensityUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitDiv: MassUnit, LinearDensityUnit => LengthUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitDiv: MassUnit, MassFlowUnit => DurationUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitDiv: MassUnit, MassFlowUnit => DurationUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitDiv: MassUnit, MassFractionUnit => MassUnit; 1 / 1, pi^0);
     #[cfg(feature = "chemistry")]
@@ -843,21 +843,21 @@ mod fixed_relations {
     #[cfg(feature = "chemistry")]
     fixed_relation!(UnitDiv: MassConcentrationUnit, VolumeConcentrationUnit => DensityUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitDiv: MassFlowUnit, AreaUnit => MassFluxUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, AreaUnit => MassFluxUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "misc"))]
-    fixed_relation!(UnitDiv: MassFlowUnit, BrakeSpecificFuelConsumptionUnit => PowerUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, BrakeSpecificFuelConsumptionUnit => PowerUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitDiv: MassFlowUnit, DensityUnit => VolumeFlowUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, DensityUnit => VolumeFlowUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitDiv: MassFlowUnit, MassFluxUnit => AreaUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, MassFluxUnit => AreaUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "chemistry", feature = "fluids"))]
-    fixed_relation!(UnitDiv: MassFlowUnit, MolarFlowUnit => MolarMassUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, MolarFlowUnit => MolarMassUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "chemistry", feature = "fluids"))]
-    fixed_relation!(UnitDiv: MassFlowUnit, MolarMassUnit => MolarFlowUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, MolarMassUnit => MolarFlowUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "misc"))]
-    fixed_relation!(UnitDiv: MassFlowUnit, PowerUnit => BrakeSpecificFuelConsumptionUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, PowerUnit => BrakeSpecificFuelConsumptionUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
-    fixed_relation!(UnitDiv: MassFlowUnit, VolumeFlowUnit => DensityUnit; 1 / 1000, pi^0);
+    fixed_relation!(UnitDiv: MassFlowUnit, VolumeFlowUnit => DensityUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
     fixed_relation!(UnitDiv: MassFluxUnit, DensityUnit => SpeedUnit; 1 / 1, pi^0);
     #[cfg(feature = "fluids")]
@@ -884,13 +884,13 @@ mod fixed_relations {
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitDiv: PowerUnit, LinearPowerDensityUnit => LengthUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "mechanics"))]
-    fixed_relation!(UnitDiv: PowerUnit, MassFlowUnit => SpecificEnergyUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitDiv: PowerUnit, MassFlowUnit => SpecificEnergyUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitDiv: PowerUnit, PowerDensityUnit => VolumeUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitDiv: PowerUnit, RotationalSpeedUnit => TorqueUnit; 1 / 1, pi^0);
     #[cfg(all(feature = "fluids", feature = "mechanics"))]
-    fixed_relation!(UnitDiv: PowerUnit, SpecificEnergyUnit => MassFlowUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitDiv: PowerUnit, SpecificEnergyUnit => MassFlowUnit; 1 / 1, pi^0);
     fixed_relation!(UnitDiv: PowerUnit, SpeedUnit => ForceUnit; 1 / 1, pi^0);
     #[cfg(feature = "mechanics")]
     fixed_relation!(UnitDiv: PowerUnit, TorqueUnit => RotationalSpeedUnit; 1 / 1, pi^0);
@@ -961,7 +961,7 @@ mod fixed_relations {
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitDiv: TemperatureDeltaUnit, DurationUnit => TemperatureChangeRateUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
-    fixed_relation!(UnitDiv: TemperatureDeltaUnit, HeatFluxUnit => ThermalInsulanceUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitDiv: TemperatureDeltaUnit, HeatFluxUnit => ThermalInsulanceUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitDiv: TemperatureDeltaUnit, LengthUnit => TemperatureGradientUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
@@ -971,7 +971,7 @@ mod fixed_relations {
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitDiv: TemperatureDeltaUnit, TemperatureGradientUnit => LengthUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
-    fixed_relation!(UnitDiv: TemperatureDeltaUnit, ThermalInsulanceUnit => HeatFluxUnit; 1000 / 1, pi^0);
+    fixed_relation!(UnitDiv: TemperatureDeltaUnit, ThermalInsulanceUnit => HeatFluxUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]
     fixed_relation!(UnitDiv: TemperatureDeltaUnit, ThermalResistanceUnit => PowerUnit; 1 / 1, pi^0);
     #[cfg(feature = "thermal")]

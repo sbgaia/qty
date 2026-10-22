@@ -5,105 +5,6 @@ use super::*;
 use crate::formula::{Dim, Dims, DivDim, Expr, MulDim, E};
 use crate::units::*;
 
-/// A base unit of size 0.001 in coherent SI.
-#[derive(Debug)]
-pub struct Size0_001;
-impl<V: crate::Number> Rescale<V, MulOp> for (Size0_001, Size0_001, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, DivOp> for (Size0_001, Size0_001, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, MulOp> for (Size0_001, Size0_001, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V> Rescale<V, DivOp> for (Size0_001, Size0_001, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, _: f64) -> V {
-        value
-    }
-}
-impl<V> Rescale<V, MulOp> for (Size0_001, Coherent, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, _: f64) -> V {
-        value
-    }
-}
-impl<V> Rescale<V, DivOp> for (Size0_001, Coherent, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, _: f64) -> V {
-        value
-    }
-}
-impl<V: crate::Number> Rescale<V, MulOp> for (Size0_001, Coherent, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, DivOp> for (Size0_001, Coherent, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V> Rescale<V, MulOp> for (Coherent, Size0_001, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, _: f64) -> V {
-        value
-    }
-}
-impl<V: crate::Number> Rescale<V, DivOp> for (Coherent, Size0_001, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, MulOp> for (Coherent, Size0_001, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, DivOp> for (Coherent, Size0_001, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, MulOp> for (Coherent, Coherent, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V: crate::Number> Rescale<V, DivOp> for (Coherent, Coherent, Size0_001) {
-    #[inline(always)]
-    fn rescale(value: V, k: f64) -> V {
-        value * V::from_f64(k)
-    }
-}
-impl<V> Rescale<V, MulOp> for (Coherent, Coherent, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, _: f64) -> V {
-        value
-    }
-}
-impl<V> Rescale<V, DivOp> for (Coherent, Coherent, Coherent) {
-    #[inline(always)]
-    fn rescale(value: V, _: f64) -> V {
-        value
-    }
-}
 /// The lookup from dimensions to quantities starts here.
 #[derive(Debug)]
 pub struct Root;
@@ -6512,8 +6413,6 @@ impl Step<E<12>> for N157 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N7 {
     type Out = MolarEntropy<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MolarEntropy<V> {
         MolarEntropy::from_base(value)
@@ -6522,8 +6421,6 @@ impl<D, V> Leaf<D, V> for N7 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N7 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6532,8 +6429,6 @@ impl<D, V> Leaf<D, V> for N7 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N12 {
     type Out = SpecificEntropy<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> SpecificEntropy<V> {
         SpecificEntropy::from_base(value)
@@ -6542,8 +6437,6 @@ impl<D, V> Leaf<D, V> for N12 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N12 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6552,8 +6445,6 @@ impl<D, V> Leaf<D, V> for N12 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N14 {
     type Out = CoefficientOfThermalExpansion<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> CoefficientOfThermalExpansion<V> {
         CoefficientOfThermalExpansion::from_base(value)
@@ -6562,8 +6453,6 @@ impl<D, V> Leaf<D, V> for N14 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N14 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6572,8 +6461,6 @@ impl<D, V> Leaf<D, V> for N14 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N17 {
     type Out = HeatTransferCoefficient<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> HeatTransferCoefficient<V> {
         HeatTransferCoefficient::from_base(value)
@@ -6582,8 +6469,6 @@ impl<D, V> Leaf<D, V> for N17 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N17 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6592,8 +6477,6 @@ impl<D, V> Leaf<D, V> for N17 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N18 {
     type Out = ThermalConductivity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ThermalConductivity<V> {
         ThermalConductivity::from_base(value)
@@ -6602,8 +6485,6 @@ impl<D, V> Leaf<D, V> for N18 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N18 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6612,8 +6493,6 @@ impl<D, V> Leaf<D, V> for N18 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N20 {
     type Out = VolumetricHeatCapacity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> VolumetricHeatCapacity<V> {
         VolumetricHeatCapacity::from_base(value)
@@ -6622,8 +6501,6 @@ impl<D, V> Leaf<D, V> for N20 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N20 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6632,8 +6509,6 @@ impl<D, V> Leaf<D, V> for N20 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N21 {
     type Out = Entropy<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Entropy<V> {
         Entropy::from_base(value)
@@ -6642,8 +6517,6 @@ impl<D, V> Leaf<D, V> for N21 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N21 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6652,8 +6525,6 @@ impl<D, V> Leaf<D, V> for N21 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N27 {
     type Out = MolarEnergy<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MolarEnergy<V> {
         MolarEnergy::from_base(value)
@@ -6662,8 +6533,6 @@ impl<D, V> Leaf<D, V> for N27 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N27 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6672,8 +6541,6 @@ impl<D, V> Leaf<D, V> for N27 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N29 {
     type Out = MolarMass<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MolarMass<V> {
         MolarMass::from_base(value)
@@ -6682,8 +6549,6 @@ impl<D, V> Leaf<D, V> for N29 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N29 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6692,8 +6557,6 @@ impl<D, V> Leaf<D, V> for N29 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N34 {
     type Out = ElectricResistance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricResistance<V> {
         ElectricResistance::from_base(value)
@@ -6702,8 +6565,6 @@ impl<D, V> Leaf<D, V> for N34 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N34 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6712,8 +6573,6 @@ impl<D, V> Leaf<D, V> for N34 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N35 {
     type Out = ElectricResistivity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricResistivity<V> {
         ElectricResistivity::from_base(value)
@@ -6722,8 +6581,6 @@ impl<D, V> Leaf<D, V> for N35 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N35 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6732,8 +6589,6 @@ impl<D, V> Leaf<D, V> for N35 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N37 {
     type Out = Permeability<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Permeability<V> {
         Permeability::from_base(value)
@@ -6742,8 +6597,6 @@ impl<D, V> Leaf<D, V> for N37 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N37 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6752,8 +6605,6 @@ impl<D, V> Leaf<D, V> for N37 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N38 {
     type Out = ElectricInductance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricInductance<V> {
         ElectricInductance::from_base(value)
@@ -6762,8 +6613,6 @@ impl<D, V> Leaf<D, V> for N38 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N38 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6772,8 +6621,6 @@ impl<D, V> Leaf<D, V> for N38 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N42 {
     type Out = ElectricPotentialChangeRate<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricPotentialChangeRate<V> {
         ElectricPotentialChangeRate::from_base(value)
@@ -6782,8 +6629,6 @@ impl<D, V> Leaf<D, V> for N42 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N42 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6792,8 +6637,6 @@ impl<D, V> Leaf<D, V> for N42 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N44 {
     type Out = ElectricField<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricField<V> {
         ElectricField::from_base(value)
@@ -6802,8 +6645,6 @@ impl<D, V> Leaf<D, V> for N44 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N44 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6812,8 +6653,6 @@ impl<D, V> Leaf<D, V> for N44 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N45 {
     type Out = ElectricPotential<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricPotential<V> {
         ElectricPotential::from_base(value)
@@ -6822,8 +6661,6 @@ impl<D, V> Leaf<D, V> for N45 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N45 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6832,8 +6669,6 @@ impl<D, V> Leaf<D, V> for N45 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N47 {
     type Out = MagneticFlux<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MagneticFlux<V> {
         MagneticFlux::from_base(value)
@@ -6842,8 +6677,6 @@ impl<D, V> Leaf<D, V> for N47 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N47 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6852,8 +6685,6 @@ impl<D, V> Leaf<D, V> for N47 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N51 {
     type Out = SpecificVolume<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> SpecificVolume<V> {
         SpecificVolume::from_base(value)
@@ -6862,8 +6693,6 @@ impl<D, V> Leaf<D, V> for N51 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N51 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6872,8 +6701,6 @@ impl<D, V> Leaf<D, V> for N51 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N53 {
     type Out = Compressibility<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Compressibility<V> {
         Compressibility::from_base(value)
@@ -6882,8 +6709,6 @@ impl<D, V> Leaf<D, V> for N53 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N53 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6892,8 +6717,6 @@ impl<D, V> Leaf<D, V> for N53 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N56 {
     type Out = Jerk<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Jerk<V> {
         Jerk::from_base(value)
@@ -6902,8 +6725,6 @@ impl<D, V> Leaf<D, V> for N56 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N56 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6912,8 +6733,6 @@ impl<D, V> Leaf<D, V> for N56 {
 #[cfg(feature = "radiation")]
 impl<D, V> Leaf<D, V> for N57 {
     type Out = RadiationEquivalentDoseRate<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> RadiationEquivalentDoseRate<V> {
         RadiationEquivalentDoseRate::from_base(value)
@@ -6922,8 +6741,6 @@ impl<D, V> Leaf<D, V> for N57 {
 #[cfg(not(feature = "radiation"))]
 impl<D, V> Leaf<D, V> for N57 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6932,8 +6749,6 @@ impl<D, V> Leaf<D, V> for N57 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N59 {
     type Out = RotationalAcceleration<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> RotationalAcceleration<V> {
         RotationalAcceleration::from_base(value)
@@ -6942,8 +6757,6 @@ impl<D, V> Leaf<D, V> for N59 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N59 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6951,8 +6764,6 @@ impl<D, V> Leaf<D, V> for N59 {
 }
 impl<D, V> Leaf<D, V> for N60 {
     type Out = Acceleration<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Acceleration<V> {
         Acceleration::from_base(value)
@@ -6961,8 +6772,6 @@ impl<D, V> Leaf<D, V> for N60 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N61 {
     type Out = SpecificEnergy<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> SpecificEnergy<V> {
         SpecificEnergy::from_base(value)
@@ -6971,8 +6780,6 @@ impl<D, V> Leaf<D, V> for N61 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N61 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -6981,8 +6788,6 @@ impl<D, V> Leaf<D, V> for N61 {
 #[cfg(feature = "radiation")]
 impl<D, V> Leaf<D, V> for N62 {
     type Out = DoseAreaProduct<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> DoseAreaProduct<V> {
         DoseAreaProduct::from_base(value)
@@ -6991,8 +6796,6 @@ impl<D, V> Leaf<D, V> for N62 {
 #[cfg(not(feature = "radiation"))]
 impl<D, V> Leaf<D, V> for N62 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7000,8 +6803,6 @@ impl<D, V> Leaf<D, V> for N62 {
 }
 impl<D, V> Leaf<D, V> for N64 {
     type Out = Frequency<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Frequency<V> {
         Frequency::from_base(value)
@@ -7009,8 +6810,6 @@ impl<D, V> Leaf<D, V> for N64 {
 }
 impl<D, V> Leaf<D, V> for N65 {
     type Out = Speed<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Speed<V> {
         Speed::from_base(value)
@@ -7019,8 +6818,6 @@ impl<D, V> Leaf<D, V> for N65 {
 #[cfg(feature = "fluids")]
 impl<D, V> Leaf<D, V> for N66 {
     type Out = KinematicViscosity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> KinematicViscosity<V> {
         KinematicViscosity::from_base(value)
@@ -7029,8 +6826,6 @@ impl<D, V> Leaf<D, V> for N66 {
 #[cfg(not(feature = "fluids"))]
 impl<D, V> Leaf<D, V> for N66 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7039,8 +6834,6 @@ impl<D, V> Leaf<D, V> for N66 {
 #[cfg(feature = "fluids")]
 impl<D, V> Leaf<D, V> for N67 {
     type Out = VolumeFlow<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> VolumeFlow<V> {
         VolumeFlow::from_base(value)
@@ -7049,8 +6842,6 @@ impl<D, V> Leaf<D, V> for N67 {
 #[cfg(not(feature = "fluids"))]
 impl<D, V> Leaf<D, V> for N67 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7059,8 +6850,6 @@ impl<D, V> Leaf<D, V> for N67 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N69 {
     type Out = ReciprocalArea<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ReciprocalArea<V> {
         ReciprocalArea::from_base(value)
@@ -7069,8 +6858,6 @@ impl<D, V> Leaf<D, V> for N69 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N69 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7079,8 +6866,6 @@ impl<D, V> Leaf<D, V> for N69 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N70 {
     type Out = ReciprocalLength<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ReciprocalLength<V> {
         ReciprocalLength::from_base(value)
@@ -7089,8 +6874,6 @@ impl<D, V> Leaf<D, V> for N70 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N70 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7098,8 +6881,6 @@ impl<D, V> Leaf<D, V> for N70 {
 }
 impl<D, V> Leaf<D, V> for N71 {
     type Out = V;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> V {
         value
@@ -7107,8 +6888,6 @@ impl<D, V> Leaf<D, V> for N71 {
 }
 impl<D, V> Leaf<D, V> for N72 {
     type Out = Length<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Length<V> {
         Length::from_base(value)
@@ -7116,8 +6895,6 @@ impl<D, V> Leaf<D, V> for N72 {
 }
 impl<D, V> Leaf<D, V> for N73 {
     type Out = Area<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Area<V> {
         Area::from_base(value)
@@ -7125,8 +6902,6 @@ impl<D, V> Leaf<D, V> for N73 {
 }
 impl<D, V> Leaf<D, V> for N74 {
     type Out = Volume<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Volume<V> {
         Volume::from_base(value)
@@ -7135,8 +6910,6 @@ impl<D, V> Leaf<D, V> for N74 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N75 {
     type Out = AreaMomentOfInertia<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> AreaMomentOfInertia<V> {
         AreaMomentOfInertia::from_base(value)
@@ -7145,8 +6918,6 @@ impl<D, V> Leaf<D, V> for N75 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N75 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7155,8 +6926,6 @@ impl<D, V> Leaf<D, V> for N75 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N76 {
     type Out = WarpingMomentOfInertia<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> WarpingMomentOfInertia<V> {
         WarpingMomentOfInertia::from_base(value)
@@ -7165,8 +6934,6 @@ impl<D, V> Leaf<D, V> for N76 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N76 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7174,8 +6941,6 @@ impl<D, V> Leaf<D, V> for N76 {
 }
 impl<D, V> Leaf<D, V> for N78 {
     type Out = Duration<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Duration<V> {
         Duration::from_base(value)
@@ -7184,8 +6949,6 @@ impl<D, V> Leaf<D, V> for N78 {
 #[cfg(feature = "misc")]
 impl<D, V> Leaf<D, V> for N80 {
     type Out = BrakeSpecificFuelConsumption<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> BrakeSpecificFuelConsumption<V> {
         BrakeSpecificFuelConsumption::from_base(value)
@@ -7194,8 +6957,6 @@ impl<D, V> Leaf<D, V> for N80 {
 #[cfg(not(feature = "misc"))]
 impl<D, V> Leaf<D, V> for N80 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7204,8 +6965,6 @@ impl<D, V> Leaf<D, V> for N80 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N83 {
     type Out = PowerDensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> PowerDensity<V> {
         PowerDensity::from_base(value)
@@ -7214,8 +6973,6 @@ impl<D, V> Leaf<D, V> for N83 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N83 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7224,8 +6981,6 @@ impl<D, V> Leaf<D, V> for N83 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N84 {
     type Out = HeatFlux<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> HeatFlux<V> {
         HeatFlux::from_base(value)
@@ -7234,8 +6989,6 @@ impl<D, V> Leaf<D, V> for N84 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N84 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7244,8 +6997,6 @@ impl<D, V> Leaf<D, V> for N84 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N85 {
     type Out = ForceChangeRate<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ForceChangeRate<V> {
         ForceChangeRate::from_base(value)
@@ -7254,8 +7005,6 @@ impl<D, V> Leaf<D, V> for N85 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N85 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7263,8 +7012,6 @@ impl<D, V> Leaf<D, V> for N85 {
 }
 impl<D, V> Leaf<D, V> for N86 {
     type Out = Power<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Power<V> {
         Power::from_base(value)
@@ -7273,8 +7020,6 @@ impl<D, V> Leaf<D, V> for N86 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N88 {
     type Out = SpecificWeight<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> SpecificWeight<V> {
         SpecificWeight::from_base(value)
@@ -7283,8 +7028,6 @@ impl<D, V> Leaf<D, V> for N88 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N88 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7292,8 +7035,6 @@ impl<D, V> Leaf<D, V> for N88 {
 }
 impl<D, V> Leaf<D, V> for N89 {
     type Out = Pressure<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Pressure<V> {
         Pressure::from_base(value)
@@ -7302,8 +7043,6 @@ impl<D, V> Leaf<D, V> for N89 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N90 {
     type Out = ForcePerLength<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ForcePerLength<V> {
         ForcePerLength::from_base(value)
@@ -7312,8 +7051,6 @@ impl<D, V> Leaf<D, V> for N90 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N90 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7321,8 +7058,6 @@ impl<D, V> Leaf<D, V> for N90 {
 }
 impl<D, V> Leaf<D, V> for N91 {
     type Out = Force<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Force<V> {
         Force::from_base(value)
@@ -7330,8 +7065,6 @@ impl<D, V> Leaf<D, V> for N91 {
 }
 impl<D, V> Leaf<D, V> for N92 {
     type Out = Energy<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Energy<V> {
         Energy::from_base(value)
@@ -7340,8 +7073,6 @@ impl<D, V> Leaf<D, V> for N92 {
 #[cfg(feature = "fluids")]
 impl<D, V> Leaf<D, V> for N94 {
     type Out = FluidResistance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> FluidResistance<V> {
         FluidResistance::from_base(value)
@@ -7350,8 +7081,6 @@ impl<D, V> Leaf<D, V> for N94 {
 #[cfg(not(feature = "fluids"))]
 impl<D, V> Leaf<D, V> for N94 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7360,8 +7089,6 @@ impl<D, V> Leaf<D, V> for N94 {
 #[cfg(feature = "fluids")]
 impl<D, V> Leaf<D, V> for N95 {
     type Out = MassFlux<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MassFlux<V> {
         MassFlux::from_base(value)
@@ -7370,8 +7097,6 @@ impl<D, V> Leaf<D, V> for N95 {
 #[cfg(not(feature = "fluids"))]
 impl<D, V> Leaf<D, V> for N95 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7380,8 +7105,6 @@ impl<D, V> Leaf<D, V> for N95 {
 #[cfg(feature = "fluids")]
 impl<D, V> Leaf<D, V> for N96 {
     type Out = DynamicViscosity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> DynamicViscosity<V> {
         DynamicViscosity::from_base(value)
@@ -7390,8 +7113,6 @@ impl<D, V> Leaf<D, V> for N96 {
 #[cfg(not(feature = "fluids"))]
 impl<D, V> Leaf<D, V> for N96 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7400,8 +7121,6 @@ impl<D, V> Leaf<D, V> for N96 {
 #[cfg(feature = "fluids")]
 impl<D, V> Leaf<D, V> for N97 {
     type Out = MassFlow<V>;
-    type Unit = Size0_001;
-    const FACTOR: f64 = 0.001;
     #[inline(always)]
     fn make(value: V) -> MassFlow<V> {
         MassFlow::from_base(value)
@@ -7410,8 +7129,6 @@ impl<D, V> Leaf<D, V> for N97 {
 #[cfg(not(feature = "fluids"))]
 impl<D, V> Leaf<D, V> for N97 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7420,8 +7137,6 @@ impl<D, V> Leaf<D, V> for N97 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N98 {
     type Out = Impulse<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Impulse<V> {
         Impulse::from_base(value)
@@ -7430,8 +7145,6 @@ impl<D, V> Leaf<D, V> for N98 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N98 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7439,8 +7152,6 @@ impl<D, V> Leaf<D, V> for N98 {
 }
 impl<D, V> Leaf<D, V> for N100 {
     type Out = Density<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Density<V> {
         Density::from_base(value)
@@ -7449,8 +7160,6 @@ impl<D, V> Leaf<D, V> for N100 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N101 {
     type Out = AreaDensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> AreaDensity<V> {
         AreaDensity::from_base(value)
@@ -7459,8 +7168,6 @@ impl<D, V> Leaf<D, V> for N101 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N101 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7469,8 +7176,6 @@ impl<D, V> Leaf<D, V> for N101 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N102 {
     type Out = LinearDensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> LinearDensity<V> {
         LinearDensity::from_base(value)
@@ -7479,8 +7184,6 @@ impl<D, V> Leaf<D, V> for N102 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N102 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7488,8 +7191,6 @@ impl<D, V> Leaf<D, V> for N102 {
 }
 impl<D, V> Leaf<D, V> for N103 {
     type Out = Mass<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Mass<V> {
         Mass::from_base(value)
@@ -7498,8 +7199,6 @@ impl<D, V> Leaf<D, V> for N103 {
 #[cfg(feature = "mechanics")]
 impl<D, V> Leaf<D, V> for N104 {
     type Out = MassMomentOfInertia<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MassMomentOfInertia<V> {
         MassMomentOfInertia::from_base(value)
@@ -7508,8 +7207,6 @@ impl<D, V> Leaf<D, V> for N104 {
 #[cfg(not(feature = "mechanics"))]
 impl<D, V> Leaf<D, V> for N104 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7518,8 +7215,6 @@ impl<D, V> Leaf<D, V> for N104 {
 #[cfg(feature = "radiation")]
 impl<D, V> Leaf<D, V> for N108 {
     type Out = RadiationExposure<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> RadiationExposure<V> {
         RadiationExposure::from_base(value)
@@ -7528,8 +7223,6 @@ impl<D, V> Leaf<D, V> for N108 {
 #[cfg(not(feature = "radiation"))]
 impl<D, V> Leaf<D, V> for N108 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7538,8 +7231,6 @@ impl<D, V> Leaf<D, V> for N108 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N111 {
     type Out = ElectricCurrentGradient<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricCurrentGradient<V> {
         ElectricCurrentGradient::from_base(value)
@@ -7548,8 +7239,6 @@ impl<D, V> Leaf<D, V> for N111 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N111 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7558,8 +7247,6 @@ impl<D, V> Leaf<D, V> for N111 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N113 {
     type Out = ElectricCurrentDensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricCurrentDensity<V> {
         ElectricCurrentDensity::from_base(value)
@@ -7568,8 +7255,6 @@ impl<D, V> Leaf<D, V> for N113 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N113 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7578,8 +7263,6 @@ impl<D, V> Leaf<D, V> for N113 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N114 {
     type Out = Magnetization<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Magnetization<V> {
         Magnetization::from_base(value)
@@ -7588,8 +7271,6 @@ impl<D, V> Leaf<D, V> for N114 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N114 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7598,8 +7279,6 @@ impl<D, V> Leaf<D, V> for N114 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N115 {
     type Out = ElectricCurrent<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricCurrent<V> {
         ElectricCurrent::from_base(value)
@@ -7608,8 +7287,6 @@ impl<D, V> Leaf<D, V> for N115 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N115 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7618,8 +7295,6 @@ impl<D, V> Leaf<D, V> for N115 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N117 {
     type Out = ElectricChargeDensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricChargeDensity<V> {
         ElectricChargeDensity::from_base(value)
@@ -7628,8 +7303,6 @@ impl<D, V> Leaf<D, V> for N117 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N117 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7638,8 +7311,6 @@ impl<D, V> Leaf<D, V> for N117 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N118 {
     type Out = ElectricSurfaceChargeDensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricSurfaceChargeDensity<V> {
         ElectricSurfaceChargeDensity::from_base(value)
@@ -7648,8 +7319,6 @@ impl<D, V> Leaf<D, V> for N118 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N118 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7658,8 +7327,6 @@ impl<D, V> Leaf<D, V> for N118 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N119 {
     type Out = ElectricCharge<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricCharge<V> {
         ElectricCharge::from_base(value)
@@ -7668,8 +7335,6 @@ impl<D, V> Leaf<D, V> for N119 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N119 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7678,8 +7343,6 @@ impl<D, V> Leaf<D, V> for N119 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N123 {
     type Out = ElectricConductivity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricConductivity<V> {
         ElectricConductivity::from_base(value)
@@ -7688,8 +7351,6 @@ impl<D, V> Leaf<D, V> for N123 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N123 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7698,8 +7359,6 @@ impl<D, V> Leaf<D, V> for N123 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N124 {
     type Out = ElectricConductance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricConductance<V> {
         ElectricConductance::from_base(value)
@@ -7708,8 +7367,6 @@ impl<D, V> Leaf<D, V> for N124 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N124 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7718,8 +7375,6 @@ impl<D, V> Leaf<D, V> for N124 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N126 {
     type Out = Permittivity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Permittivity<V> {
         Permittivity::from_base(value)
@@ -7728,8 +7383,6 @@ impl<D, V> Leaf<D, V> for N126 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N126 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7738,8 +7391,6 @@ impl<D, V> Leaf<D, V> for N126 {
 #[cfg(feature = "electrical")]
 impl<D, V> Leaf<D, V> for N127 {
     type Out = ElectricCapacitance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ElectricCapacitance<V> {
         ElectricCapacitance::from_base(value)
@@ -7748,8 +7399,6 @@ impl<D, V> Leaf<D, V> for N127 {
 #[cfg(not(feature = "electrical"))]
 impl<D, V> Leaf<D, V> for N127 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7758,8 +7407,6 @@ impl<D, V> Leaf<D, V> for N127 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N132 {
     type Out = Molality<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Molality<V> {
         Molality::from_base(value)
@@ -7768,8 +7415,6 @@ impl<D, V> Leaf<D, V> for N132 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N132 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7778,8 +7423,6 @@ impl<D, V> Leaf<D, V> for N132 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N135 {
     type Out = MolarFlow<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> MolarFlow<V> {
         MolarFlow::from_base(value)
@@ -7788,8 +7431,6 @@ impl<D, V> Leaf<D, V> for N135 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N135 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7798,8 +7439,6 @@ impl<D, V> Leaf<D, V> for N135 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N137 {
     type Out = Molarity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Molarity<V> {
         Molarity::from_base(value)
@@ -7808,8 +7447,6 @@ impl<D, V> Leaf<D, V> for N137 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N137 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7818,8 +7455,6 @@ impl<D, V> Leaf<D, V> for N137 {
 #[cfg(feature = "chemistry")]
 impl<D, V> Leaf<D, V> for N138 {
     type Out = AmountOfSubstance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> AmountOfSubstance<V> {
         AmountOfSubstance::from_base(value)
@@ -7828,8 +7463,6 @@ impl<D, V> Leaf<D, V> for N138 {
 #[cfg(not(feature = "chemistry"))]
 impl<D, V> Leaf<D, V> for N138 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7838,8 +7471,6 @@ impl<D, V> Leaf<D, V> for N138 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N144 {
     type Out = ThermalResistance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> ThermalResistance<V> {
         ThermalResistance::from_base(value)
@@ -7848,8 +7479,6 @@ impl<D, V> Leaf<D, V> for N144 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N144 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7858,8 +7487,6 @@ impl<D, V> Leaf<D, V> for N144 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N145 {
     type Out = ThermalInsulance<V>;
-    type Unit = Size0_001;
-    const FACTOR: f64 = 0.001;
     #[inline(always)]
     fn make(value: V) -> ThermalInsulance<V> {
         ThermalInsulance::from_base(value)
@@ -7868,8 +7495,6 @@ impl<D, V> Leaf<D, V> for N145 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N145 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7878,8 +7503,6 @@ impl<D, V> Leaf<D, V> for N145 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N148 {
     type Out = TemperatureChangeRate<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> TemperatureChangeRate<V> {
         TemperatureChangeRate::from_base(value)
@@ -7888,8 +7511,6 @@ impl<D, V> Leaf<D, V> for N148 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N148 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7898,8 +7519,6 @@ impl<D, V> Leaf<D, V> for N148 {
 #[cfg(feature = "thermal")]
 impl<D, V> Leaf<D, V> for N150 {
     type Out = TemperatureGradient<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> TemperatureGradient<V> {
         TemperatureGradient::from_base(value)
@@ -7908,8 +7527,6 @@ impl<D, V> Leaf<D, V> for N150 {
 #[cfg(not(feature = "thermal"))]
 impl<D, V> Leaf<D, V> for N150 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7917,8 +7534,6 @@ impl<D, V> Leaf<D, V> for N150 {
 }
 impl<D, V> Leaf<D, V> for N151 {
     type Out = TemperatureDelta<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> TemperatureDelta<V> {
         TemperatureDelta::from_base(value)
@@ -7927,8 +7542,6 @@ impl<D, V> Leaf<D, V> for N151 {
 #[cfg(feature = "light")]
 impl<D, V> Leaf<D, V> for N158 {
     type Out = Luminance<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Luminance<V> {
         Luminance::from_base(value)
@@ -7937,8 +7550,6 @@ impl<D, V> Leaf<D, V> for N158 {
 #[cfg(not(feature = "light"))]
 impl<D, V> Leaf<D, V> for N158 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7947,8 +7558,6 @@ impl<D, V> Leaf<D, V> for N158 {
 #[cfg(feature = "light")]
 impl<D, V> Leaf<D, V> for N159 {
     type Out = LuminousIntensity<V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> LuminousIntensity<V> {
         LuminousIntensity::from_base(value)
@@ -7957,8 +7566,6 @@ impl<D, V> Leaf<D, V> for N159 {
 #[cfg(not(feature = "light"))]
 impl<D, V> Leaf<D, V> for N159 {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
@@ -7976,8 +7583,6 @@ where
     <<<<<<<Root as Step<J>>::Next as Step<H>>::Next as Step<N>>::Next as Step<I>>::Next as Step<M>>::Next as Step<T>>::Next as Step<L>>::Next: Leaf<Self, V>,
 {
     type Out = <<<<<<<<Root as Step<J>>::Next as Step<H>>::Next as Step<N>>::Next as Step<I>>::Next as Step<M>>::Next as Step<T>>::Next as Step<L>>::Next as Leaf<Self, V>>::Out;
-    type Unit = <<<<<<<<Root as Step<J>>::Next as Step<H>>::Next as Step<N>>::Next as Step<I>>::Next as Step<M>>::Next as Step<T>>::Next as Step<L>>::Next as Leaf<Self, V>>::Unit;
-    const FACTOR: f64 = <<<<<<<<Root as Step<J>>::Next as Step<H>>::Next as Step<N>>::Next as Step<I>>::Next as Step<M>>::Next as Step<T>>::Next as Step<L>>::Next as Leaf<Self, V>>::FACTOR;
     #[inline(always)]
     fn make(value: V) -> Self::Out {
         <<<<<<<<Root as Step<J>>::Next as Step<H>>::Next as Step<N>>::Next as Step<I>>::Next as Step<M>>::Next as Step<T>>::Next as Step<L>>::Next as Leaf<Self, V>>::make(value)
@@ -12308,8 +11913,6 @@ impl<V> Arith for AbsorbedDoseOfIonizingRadiation<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -12433,8 +12036,6 @@ impl<V> Arith for Acceleration<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 0, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -12537,8 +12138,6 @@ impl<V> Arith for AmountOfSubstance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -12654,8 +12253,6 @@ impl<V> Arith for Angle<V> {
     type Value = V;
     type Kind = Quantity<RAngle, RAngle>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -12761,8 +12358,6 @@ impl<V> Arith for Area<V> {
     type Value = V;
     type Kind = Quantity<RArea, RArea>;
     type Dim = Dims<2, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -12867,8 +12462,6 @@ impl<V> Arith for AreaDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -12975,8 +12568,6 @@ impl<V> Arith for AreaMomentOfInertia<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<4, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13101,8 +12692,6 @@ impl<V> Arith for BitRate<V> {
     type Value = V;
     type Kind = Quantity<RBitRate, NoGroup>;
     type Dim = Dims<0, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13213,8 +12802,6 @@ impl<V> Arith for BrakeSpecificFuelConsumption<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 0, 2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13339,8 +12926,6 @@ impl<V> Arith for CoefficientOfThermalExpansion<V> {
     type Value = V;
     type Kind = Quantity<RCoefficientOfThermalExpansion, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, -1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13467,8 +13052,6 @@ impl<V> Arith for Compressibility<V> {
     type Value = V;
     type Kind = Quantity<RCompressibility, NoGroup>;
     type Dim = Dims<1, -1, 2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13586,8 +13169,6 @@ impl<V> Arith for Density<V> {
     type Value = V;
     type Kind = Quantity<RDensity, RDensity>;
     type Dim = Dims<-3, 1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13694,8 +13275,6 @@ impl<V> Arith for DoseAreaProduct<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<4, 0, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13813,8 +13392,6 @@ impl<V> Arith for Duration<V> {
     type Value = V;
     type Kind = Quantity<RDuration, RDuration>;
     type Dim = Dims<0, 0, 1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -13921,8 +13498,6 @@ impl<V> Arith for DynamicViscosity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 1, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14039,8 +13614,6 @@ impl<V> Arith for ElectricAdmittance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, -1, 3, 2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14165,8 +13738,6 @@ impl<V> Arith for ElectricApparentPower<V> {
     type Value = V;
     type Kind = Quantity<RElectricApparentPower, NoGroup>;
     type Dim = Dims<2, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14293,8 +13864,6 @@ impl<V> Arith for ElectricCapacitance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, -1, 4, 2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14419,8 +13988,6 @@ impl<V> Arith for ElectricCharge<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 1, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14529,8 +14096,6 @@ impl<V> Arith for ElectricChargeDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-3, 0, 1, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14655,8 +14220,6 @@ impl<V> Arith for ElectricConductance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, -1, 3, 2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14781,8 +14344,6 @@ impl<V> Arith for ElectricConductivity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-3, -1, 3, 2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -14907,8 +14468,6 @@ impl<V> Arith for ElectricCurrent<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 0, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15025,8 +14584,6 @@ impl<V> Arith for ElectricCurrentDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 0, 0, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15151,8 +14708,6 @@ impl<V> Arith for ElectricCurrentGradient<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, -1, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15277,8 +14832,6 @@ impl<V> Arith for ElectricField<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 1, -3, -1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15395,8 +14948,6 @@ impl<V> Arith for ElectricImpedance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, -2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15521,8 +15072,6 @@ impl<V> Arith for ElectricInductance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -2, -2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15647,8 +15196,6 @@ impl<V> Arith for ElectricPotential<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, -1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15773,8 +15320,6 @@ impl<V> Arith for ElectricPotentialChangeRate<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -4, -1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -15899,8 +15444,6 @@ impl<V> Arith for ElectricReactance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, -2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16025,8 +15568,6 @@ impl<V> Arith for ElectricReactivePower<V> {
     type Value = V;
     type Kind = Quantity<RElectricReactivePower, NoGroup>;
     type Dim = Dims<2, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16153,8 +15694,6 @@ impl<V> Arith for ElectricResistance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, -2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16279,8 +15818,6 @@ impl<V> Arith for ElectricResistivity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<3, 1, -3, -2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16405,8 +15942,6 @@ impl<V> Arith for ElectricSurfaceChargeDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 0, 1, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16531,8 +16066,6 @@ impl<V> Arith for ElectricSusceptance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, -1, 3, 2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16656,8 +16189,6 @@ impl<V> Arith for Energy<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16764,8 +16295,6 @@ impl<V> Arith for EnergyDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16882,8 +16411,6 @@ impl<V> Arith for Entropy<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -2, 0, -1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -16990,8 +16517,6 @@ impl<V> Arith for FluidResistance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-4, 1, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17107,8 +16632,6 @@ impl<V> Arith for Force<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17211,8 +16734,6 @@ impl<V> Arith for ForceChangeRate<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17329,8 +16850,6 @@ impl<V> Arith for ForcePerLength<V> {
     type Value = V;
     type Kind = Quantity<RForcePerLength, NoGroup>;
     type Dim = Dims<0, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17448,8 +16967,6 @@ impl<V> Arith for Frequency<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, RFrequency>;
     type Dim = Dims<0, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17552,8 +17069,6 @@ impl<V> Arith for HeatFlux<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17660,8 +17175,6 @@ impl<V> Arith for HeatTransferCoefficient<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 1, -3, 0, -1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17786,8 +17299,6 @@ impl<V> Arith for Illuminance<V> {
     type Value = V;
     type Kind = Quantity<RIlluminance, NoGroup>;
     type Dim = Dims<-2, 0, 0, 0, 0, 0, 1>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -17898,8 +17409,6 @@ impl<V> Arith for Impulse<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 1, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18006,8 +17515,6 @@ impl<V> Arith for Irradiance<V> {
     type Value = V;
     type Kind = Quantity<RIrradiance, NoGroup>;
     type Dim = Dims<0, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18118,8 +17625,6 @@ impl<V> Arith for Irradiation<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18230,8 +17735,6 @@ impl<V> Arith for Jerk<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 0, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18338,8 +17841,6 @@ impl<V> Arith for KinematicViscosity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18464,8 +17965,6 @@ impl<V> Arith for LeakRate<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18571,8 +18070,6 @@ impl<V> Arith for Length<V> {
     type Value = V;
     type Kind = Quantity<RLength, RLength>;
     type Dim = Dims<1, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18679,8 +18176,6 @@ impl<V> Arith for LinearDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18789,8 +18284,6 @@ impl<V> Arith for LinearPowerDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -18915,8 +18408,6 @@ impl<V> Arith for Luminance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 0, 0, 0, 0, 0, 1>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19023,8 +18514,6 @@ impl<V> Arith for Luminosity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19131,8 +18620,6 @@ impl<V> Arith for LuminousFlux<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 1>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19243,8 +18730,6 @@ impl<V> Arith for LuminousIntensity<V> {
     type Value = V;
     type Kind = Quantity<RLuminousIntensity, RLuminousIntensity>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 1>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19363,8 +18848,6 @@ impl<V> Arith for MagneticFlux<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -2, -1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19475,8 +18958,6 @@ impl<V> Arith for Magnetization<V> {
     type Value = V;
     type Kind = Quantity<RMagnetization, NoGroup>;
     type Dim = Dims<-1, 0, 0, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19586,8 +19067,6 @@ impl<V> Arith for Mass<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19678,8 +19157,6 @@ impl<V> Arith for MassConcentration<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-3, 1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19798,8 +19275,6 @@ impl<V> Arith for MassFlow<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 1, -1, 0, 0, 0, 0>;
-    type Unit = Size0_001;
-    const FACTOR: f64 = 0.001;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -19906,8 +19381,6 @@ impl<V> Arith for MassFlux<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 1, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20014,8 +19487,6 @@ impl<V> Arith for MassFraction<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20122,8 +19593,6 @@ impl<V> Arith for MassMomentOfInertia<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20248,8 +19717,6 @@ impl<V> Arith for Molality<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, -1, 0, 0, 0, 1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20356,8 +19823,6 @@ impl<V> Arith for MolarEnergy<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -2, 0, 0, -1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20464,8 +19929,6 @@ impl<V> Arith for MolarEntropy<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -2, 0, -1, -1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20582,8 +20045,6 @@ impl<V> Arith for MolarFlow<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, -1, 0, 0, 1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20690,8 +20151,6 @@ impl<V> Arith for MolarMass<V> {
     type Value = V;
     type Kind = Quantity<RMolarMass, NoGroup>;
     type Dim = Dims<0, 1, 0, 0, 0, -1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20802,8 +20261,6 @@ impl<V> Arith for Molarity<V> {
     type Value = V;
     type Kind = Quantity<RMolarity, NoGroup>;
     type Dim = Dims<-3, 0, 0, 0, 0, 1, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -20914,8 +20371,6 @@ impl<V> Arith for Permeability<V> {
     type Value = V;
     type Kind = Quantity<RPermeability, NoGroup>;
     type Dim = Dims<1, 1, -2, -2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21026,8 +20481,6 @@ impl<V> Arith for Permittivity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-3, -1, 4, 2, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21136,8 +20589,6 @@ impl<V> Arith for PorousMediumPermeability<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21261,8 +20712,6 @@ impl<V> Arith for Power<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21369,8 +20818,6 @@ impl<V> Arith for PowerDensity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21478,8 +20925,6 @@ impl<V> Arith for Pressure<V> {
     type Value = V;
     type Kind = Quantity<RPressure, NoGroup>;
     type Dim = Dims<-1, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21586,8 +21031,6 @@ impl<V> Arith for PressureChangeRate<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 1, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21712,8 +21155,6 @@ impl<V> Arith for RadiationEquivalentDose<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21838,8 +21279,6 @@ impl<V> Arith for RadiationEquivalentDoseRate<V> {
     type Value = V;
     type Kind = Quantity<RRadiationEquivalentDoseRate, NoGroup>;
     type Dim = Dims<2, 0, -3, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -21966,8 +21405,6 @@ impl<V> Arith for RadiationExposure<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, -1, 1, 1, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22084,8 +21521,6 @@ impl<V> Arith for Radioactivity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22193,8 +21628,6 @@ impl<V> Arith for Ratio<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22301,8 +21734,6 @@ impl<V> Arith for RatioChangeRate<V> {
     type Value = V;
     type Kind = Quantity<RRatioChangeRate, NoGroup>;
     type Dim = Dims<0, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22421,8 +21852,6 @@ impl<V> Arith for ReciprocalArea<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22539,8 +21968,6 @@ impl<V> Arith for ReciprocalLength<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22657,8 +22084,6 @@ impl<V> Arith for RotationalAcceleration<V> {
     type Value = V;
     type Kind = Quantity<RRotationalAcceleration, NoGroup>;
     type Dim = Dims<0, 0, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22785,8 +22210,6 @@ impl<V> Arith for RotationalSpeed<V> {
     type Value = V;
     type Kind = Quantity<RRotationalSpeed, RRotationalSpeed>;
     type Dim = Dims<0, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -22905,8 +22328,6 @@ impl<V> Arith for RotationalStiffness<V> {
     type Value = V;
     type Kind = Quantity<RRotationalStiffness, RRotationalStiffness>;
     type Dim = Dims<2, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23033,8 +22454,6 @@ impl<V> Arith for RotationalStiffnessPerLength<V> {
     type Value = V;
     type Kind = Quantity<RRotationalStiffnessPerLength, NoGroup>;
     type Dim = Dims<1, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23160,8 +22579,6 @@ impl<V> Arith for Scalar<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23264,8 +22681,6 @@ impl<V> Arith for SolidAngle<V> {
     type Value = V;
     type Kind = Quantity<RSolidAngle, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23376,8 +22791,6 @@ impl<V> Arith for SpecificEnergy<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23494,8 +22907,6 @@ impl<V> Arith for SpecificEntropy<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, -2, 0, -1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23612,8 +23023,6 @@ impl<V> Arith for SpecificVolume<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<3, -1, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23730,8 +23139,6 @@ impl<V> Arith for SpecificWeight<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23847,8 +23254,6 @@ impl<V> Arith for Speed<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -23951,8 +23356,6 @@ impl<V> Arith for TemperatureChangeRate<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, 0, -1, 0, 1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24076,8 +23479,6 @@ impl<V> Arith for TemperatureDelta<V> {
     type Value = V;
     type Kind = Quantity<RTemperatureDelta, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24192,8 +23593,6 @@ impl<V> Arith for TemperatureGradient<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-1, 0, 0, 0, 1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24318,8 +23717,6 @@ impl<V> Arith for ThermalConductivity<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 1, -3, 0, -1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24444,8 +23841,6 @@ impl<V> Arith for ThermalInsulance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<0, -1, 3, 0, 1, 0, 0>;
-    type Unit = Size0_001;
-    const FACTOR: f64 = 0.001;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24562,8 +23957,6 @@ impl<V> Arith for ThermalResistance<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<-2, -1, 3, 0, 1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24688,8 +24081,6 @@ impl<V> Arith for Torque<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, RTorque>;
     type Dim = Dims<2, 1, -2, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24799,8 +24190,6 @@ impl<V> Arith for Volume<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, RVolume>;
     type Dim = Dims<3, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -24903,8 +24292,6 @@ impl<V> Arith for VolumeConcentration<V> {
     type Value = V;
     type Kind = Quantity<RVolumeConcentration, NoGroup>;
     type Dim = Dims<0, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -25031,8 +24418,6 @@ impl<V> Arith for VolumeFlow<V> {
     type Value = V;
     type Kind = Quantity<RVolumeFlow, NoGroup>;
     type Dim = Dims<3, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -25143,8 +24528,6 @@ impl<V> Arith for VolumeFlowPerArea<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<1, 0, -1, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -25261,8 +24644,6 @@ impl<V> Arith for VolumePerLength<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<2, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -25379,8 +24760,6 @@ impl<V> Arith for VolumetricHeatCapacity<V> {
     type Value = V;
     type Kind = Quantity<RVolumetricHeatCapacity, NoGroup>;
     type Dim = Dims<-1, 1, -2, 0, -1, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()
@@ -25507,8 +24886,6 @@ impl<V> Arith for WarpingMomentOfInertia<V> {
     type Value = V;
     type Kind = Quantity<NoGroup, NoGroup>;
     type Dim = Dims<6, 0, 0, 0, 0, 0, 0>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.into_base()

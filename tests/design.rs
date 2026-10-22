@@ -167,8 +167,8 @@ fn reciprocal_and_dimensionless_relations() {
 }
 
 /// UnitsNet stores some quantities in units that are not coherent SI base
-/// units (`MassFlow` in g/s, `ElectricApparentEnergy` in VAh, …). Relations
-/// between them must include the conversion factor.
+/// units (`ElectricApparentEnergy` in VAh, …). Relations between them must
+/// include the conversion factor.
 #[test]
 fn relations_with_non_coherent_base_units() {
     let m: Mass = MassFlow::from_kilograms_per_second(2.0) * Duration::from_seconds(3.0);
@@ -253,7 +253,7 @@ fn temperature_is_affine() {
 #[test]
 fn expressions_for_base_units_unitsnet_writes_differently() {
     // UnitsNet writes these base units as ∆K, Ns/m², J/kg·K, Cd/m², VA and
-    // m²K/kW, which aren't unit expressions. The generator works them out
+    // m²K/W, which aren't unit expressions. The generator works them out
     // from UnitsNet's data instead.
     assert_eq!("3 mK".parse(), Ok(TemperatureDelta::from_kelvins(0.003)));
     assert_eq!(

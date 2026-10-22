@@ -753,7 +753,12 @@ fn mul_area_mass_flux() {
     let a = Area::from_base(6.0);
     let b = MassFlux::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = MassFlux::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -767,7 +772,11 @@ fn mul_area_mass_flux() {
             Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -1083,7 +1092,12 @@ fn mul_brake_specific_fuel_consumption_power() {
     let a = BrakeSpecificFuelConsumption::from_base(6.0);
     let b = Power::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = BrakeSpecificFuelConsumption::<i32>::from_base(6);
+    let b = Power::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -1097,7 +1111,11 @@ fn mul_brake_specific_fuel_consumption_power() {
             Fixed::<unit::power::Watt>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -1421,7 +1439,12 @@ fn mul_density_volume_flow() {
     let a = Density::from_base(6.0);
     let b = VolumeFlow::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -1435,7 +1458,11 @@ fn mul_density_volume_flow() {
             Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -1869,7 +1896,12 @@ fn mul_duration_mass_flow() {
     let a = Duration::from_base(6.0);
     let b = MassFlow::from_base(2.0);
     let c: Mass = a * b;
-    assert_eq!(c.as_base(), 12.0 * 0.001);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = MassFlow::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -1880,7 +1912,7 @@ fn mul_duration_mass_flow() {
     ] {
         let (a, b) = (
             Fixed::<unit::duration::Second>::new(x),
-            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(y),
         );
         let fixed = a
             .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
@@ -3780,7 +3812,12 @@ fn mul_heat_flux_thermal_insulance() {
     let a = HeatFlux::from_base(6.0);
     let b = ThermalInsulance::from_base(2.0);
     let c: TemperatureDelta = a * b;
-    assert_eq!(c.as_base(), 12.0 * 0.001);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = HeatFlux::<i32>::from_base(6);
+    let b = ThermalInsulance::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -3791,7 +3828,7 @@ fn mul_heat_flux_thermal_insulance() {
     ] {
         let (a, b) = (
             Fixed::<unit::heat_flux::WattPerSquareMeter>::new(x),
-            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>::new(y),
+            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerWatt>::new(y),
         );
         let fixed = a
             .mul_to_rounded(
@@ -5323,7 +5360,12 @@ fn mul_mass_flow_duration() {
     let a = MassFlow::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Mass = a * b;
-    assert_eq!(c.as_base(), 12.0 * 0.001);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -5333,7 +5375,7 @@ fn mul_mass_flow_duration() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::duration::Second>::new(y),
         );
         let fixed = a
@@ -5350,7 +5392,12 @@ fn mul_mass_flow_specific_energy() {
     let a = MassFlow::from_base(6.0);
     let b = SpecificEnergy::from_base(2.0);
     let c: Power = a * b;
-    assert_eq!(c.as_base(), 12.0 * 0.001);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = SpecificEnergy::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -5360,7 +5407,7 @@ fn mul_mass_flow_specific_energy() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::specific_energy::JoulePerKilogram>::new(y),
         );
         let fixed = a
@@ -5377,7 +5424,12 @@ fn mul_mass_flux_area() {
     let a = MassFlux::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlux::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -5391,7 +5443,11 @@ fn mul_mass_flux_area() {
             Fixed::<unit::area::SquareMeter>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -5572,7 +5628,12 @@ fn mul_molar_flow_molar_mass() {
     let a = MolarFlow::from_base(6.0);
     let b = MolarMass::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarFlow::<i32>::from_base(6);
+    let b = MolarMass::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -5586,7 +5647,11 @@ fn mul_molar_flow_molar_mass() {
             Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -5631,7 +5696,12 @@ fn mul_molar_mass_molar_flow() {
     let a = MolarMass::from_base(6.0);
     let b = MolarFlow::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarMass::<i32>::from_base(6);
+    let b = MolarFlow::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -5645,7 +5715,11 @@ fn mul_molar_mass_molar_flow() {
             Fixed::<unit::molar_flow::MolePerSecond>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -5942,7 +6016,12 @@ fn mul_power_brake_specific_fuel_consumption() {
     let a = Power::from_base(6.0);
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = BrakeSpecificFuelConsumption::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -5956,7 +6035,11 @@ fn mul_power_brake_specific_fuel_consumption() {
             Fixed::<unit::brake_specific_fuel_consumption::KilogramPerJoule>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -6803,7 +6886,12 @@ fn mul_specific_energy_mass_flow() {
     let a = SpecificEnergy::from_base(6.0);
     let b = MassFlow::from_base(2.0);
     let c: Power = a * b;
-    assert_eq!(c.as_base(), 12.0 * 0.001);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEnergy::<i32>::from_base(6);
+    let b = MassFlow::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -6814,7 +6902,7 @@ fn mul_specific_energy_mass_flow() {
     ] {
         let (a, b) = (
             Fixed::<unit::specific_energy::JoulePerKilogram>::new(x),
-            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(y),
         );
         let fixed = a
             .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
@@ -7512,7 +7600,12 @@ fn mul_thermal_insulance_heat_flux() {
     let a = ThermalInsulance::from_base(6.0);
     let b = HeatFlux::from_base(2.0);
     let c: TemperatureDelta = a * b;
-    assert_eq!(c.as_base(), 12.0 * 0.001);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ThermalInsulance::<i32>::from_base(6);
+    let b = HeatFlux::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -7522,7 +7615,7 @@ fn mul_thermal_insulance_heat_flux() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>::new(x),
+            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerWatt>::new(x),
             Fixed::<unit::heat_flux::WattPerSquareMeter>::new(y),
         );
         let fixed = a
@@ -8010,7 +8103,12 @@ fn mul_volume_flow_density() {
     let a = VolumeFlow::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: MassFlow = a * b;
-    assert_eq!(c.as_base(), 12.0 * 1000.0);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: MassFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -8024,7 +8122,11 @@ fn mul_volume_flow_density() {
             Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .mul_to_rounded(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -13113,7 +13215,12 @@ fn div_mass_duration() {
     let a = Mass::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: MassFlow = a / b;
-    assert_eq!(c.as_base(), 3.0 * 1000.0);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: MassFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13127,7 +13234,11 @@ fn div_mass_duration() {
             Fixed::<unit::duration::Second>::new(y),
         );
         let fixed = a
-            .div_to(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .div_to(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -13208,7 +13319,12 @@ fn div_mass_mass_flow() {
     let a = Mass::from_base(6.0);
     let b = MassFlow::from_base(2.0);
     let c: Duration = a / b;
-    assert_eq!(c.as_base(), 3.0 * 1000.0);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = MassFlow::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13219,7 +13335,7 @@ fn div_mass_mass_flow() {
     ] {
         let (a, b) = (
             Fixed::<unit::mass::Kilogram>::new(x),
-            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(y),
         );
         let fixed = a
             .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
@@ -13482,7 +13598,12 @@ fn div_mass_flow_area() {
     let a = MassFlow::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: MassFlux = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: MassFlux<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13492,7 +13613,7 @@ fn div_mass_flow_area() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::area::SquareMeter>::new(y),
         );
         let fixed = a
@@ -13513,7 +13634,12 @@ fn div_mass_flow_brake_specific_fuel_consumption() {
     let a = MassFlow::from_base(6.0);
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: Power = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = BrakeSpecificFuelConsumption::<i32>::from_base(2);
+    let c: Power<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13523,7 +13649,7 @@ fn div_mass_flow_brake_specific_fuel_consumption() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::brake_specific_fuel_consumption::KilogramPerJoule>::new(y),
         );
         let fixed = a
@@ -13540,7 +13666,12 @@ fn div_mass_flow_density() {
     let a = MassFlow::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: VolumeFlow = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13550,7 +13681,7 @@ fn div_mass_flow_density() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
         );
         let fixed = a
@@ -13571,7 +13702,12 @@ fn div_mass_flow_mass_flux() {
     let a = MassFlow::from_base(6.0);
     let b = MassFlux::from_base(2.0);
     let c: Area = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = MassFlux::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13581,7 +13717,7 @@ fn div_mass_flow_mass_flux() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(y),
         );
         let fixed = a
@@ -13598,7 +13734,12 @@ fn div_mass_flow_molar_flow() {
     let a = MassFlow::from_base(6.0);
     let b = MolarFlow::from_base(2.0);
     let c: MolarMass = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = MolarFlow::<i32>::from_base(2);
+    let c: MolarMass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13608,7 +13749,7 @@ fn div_mass_flow_molar_flow() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::molar_flow::MolePerSecond>::new(y),
         );
         let fixed = a
@@ -13629,7 +13770,12 @@ fn div_mass_flow_molar_mass() {
     let a = MassFlow::from_base(6.0);
     let b = MolarMass::from_base(2.0);
     let c: MolarFlow = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = MolarMass::<i32>::from_base(2);
+    let c: MolarFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13639,7 +13785,7 @@ fn div_mass_flow_molar_mass() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
         );
         let fixed = a
@@ -13660,7 +13806,12 @@ fn div_mass_flow_power() {
     let a = MassFlow::from_base(6.0);
     let b = Power::from_base(2.0);
     let c: BrakeSpecificFuelConsumption = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = Power::<i32>::from_base(2);
+    let c: BrakeSpecificFuelConsumption<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13670,7 +13821,7 @@ fn div_mass_flow_power() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::power::Watt>::new(y),
         );
         let fixed = a
@@ -13691,7 +13842,12 @@ fn div_mass_flow_volume_flow() {
     let a = MassFlow::from_base(6.0);
     let b = VolumeFlow::from_base(2.0);
     let c: Density = a / b;
-    assert_eq!(c.as_base(), 3.0 * 0.001);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlow::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -13701,7 +13857,7 @@ fn div_mass_flow_volume_flow() {
         (7, 1_000_000),
     ] {
         let (a, b) = (
-            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(x),
             Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
         );
         let fixed = a
@@ -14191,7 +14347,12 @@ fn div_power_mass_flow() {
     let a = Power::from_base(6.0);
     let b = MassFlow::from_base(2.0);
     let c: SpecificEnergy = a / b;
-    assert_eq!(c.as_base(), 3.0 * 1000.0);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = MassFlow::<i32>::from_base(2);
+    let c: SpecificEnergy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -14202,7 +14363,7 @@ fn div_power_mass_flow() {
     ] {
         let (a, b) = (
             Fixed::<unit::power::Watt>::new(x),
-            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+            Fixed::<unit::mass_flow::KilogramPerSecond>::new(y),
         );
         let fixed = a
             .div_to(
@@ -14286,7 +14447,12 @@ fn div_power_specific_energy() {
     let a = Power::from_base(6.0);
     let b = SpecificEnergy::from_base(2.0);
     let c: MassFlow = a / b;
-    assert_eq!(c.as_base(), 3.0 * 1000.0);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = SpecificEnergy::<i32>::from_base(2);
+    let c: MassFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -14300,7 +14466,11 @@ fn div_power_specific_energy() {
             Fixed::<unit::specific_energy::JoulePerKilogram>::new(y),
         );
         let fixed = a
-            .div_to(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .div_to(
+                b,
+                unit::mass_flow::KilogramPerSecond,
+                Rounding::NearestTiesEven,
+            )
             .map(|c| c.count());
         let float: MassFlow = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
@@ -15558,7 +15728,12 @@ fn div_temperature_delta_heat_flux() {
     let a = TemperatureDelta::from_base(6.0);
     let b = HeatFlux::from_base(2.0);
     let c: ThermalInsulance = a / b;
-    assert_eq!(c.as_base(), 3.0 * 1000.0);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = HeatFlux::<i32>::from_base(2);
+    let c: ThermalInsulance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -15574,7 +15749,7 @@ fn div_temperature_delta_heat_flux() {
         let fixed = a
             .div_to(
                 b,
-                unit::thermal_insulance::SquareMeterKelvinPerKilowatt,
+                unit::thermal_insulance::SquareMeterKelvinPerWatt,
                 Rounding::NearestTiesEven,
             )
             .map(|c| c.count());
@@ -15725,7 +15900,12 @@ fn div_temperature_delta_thermal_insulance() {
     let a = TemperatureDelta::from_base(6.0);
     let b = ThermalInsulance::from_base(2.0);
     let c: HeatFlux = a / b;
-    assert_eq!(c.as_base(), 3.0 * 1000.0);
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = ThermalInsulance::<i32>::from_base(2);
+    let c: HeatFlux<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
     #[cfg(feature = "fixed")]
     for (x, y) in [
         (6_i64, 2_i64),
@@ -15736,7 +15916,7 @@ fn div_temperature_delta_thermal_insulance() {
     ] {
         let (a, b) = (
             Fixed::<unit::temperature_delta::Kelvin>::new(x),
-            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>::new(y),
+            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerWatt>::new(y),
         );
         let fixed = a
             .div_to(

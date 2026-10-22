@@ -11,13 +11,13 @@ use crate::Number;
 
 /// Mass flow is the ratio of the mass change to the time during which the change occurred (value of mass changes per unit time).
 ///
-/// Stored as a `T` (`f64` by default) in [`MassFlowUnit::GramPerSecond`], with the same layout as `T`.
+/// Stored as a `T` (`f64` by default) in [`MassFlowUnit::KilogramPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[repr(transparent)]
 #[must_use]
 pub struct MassFlow<T = f64>(T);
 
-quantity!(arith MassFlow, MassFlowUnit, GramPerSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 1, -1, 0, 0, 0, 0), angle: 0, factor: 0.001 }));
+quantity!(arith MassFlow, MassFlowUnit, KilogramPerSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 1, -1, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
 crate::__qty_formula!(MassFlow, MassFlowUnit, arith, dim: crate::formula::Dims<0, 1, -1>);
 
 /// The units of [`MassFlow`].
@@ -311,7 +311,7 @@ impl MassFlowUnit {
         name: "MassFlow",
         description: "Mass flow is the ratio of the mass change to the time during which the change occurred (value of mass changes per unit time).",
         dimensions: crate::Dimensions::new(0, 1, -1, 0, 0, 0, 0),
-        base_unit: &Self::INFOS[0],
+        base_unit: &Self::INFOS[8],
         units: Self::INFOS,
     };
 
@@ -524,78 +524,78 @@ impl<T: Number> crate::UnitOf<MassFlow<T>> for MassFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            MassFlowUnit::GramPerSecond => value,
-            MassFlowUnit::NanogramPerSecond => value / T::from_f64(1e9),
-            MassFlowUnit::MicrogramPerSecond => value / T::from_f64(1000000.0),
-            MassFlowUnit::MilligramPerSecond => value / T::from_f64(1000.0),
-            MassFlowUnit::CentigramPerSecond => value / T::from_f64(100.0),
-            MassFlowUnit::DecigramPerSecond => value / T::from_f64(10.0),
-            MassFlowUnit::DecagramPerSecond => value * T::from_f64(10.0),
-            MassFlowUnit::HectogramPerSecond => value * T::from_f64(100.0),
-            MassFlowUnit::KilogramPerSecond => value * T::from_f64(1000.0),
-            MassFlowUnit::GramPerDay => value / T::from_f64(86400.0),
-            MassFlowUnit::NanogramPerDay => value / T::from_f64(8.64e13),
-            MassFlowUnit::MicrogramPerDay => value / T::from_f64(8.64e10),
-            MassFlowUnit::MilligramPerDay => value / T::from_f64(8.64e7),
-            MassFlowUnit::CentigramPerDay => value / T::from_f64(8640000.0),
-            MassFlowUnit::DecigramPerDay => value / T::from_f64(864000.0),
-            MassFlowUnit::DecagramPerDay => value / T::from_f64(8640.0),
-            MassFlowUnit::HectogramPerDay => value / T::from_f64(864.0),
-            MassFlowUnit::KilogramPerDay => T::mul_ratio(value, 5.0, 432.0),
-            MassFlowUnit::MegagramPerDay => T::mul_ratio(value, 625.0, 54.0),
-            MassFlowUnit::GramPerHour => value / T::from_f64(3600.0),
-            MassFlowUnit::KilogramPerHour => T::mul_ratio(value, 5.0, 18.0),
-            MassFlowUnit::KilogramPerMinute => T::mul_ratio(value, 50.0, 3.0),
-            MassFlowUnit::TonnePerHour => T::mul_ratio(value, 2500.0, 9.0),
-            MassFlowUnit::PoundPerDay => T::mul_ratio(value, 45359237.0, 8640000000.0),
-            MassFlowUnit::MegapoundPerDay => T::mul_ratio(value, 45359237.0, 8640.0),
-            MassFlowUnit::PoundPerHour => T::mul_ratio(value, 45359237.0, 360000000.0),
-            MassFlowUnit::MegapoundPerHour => T::mul_ratio(value, 45359237.0, 360.0),
-            MassFlowUnit::PoundPerMinute => T::mul_ratio(value, 45359237.0, 6000000.0),
-            MassFlowUnit::MegapoundPerMinute => T::mul_ratio(value, 45359237.0, 6.0),
-            MassFlowUnit::PoundPerSecond => value * T::from_f64(453.59237),
-            MassFlowUnit::MegapoundPerSecond => value * T::from_f64(4.5359237e8),
-            MassFlowUnit::TonnePerDay => T::mul_ratio(value, 625.0, 54.0),
-            MassFlowUnit::ShortTonPerHour => T::mul_ratio(value, 45359237.0, 180000.0),
+            MassFlowUnit::GramPerSecond => value / T::from_f64(1000.0),
+            MassFlowUnit::NanogramPerSecond => value / T::from_f64(1e12),
+            MassFlowUnit::MicrogramPerSecond => value / T::from_f64(1e9),
+            MassFlowUnit::MilligramPerSecond => value / T::from_f64(1000000.0),
+            MassFlowUnit::CentigramPerSecond => value / T::from_f64(100000.0),
+            MassFlowUnit::DecigramPerSecond => value / T::from_f64(10000.0),
+            MassFlowUnit::DecagramPerSecond => value / T::from_f64(100.0),
+            MassFlowUnit::HectogramPerSecond => value / T::from_f64(10.0),
+            MassFlowUnit::KilogramPerSecond => value,
+            MassFlowUnit::GramPerDay => value / T::from_f64(8.64e7),
+            MassFlowUnit::NanogramPerDay => value / T::from_f64(8.64e16),
+            MassFlowUnit::MicrogramPerDay => value / T::from_f64(8.64e13),
+            MassFlowUnit::MilligramPerDay => value / T::from_f64(8.64e10),
+            MassFlowUnit::CentigramPerDay => value / T::from_f64(8.64e9),
+            MassFlowUnit::DecigramPerDay => value / T::from_f64(8.64e8),
+            MassFlowUnit::DecagramPerDay => value / T::from_f64(8640000.0),
+            MassFlowUnit::HectogramPerDay => value / T::from_f64(864000.0),
+            MassFlowUnit::KilogramPerDay => value / T::from_f64(86400.0),
+            MassFlowUnit::MegagramPerDay => T::mul_ratio(value, 5.0, 432.0),
+            MassFlowUnit::GramPerHour => value / T::from_f64(3600000.0),
+            MassFlowUnit::KilogramPerHour => value / T::from_f64(3600.0),
+            MassFlowUnit::KilogramPerMinute => value / T::from_f64(60.0),
+            MassFlowUnit::TonnePerHour => T::mul_ratio(value, 5.0, 18.0),
+            MassFlowUnit::PoundPerDay => T::mul_ratio(value, 45359237.0, 8640000000000.0),
+            MassFlowUnit::MegapoundPerDay => T::mul_ratio(value, 45359237.0, 8640000.0),
+            MassFlowUnit::PoundPerHour => T::mul_ratio(value, 45359237.0, 360000000000.0),
+            MassFlowUnit::MegapoundPerHour => T::mul_ratio(value, 45359237.0, 360000.0),
+            MassFlowUnit::PoundPerMinute => T::mul_ratio(value, 45359237.0, 6000000000.0),
+            MassFlowUnit::MegapoundPerMinute => T::mul_ratio(value, 45359237.0, 6000.0),
+            MassFlowUnit::PoundPerSecond => value * T::from_f64(0.45359237),
+            MassFlowUnit::MegapoundPerSecond => value * T::from_f64(453592.37),
+            MassFlowUnit::TonnePerDay => T::mul_ratio(value, 5.0, 432.0),
+            MassFlowUnit::ShortTonPerHour => T::mul_ratio(value, 45359237.0, 180000000.0),
         }
     }
 
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            MassFlowUnit::GramPerSecond => value,
-            MassFlowUnit::NanogramPerSecond => value * T::from_f64(1e9),
-            MassFlowUnit::MicrogramPerSecond => value * T::from_f64(1000000.0),
-            MassFlowUnit::MilligramPerSecond => value * T::from_f64(1000.0),
-            MassFlowUnit::CentigramPerSecond => value * T::from_f64(100.0),
-            MassFlowUnit::DecigramPerSecond => value * T::from_f64(10.0),
-            MassFlowUnit::DecagramPerSecond => value / T::from_f64(10.0),
-            MassFlowUnit::HectogramPerSecond => value / T::from_f64(100.0),
-            MassFlowUnit::KilogramPerSecond => value / T::from_f64(1000.0),
-            MassFlowUnit::GramPerDay => value * T::from_f64(86400.0),
-            MassFlowUnit::NanogramPerDay => value * T::from_f64(8.64e13),
-            MassFlowUnit::MicrogramPerDay => value * T::from_f64(8.64e10),
-            MassFlowUnit::MilligramPerDay => value * T::from_f64(8.64e7),
-            MassFlowUnit::CentigramPerDay => value * T::from_f64(8640000.0),
-            MassFlowUnit::DecigramPerDay => value * T::from_f64(864000.0),
-            MassFlowUnit::DecagramPerDay => value * T::from_f64(8640.0),
-            MassFlowUnit::HectogramPerDay => value * T::from_f64(864.0),
-            MassFlowUnit::KilogramPerDay => T::div_ratio(value, 5.0, 432.0),
-            MassFlowUnit::MegagramPerDay => T::div_ratio(value, 625.0, 54.0),
-            MassFlowUnit::GramPerHour => value * T::from_f64(3600.0),
-            MassFlowUnit::KilogramPerHour => T::div_ratio(value, 5.0, 18.0),
-            MassFlowUnit::KilogramPerMinute => T::div_ratio(value, 50.0, 3.0),
-            MassFlowUnit::TonnePerHour => T::div_ratio(value, 2500.0, 9.0),
-            MassFlowUnit::PoundPerDay => T::div_ratio(value, 45359237.0, 8640000000.0),
-            MassFlowUnit::MegapoundPerDay => T::div_ratio(value, 45359237.0, 8640.0),
-            MassFlowUnit::PoundPerHour => T::div_ratio(value, 45359237.0, 360000000.0),
-            MassFlowUnit::MegapoundPerHour => T::div_ratio(value, 45359237.0, 360.0),
-            MassFlowUnit::PoundPerMinute => T::div_ratio(value, 45359237.0, 6000000.0),
-            MassFlowUnit::MegapoundPerMinute => T::div_ratio(value, 45359237.0, 6.0),
-            MassFlowUnit::PoundPerSecond => value / T::from_f64(453.59237),
-            MassFlowUnit::MegapoundPerSecond => value / T::from_f64(4.5359237e8),
-            MassFlowUnit::TonnePerDay => T::div_ratio(value, 625.0, 54.0),
-            MassFlowUnit::ShortTonPerHour => T::div_ratio(value, 45359237.0, 180000.0),
+            MassFlowUnit::GramPerSecond => value * T::from_f64(1000.0),
+            MassFlowUnit::NanogramPerSecond => value * T::from_f64(1e12),
+            MassFlowUnit::MicrogramPerSecond => value * T::from_f64(1e9),
+            MassFlowUnit::MilligramPerSecond => value * T::from_f64(1000000.0),
+            MassFlowUnit::CentigramPerSecond => value * T::from_f64(100000.0),
+            MassFlowUnit::DecigramPerSecond => value * T::from_f64(10000.0),
+            MassFlowUnit::DecagramPerSecond => value * T::from_f64(100.0),
+            MassFlowUnit::HectogramPerSecond => value * T::from_f64(10.0),
+            MassFlowUnit::KilogramPerSecond => value,
+            MassFlowUnit::GramPerDay => value * T::from_f64(8.64e7),
+            MassFlowUnit::NanogramPerDay => value * T::from_f64(8.64e16),
+            MassFlowUnit::MicrogramPerDay => value * T::from_f64(8.64e13),
+            MassFlowUnit::MilligramPerDay => value * T::from_f64(8.64e10),
+            MassFlowUnit::CentigramPerDay => value * T::from_f64(8.64e9),
+            MassFlowUnit::DecigramPerDay => value * T::from_f64(8.64e8),
+            MassFlowUnit::DecagramPerDay => value * T::from_f64(8640000.0),
+            MassFlowUnit::HectogramPerDay => value * T::from_f64(864000.0),
+            MassFlowUnit::KilogramPerDay => value * T::from_f64(86400.0),
+            MassFlowUnit::MegagramPerDay => T::div_ratio(value, 5.0, 432.0),
+            MassFlowUnit::GramPerHour => value * T::from_f64(3600000.0),
+            MassFlowUnit::KilogramPerHour => value * T::from_f64(3600.0),
+            MassFlowUnit::KilogramPerMinute => value * T::from_f64(60.0),
+            MassFlowUnit::TonnePerHour => T::div_ratio(value, 5.0, 18.0),
+            MassFlowUnit::PoundPerDay => T::div_ratio(value, 45359237.0, 8640000000000.0),
+            MassFlowUnit::MegapoundPerDay => T::div_ratio(value, 45359237.0, 8640000.0),
+            MassFlowUnit::PoundPerHour => T::div_ratio(value, 45359237.0, 360000000000.0),
+            MassFlowUnit::MegapoundPerHour => T::div_ratio(value, 45359237.0, 360000.0),
+            MassFlowUnit::PoundPerMinute => T::div_ratio(value, 45359237.0, 6000000000.0),
+            MassFlowUnit::MegapoundPerMinute => T::div_ratio(value, 45359237.0, 6000.0),
+            MassFlowUnit::PoundPerSecond => value / T::from_f64(0.45359237),
+            MassFlowUnit::MegapoundPerSecond => value / T::from_f64(453592.37),
+            MassFlowUnit::TonnePerDay => T::div_ratio(value, 5.0, 432.0),
+            MassFlowUnit::ShortTonPerHour => T::div_ratio(value, 45359237.0, 180000000.0),
         }
     }
 }
@@ -607,11 +607,11 @@ impl<T: crate::Float> MassFlow<T> {
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MassFlowUnit> {
         const SCALE: [(f64, MassFlowUnit); 5] = [
-            (1000.0, MassFlowUnit::KilogramPerSecond),
-            (1.0, MassFlowUnit::GramPerSecond),
-            (0.001, MassFlowUnit::MilligramPerSecond),
-            (1e-6, MassFlowUnit::MicrogramPerSecond),
-            (1e-9, MassFlowUnit::NanogramPerSecond),
+            (1.0, MassFlowUnit::KilogramPerSecond),
+            (0.001, MassFlowUnit::GramPerSecond),
+            (1e-6, MassFlowUnit::MilligramPerSecond),
+            (1e-9, MassFlowUnit::MicrogramPerSecond),
+            (1e-12, MassFlowUnit::NanogramPerSecond),
         ];
         crate::__private::auto_unit(self, &SCALE)
     }
@@ -621,397 +621,397 @@ impl<T: Number> MassFlow<T> {
     /// A [`MassFlow`] from a value in `g/s`.
     #[inline]
     pub fn from_grams_per_second(value: T) -> Self {
-        Self(value)
+        Self(value / T::from_f64(1000.0))
     }
 
     /// The value in `g/s`.
     #[inline]
     pub fn as_grams_per_second(self) -> T {
-        self.0
+        self.0 * T::from_f64(1000.0)
     }
 
     /// A [`MassFlow`] from a value in `ng/s`.
     #[inline]
     pub fn from_nanograms_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1e9))
+        Self(value / T::from_f64(1e12))
     }
 
     /// The value in `ng/s`.
     #[inline]
     pub fn as_nanograms_per_second(self) -> T {
-        self.0 * T::from_f64(1e9)
+        self.0 * T::from_f64(1e12)
     }
 
     /// A [`MassFlow`] from a value in `µg/s`.
     #[inline]
     pub fn from_micrograms_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000000.0))
+        Self(value / T::from_f64(1e9))
     }
 
     /// The value in `µg/s`.
     #[inline]
     pub fn as_micrograms_per_second(self) -> T {
-        self.0 * T::from_f64(1000000.0)
+        self.0 * T::from_f64(1e9)
     }
 
     /// A [`MassFlow`] from a value in `mg/s`.
     #[inline]
     pub fn from_milligrams_per_second(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// The value in `mg/s`.
     #[inline]
     pub fn as_milligrams_per_second(self) -> T {
-        self.0 * T::from_f64(1000.0)
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// A [`MassFlow`] from a value in `cg/s`.
     #[inline]
     pub fn from_centigrams_per_second(value: T) -> Self {
-        Self(value / T::from_f64(100.0))
+        Self(value / T::from_f64(100000.0))
     }
 
     /// The value in `cg/s`.
     #[inline]
     pub fn as_centigrams_per_second(self) -> T {
-        self.0 * T::from_f64(100.0)
+        self.0 * T::from_f64(100000.0)
     }
 
     /// A [`MassFlow`] from a value in `dg/s`.
     #[inline]
     pub fn from_decigrams_per_second(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(value / T::from_f64(10000.0))
     }
 
     /// The value in `dg/s`.
     #[inline]
     pub fn as_decigrams_per_second(self) -> T {
-        self.0 * T::from_f64(10.0)
+        self.0 * T::from_f64(10000.0)
     }
 
     /// A [`MassFlow`] from a value in `dag/s`.
     #[inline]
     pub fn from_decagrams_per_second(value: T) -> Self {
-        Self(value * T::from_f64(10.0))
+        Self(value / T::from_f64(100.0))
     }
 
     /// The value in `dag/s`.
     #[inline]
     pub fn as_decagrams_per_second(self) -> T {
-        self.0 / T::from_f64(10.0)
+        self.0 * T::from_f64(100.0)
     }
 
     /// A [`MassFlow`] from a value in `hg/s`.
     #[inline]
     pub fn from_hectograms_per_second(value: T) -> Self {
-        Self(value * T::from_f64(100.0))
+        Self(value / T::from_f64(10.0))
     }
 
     /// The value in `hg/s`.
     #[inline]
     pub fn as_hectograms_per_second(self) -> T {
-        self.0 / T::from_f64(100.0)
+        self.0 * T::from_f64(10.0)
     }
 
     /// A [`MassFlow`] from a value in `kg/s`.
     #[inline]
     pub fn from_kilograms_per_second(value: T) -> Self {
-        Self(value * T::from_f64(1000.0))
+        Self(value)
     }
 
     /// The value in `kg/s`.
     #[inline]
     pub fn as_kilograms_per_second(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        self.0
     }
 
     /// A [`MassFlow`] from a value in `g/d`.
     #[inline]
     pub fn from_grams_per_day(value: T) -> Self {
-        Self(value / T::from_f64(86400.0))
+        Self(value / T::from_f64(8.64e7))
     }
 
     /// The value in `g/d`.
     #[inline]
     pub fn as_grams_per_day(self) -> T {
-        self.0 * T::from_f64(86400.0)
+        self.0 * T::from_f64(8.64e7)
     }
 
     /// A [`MassFlow`] from a value in `ng/d`.
     #[inline]
     pub fn from_nanograms_per_day(value: T) -> Self {
-        Self(value / T::from_f64(8.64e13))
+        Self(value / T::from_f64(8.64e16))
     }
 
     /// The value in `ng/d`.
     #[inline]
     pub fn as_nanograms_per_day(self) -> T {
-        self.0 * T::from_f64(8.64e13)
+        self.0 * T::from_f64(8.64e16)
     }
 
     /// A [`MassFlow`] from a value in `µg/d`.
     #[inline]
     pub fn from_micrograms_per_day(value: T) -> Self {
-        Self(value / T::from_f64(8.64e10))
+        Self(value / T::from_f64(8.64e13))
     }
 
     /// The value in `µg/d`.
     #[inline]
     pub fn as_micrograms_per_day(self) -> T {
-        self.0 * T::from_f64(8.64e10)
+        self.0 * T::from_f64(8.64e13)
     }
 
     /// A [`MassFlow`] from a value in `mg/d`.
     #[inline]
     pub fn from_milligrams_per_day(value: T) -> Self {
-        Self(value / T::from_f64(8.64e7))
+        Self(value / T::from_f64(8.64e10))
     }
 
     /// The value in `mg/d`.
     #[inline]
     pub fn as_milligrams_per_day(self) -> T {
-        self.0 * T::from_f64(8.64e7)
+        self.0 * T::from_f64(8.64e10)
     }
 
     /// A [`MassFlow`] from a value in `cg/d`.
     #[inline]
     pub fn from_centigrams_per_day(value: T) -> Self {
-        Self(value / T::from_f64(8640000.0))
+        Self(value / T::from_f64(8.64e9))
     }
 
     /// The value in `cg/d`.
     #[inline]
     pub fn as_centigrams_per_day(self) -> T {
-        self.0 * T::from_f64(8640000.0)
+        self.0 * T::from_f64(8.64e9)
     }
 
     /// A [`MassFlow`] from a value in `dg/d`.
     #[inline]
     pub fn from_decigrams_per_day(value: T) -> Self {
-        Self(value / T::from_f64(864000.0))
+        Self(value / T::from_f64(8.64e8))
     }
 
     /// The value in `dg/d`.
     #[inline]
     pub fn as_decigrams_per_day(self) -> T {
-        self.0 * T::from_f64(864000.0)
+        self.0 * T::from_f64(8.64e8)
     }
 
     /// A [`MassFlow`] from a value in `dag/d`.
     #[inline]
     pub fn from_decagrams_per_day(value: T) -> Self {
-        Self(value / T::from_f64(8640.0))
+        Self(value / T::from_f64(8640000.0))
     }
 
     /// The value in `dag/d`.
     #[inline]
     pub fn as_decagrams_per_day(self) -> T {
-        self.0 * T::from_f64(8640.0)
+        self.0 * T::from_f64(8640000.0)
     }
 
     /// A [`MassFlow`] from a value in `hg/d`.
     #[inline]
     pub fn from_hectograms_per_day(value: T) -> Self {
-        Self(value / T::from_f64(864.0))
+        Self(value / T::from_f64(864000.0))
     }
 
     /// The value in `hg/d`.
     #[inline]
     pub fn as_hectograms_per_day(self) -> T {
-        self.0 * T::from_f64(864.0)
+        self.0 * T::from_f64(864000.0)
     }
 
     /// A [`MassFlow`] from a value in `kg/d`.
     #[inline]
     pub fn from_kilograms_per_day(value: T) -> Self {
-        Self(T::mul_ratio(value, 5.0, 432.0))
+        Self(value / T::from_f64(86400.0))
     }
 
     /// The value in `kg/d`.
     #[inline]
     pub fn as_kilograms_per_day(self) -> T {
-        T::div_ratio(self.0, 5.0, 432.0)
+        self.0 * T::from_f64(86400.0)
     }
 
     /// A [`MassFlow`] from a value in `Mg/d`.
     #[inline]
     pub fn from_megagrams_per_day(value: T) -> Self {
-        Self(T::mul_ratio(value, 625.0, 54.0))
+        Self(T::mul_ratio(value, 5.0, 432.0))
     }
 
     /// The value in `Mg/d`.
     #[inline]
     pub fn as_megagrams_per_day(self) -> T {
-        T::div_ratio(self.0, 625.0, 54.0)
+        T::div_ratio(self.0, 5.0, 432.0)
     }
 
     /// A [`MassFlow`] from a value in `g/h`.
     #[inline]
     pub fn from_grams_per_hour(value: T) -> Self {
-        Self(value / T::from_f64(3600.0))
+        Self(value / T::from_f64(3600000.0))
     }
 
     /// The value in `g/h`.
     #[inline]
     pub fn as_grams_per_hour(self) -> T {
-        self.0 * T::from_f64(3600.0)
+        self.0 * T::from_f64(3600000.0)
     }
 
     /// A [`MassFlow`] from a value in `kg/h`.
     #[inline]
     pub fn from_kilograms_per_hour(value: T) -> Self {
-        Self(T::mul_ratio(value, 5.0, 18.0))
+        Self(value / T::from_f64(3600.0))
     }
 
     /// The value in `kg/h`.
     #[inline]
     pub fn as_kilograms_per_hour(self) -> T {
-        T::div_ratio(self.0, 5.0, 18.0)
+        self.0 * T::from_f64(3600.0)
     }
 
     /// A [`MassFlow`] from a value in `kg/min`.
     #[inline]
     pub fn from_kilograms_per_minute(value: T) -> Self {
-        Self(T::mul_ratio(value, 50.0, 3.0))
+        Self(value / T::from_f64(60.0))
     }
 
     /// The value in `kg/min`.
     #[inline]
     pub fn as_kilograms_per_minute(self) -> T {
-        T::div_ratio(self.0, 50.0, 3.0)
+        self.0 * T::from_f64(60.0)
     }
 
     /// A [`MassFlow`] from a value in `t/h`.
     #[inline]
     pub fn from_tonnes_per_hour(value: T) -> Self {
-        Self(T::mul_ratio(value, 2500.0, 9.0))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `t/h`.
     #[inline]
     pub fn as_tonnes_per_hour(self) -> T {
-        T::div_ratio(self.0, 2500.0, 9.0)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`MassFlow`] from a value in `lb/d`.
     #[inline]
     pub fn from_pounds_per_day(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 8640000000.0))
+        Self(T::mul_ratio(value, 45359237.0, 8640000000000.0))
     }
 
     /// The value in `lb/d`.
     #[inline]
     pub fn as_pounds_per_day(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 8640000000.0)
+        T::div_ratio(self.0, 45359237.0, 8640000000000.0)
     }
 
     /// A [`MassFlow`] from a value in `Mlb/d`.
     #[inline]
     pub fn from_megapounds_per_day(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 8640.0))
+        Self(T::mul_ratio(value, 45359237.0, 8640000.0))
     }
 
     /// The value in `Mlb/d`.
     #[inline]
     pub fn as_megapounds_per_day(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 8640.0)
+        T::div_ratio(self.0, 45359237.0, 8640000.0)
     }
 
     /// A [`MassFlow`] from a value in `lb/h`.
     #[inline]
     pub fn from_pounds_per_hour(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 360000000.0))
+        Self(T::mul_ratio(value, 45359237.0, 360000000000.0))
     }
 
     /// The value in `lb/h`.
     #[inline]
     pub fn as_pounds_per_hour(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 360000000.0)
+        T::div_ratio(self.0, 45359237.0, 360000000000.0)
     }
 
     /// A [`MassFlow`] from a value in `Mlb/h`.
     #[inline]
     pub fn from_megapounds_per_hour(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 360.0))
+        Self(T::mul_ratio(value, 45359237.0, 360000.0))
     }
 
     /// The value in `Mlb/h`.
     #[inline]
     pub fn as_megapounds_per_hour(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 360.0)
+        T::div_ratio(self.0, 45359237.0, 360000.0)
     }
 
     /// A [`MassFlow`] from a value in `lb/min`.
     #[inline]
     pub fn from_pounds_per_minute(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 6000000.0))
+        Self(T::mul_ratio(value, 45359237.0, 6000000000.0))
     }
 
     /// The value in `lb/min`.
     #[inline]
     pub fn as_pounds_per_minute(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 6000000.0)
+        T::div_ratio(self.0, 45359237.0, 6000000000.0)
     }
 
     /// A [`MassFlow`] from a value in `Mlb/min`.
     #[inline]
     pub fn from_megapounds_per_minute(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 6.0))
+        Self(T::mul_ratio(value, 45359237.0, 6000.0))
     }
 
     /// The value in `Mlb/min`.
     #[inline]
     pub fn as_megapounds_per_minute(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 6.0)
+        T::div_ratio(self.0, 45359237.0, 6000.0)
     }
 
     /// A [`MassFlow`] from a value in `lb/s`.
     #[inline]
     pub fn from_pounds_per_second(value: T) -> Self {
-        Self(value * T::from_f64(453.59237))
+        Self(value * T::from_f64(0.45359237))
     }
 
     /// The value in `lb/s`.
     #[inline]
     pub fn as_pounds_per_second(self) -> T {
-        self.0 / T::from_f64(453.59237)
+        self.0 / T::from_f64(0.45359237)
     }
 
     /// A [`MassFlow`] from a value in `Mlb/s`.
     #[inline]
     pub fn from_megapounds_per_second(value: T) -> Self {
-        Self(value * T::from_f64(4.5359237e8))
+        Self(value * T::from_f64(453592.37))
     }
 
     /// The value in `Mlb/s`.
     #[inline]
     pub fn as_megapounds_per_second(self) -> T {
-        self.0 / T::from_f64(4.5359237e8)
+        self.0 / T::from_f64(453592.37)
     }
 
     /// A [`MassFlow`] from a value in `t/d`.
     #[inline]
     pub fn from_tonnes_per_day(value: T) -> Self {
-        Self(T::mul_ratio(value, 625.0, 54.0))
+        Self(T::mul_ratio(value, 5.0, 432.0))
     }
 
     /// The value in `t/d`.
     #[inline]
     pub fn as_tonnes_per_day(self) -> T {
-        T::div_ratio(self.0, 625.0, 54.0)
+        T::div_ratio(self.0, 5.0, 432.0)
     }
 
     /// A [`MassFlow`] from a value in `short tn/h`.
     #[inline]
     pub fn from_short_tons_per_hour(value: T) -> Self {
-        Self(T::mul_ratio(value, 45359237.0, 180000.0))
+        Self(T::mul_ratio(value, 45359237.0, 180000000.0))
     }
 
     /// The value in `short tn/h`.
     #[inline]
     pub fn as_short_tons_per_hour(self) -> T {
-        T::div_ratio(self.0, 45359237.0, 180000.0)
+        T::div_ratio(self.0, 45359237.0, 180000000.0)
     }
 }
 
@@ -1021,45 +1021,45 @@ impl MassFlow<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: MassFlowUnit) -> Self {
         Self(match unit {
-            MassFlowUnit::GramPerSecond => value,
-            MassFlowUnit::NanogramPerSecond => value / 1e9,
-            MassFlowUnit::MicrogramPerSecond => value / 1000000.0,
-            MassFlowUnit::MilligramPerSecond => value / 1000.0,
-            MassFlowUnit::CentigramPerSecond => value / 100.0,
-            MassFlowUnit::DecigramPerSecond => value / 10.0,
-            MassFlowUnit::DecagramPerSecond => value * 10.0,
-            MassFlowUnit::HectogramPerSecond => value * 100.0,
-            MassFlowUnit::KilogramPerSecond => value * 1000.0,
-            MassFlowUnit::GramPerDay => value / 86400.0,
-            MassFlowUnit::NanogramPerDay => value / 8.64e13,
-            MassFlowUnit::MicrogramPerDay => value / 8.64e10,
-            MassFlowUnit::MilligramPerDay => value / 8.64e7,
-            MassFlowUnit::CentigramPerDay => value / 8640000.0,
-            MassFlowUnit::DecigramPerDay => value / 864000.0,
-            MassFlowUnit::DecagramPerDay => value / 8640.0,
-            MassFlowUnit::HectogramPerDay => value / 864.0,
-            MassFlowUnit::KilogramPerDay => value * 0.011574074074074073,
-            MassFlowUnit::MegagramPerDay => value * 11.574074074074074,
-            MassFlowUnit::GramPerHour => value / 3600.0,
-            MassFlowUnit::KilogramPerHour => value * 0.2777777777777778,
-            MassFlowUnit::KilogramPerMinute => value * 16.666666666666668,
-            MassFlowUnit::TonnePerHour => value * 277.77777777777777,
-            MassFlowUnit::PoundPerDay => value * 0.005249911689814815,
-            MassFlowUnit::MegapoundPerDay => value * 5249.911689814815,
-            MassFlowUnit::PoundPerHour => value * 0.12599788055555555,
-            MassFlowUnit::MegapoundPerHour => value * 125997.88055555556,
-            MassFlowUnit::PoundPerMinute => value * 7.559872833333333,
-            MassFlowUnit::MegapoundPerMinute => value * 7559872.833333333,
-            MassFlowUnit::PoundPerSecond => value * 453.59237,
-            MassFlowUnit::MegapoundPerSecond => value * 4.5359237e8,
-            MassFlowUnit::TonnePerDay => value * 11.574074074074074,
-            MassFlowUnit::ShortTonPerHour => value * 251.9957611111111,
+            MassFlowUnit::GramPerSecond => value / 1000.0,
+            MassFlowUnit::NanogramPerSecond => value / 1e12,
+            MassFlowUnit::MicrogramPerSecond => value / 1e9,
+            MassFlowUnit::MilligramPerSecond => value / 1000000.0,
+            MassFlowUnit::CentigramPerSecond => value / 100000.0,
+            MassFlowUnit::DecigramPerSecond => value / 10000.0,
+            MassFlowUnit::DecagramPerSecond => value / 100.0,
+            MassFlowUnit::HectogramPerSecond => value / 10.0,
+            MassFlowUnit::KilogramPerSecond => value,
+            MassFlowUnit::GramPerDay => value / 8.64e7,
+            MassFlowUnit::NanogramPerDay => value / 8.64e16,
+            MassFlowUnit::MicrogramPerDay => value / 8.64e13,
+            MassFlowUnit::MilligramPerDay => value / 8.64e10,
+            MassFlowUnit::CentigramPerDay => value / 8.64e9,
+            MassFlowUnit::DecigramPerDay => value / 8.64e8,
+            MassFlowUnit::DecagramPerDay => value / 8640000.0,
+            MassFlowUnit::HectogramPerDay => value / 864000.0,
+            MassFlowUnit::KilogramPerDay => value / 86400.0,
+            MassFlowUnit::MegagramPerDay => value * 0.011574074074074073,
+            MassFlowUnit::GramPerHour => value / 3600000.0,
+            MassFlowUnit::KilogramPerHour => value / 3600.0,
+            MassFlowUnit::KilogramPerMinute => value / 60.0,
+            MassFlowUnit::TonnePerHour => value * 0.2777777777777778,
+            MassFlowUnit::PoundPerDay => value * 5.249911689814815e-6,
+            MassFlowUnit::MegapoundPerDay => value * 5.249911689814815,
+            MassFlowUnit::PoundPerHour => value * 0.00012599788055555556,
+            MassFlowUnit::MegapoundPerHour => value * 125.99788055555555,
+            MassFlowUnit::PoundPerMinute => value * 0.007559872833333333,
+            MassFlowUnit::MegapoundPerMinute => value * 7559.872833333333,
+            MassFlowUnit::PoundPerSecond => value * 0.45359237,
+            MassFlowUnit::MegapoundPerSecond => value * 453592.37,
+            MassFlowUnit::TonnePerDay => value * 0.011574074074074073,
+            MassFlowUnit::ShortTonPerHour => value * 0.2519957611111111,
         })
     }
 }
 
 #[cfg(feature = "fixed")]
-fixed_base!(MassFlow, GramPerSecond);
+fixed_base!(MassFlow, KilogramPerSecond);
 
 /// Units for counting [`MassFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
@@ -1067,37 +1067,37 @@ fixed_base!(MassFlow, GramPerSecond);
 #[cfg(feature = "fixed")]
 #[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
-    fixed_unit!(GramPerSecond: MassFlow, MassFlowUnit::GramPerSecond, base GramPerSecond, 1 / 1, pi^0, from_grams_per_second, as_grams_per_second, additive);
-    fixed_unit!(NanogramPerSecond: MassFlow, MassFlowUnit::NanogramPerSecond, base GramPerSecond, 1 / 1000000000, pi^0, from_nanograms_per_second, as_nanograms_per_second, additive);
-    fixed_unit!(MicrogramPerSecond: MassFlow, MassFlowUnit::MicrogramPerSecond, base GramPerSecond, 1 / 1000000, pi^0, from_micrograms_per_second, as_micrograms_per_second, additive);
-    fixed_unit!(MilligramPerSecond: MassFlow, MassFlowUnit::MilligramPerSecond, base GramPerSecond, 1 / 1000, pi^0, from_milligrams_per_second, as_milligrams_per_second, additive);
-    fixed_unit!(CentigramPerSecond: MassFlow, MassFlowUnit::CentigramPerSecond, base GramPerSecond, 1 / 100, pi^0, from_centigrams_per_second, as_centigrams_per_second, additive);
-    fixed_unit!(DecigramPerSecond: MassFlow, MassFlowUnit::DecigramPerSecond, base GramPerSecond, 1 / 10, pi^0, from_decigrams_per_second, as_decigrams_per_second, additive);
-    fixed_unit!(DecagramPerSecond: MassFlow, MassFlowUnit::DecagramPerSecond, base GramPerSecond, 10 / 1, pi^0, from_decagrams_per_second, as_decagrams_per_second, additive);
-    fixed_unit!(HectogramPerSecond: MassFlow, MassFlowUnit::HectogramPerSecond, base GramPerSecond, 100 / 1, pi^0, from_hectograms_per_second, as_hectograms_per_second, additive);
-    fixed_unit!(KilogramPerSecond: MassFlow, MassFlowUnit::KilogramPerSecond, base GramPerSecond, 1000 / 1, pi^0, from_kilograms_per_second, as_kilograms_per_second, additive);
-    fixed_unit!(GramPerDay: MassFlow, MassFlowUnit::GramPerDay, base GramPerSecond, 1 / 86400, pi^0, from_grams_per_day, as_grams_per_day, additive);
-    fixed_unit!(NanogramPerDay: MassFlow, MassFlowUnit::NanogramPerDay, base GramPerSecond, 1 / 86400000000000, pi^0, from_nanograms_per_day, as_nanograms_per_day, additive);
-    fixed_unit!(MicrogramPerDay: MassFlow, MassFlowUnit::MicrogramPerDay, base GramPerSecond, 1 / 86400000000, pi^0, from_micrograms_per_day, as_micrograms_per_day, additive);
-    fixed_unit!(MilligramPerDay: MassFlow, MassFlowUnit::MilligramPerDay, base GramPerSecond, 1 / 86400000, pi^0, from_milligrams_per_day, as_milligrams_per_day, additive);
-    fixed_unit!(CentigramPerDay: MassFlow, MassFlowUnit::CentigramPerDay, base GramPerSecond, 1 / 8640000, pi^0, from_centigrams_per_day, as_centigrams_per_day, additive);
-    fixed_unit!(DecigramPerDay: MassFlow, MassFlowUnit::DecigramPerDay, base GramPerSecond, 1 / 864000, pi^0, from_decigrams_per_day, as_decigrams_per_day, additive);
-    fixed_unit!(DecagramPerDay: MassFlow, MassFlowUnit::DecagramPerDay, base GramPerSecond, 1 / 8640, pi^0, from_decagrams_per_day, as_decagrams_per_day, additive);
-    fixed_unit!(HectogramPerDay: MassFlow, MassFlowUnit::HectogramPerDay, base GramPerSecond, 1 / 864, pi^0, from_hectograms_per_day, as_hectograms_per_day, additive);
-    fixed_unit!(KilogramPerDay: MassFlow, MassFlowUnit::KilogramPerDay, base GramPerSecond, 5 / 432, pi^0, from_kilograms_per_day, as_kilograms_per_day, additive);
-    fixed_unit!(MegagramPerDay: MassFlow, MassFlowUnit::MegagramPerDay, base GramPerSecond, 625 / 54, pi^0, from_megagrams_per_day, as_megagrams_per_day, additive);
-    fixed_unit!(GramPerHour: MassFlow, MassFlowUnit::GramPerHour, base GramPerSecond, 1 / 3600, pi^0, from_grams_per_hour, as_grams_per_hour, additive);
-    fixed_unit!(KilogramPerHour: MassFlow, MassFlowUnit::KilogramPerHour, base GramPerSecond, 5 / 18, pi^0, from_kilograms_per_hour, as_kilograms_per_hour, additive);
-    fixed_unit!(KilogramPerMinute: MassFlow, MassFlowUnit::KilogramPerMinute, base GramPerSecond, 50 / 3, pi^0, from_kilograms_per_minute, as_kilograms_per_minute, additive);
-    fixed_unit!(TonnePerHour: MassFlow, MassFlowUnit::TonnePerHour, base GramPerSecond, 2500 / 9, pi^0, from_tonnes_per_hour, as_tonnes_per_hour, additive);
-    fixed_unit!(PoundPerDay: MassFlow, MassFlowUnit::PoundPerDay, base GramPerSecond, 45359237 / 8640000000, pi^0, from_pounds_per_day, as_pounds_per_day, additive);
-    fixed_unit!(MegapoundPerDay: MassFlow, MassFlowUnit::MegapoundPerDay, base GramPerSecond, 45359237 / 8640, pi^0, from_megapounds_per_day, as_megapounds_per_day, additive);
-    fixed_unit!(PoundPerHour: MassFlow, MassFlowUnit::PoundPerHour, base GramPerSecond, 45359237 / 360000000, pi^0, from_pounds_per_hour, as_pounds_per_hour, additive);
-    fixed_unit!(MegapoundPerHour: MassFlow, MassFlowUnit::MegapoundPerHour, base GramPerSecond, 45359237 / 360, pi^0, from_megapounds_per_hour, as_megapounds_per_hour, additive);
-    fixed_unit!(PoundPerMinute: MassFlow, MassFlowUnit::PoundPerMinute, base GramPerSecond, 45359237 / 6000000, pi^0, from_pounds_per_minute, as_pounds_per_minute, additive);
-    fixed_unit!(MegapoundPerMinute: MassFlow, MassFlowUnit::MegapoundPerMinute, base GramPerSecond, 45359237 / 6, pi^0, from_megapounds_per_minute, as_megapounds_per_minute, additive);
-    fixed_unit!(PoundPerSecond: MassFlow, MassFlowUnit::PoundPerSecond, base GramPerSecond, 45359237 / 100000, pi^0, from_pounds_per_second, as_pounds_per_second, additive);
-    fixed_unit!(MegapoundPerSecond: MassFlow, MassFlowUnit::MegapoundPerSecond, base GramPerSecond, 453592370 / 1, pi^0, from_megapounds_per_second, as_megapounds_per_second, additive);
-    fixed_unit!(TonnePerDay: MassFlow, MassFlowUnit::TonnePerDay, base GramPerSecond, 625 / 54, pi^0, from_tonnes_per_day, as_tonnes_per_day, additive);
-    fixed_unit!(ShortTonPerHour: MassFlow, MassFlowUnit::ShortTonPerHour, base GramPerSecond, 45359237 / 180000, pi^0, from_short_tons_per_hour, as_short_tons_per_hour, additive);
+    fixed_unit!(GramPerSecond: MassFlow, MassFlowUnit::GramPerSecond, base KilogramPerSecond, 1 / 1000, pi^0, from_grams_per_second, as_grams_per_second, additive);
+    fixed_unit!(NanogramPerSecond: MassFlow, MassFlowUnit::NanogramPerSecond, base KilogramPerSecond, 1 / 1000000000000, pi^0, from_nanograms_per_second, as_nanograms_per_second, additive);
+    fixed_unit!(MicrogramPerSecond: MassFlow, MassFlowUnit::MicrogramPerSecond, base KilogramPerSecond, 1 / 1000000000, pi^0, from_micrograms_per_second, as_micrograms_per_second, additive);
+    fixed_unit!(MilligramPerSecond: MassFlow, MassFlowUnit::MilligramPerSecond, base KilogramPerSecond, 1 / 1000000, pi^0, from_milligrams_per_second, as_milligrams_per_second, additive);
+    fixed_unit!(CentigramPerSecond: MassFlow, MassFlowUnit::CentigramPerSecond, base KilogramPerSecond, 1 / 100000, pi^0, from_centigrams_per_second, as_centigrams_per_second, additive);
+    fixed_unit!(DecigramPerSecond: MassFlow, MassFlowUnit::DecigramPerSecond, base KilogramPerSecond, 1 / 10000, pi^0, from_decigrams_per_second, as_decigrams_per_second, additive);
+    fixed_unit!(DecagramPerSecond: MassFlow, MassFlowUnit::DecagramPerSecond, base KilogramPerSecond, 1 / 100, pi^0, from_decagrams_per_second, as_decagrams_per_second, additive);
+    fixed_unit!(HectogramPerSecond: MassFlow, MassFlowUnit::HectogramPerSecond, base KilogramPerSecond, 1 / 10, pi^0, from_hectograms_per_second, as_hectograms_per_second, additive);
+    fixed_unit!(KilogramPerSecond: MassFlow, MassFlowUnit::KilogramPerSecond, base KilogramPerSecond, 1 / 1, pi^0, from_kilograms_per_second, as_kilograms_per_second, additive);
+    fixed_unit!(GramPerDay: MassFlow, MassFlowUnit::GramPerDay, base KilogramPerSecond, 1 / 86400000, pi^0, from_grams_per_day, as_grams_per_day, additive);
+    fixed_unit!(NanogramPerDay: MassFlow, MassFlowUnit::NanogramPerDay, base KilogramPerSecond, 1 / 86400000000000000, pi^0, from_nanograms_per_day, as_nanograms_per_day, additive);
+    fixed_unit!(MicrogramPerDay: MassFlow, MassFlowUnit::MicrogramPerDay, base KilogramPerSecond, 1 / 86400000000000, pi^0, from_micrograms_per_day, as_micrograms_per_day, additive);
+    fixed_unit!(MilligramPerDay: MassFlow, MassFlowUnit::MilligramPerDay, base KilogramPerSecond, 1 / 86400000000, pi^0, from_milligrams_per_day, as_milligrams_per_day, additive);
+    fixed_unit!(CentigramPerDay: MassFlow, MassFlowUnit::CentigramPerDay, base KilogramPerSecond, 1 / 8640000000, pi^0, from_centigrams_per_day, as_centigrams_per_day, additive);
+    fixed_unit!(DecigramPerDay: MassFlow, MassFlowUnit::DecigramPerDay, base KilogramPerSecond, 1 / 864000000, pi^0, from_decigrams_per_day, as_decigrams_per_day, additive);
+    fixed_unit!(DecagramPerDay: MassFlow, MassFlowUnit::DecagramPerDay, base KilogramPerSecond, 1 / 8640000, pi^0, from_decagrams_per_day, as_decagrams_per_day, additive);
+    fixed_unit!(HectogramPerDay: MassFlow, MassFlowUnit::HectogramPerDay, base KilogramPerSecond, 1 / 864000, pi^0, from_hectograms_per_day, as_hectograms_per_day, additive);
+    fixed_unit!(KilogramPerDay: MassFlow, MassFlowUnit::KilogramPerDay, base KilogramPerSecond, 1 / 86400, pi^0, from_kilograms_per_day, as_kilograms_per_day, additive);
+    fixed_unit!(MegagramPerDay: MassFlow, MassFlowUnit::MegagramPerDay, base KilogramPerSecond, 5 / 432, pi^0, from_megagrams_per_day, as_megagrams_per_day, additive);
+    fixed_unit!(GramPerHour: MassFlow, MassFlowUnit::GramPerHour, base KilogramPerSecond, 1 / 3600000, pi^0, from_grams_per_hour, as_grams_per_hour, additive);
+    fixed_unit!(KilogramPerHour: MassFlow, MassFlowUnit::KilogramPerHour, base KilogramPerSecond, 1 / 3600, pi^0, from_kilograms_per_hour, as_kilograms_per_hour, additive);
+    fixed_unit!(KilogramPerMinute: MassFlow, MassFlowUnit::KilogramPerMinute, base KilogramPerSecond, 1 / 60, pi^0, from_kilograms_per_minute, as_kilograms_per_minute, additive);
+    fixed_unit!(TonnePerHour: MassFlow, MassFlowUnit::TonnePerHour, base KilogramPerSecond, 5 / 18, pi^0, from_tonnes_per_hour, as_tonnes_per_hour, additive);
+    fixed_unit!(PoundPerDay: MassFlow, MassFlowUnit::PoundPerDay, base KilogramPerSecond, 45359237 / 8640000000000, pi^0, from_pounds_per_day, as_pounds_per_day, additive);
+    fixed_unit!(MegapoundPerDay: MassFlow, MassFlowUnit::MegapoundPerDay, base KilogramPerSecond, 45359237 / 8640000, pi^0, from_megapounds_per_day, as_megapounds_per_day, additive);
+    fixed_unit!(PoundPerHour: MassFlow, MassFlowUnit::PoundPerHour, base KilogramPerSecond, 45359237 / 360000000000, pi^0, from_pounds_per_hour, as_pounds_per_hour, additive);
+    fixed_unit!(MegapoundPerHour: MassFlow, MassFlowUnit::MegapoundPerHour, base KilogramPerSecond, 45359237 / 360000, pi^0, from_megapounds_per_hour, as_megapounds_per_hour, additive);
+    fixed_unit!(PoundPerMinute: MassFlow, MassFlowUnit::PoundPerMinute, base KilogramPerSecond, 45359237 / 6000000000, pi^0, from_pounds_per_minute, as_pounds_per_minute, additive);
+    fixed_unit!(MegapoundPerMinute: MassFlow, MassFlowUnit::MegapoundPerMinute, base KilogramPerSecond, 45359237 / 6000, pi^0, from_megapounds_per_minute, as_megapounds_per_minute, additive);
+    fixed_unit!(PoundPerSecond: MassFlow, MassFlowUnit::PoundPerSecond, base KilogramPerSecond, 45359237 / 100000000, pi^0, from_pounds_per_second, as_pounds_per_second, additive);
+    fixed_unit!(MegapoundPerSecond: MassFlow, MassFlowUnit::MegapoundPerSecond, base KilogramPerSecond, 45359237 / 100, pi^0, from_megapounds_per_second, as_megapounds_per_second, additive);
+    fixed_unit!(TonnePerDay: MassFlow, MassFlowUnit::TonnePerDay, base KilogramPerSecond, 5 / 432, pi^0, from_tonnes_per_day, as_tonnes_per_day, additive);
+    fixed_unit!(ShortTonPerHour: MassFlow, MassFlowUnit::ShortTonPerHour, base KilogramPerSecond, 45359237 / 180000000, pi^0, from_short_tons_per_hour, as_short_tons_per_hour, additive);
 }

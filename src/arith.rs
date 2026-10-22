@@ -35,12 +35,7 @@ pub trait Arith: Sized {
     type Kind;
     /// The dimensions, a [`Dim`](crate::formula::Dim).
     type Dim;
-    /// [`Coherent`] when [`FACTOR`](Self::FACTOR) is 1, else a marker for
-    /// the factor.
-    type Unit;
-    /// The size of the base unit in coherent SI units.
-    const FACTOR: f64;
-    /// The value in the base unit.
+    /// The value in the base unit, which is coherent SI.
     fn into_value(self) -> Self::Value;
     /// The value with `value` in the base unit.
     fn from_value(value: Self::Value) -> Self;
@@ -70,14 +65,11 @@ pub struct DivOp;
 
 /// `*` or `/` on values.
 pub trait BinOp<V> {
-    /// `true` for `*`, `false` for `/`.
-    const MUL: bool;
     /// `a * b` or `a / b`.
     fn apply(a: V, b: V) -> V;
 }
 
 impl<V: Mul<Output = V>> BinOp<V> for MulOp {
-    const MUL: bool = true;
     #[inline(always)]
     fn apply(a: V, b: V) -> V {
         a * b
@@ -85,43 +77,10 @@ impl<V: Mul<Output = V>> BinOp<V> for MulOp {
 }
 
 impl<V: Div<Output = V>> BinOp<V> for DivOp {
-    const MUL: bool = false;
     #[inline(always)]
     fn apply(a: V, b: V) -> V {
         a / b
     }
-}
-
-/// The factor from the base units of `a op b` to the base unit of the
-/// output, `fa · fb / fc` or `fa / fb / fc` for base units `fa`, `fb` and
-/// `fc` in coherent SI. `1` for coherent SI base units.
-#[inline(always)]
-pub const fn factor(mul: bool, fa: f64, fb: f64, fc: f64) -> f64 {
-    if mul {
-        fa * fb / fc
-    } else {
-        fa / fb / fc
-    }
-}
-
-/// The [`Arith::Unit`] of values whose base unit is coherent SI. Other
-/// sizes of base units have markers in `arith_table.rs`, such as grams per
-/// second for `MassFlow`.
-#[derive(Debug)]
-pub struct Coherent;
-
-/// Converts the result of `a op b` to the output's base unit, from the
-/// [`Arith::Unit`]s of `a`, `b` and the output. Where the sizes cancel,
-/// as between coherent units, it does nothing, so that any storage type
-/// with the operator works; the others need a [`Number`] for the factor.
-/// The impls are in `arith_table.rs`.
-#[diagnostic::on_unimplemented(
-    message = "this storage type can't be converted between the base units of these quantities",
-    note = "a base unit that isn't coherent SI, like grams per second, needs a storage type that implements `qty::Number`"
-)]
-pub trait Rescale<V, Op> {
-    /// `value * k`.
-    fn rescale(value: V, k: f64) -> V;
 }
 
 /// A plain number on the right of `*` or `/`: a [`Number`] or a primitive
@@ -142,8 +101,6 @@ impl<T: PlainScalar> Arith for T {
     type Value = T;
     type Kind = PlainNumber;
     type Dim = Dims;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> T {
         self
@@ -158,8 +115,6 @@ impl<D, V> Arith for Expr<D, V> {
     type Value = V;
     type Kind = ExprKind;
     type Dim = D;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn into_value(self) -> V {
         self.value()
@@ -233,10 +188,6 @@ scaled!(Scaled, PlainNumber);
 pub trait Canon<V> {
     /// The output type.
     type Out;
-    /// Its [`Arith::Unit`].
-    type Unit;
-    /// The size of its base unit in coherent SI.
-    const FACTOR: f64;
     /// The output with `value` in its base unit.
     fn make(value: V) -> Self::Out;
 }
@@ -249,13 +200,11 @@ macro_rules! by_dimensions {
             R: Arith<Value = S::Value>,
             Op: BinOp<S::Value>,
             D: Canon<S::Value>,
-            (S::Unit, R::Unit, D::Unit): Rescale<S::Value, Op>,
         {
             type Out = D::Out;
             #[inline(always)]
             fn apply(a: S::Value, b: S::Value) -> D::Out {
-                let k = const { factor(Op::MUL, S::FACTOR, R::FACTOR, D::FACTOR) };
-                D::make(<(S::Unit, R::Unit, D::Unit) as Rescale<S::Value, Op>>::rescale(Op::apply(a, b), k))
+                D::make(Op::apply(a, b))
             }
         }
     )*};
@@ -289,32 +238,7 @@ where
     if N < 0 {
         result = one / result;
     }
-    let k = const {
-        pow_factor(
-            Q::FACTOR,
-            N,
-            <<Q::Dim as PowDim<N>>::Out as Canon<Q::Value>>::FACTOR,
-        )
-    };
-    if k != 1.0 {
-        result = result * Q::Value::from_f64(k);
-    }
     <<Q::Dim as PowDim<N>>::Out as Canon<Q::Value>>::make(result)
-}
-
-/// The factor from `base^n` to the base unit of the power, `fa^n / fc`, for
-/// base units `fa` and `fc` in coherent SI.
-pub const fn pow_factor(fa: f64, n: i8, fc: f64) -> f64 {
-    let mut p = 1.0;
-    let mut i = 0;
-    while i < n.unsigned_abs() {
-        p *= fa;
-        i += 1;
-    }
-    if n < 0 {
-        p = 1.0 / p;
-    }
-    p / fc
 }
 
 /// A node of the lookup from dimensions to quantities: the next node for
@@ -328,10 +252,6 @@ pub trait Step<X> {
 pub trait Leaf<D, V> {
     /// The quantity.
     type Out;
-    /// Its [`Arith::Unit`].
-    type Unit;
-    /// The size of its base unit in coherent SI.
-    const FACTOR: f64;
     /// The quantity with `value` in its base unit.
     fn make(value: V) -> Self::Out;
 }
@@ -346,8 +266,6 @@ impl<X> Step<X> for Unnamed {
 
 impl<D, V> Leaf<D, V> for Unnamed {
     type Out = Expr<D, V>;
-    type Unit = Coherent;
-    const FACTOR: f64 = 1.0;
     #[inline(always)]
     fn make(value: V) -> Expr<D, V> {
         Expr::new(value)
