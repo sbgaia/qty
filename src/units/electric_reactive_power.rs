@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ElectricReactivePower<T = f64>(T);
 
-quantity!(arith ElectricReactivePower, ElectricReactivePowerUnit, VoltampereReactive, si: Some(crate::__private::si_unit([2, 1, -3, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricReactivePower, ElectricReactivePowerUnit, arith);
+quantity!(arith ElectricReactivePower, ElectricReactivePowerUnit, VoltampereReactive, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(2, 1, -3, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(ElectricReactivePower, ElectricReactivePowerUnit, arith, dim: crate::formula::Dims<2, 1, -3>);
 
 /// The units of [`ElectricReactivePower`].
 ///

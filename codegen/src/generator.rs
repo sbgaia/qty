@@ -301,15 +301,50 @@ pub fn generate(qty: &QuantityDef, all: &[QuantityDef]) -> String {
     out
 }
 
-/// The base unit in SI from UnitsNet's data, as an `Option<UnitExpr>`
-/// expression for the generated code.
-fn si_unit_expr(qty: &QuantityDef, all: &[QuantityDef]) -> String {
-    match si::base_unit_size(qty, all) {
-        Some(size) => format!(
-            "Some(crate::__private::si_unit({:?}, {size}))",
-            qty.dimensions
+/// The base unit as a unit expression, written out as an
+/// `Option<UnitExpr>` value for the generated code, so that the library
+/// doesn't parse it at compile time. It's what `base_unit_expr` in
+/// `src/custom.rs` gives: the base unit's abbreviation read by qty's parser
+/// when that has the quantity's dimensions, and otherwise the base unit
+/// worked out from UnitsNet's data. The generated tests check that the two
+/// agree.
+fn base_unit_expr(qty: &QuantityDef, all: &[QuantityDef]) -> String {
+    let abbreviation = &qty
+        .units
+        .iter()
+        .find(|u| u.singular == qty.base_unit)
+        .expect("the base unit is a unit")
+        .abbreviation;
+    let dimensions = qty.dimensions.map(|e| e as i8);
+    let expr = if abbreviation.is_empty() && dimensions == [0; 7] {
+        Some((dimensions, 0, 1.0))
+    } else {
+        match crate::qty_src::UnitExpr::parse(abbreviation) {
+            Ok(e) if e.dimensions.to_array() == dimensions => Some((dimensions, e.angle, e.factor)),
+            _ => si::base_unit_size(qty, all).map(|size| (dimensions, 0, size.to_f64())),
+        }
+    };
+    match expr {
+        Some((d, angle, factor)) => format!(
+            "Some(crate::UnitExpr {{ dimensions: crate::Dimensions::new({}, {}, {}, {}, {}, {}, {}), angle: {angle}, factor: {} }})",
+            d[0], d[1], d[2], d[3], d[4], d[5], d[6], expr::f64_literal(factor)
         ),
         None => "None".to_string(),
+    }
+}
+
+/// The type of `Dims` with the quantity's dimensions, such as `Dims<1, 0,
+/// -1>`, without the trailing zeros.
+fn dims_type(qty: &QuantityDef) -> String {
+    let mut dims = qty.dimensions.to_vec();
+    while dims.last() == Some(&0) {
+        dims.pop();
+    }
+    if dims.is_empty() {
+        "crate::formula::Dims".to_string()
+    } else {
+        let dims: Vec<String> = dims.iter().map(|d| d.to_string()).collect();
+        format!("crate::formula::Dims<{}>", dims.join(", "))
     }
 }
 
@@ -491,7 +526,7 @@ fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     w!(out, "#[must_use]");
     w!(out, "pub struct {}<T = f64>(T);", name);
     w!(out);
-    let si = si_unit_expr(qty, all);
+    let si = base_unit_expr(qty, all);
     // Quantities with the generic operators of `arith.rs` get `arith`,
     // which leaves out the operators those replace.
     let arith = crate::arith::has_arith(qty, all);
@@ -511,9 +546,17 @@ fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     };
     w!(out, "{invocation}");
     if arith {
-        w!(out, "crate::__qty_formula!({name}, {name}Unit, arith);");
+        w!(
+            out,
+            "crate::__qty_formula!({name}, {name}Unit, arith, dim: {});",
+            dims_type(qty)
+        );
     } else if in_formulas(qty, all) {
-        w!(out, "crate::__qty_formula!({name}, {name}Unit);");
+        w!(
+            out,
+            "crate::__qty_formula!({name}, {name}Unit, dim: {});",
+            dims_type(qty)
+        );
     }
     w!(out);
 }
@@ -1493,9 +1536,10 @@ pub fn generate_quantity_tests(qty: &QuantityDef, all: &[QuantityDef]) -> String
 
 /// One test per unit: f64 against the upstream formula, f32 against the
 /// same, and the f64 round trip.
-/// Checks `BASE_UNIT_EXPR`. Where the base unit's abbreviation parses with
-/// the right dimensions, its size must match the one from UnitsNet's data,
-/// which tests the data-derived fallback against the parser.
+/// Checks `BASE_UNIT_EXPR`, which the generator writes out, against the
+/// parser, and the formula dimensions against `INFO`. Where the base unit's
+/// abbreviation parses with the right dimensions, its size must also match
+/// the one from UnitsNet's data, which tests the data-derived fallback.
 fn emit_base_unit_test(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     let name = &qty.name;
     let base = qty
@@ -1543,6 +1587,17 @@ fn emit_base_unit_test(qty: &QuantityDef, all: &[QuantityDef], out: &mut String)
     w!(out, "    if let Some(expr) = expr {{");
     w!(out, "        assert_eq!(expr.dimensions, info.dimensions);");
     w!(out, "    }}");
+    // The generator writes the formula dimensions out too.
+    if crate::arith::has_arith(qty, all) || in_formulas(qty, all) {
+        w!(
+            out,
+            "    let operand = qty::formula::operand({name}::<f64>::from_base(1.0));"
+        );
+        w!(
+            out,
+            "    assert_eq!(operand.dimensions(), info.dimensions);"
+        );
+    }
     w!(out, "}}");
     w!(out);
 }

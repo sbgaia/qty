@@ -941,22 +941,20 @@ pub const fn base_unit_factor(expr: Option<crate::UnitExpr>) -> f64 {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_formula {
-    // Built-in quantities get `*` and `/` with `Expr`s from `arith`.
-    ($Q:ident, $U:ident, arith) => {
-        $crate::__qty_formula!(@operand $Q, $U);
+    // Built-in quantities get `*` and `/` with `Expr`s from `arith`, and
+    // their dimensions as a literal `Dims` type from the generator.
+    ($Q:ident, $U:ident, arith, dim: $D:ty) => {
+        $crate::__qty_formula!(@operand $Q, $D);
     };
-    ($Q:ident, $U:ident) => {
-        $crate::__qty_formula!(@operand $Q, $U);
+    ($Q:ident, $U:ident, dim: $D:ty) => {
+        $crate::__qty_formula!(@operand $Q, $D);
         $crate::__qty_formula!(@expr_ops $Q);
     };
-    (@operand $Q:ident, $U:ident) => {
-        const _: () = ::core::assert!(
-            <$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR.is_some(),
-            ::core::concat!(::core::stringify!($Q), ": formulas need a base unit in SI"),
-        );
-
-        impl<V: $crate::Number> $crate::formula::Operand<V> for $Q<V> {
-            type Dim = $crate::formula::Dims<
+    // Custom quantities read their dimensions from `QUANTITY`.
+    ($Q:ident, $U:ident) => {
+        $crate::__qty_formula!(
+            @operand $Q,
+            $crate::formula::Dims<
                 { $U::QUANTITY.dimensions.length },
                 { $U::QUANTITY.dimensions.mass },
                 { $U::QUANTITY.dimensions.time },
@@ -964,7 +962,18 @@ macro_rules! __qty_formula {
                 { $U::QUANTITY.dimensions.temperature },
                 { $U::QUANTITY.dimensions.amount_of_substance },
                 { $U::QUANTITY.dimensions.luminous_intensity },
-            >;
+            >
+        );
+        $crate::__qty_formula!(@expr_ops $Q);
+    };
+    (@operand $Q:ident, $D:ty) => {
+        const _: () = ::core::assert!(
+            <$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR.is_some(),
+            ::core::concat!(::core::stringify!($Q), ": formulas need a base unit in SI"),
+        );
+
+        impl<V: $crate::Number> $crate::formula::Operand<V> for $Q<V> {
+            type Dim = $D;
             #[inline(always)]
             fn into_expr(self) -> $crate::formula::Expr<Self::Dim, V> {
                 $crate::formula::Expr::new(

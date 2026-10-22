@@ -38,7 +38,7 @@ use crate::TemperatureDelta;
 #[must_use]
 pub struct Temperature<T = f64>(T);
 
-point_quantity!(Temperature, TemperatureUnit, Kelvin, TemperatureDelta, si: Some(crate::__private::si_unit([0, 0, 0, 0, 1, 0, 0], 1.0)));
+point_quantity!(Temperature, TemperatureUnit, Kelvin, TemperatureDelta, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, 0, 0, 1, 0, 0), angle: 0, factor: 1.0 }));
 
 /// The units of [`Temperature`].
 ///

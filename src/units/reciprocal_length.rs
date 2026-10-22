@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ReciprocalLength<T = f64>(T);
 
-quantity!(arith ReciprocalLength, ReciprocalLengthUnit, InverseMeter, si: Some(crate::__private::si_unit([-1, 0, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ReciprocalLength, ReciprocalLengthUnit, arith);
+quantity!(arith ReciprocalLength, ReciprocalLengthUnit, InverseMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-1, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(ReciprocalLength, ReciprocalLengthUnit, arith, dim: crate::formula::Dims<-1>);
 
 /// The units of [`ReciprocalLength`].
 ///

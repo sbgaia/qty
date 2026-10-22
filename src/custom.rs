@@ -633,32 +633,25 @@ pub mod private {
 
     /// `Quantity::BASE_UNIT_EXPR`: the base unit's abbreviation read as an
     /// expression, if it has the quantity's dimensions, and `fallback`
-    /// otherwise. Built-in quantities pass the base unit worked out from
-    /// UnitsNet's data. A dimensionless quantity whose base unit has no
+    /// otherwise. A dimensionless quantity whose base unit has no
     /// abbreviation, like a ratio's decimal fraction, is a plain number.
+    /// Built-in quantities don't call it: the generator writes out what it
+    /// gives them, and the generated tests check that.
     pub const fn base_unit_expr(
         info: QuantityInfo,
         fallback: Option<UnitExpr>,
     ) -> Option<UnitExpr> {
         let abbreviation = info.base_unit.abbreviation;
         if abbreviation.is_empty() && info.dimensions.is_dimensionless() {
-            return Some(si_unit([0; 7], 1.0));
+            return Some(UnitExpr {
+                dimensions: Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+                angle: 0,
+                factor: 1.0,
+            });
         }
         match UnitExpr::parse(abbreviation) {
             Ok(e) if same_dimensions(e.dimensions, info.dimensions) => Some(e),
             _ => fallback,
-        }
-    }
-
-    /// A unit in coherent SI: `size` times the SI base units raised to
-    /// `dims`, in the order L, M, T, I, Θ, N, J.
-    pub const fn si_unit(dims: [i8; 7], size: f64) -> UnitExpr {
-        UnitExpr {
-            dimensions: Dimensions::new(
-                dims[0], dims[1], dims[2], dims[3], dims[4], dims[5], dims[6],
-            ),
-            angle: 0,
-            factor: size,
         }
     }
 

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Magnetization<T = f64>(T);
 
-quantity!(arith Magnetization, MagnetizationUnit, AmperePerMeter, si: Some(crate::__private::si_unit([-1, 0, 0, 1, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Magnetization, MagnetizationUnit, arith);
+quantity!(arith Magnetization, MagnetizationUnit, AmperePerMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-1, 0, 0, 1, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Magnetization, MagnetizationUnit, arith, dim: crate::formula::Dims<-1, 0, 0, 1>);
 
 /// The units of [`Magnetization`].
 ///

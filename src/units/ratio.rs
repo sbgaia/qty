@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Ratio<T = f64>(T);
 
-quantity!(arith Ratio, RatioUnit, DecimalFraction, si: None);
-crate::__qty_formula!(Ratio, RatioUnit, arith);
+quantity!(arith Ratio, RatioUnit, DecimalFraction, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Ratio, RatioUnit, arith, dim: crate::formula::Dims);
 
 /// The units of [`Ratio`].
 ///

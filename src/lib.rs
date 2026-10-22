@@ -635,7 +635,9 @@ macro_rules! __qty_fmt {
 /// Used by the built-in quantities and by `custom_quantity!`, so it can
 /// expand in other crates. That's why it names everything through `$crate`
 /// and checks qty's features with the `__qty_if_*` switches. `exprs` is the
-/// [`__private::Exprs`] mode for parsing.
+/// [`__private::Exprs`] mode for parsing. `si`, given by the built-in
+/// quantities, is [`Quantity::BASE_UNIT_EXPR`] as the generator works it
+/// out, so that it isn't parsed at compile time.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_common {
@@ -786,8 +788,7 @@ macro_rules! __qty_common {
             const BASE_UNIT: $U = $U::$base;
             const INFO: $crate::QuantityInfo = $U::QUANTITY;
             $(
-                const BASE_UNIT_EXPR: ::core::option::Option<$crate::UnitExpr> =
-                    $crate::__private::base_unit_expr($U::QUANTITY, $si);
+                const BASE_UNIT_EXPR: ::core::option::Option<$crate::UnitExpr> = $si;
             )?
             #[inline(always)]
             fn from_base(value: T) -> Self {

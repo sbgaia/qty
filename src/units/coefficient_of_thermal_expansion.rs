@@ -17,12 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct CoefficientOfThermalExpansion<T = f64>(T);
 
-quantity!(arith CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit, PerKelvin, si: Some(crate::__private::si_unit([0, 0, 0, 0, -1, 0, 0], 1.0)));
-crate::__qty_formula!(
-    CoefficientOfThermalExpansion,
-    CoefficientOfThermalExpansionUnit,
-    arith
-);
+quantity!(arith CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit, PerKelvin, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, 0, 0, -1, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit, arith, dim: crate::formula::Dims<0, 0, 0, 0, -1>);
 
 /// The units of [`CoefficientOfThermalExpansion`].
 ///

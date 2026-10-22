@@ -17,7 +17,7 @@ use crate::Number;
 #[must_use]
 pub struct MagneticField<T = f64>(T);
 
-quantity!(MagneticField, MagneticFieldUnit, Tesla, si: None);
+quantity!(MagneticField, MagneticFieldUnit, Tesla, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 1, -2, -1, 0, 0, 0), angle: 0, factor: 1.0 }));
 
 /// The units of [`MagneticField`].
 ///

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct FluidResistance<T = f64>(T);
 
-quantity!(arith FluidResistance, FluidResistanceUnit, PascalSecondPerCubicMeter, si: Some(crate::__private::si_unit([-4, 1, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(FluidResistance, FluidResistanceUnit, arith);
+quantity!(arith FluidResistance, FluidResistanceUnit, PascalSecondPerCubicMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-4, 1, -1, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(FluidResistance, FluidResistanceUnit, arith, dim: crate::formula::Dims<-4, 1, -1>);
 
 /// The units of [`FluidResistance`].
 ///

@@ -17,7 +17,7 @@ use crate::Number;
 #[must_use]
 pub struct FuelEfficiency<T = f64>(T);
 
-quantity!(FuelEfficiency, FuelEfficiencyUnit, KilometerPerLiter, si: None);
+quantity!(FuelEfficiency, FuelEfficiencyUnit, KilometerPerLiter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-2, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1000000.0 }));
 
 /// The units of [`FuelEfficiency`].
 ///

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct WarpingMomentOfInertia<T = f64>(T);
 
-quantity!(arith WarpingMomentOfInertia, WarpingMomentOfInertiaUnit, MeterToTheSixth, si: Some(crate::__private::si_unit([6, 0, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(WarpingMomentOfInertia, WarpingMomentOfInertiaUnit, arith);
+quantity!(arith WarpingMomentOfInertia, WarpingMomentOfInertiaUnit, MeterToTheSixth, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(6, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(WarpingMomentOfInertia, WarpingMomentOfInertiaUnit, arith, dim: crate::formula::Dims<6>);
 
 /// The units of [`WarpingMomentOfInertia`].
 ///

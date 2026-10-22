@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct MassMomentOfInertia<T = f64>(T);
 
-quantity!(arith MassMomentOfInertia, MassMomentOfInertiaUnit, KilogramSquareMeter, si: Some(crate::__private::si_unit([2, 1, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(MassMomentOfInertia, MassMomentOfInertiaUnit, arith);
+quantity!(arith MassMomentOfInertia, MassMomentOfInertiaUnit, KilogramSquareMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(2, 1, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(MassMomentOfInertia, MassMomentOfInertiaUnit, arith, dim: crate::formula::Dims<2, 1>);
 
 /// The units of [`MassMomentOfInertia`].
 ///

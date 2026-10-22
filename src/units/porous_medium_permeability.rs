@@ -15,12 +15,8 @@ use crate::Number;
 #[must_use]
 pub struct PorousMediumPermeability<T = f64>(T);
 
-quantity!(arith PorousMediumPermeability, PorousMediumPermeabilityUnit, SquareMeter, si: Some(crate::__private::si_unit([2, 0, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(
-    PorousMediumPermeability,
-    PorousMediumPermeabilityUnit,
-    arith
-);
+quantity!(arith PorousMediumPermeability, PorousMediumPermeabilityUnit, SquareMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(2, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(PorousMediumPermeability, PorousMediumPermeabilityUnit, arith, dim: crate::formula::Dims<2>);
 
 /// The units of [`PorousMediumPermeability`].
 ///

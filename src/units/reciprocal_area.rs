@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ReciprocalArea<T = f64>(T);
 
-quantity!(arith ReciprocalArea, ReciprocalAreaUnit, InverseSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ReciprocalArea, ReciprocalAreaUnit, arith);
+quantity!(arith ReciprocalArea, ReciprocalAreaUnit, InverseSquareMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-2, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(ReciprocalArea, ReciprocalAreaUnit, arith, dim: crate::formula::Dims<-2>);
 
 /// The units of [`ReciprocalArea`].
 ///

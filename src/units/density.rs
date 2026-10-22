@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Density<T = f64>(T);
 
-quantity!(arith Density, DensityUnit, KilogramPerCubicMeter, si: Some(crate::__private::si_unit([-3, 1, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Density, DensityUnit, arith);
+quantity!(arith Density, DensityUnit, KilogramPerCubicMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-3, 1, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Density, DensityUnit, arith, dim: crate::formula::Dims<-3, 1>);
 
 /// The units of [`Density`].
 ///

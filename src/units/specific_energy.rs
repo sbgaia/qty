@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct SpecificEnergy<T = f64>(T);
 
-quantity!(arith SpecificEnergy, SpecificEnergyUnit, JoulePerKilogram, si: Some(crate::__private::si_unit([2, 0, -2, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(SpecificEnergy, SpecificEnergyUnit, arith);
+quantity!(arith SpecificEnergy, SpecificEnergyUnit, JoulePerKilogram, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(2, 0, -2, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(SpecificEnergy, SpecificEnergyUnit, arith, dim: crate::formula::Dims<2, 0, -2>);
 
 /// The units of [`SpecificEnergy`].
 ///
