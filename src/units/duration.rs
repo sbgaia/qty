@@ -93,8 +93,8 @@ impl DurationUnit {
         crate::UnitInfo {
             singular: "Minute",
             plural: "Minutes",
-            abbreviation: "m",
-            abbreviations: &["m", "min", "minute", "minutes"],
+            abbreviation: "min",
+            abbreviations: &["min", "m", "minute", "minutes"],
         },
         crate::UnitInfo {
             singular: "Second",
@@ -164,7 +164,7 @@ impl DurationUnit {
             Self::Week => "wk",
             Self::Day => "d",
             Self::Hour => "h",
-            Self::Minute => "m",
+            Self::Minute => "min",
             Self::Second => "s",
             Self::Picosecond => "ps",
             Self::Nanosecond => "ns",
@@ -184,7 +184,7 @@ impl DurationUnit {
             Self::Week => &["wk", "week", "weeks"],
             Self::Day => &["d", "day", "days"],
             Self::Hour => &["h", "hr", "hrs", "hour", "hours"],
-            Self::Minute => &["m", "min", "minute", "minutes"],
+            Self::Minute => &["min", "m", "minute", "minutes"],
             Self::Second => &["s", "sec", "secs", "second", "seconds"],
             Self::Picosecond => &["ps"],
             Self::Nanosecond => &["ns"],
@@ -256,8 +256,8 @@ impl core::str::FromStr for DurationUnit {
             "hrs" => Ok(Self::Hour),
             "hour" => Ok(Self::Hour),
             "hours" => Ok(Self::Hour),
-            "m" => Ok(Self::Minute),
             "min" => Ok(Self::Minute),
+            "m" => Ok(Self::Minute),
             "minute" => Ok(Self::Minute),
             "minutes" => Ok(Self::Minute),
             "s" => Ok(Self::Second),
@@ -398,13 +398,13 @@ impl<T: Number> Duration<T> {
         self.0 / T::from_f64(3600.0)
     }
 
-    /// A [`Duration`] from a value in `m`.
+    /// A [`Duration`] from a value in `min`.
     #[inline]
     pub fn from_minutes(value: T) -> Self {
         Self(value * T::from_f64(60.0))
     }
 
-    /// The value in `m`.
+    /// The value in `min`.
     #[inline]
     pub fn as_minutes(self) -> T {
         self.0 / T::from_f64(60.0)

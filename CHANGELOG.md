@@ -23,6 +23,9 @@ follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Minutes print as `min` rather than UnitsNet's `m`, which read as metres:
+  `Duration::from_minutes(14.4)` in minutes is `14.4 min`. `"5 m"` still
+  parses as minutes where a duration is expected.
 - An `Expr` times or over a quantity is the quantity with the dimensions of
   the result, when there is one: `mass * STANDARD_GRAVITY` is a `Force`.
   `Expr` times `Expr` or a number is still an `Expr`, and `formula!` and

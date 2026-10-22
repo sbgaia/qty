@@ -231,6 +231,7 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
     let mut raw: RawQuantity = serde_json::from_str(&content)
         .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
     apply_abbreviation_fixes(&mut raw);
+    apply_display_abbreviations(&mut raw);
 
     let mut units = Vec::new();
 
@@ -399,6 +400,40 @@ fn apply_abbreviation_fixes(raw: &mut RawQuantity) {
             fixed > 0,
             "abbreviation fix for {quantity}.{unit} no longer applies: remove it"
         );
+    }
+}
+
+/// Units printed with another of their upstream abbreviations, as
+/// `(quantity, unit, abbreviation)`. The first upstream one stays accepted
+/// when parsing.
+///
+/// - Duration `Minute` is `m` upstream, which reads as metres: `14.4 m`.
+const DISPLAY_ABBREVIATIONS: &[(&str, &str, &str)] = &[("Duration", "Minute", "min")];
+
+/// Applies [`DISPLAY_ABBREVIATIONS`] by moving the abbreviation to the
+/// front of the en-US list; panics when upstream no longer lists it.
+fn apply_display_abbreviations(raw: &mut RawQuantity) {
+    for &(quantity, unit, display) in DISPLAY_ABBREVIATIONS {
+        if raw.name != quantity {
+            continue;
+        }
+        let abbreviations = raw
+            .units
+            .iter_mut()
+            .filter(|u| u.singular_name == unit)
+            .flat_map(|u| u.localization.iter_mut())
+            .find(|l| l.culture == "en-US")
+            .map(|l| &mut l.abbreviations);
+        let position = abbreviations
+            .as_ref()
+            .and_then(|list| list.iter().position(|a| a == display));
+        match (abbreviations, position) {
+            (Some(list), Some(i)) => {
+                let abbreviation = list.remove(i);
+                list.insert(0, abbreviation);
+            }
+            _ => panic!("{quantity}.{unit} no longer has the abbreviation {display:?}"),
+        }
     }
 }
 
