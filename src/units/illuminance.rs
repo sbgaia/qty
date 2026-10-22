@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Illuminance<T = f64>(T);
 
-quantity!(arith Illuminance, IlluminanceUnit, Lux, si: Some(crate::__private::si_unit([-2, 0, 0, 0, 0, 0, 1], 1.0)));
-crate::__qty_formula!(Illuminance, IlluminanceUnit, arith);
+quantity!(arith Illuminance, IlluminanceUnit, Lux, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-2, 0, 0, 0, 0, 0, 1), angle: 2, factor: 1.0 }));
+crate::__qty_formula!(Illuminance, IlluminanceUnit, arith, dim: crate::formula::Dims<-2, 0, 0, 0, 0, 0, 1>);
 
 /// The units of [`Illuminance`].
 ///

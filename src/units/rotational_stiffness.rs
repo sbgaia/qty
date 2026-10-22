@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct RotationalStiffness<T = f64>(T);
 
-quantity!(arith RotationalStiffness, RotationalStiffnessUnit, NewtonMeterPerRadian, si: Some(crate::__private::si_unit([2, 1, -2, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(RotationalStiffness, RotationalStiffnessUnit, arith);
+quantity!(arith RotationalStiffness, RotationalStiffnessUnit, NewtonMeterPerRadian, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, 0, 0), angle: -1, factor: 1.0 }));
+crate::__qty_formula!(RotationalStiffness, RotationalStiffnessUnit, arith, dim: crate::formula::Dims<2, 1, -2>);
 
 /// The units of [`RotationalStiffness`].
 ///

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct MassFlow<T = f64>(T);
 
-quantity!(arith MassFlow, MassFlowUnit, GramPerSecond, si: Some(crate::__private::si_unit([0, 1, -1, 0, 0, 0, 0], 0.001)));
-crate::__qty_formula!(MassFlow, MassFlowUnit, arith);
+quantity!(arith MassFlow, MassFlowUnit, GramPerSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 1, -1, 0, 0, 0, 0), angle: 0, factor: 0.001 }));
+crate::__qty_formula!(MassFlow, MassFlowUnit, arith, dim: crate::formula::Dims<0, 1, -1>);
 
 /// The units of [`MassFlow`].
 ///

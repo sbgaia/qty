@@ -15,8 +15,8 @@ use crate::Number;
 #[must_use]
 pub struct Compressibility<T = f64>(T);
 
-quantity!(arith Compressibility, CompressibilityUnit, InversePascal, si: Some(crate::__private::si_unit([1, -1, 2, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Compressibility, CompressibilityUnit, arith);
+quantity!(arith Compressibility, CompressibilityUnit, InversePascal, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(1, -1, 2, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Compressibility, CompressibilityUnit, arith, dim: crate::formula::Dims<1, -1, 2>);
 
 /// The units of [`Compressibility`].
 ///

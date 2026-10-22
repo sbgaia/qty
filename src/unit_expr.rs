@@ -3,7 +3,7 @@
 use core::f64::consts::PI;
 use core::str::FromStr;
 
-use crate::{Dimensions, ParseError, Quantity};
+use super::{Dimensions, ParseError, Quantity};
 
 /// A unit written as an expression of SI and common units, like
 /// `"kg*m/s^2"`, `"N·m"`, `"W/(m²·K)"`, `"kWh"` or `"rev/min"`.

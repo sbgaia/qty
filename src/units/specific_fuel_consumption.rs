@@ -17,7 +17,7 @@ use crate::Number;
 #[must_use]
 pub struct SpecificFuelConsumption<T = f64>(T);
 
-quantity!(SpecificFuelConsumption, SpecificFuelConsumptionUnit, GramPerKilonewtonSecond, si: None);
+quantity!(SpecificFuelConsumption, SpecificFuelConsumptionUnit, GramPerKilonewtonSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-1, 0, 1, 0, 0, 0, 0), angle: 0, factor: 1e-6 }));
 
 /// The units of [`SpecificFuelConsumption`].
 ///

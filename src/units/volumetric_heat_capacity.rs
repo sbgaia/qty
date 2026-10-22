@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct VolumetricHeatCapacity<T = f64>(T);
 
-quantity!(arith VolumetricHeatCapacity, VolumetricHeatCapacityUnit, JoulePerCubicMeterKelvin, si: Some(crate::__private::si_unit([-1, 1, -2, 0, -1, 0, 0], 1.0)));
-crate::__qty_formula!(VolumetricHeatCapacity, VolumetricHeatCapacityUnit, arith);
+quantity!(arith VolumetricHeatCapacity, VolumetricHeatCapacityUnit, JoulePerCubicMeterKelvin, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-1, 1, -2, 0, -1, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(VolumetricHeatCapacity, VolumetricHeatCapacityUnit, arith, dim: crate::formula::Dims<-1, 1, -2, 0, -1>);
 
 /// The units of [`VolumetricHeatCapacity`].
 ///

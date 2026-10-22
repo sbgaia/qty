@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct SpecificWeight<T = f64>(T);
 
-quantity!(arith SpecificWeight, SpecificWeightUnit, NewtonPerCubicMeter, si: Some(crate::__private::si_unit([-2, 1, -2, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(SpecificWeight, SpecificWeightUnit, arith);
+quantity!(arith SpecificWeight, SpecificWeightUnit, NewtonPerCubicMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-2, 1, -2, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(SpecificWeight, SpecificWeightUnit, arith, dim: crate::formula::Dims<-2, 1, -2>);
 
 /// The units of [`SpecificWeight`].
 ///

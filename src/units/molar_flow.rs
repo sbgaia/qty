@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct MolarFlow<T = f64>(T);
 
-quantity!(arith MolarFlow, MolarFlowUnit, MolePerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 1, 0], 1.0)));
-crate::__qty_formula!(MolarFlow, MolarFlowUnit, arith);
+quantity!(arith MolarFlow, MolarFlowUnit, MolePerSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 1, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(MolarFlow, MolarFlowUnit, arith, dim: crate::formula::Dims<0, 0, -1, 0, 0, 1>);
 
 /// The units of [`MolarFlow`].
 ///

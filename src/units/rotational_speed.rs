@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct RotationalSpeed<T = f64>(T);
 
-quantity!(arith RotationalSpeed, RotationalSpeedUnit, RadianPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(RotationalSpeed, RotationalSpeedUnit, arith);
+quantity!(arith RotationalSpeed, RotationalSpeedUnit, RadianPerSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0), angle: 1, factor: 1.0 }));
+crate::__qty_formula!(RotationalSpeed, RotationalSpeedUnit, arith, dim: crate::formula::Dims<0, 0, -1>);
 
 /// The units of [`RotationalSpeed`].
 ///

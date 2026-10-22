@@ -6,6 +6,13 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- The library builds about 1 s faster: the generator writes each built-in
+  quantity's base unit and dimensions out as literals, so the compiler no
+  longer parses the base unit's abbreviation for every quantity. Nothing
+  else changes.
+
 ## [0.4.0] - 2026-10-22
 
 ### Migrating from 0.3

@@ -252,6 +252,8 @@ fn base_unit_expression() {
     if let Some(expr) = expr {
         assert_eq!(expr.dimensions, info.dimensions);
     }
+    let operand = qty::formula::operand(WarpingMomentOfInertia::<f64>::from_base(1.0));
+    assert_eq!(operand.dimensions(), info.dimensions);
 }
 
 #[test]

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Angle<T = f64>(T);
 
-quantity!(arith Angle, AngleUnit, Radian, si: None);
-crate::__qty_formula!(Angle, AngleUnit, arith);
+quantity!(arith Angle, AngleUnit, Radian, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0), angle: 1, factor: 1.0 }));
+crate::__qty_formula!(Angle, AngleUnit, arith, dim: crate::formula::Dims);
 
 /// The units of [`Angle`].
 ///

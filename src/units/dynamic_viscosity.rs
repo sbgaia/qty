@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct DynamicViscosity<T = f64>(T);
 
-quantity!(arith DynamicViscosity, DynamicViscosityUnit, NewtonSecondPerMeterSquared, si: Some(crate::__private::si_unit([-1, 1, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(DynamicViscosity, DynamicViscosityUnit, arith);
+quantity!(arith DynamicViscosity, DynamicViscosityUnit, NewtonSecondPerMeterSquared, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-1, 1, -1, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(DynamicViscosity, DynamicViscosityUnit, arith, dim: crate::formula::Dims<-1, 1, -1>);
 
 /// The units of [`DynamicViscosity`].
 ///

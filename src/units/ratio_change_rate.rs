@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct RatioChangeRate<T = f64>(T);
 
-quantity!(arith RatioChangeRate, RatioChangeRateUnit, DecimalFractionPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(RatioChangeRate, RatioChangeRateUnit, arith);
+quantity!(arith RatioChangeRate, RatioChangeRateUnit, DecimalFractionPerSecond, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(RatioChangeRate, RatioChangeRateUnit, arith, dim: crate::formula::Dims<0, 0, -1>);
 
 /// The units of [`RatioChangeRate`].
 ///

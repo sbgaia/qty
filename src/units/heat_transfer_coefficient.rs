@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct HeatTransferCoefficient<T = f64>(T);
 
-quantity!(arith HeatTransferCoefficient, HeatTransferCoefficientUnit, WattPerSquareMeterKelvin, si: Some(crate::__private::si_unit([0, 1, -3, 0, -1, 0, 0], 1.0)));
-crate::__qty_formula!(HeatTransferCoefficient, HeatTransferCoefficientUnit, arith);
+quantity!(arith HeatTransferCoefficient, HeatTransferCoefficientUnit, WattPerSquareMeterKelvin, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 1, -3, 0, -1, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(HeatTransferCoefficient, HeatTransferCoefficientUnit, arith, dim: crate::formula::Dims<0, 1, -3, 0, -1>);
 
 /// The units of [`HeatTransferCoefficient`].
 ///

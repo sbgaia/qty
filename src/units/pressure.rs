@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Pressure<T = f64>(T);
 
-quantity!(arith Pressure, PressureUnit, Pascal, si: Some(crate::__private::si_unit([-1, 1, -2, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Pressure, PressureUnit, arith);
+quantity!(arith Pressure, PressureUnit, Pascal, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(-1, 1, -2, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Pressure, PressureUnit, arith, dim: crate::formula::Dims<-1, 1, -2>);
 
 /// The units of [`Pressure`].
 ///

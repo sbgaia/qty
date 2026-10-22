@@ -13,6 +13,7 @@ mod expr;
 mod formula;
 mod generator;
 mod parser;
+mod qty_src;
 mod si;
 
 use std::collections::{HashMap, HashSet};

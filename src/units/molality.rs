@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Molality<T = f64>(T);
 
-quantity!(arith Molality, MolalityUnit, MolePerKilogram, si: Some(crate::__private::si_unit([0, -1, 0, 0, 0, 1, 0], 1.0)));
-crate::__qty_formula!(Molality, MolalityUnit, arith);
+quantity!(arith Molality, MolalityUnit, MolePerKilogram, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, -1, 0, 0, 0, 1, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Molality, MolalityUnit, arith, dim: crate::formula::Dims<0, -1, 0, 0, 0, 1>);
 
 /// The units of [`Molality`].
 ///

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Scalar<T = f64>(T);
 
-quantity!(arith Scalar, ScalarUnit, Amount, si: None);
-crate::__qty_formula!(Scalar, ScalarUnit, arith);
+quantity!(arith Scalar, ScalarUnit, Amount, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(Scalar, ScalarUnit, arith, dim: crate::formula::Dims);
 
 /// The units of [`Scalar`].
 ///

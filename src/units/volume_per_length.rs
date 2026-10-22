@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct VolumePerLength<T = f64>(T);
 
-quantity!(arith VolumePerLength, VolumePerLengthUnit, CubicMeterPerMeter, si: Some(crate::__private::si_unit([2, 0, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(VolumePerLength, VolumePerLengthUnit, arith);
+quantity!(arith VolumePerLength, VolumePerLengthUnit, CubicMeterPerMeter, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(2, 0, 0, 0, 0, 0, 0), angle: 0, factor: 1.0 }));
+crate::__qty_formula!(VolumePerLength, VolumePerLengthUnit, arith, dim: crate::formula::Dims<2>);
 
 /// The units of [`VolumePerLength`].
 ///
