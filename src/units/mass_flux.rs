@@ -474,11 +474,14 @@ impl MassFlux<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MassFlux, KilogramPerSecondPerSquareMeter);
 
 /// Units for counting [`MassFlux`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::mass_flux`](crate::unit::mass_flux).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::GramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1000, pi^0, from_grams_per_second_per_square_meter, as_grams_per_second_per_square_meter, additive);
     fixed_unit!(KilogramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::KilogramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_second_per_square_meter, as_kilograms_per_second_per_square_meter, additive);

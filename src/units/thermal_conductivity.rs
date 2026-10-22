@@ -218,11 +218,14 @@ impl ThermalConductivity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ThermalConductivity, WattPerMeterKelvin);
 
 /// Units for counting [`ThermalConductivity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::thermal_conductivity`](crate::unit::thermal_conductivity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(WattPerMeterKelvin: ThermalConductivity, ThermalConductivityUnit::WattPerMeterKelvin, base WattPerMeterKelvin, 1 / 1, pi^0, from_watts_per_meter_kelvin, as_watts_per_meter_kelvin, additive);
     fixed_unit!(BtuPerHourFootFahrenheit: ThermalConductivity, ThermalConductivityUnit::BtuPerHourFootFahrenheit, base WattPerMeterKelvin, 52752792631 / 30480000000, pi^0, from_btus_per_hour_foot_fahrenheit, as_btus_per_hour_foot_fahrenheit, additive);

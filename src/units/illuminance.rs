@@ -235,11 +235,14 @@ impl Illuminance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Illuminance, Lux);
 
 /// Units for counting [`Illuminance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::illuminance`](crate::unit::illuminance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Lux: Illuminance, IlluminanceUnit::Lux, base Lux, 1 / 1, pi^0, from_lux, as_lux, additive);
     fixed_unit!(Millilux: Illuminance, IlluminanceUnit::Millilux, base Lux, 1 / 1000, pi^0, from_millilux, as_millilux, additive);

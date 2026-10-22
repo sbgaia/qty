@@ -1453,11 +1453,14 @@ impl PowerDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(PowerDensity, WattPerCubicMeter);
 
 /// Units for counting [`PowerDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::power_density`](crate::unit::power_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(WattPerCubicMeter: PowerDensity, PowerDensityUnit::WattPerCubicMeter, base WattPerCubicMeter, 1 / 1, pi^0, from_watts_per_cubic_meter, as_watts_per_cubic_meter, additive);
     fixed_unit!(PicowattPerCubicMeter: PowerDensity, PowerDensityUnit::PicowattPerCubicMeter, base WattPerCubicMeter, 1 / 1000000000000, pi^0, from_picowatts_per_cubic_meter, as_picowatts_per_cubic_meter, additive);

@@ -180,11 +180,14 @@ impl VolumeFlowPerArea<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(VolumeFlowPerArea, CubicMeterPerSecondPerSquareMeter);
 
 /// Units for counting [`VolumeFlowPerArea`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::volume_flow_per_area`](crate::unit::volume_flow_per_area).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(CubicMeterPerSecondPerSquareMeter: VolumeFlowPerArea, VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter, base CubicMeterPerSecondPerSquareMeter, 1 / 1, pi^0, from_cubic_meters_per_second_per_square_meter, as_cubic_meters_per_second_per_square_meter, additive);
     fixed_unit!(CubicFootPerMinutePerSquareFoot: VolumeFlowPerArea, VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot, base CubicMeterPerSecondPerSquareMeter, 127 / 25000, pi^0, from_cubic_feet_per_minute_per_square_foot, as_cubic_feet_per_minute_per_square_foot, additive);

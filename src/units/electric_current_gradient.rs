@@ -327,11 +327,14 @@ impl ElectricCurrentGradient<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricCurrentGradient, AmperePerSecond);
 
 /// Units for counting [`ElectricCurrentGradient`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_current_gradient`](crate::unit::electric_current_gradient).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(AmperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerSecond, base AmperePerSecond, 1 / 1, pi^0, from_amperes_per_second, as_amperes_per_second, additive);
     fixed_unit!(MilliamperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::MilliamperePerSecond, base AmperePerSecond, 1 / 1000, pi^0, from_milliamperes_per_second, as_milliamperes_per_second, additive);

@@ -326,11 +326,14 @@ impl RotationalStiffnessPerLength<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(RotationalStiffnessPerLength, NewtonMeterPerRadianPerMeter);
 
 /// Units for counting [`RotationalStiffnessPerLength`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::rotational_stiffness_per_length`](crate::unit::rotational_stiffness_per_length).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(NewtonMeterPerRadianPerMeter: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter, base NewtonMeterPerRadianPerMeter, 1 / 1, pi^0, from_newton_meters_per_radian_per_meter, as_newton_meters_per_radian_per_meter, additive);
     fixed_unit!(KilonewtonMeterPerRadianPerMeter: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter, base NewtonMeterPerRadianPerMeter, 1000 / 1, pi^0, from_kilonewton_meters_per_radian_per_meter, as_kilonewton_meters_per_radian_per_meter, additive);

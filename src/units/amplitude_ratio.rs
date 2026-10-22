@@ -259,11 +259,14 @@ impl AmplitudeRatio<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(AmplitudeRatio, DecibelVolt);
 
 /// Units for counting [`AmplitudeRatio`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::amplitude_ratio`](crate::unit::amplitude_ratio).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts, point crate::units::level::unit::Decibel);
     fixed_unit!(DecibelMicrovolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelMicrovolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_microvolts, as_decibel_microvolts, offset(-120, 1), point crate::units::level::unit::Decibel);

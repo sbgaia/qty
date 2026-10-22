@@ -842,11 +842,14 @@ impl HeatFlux<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(HeatFlux, WattPerSquareMeter);
 
 /// Units for counting [`HeatFlux`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::heat_flux`](crate::unit::heat_flux).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(WattPerSquareMeter: HeatFlux, HeatFluxUnit::WattPerSquareMeter, base WattPerSquareMeter, 1 / 1, pi^0, from_watts_per_square_meter, as_watts_per_square_meter, additive);
     fixed_unit!(NanowattPerSquareMeter: HeatFlux, HeatFluxUnit::NanowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000, pi^0, from_nanowatts_per_square_meter, as_nanowatts_per_square_meter, additive);

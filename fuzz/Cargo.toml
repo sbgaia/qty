@@ -9,7 +9,7 @@ cargo-fuzz = true
 
 [dependencies]
 libfuzzer-sys = "0.4"
-qty = { path = "..", features = ["full"] }
+qty = { path = "..", features = ["full", "fixed"] }
 
 # Not part of the main workspace: needs nightly and `cargo fuzz`.
 [workspace]

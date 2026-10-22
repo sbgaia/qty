@@ -576,11 +576,14 @@ impl ElectricAdmittance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricAdmittance, Siemens);
 
 /// Units for counting [`ElectricAdmittance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_admittance`](crate::unit::electric_admittance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Siemens: ElectricAdmittance, ElectricAdmittanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
     fixed_unit!(Nanosiemens: ElectricAdmittance, ElectricAdmittanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);

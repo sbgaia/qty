@@ -518,11 +518,14 @@ impl Duration<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Duration, Second);
 
 /// Units for counting [`Duration`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::duration`](crate::unit::duration).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Year365: Duration, DurationUnit::Year365, base Second, 31536000 / 1, pi^0, from_years365, as_years365, additive);
     fixed_unit!(Month30: Duration, DurationUnit::Month30, base Second, 2592000 / 1, pi^0, from_months30, as_months30, additive);

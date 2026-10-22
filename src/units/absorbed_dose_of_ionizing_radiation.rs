@@ -619,11 +619,14 @@ impl AbsorbedDoseOfIonizingRadiation<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(AbsorbedDoseOfIonizingRadiation, Gray);
 
 /// Units for counting [`AbsorbedDoseOfIonizingRadiation`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::absorbed_dose_of_ionizing_radiation`](crate::unit::absorbed_dose_of_ionizing_radiation).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Gray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Gray, base Gray, 1 / 1, pi^0, from_grays, as_grays, additive);
     fixed_unit!(Femtogray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Femtogray, base Gray, 1 / 1000000000000000, pi^0, from_femtograys, as_femtograys, additive);

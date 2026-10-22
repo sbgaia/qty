@@ -797,11 +797,14 @@ impl MassFraction<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MassFraction, DecimalFraction);
 
 /// Units for counting [`MassFraction`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::mass_fraction`](crate::unit::mass_fraction).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(DecimalFraction: MassFraction, MassFractionUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
     fixed_unit!(GramPerGram: MassFraction, MassFractionUnit::GramPerGram, base DecimalFraction, 1 / 1, pi^0, from_grams_per_gram, as_grams_per_gram, additive);

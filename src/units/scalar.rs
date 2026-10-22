@@ -146,11 +146,14 @@ impl Scalar<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Scalar, Amount);
 
 /// Units for counting [`Scalar`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::scalar`](crate::unit::scalar).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Amount: Scalar, ScalarUnit::Amount, base Amount, 1 / 1, pi^0, from_amount, as_amount, additive);
 }

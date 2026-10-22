@@ -150,11 +150,14 @@ impl ElectricField<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricField, VoltPerMeter);
 
 /// Units for counting [`ElectricField`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_field`](crate::unit::electric_field).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(VoltPerMeter: ElectricField, ElectricFieldUnit::VoltPerMeter, base VoltPerMeter, 1 / 1, pi^0, from_volts_per_meter, as_volts_per_meter, additive);
 }

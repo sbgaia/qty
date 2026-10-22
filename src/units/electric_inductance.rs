@@ -274,11 +274,14 @@ impl ElectricInductance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricInductance, Henry);
 
 /// Units for counting [`ElectricInductance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_inductance`](crate::unit::electric_inductance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Henry: ElectricInductance, ElectricInductanceUnit::Henry, base Henry, 1 / 1, pi^0, from_henries, as_henries, additive);
     fixed_unit!(Picohenry: ElectricInductance, ElectricInductanceUnit::Picohenry, base Henry, 1 / 1000000000000, pi^0, from_picohenries, as_picohenries, additive);

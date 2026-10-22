@@ -295,11 +295,14 @@ impl WarpingMomentOfInertia<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(WarpingMomentOfInertia, MeterToTheSixth);
 
 /// Units for counting [`WarpingMomentOfInertia`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::warping_moment_of_inertia`](crate::unit::warping_moment_of_inertia).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MeterToTheSixth, base MeterToTheSixth, 1 / 1, pi^0, from_meters_to_the_sixth, as_meters_to_the_sixth, additive);
     fixed_unit!(DecimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::DecimeterToTheSixth, base MeterToTheSixth, 1 / 1000000, pi^0, from_decimeters_to_the_sixth, as_decimeters_to_the_sixth, additive);

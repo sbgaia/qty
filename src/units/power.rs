@@ -908,11 +908,14 @@ impl Power<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Power, Watt);
 
 /// Units for counting [`Power`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::power`](crate::unit::power).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Watt: Power, PowerUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts, additive);
     fixed_unit!(Femtowatt: Power, PowerUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts, additive);

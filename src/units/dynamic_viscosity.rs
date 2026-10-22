@@ -413,11 +413,14 @@ impl DynamicViscosity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(DynamicViscosity, NewtonSecondPerMeterSquared);
 
 /// Units for counting [`DynamicViscosity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::dynamic_viscosity`](crate::unit::dynamic_viscosity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(NewtonSecondPerMeterSquared: DynamicViscosity, DynamicViscosityUnit::NewtonSecondPerMeterSquared, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_newton_seconds_per_meter_squared, as_newton_seconds_per_meter_squared, additive);
     fixed_unit!(PascalSecond: DynamicViscosity, DynamicViscosityUnit::PascalSecond, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_pascal_seconds, as_pascal_seconds, additive);

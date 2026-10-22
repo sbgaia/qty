@@ -525,11 +525,14 @@ impl Acceleration<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Acceleration, MeterPerSecondSquared);
 
 /// Units for counting [`Acceleration`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::acceleration`](crate::unit::acceleration).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MeterPerSecondSquared: Acceleration, AccelerationUnit::MeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1, pi^0, from_meters_per_second_squared, as_meters_per_second_squared, additive);
     fixed_unit!(NanometerPerSecondSquared: Acceleration, AccelerationUnit::NanometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000000, pi^0, from_nanometers_per_second_squared, as_nanometers_per_second_squared, additive);

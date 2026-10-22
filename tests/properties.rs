@@ -1,9 +1,11 @@
 //! Property tests: the library against independent references (exact `i128`
 //! rational arithmetic, `f64`'s own rounding), over the full input ranges.
 
+#[cfg(feature = "fixed")]
 use std::cmp::Ordering;
 
 use proptest::prelude::*;
+#[cfg(feature = "fixed")]
 use qty::unit::{
     area::SquareMeter,
     duration::Millisecond,
@@ -29,6 +31,7 @@ fn rounding() -> impl Strategy<Value = Rounding> {
 /// Counts: anywhere in `i64`, small, at the extremes, and on exact ties
 /// (`… 500 / 1000`, also after the 273 150 m°C offset), which uniformly
 /// random values would almost never hit.
+#[cfg(feature = "fixed")]
 fn count() -> impl Strategy<Value = i64> {
     prop_oneof![
         3 => any::<i64>(),
@@ -40,6 +43,7 @@ fn count() -> impl Strategy<Value = i64> {
 }
 
 /// `n / d` rounded with `mode`, then narrowed to `i64`: the reference.
+#[cfg(feature = "fixed")]
 fn reference(n: i128, d: i128, mode: Rounding) -> Result<i64, RoundError> {
     if d == 0 {
         return Err(RoundError::DivisionByZero);
@@ -95,6 +99,7 @@ fn reference(n: i128, d: i128, mode: Rounding) -> Result<i64, RoundError> {
 proptest! {
     // Fixed: conversions between units
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn rescaling_matches_exact_rationals(a in count(), mode in rounding()) {
         // 1 mm = 1/1000 m.
@@ -108,6 +113,7 @@ proptest! {
         prop_assert_eq!(got, reference(i128::from(a) * 5, 127, mode));
     }
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn affine_rescaling_matches_exact_rationals(t in count(), mode in rounding()) {
         // °C to °F: 9c/5 + 32.
@@ -123,6 +129,7 @@ proptest! {
 
     // Fixed: comparisons across units are exact
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn comparisons_across_units_are_exact(
         (a, b) in prop_oneof![
@@ -151,6 +158,7 @@ proptest! {
 
     // Fixed: physics
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn products_and_quotients_match_exact_rationals(
         (a, b) in prop_oneof![
@@ -173,6 +181,7 @@ proptest! {
         prop_assert_eq!(got, reference(a.into(), b.into(), mode));
     }
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn point_differences_move_points_back(t0 in -(1i64 << 61)..(1i64 << 61), t1 in -(1i64 << 61)..(1i64 << 61)) {
         let (p0, p1) = (Fixed::<MillidegreeCelsius>::new(t0), Fixed::<MillidegreeCelsius>::new(t1));
@@ -186,7 +195,7 @@ proptest! {
 
     #[test]
     fn rounding_floats_matches_std(x in -1e15f64..1e15, mode in rounding()) {
-        let got = Fixed::<Meter>::round_from(Length::from_meters(x), mode).map(|f| f.count());
+        let got = Length::<i64>::round_from(Length::from_meters(x), mode).map(|l| l.as_base());
         let expected = match mode {
             Rounding::Floor => Ok(x.floor()),
             Rounding::Ceil => Ok(x.ceil()),
@@ -249,6 +258,7 @@ proptest! {
 
     // Exact decimal display
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn decimal_display_matches_exact_rationals(n in count(), precision in prop::option::of(0usize..10)) {
         use qty::unit::length::{Kilometer, Micrometer};
@@ -314,6 +324,7 @@ proptest! {
         prop_assert!((u + v).norm().as_base() <= (u.norm() + v.norm()).as_base() * (1.0 + 1e-15));
     }
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn fixed_means_match_exact_rationals(counts in prop::collection::vec(count(), 0..8), mode in rounding()) {
         let values = counts.iter().map(|&c| Fixed::<MillidegreeCelsius, i64>::new(c));

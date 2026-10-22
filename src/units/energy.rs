@@ -1264,11 +1264,14 @@ impl Energy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Energy, Joule);
 
 /// Units for counting [`Energy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::energy`](crate::unit::energy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Joule: Energy, EnergyUnit::Joule, base Joule, 1 / 1, pi^0, from_joules, as_joules, additive);
     fixed_unit!(Nanojoule: Energy, EnergyUnit::Nanojoule, base Joule, 1 / 1000000000, pi^0, from_nanojoules, as_nanojoules, additive);

@@ -576,11 +576,14 @@ impl ElectricSusceptance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricSusceptance, Siemens);
 
 /// Units for counting [`ElectricSusceptance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_susceptance`](crate::unit::electric_susceptance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Siemens: ElectricSusceptance, ElectricSusceptanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
     fixed_unit!(Nanosiemens: ElectricSusceptance, ElectricSusceptanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);

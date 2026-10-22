@@ -382,11 +382,14 @@ impl Irradiation<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Irradiation, JoulePerSquareMeter);
 
 /// Units for counting [`Irradiation`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::irradiation`](crate::unit::irradiation).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerSquareMeter: Irradiation, IrradiationUnit::JoulePerSquareMeter, base JoulePerSquareMeter, 1 / 1, pi^0, from_joules_per_square_meter, as_joules_per_square_meter, additive);
     fixed_unit!(KilojoulePerSquareMeter: Irradiation, IrradiationUnit::KilojoulePerSquareMeter, base JoulePerSquareMeter, 1000 / 1, pi^0, from_kilojoules_per_square_meter, as_kilojoules_per_square_meter, additive);

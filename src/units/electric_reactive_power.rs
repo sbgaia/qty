@@ -244,11 +244,14 @@ impl ElectricReactivePower<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricReactivePower, VoltampereReactive);
 
 /// Units for counting [`ElectricReactivePower`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_reactive_power`](crate::unit::electric_reactive_power).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(VoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::VoltampereReactive, base VoltampereReactive, 1 / 1, pi^0, from_voltamperes_reactive, as_voltamperes_reactive, additive);
     fixed_unit!(KilovoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::KilovoltampereReactive, base VoltampereReactive, 1000 / 1, pi^0, from_kilovoltamperes_reactive, as_kilovoltamperes_reactive, additive);

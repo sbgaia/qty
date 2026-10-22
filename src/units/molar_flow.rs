@@ -382,11 +382,14 @@ impl MolarFlow<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MolarFlow, MolePerSecond);
 
 /// Units for counting [`MolarFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::molar_flow`](crate::unit::molar_flow).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MolePerSecond: MolarFlow, MolarFlowUnit::MolePerSecond, base MolePerSecond, 1 / 1, pi^0, from_moles_per_second, as_moles_per_second, additive);
     fixed_unit!(KilomolePerSecond: MolarFlow, MolarFlowUnit::KilomolePerSecond, base MolePerSecond, 1000 / 1, pi^0, from_kilomoles_per_second, as_kilomoles_per_second, additive);

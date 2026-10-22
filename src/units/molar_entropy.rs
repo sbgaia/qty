@@ -215,11 +215,14 @@ impl MolarEntropy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MolarEntropy, JoulePerMoleKelvin);
 
 /// Units for counting [`MolarEntropy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::molar_entropy`](crate::unit::molar_entropy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::JoulePerMoleKelvin, base JoulePerMoleKelvin, 1 / 1, pi^0, from_joules_per_mole_kelvin, as_joules_per_mole_kelvin, additive);
     fixed_unit!(KilojoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::KilojoulePerMoleKelvin, base JoulePerMoleKelvin, 1000 / 1, pi^0, from_kilojoules_per_mole_kelvin, as_kilojoules_per_mole_kelvin, additive);

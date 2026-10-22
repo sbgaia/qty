@@ -78,6 +78,26 @@ fn integer_storage_is_eq_ord_and_hash() {
 }
 
 #[test]
+fn integer_storage_rounds_from_floats() {
+    let r = |cm: f64, mode| Length::<i64>::round_from(Length::from_centimeters(cm), mode);
+    assert_eq!(
+        r(250.0, Rounding::NearestTiesEven),
+        Ok(Length::from_base(2))
+    );
+    assert_eq!(
+        r(250.0, Rounding::NearestTiesAway),
+        Ok(Length::from_base(3))
+    );
+    assert_eq!(r(-120.0, Rounding::Floor), Ok(Length::from_base(-2)));
+    assert_eq!(r(120.0, Rounding::Exact), Err(RoundError::Inexact));
+    assert_eq!(r(f64::NAN, Rounding::Floor), Err(RoundError::NotFinite));
+    assert_eq!(
+        Length::<i8>::round_from(Length::from_meters(300.0), Rounding::Floor),
+        Err(RoundError::Overflow)
+    );
+}
+
+#[test]
 fn lossless_cast() {
     let m: Mass<f64> = Mass::<i32>::from_base(3).cast();
     assert_eq!(m.as_grams(), 3_000.0);
@@ -451,10 +471,51 @@ fn serde_is_transparent() {
     );
 }
 
-// Integers in a chosen unit, rounding, ordering
+// Ordering float quantities
 
+mod ordering {
+    use std::collections::{BTreeMap, HashMap, HashSet};
+
+    use qty::*;
+
+    #[test]
+    fn float_keys_and_sorting() {
+        // Sorting floats: total order.
+        let mut v = [
+            Length::from_meters(2.0),
+            Length::from_inches(1.0),
+            Length::from_meters(f64::NAN),
+        ];
+        v.sort_by(Length::total_cmp);
+        assert_eq!(v[0], Length::from_inches(1.0));
+        assert!(v[2].as_base().is_nan());
+
+        // Float keys: Ordered gives Eq + Ord + Hash.
+        let mut m = HashMap::new();
+        m.insert(Ordered(Length::from_meters(0.0)), "zero");
+        assert_eq!(m[&Ordered(Length::from_meters(-0.0))], "zero"); // -0.0 == 0.0
+        m.insert(Ordered(Length::from_meters(f64::NAN)), "nan");
+        assert_eq!(m[&Ordered(Length::from_meters(-f64::NAN))], "nan"); // all NaNs are one key
+
+        let tree: BTreeMap<Ordered<Length>, &str> = [
+            (Ordered(Length::from_kilometers(1.0)), "km"),
+            (Ordered(Length::from_meters(1.0)), "m"),
+        ]
+        .into();
+        assert_eq!(tree.values().copied().collect::<Vec<_>>(), ["m", "km"]);
+
+        let set: HashSet<Ordered<Length<f32>>> = [1.0_f32, 1.0, 2.0]
+            .map(|m| Ordered(Length::from_meters(m)))
+            .into();
+        assert_eq!(set.len(), 2);
+    }
+}
+
+// Integers in a chosen unit, rounding
+
+#[cfg(feature = "fixed")]
 mod fixed {
-    use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+    use std::collections::{BTreeSet, HashMap};
 
     use qty::unit::duration::{Microsecond, Millisecond, Second};
     use qty::unit::length::{Inch, Meter, Millimeter};
@@ -662,11 +723,6 @@ mod fixed {
             Fixed::<Millimeter>::round_from_count(2.5, Rounding::NearestTiesEven),
             Ok(Fixed::new(2))
         );
-        // Base-unit integer quantities round too.
-        assert_eq!(
-            Length::<i64>::round_from(Length::from_centimeters(250.0), Rounding::NearestTiesEven),
-            Ok(Length::from_base(2))
-        );
     }
 
     #[test]
@@ -778,38 +834,6 @@ mod fixed {
             Fixed::<Millisecond>::new(6)
         );
         assert_eq!(Fixed::as_count_slice(typed), &raw);
-    }
-
-    #[test]
-    fn float_keys_and_sorting() {
-        // Sorting floats: total order.
-        let mut v = [
-            Length::from_meters(2.0),
-            Length::from_inches(1.0),
-            Length::from_meters(f64::NAN),
-        ];
-        v.sort_by(Length::total_cmp);
-        assert_eq!(v[0], Length::from_inches(1.0));
-        assert!(v[2].as_base().is_nan());
-
-        // Float keys: Ordered gives Eq + Ord + Hash.
-        let mut m = HashMap::new();
-        m.insert(Ordered(Length::from_meters(0.0)), "zero");
-        assert_eq!(m[&Ordered(Length::from_meters(-0.0))], "zero"); // -0.0 == 0.0
-        m.insert(Ordered(Length::from_meters(f64::NAN)), "nan");
-        assert_eq!(m[&Ordered(Length::from_meters(-f64::NAN))], "nan"); // all NaNs are one key
-
-        let tree: BTreeMap<Ordered<Length>, &str> = [
-            (Ordered(Length::from_kilometers(1.0)), "km"),
-            (Ordered(Length::from_meters(1.0)), "m"),
-        ]
-        .into();
-        assert_eq!(tree.values().copied().collect::<Vec<_>>(), ["m", "km"]);
-
-        let set: HashSet<Ordered<Length<f32>>> = [1.0_f32, 1.0, 2.0]
-            .map(|m| Ordered(Length::from_meters(m)))
-            .into();
-        assert_eq!(set.len(), 2);
     }
 }
 
@@ -1123,6 +1147,7 @@ mod vectors {
 // std::time::Duration interop
 
 mod std_time {
+    #[cfg(feature = "fixed")]
     use qty::unit::duration::Nanosecond;
     use qty::*;
     use std::time::Duration as StdDuration;
@@ -1151,6 +1176,7 @@ mod std_time {
         assert!(StdDuration::try_from(Duration::from_seconds(2.0f32)).is_ok());
     }
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn integer_nanoseconds_are_exact() {
         let d = StdDuration::new(1_234_567, 890_123_456);
@@ -1368,6 +1394,7 @@ mod wrapping {
 
 // Exact decimal display of Fixed
 
+#[cfg(feature = "fixed")]
 #[test]
 fn decimal_display_flags() {
     use qty::unit::length::{Meter, Millimeter};
@@ -1754,7 +1781,11 @@ mod presentation {
         assert_eq!(Temperature::<f64>::mean([]), None);
         let lengths = [1.0, 2.0, 6.0].map(Length::from_meters);
         assert_eq!(Length::mean(lengths), Some(Length::from_meters(3.0)));
+    }
 
+    #[cfg(feature = "fixed")]
+    #[test]
+    fn fixed_means() {
         use qty::unit::temperature::MillidegreeCelsius;
         type Reading = Fixed<MillidegreeCelsius, i32>;
         let r = [2, -1].map(Reading::new);
@@ -1784,6 +1815,7 @@ mod presentation {
 }
 
 mod polish {
+    #[cfg(feature = "fixed")]
     use qty::unit::length::Millimeter;
     use qty::*;
 
@@ -1896,6 +1928,7 @@ mod polish {
         assert_eq!(u.as_meters().sigma(), 0.02);
     }
 
+    #[cfg(feature = "fixed")]
     #[test]
     fn fixed_signs() {
         type Mm = Fixed<Millimeter, i32>;
@@ -1919,6 +1952,7 @@ mod polish {
         assert_eq!(Unsigned::new(5).signum(), 1);
     }
 
+    #[cfg(feature = "fixed")]
     #[test]
     #[should_panic(expected = "Fixed::abs overflowed")]
     fn fixed_abs_overflow_panics() {

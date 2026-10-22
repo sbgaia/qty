@@ -3,7 +3,6 @@
 //!
 //! ```rust
 //! use qty::*;
-//! use qty::unit::duration::Nanosecond;
 //!
 //! // From std, say the result of `Instant::elapsed()`.
 //! let elapsed = std::time::Duration::from_millis(1500);
@@ -14,18 +13,28 @@
 //! let timeout: std::time::Duration = Duration::from_minutes(2.0).try_into().unwrap();
 //! assert_eq!(timeout.as_secs(), 120);
 //! assert!(std::time::Duration::try_from(Duration::from_seconds(-1.0)).is_err());
+//! ```
 //!
-//! // Integer nanoseconds convert exactly both ways.
+//! With the `fixed` feature, integer nanoseconds convert exactly both ways:
+//!
+//! ```rust
+//! use qty::*;
+//! # #[cfg(feature = "fixed")] {
+//! use qty::unit::duration::Nanosecond;
+//!
+//! let elapsed = std::time::Duration::from_millis(1500);
 //! let ns = Fixed::<Nanosecond>::try_from(elapsed)?;
 //! assert_eq!(ns.count(), 1_500_000_000);
 //! assert_eq!(std::time::Duration::try_from(ns)?, elapsed);
+//! # }
 //! # Ok::<(), RoundError>(())
 //! ```
 
 use core::time::Duration as StdDuration;
 
-use crate::unit::duration::Nanosecond;
-use crate::{Duration, Fixed, Integer, RoundError};
+use crate::Duration;
+#[cfg(feature = "fixed")]
+use crate::{unit::duration::Nanosecond, Fixed, Integer, RoundError};
 
 /// Rounds to the nearest `f64` second. Exact to the nanosecond up to about
 /// 104 days.
@@ -65,6 +74,7 @@ impl TryFrom<Duration<f32>> for StdDuration {
 }
 
 /// Exact. [`RoundError::Overflow`] if the count doesn't fit in `I`.
+#[cfg(feature = "fixed")]
 impl<I: Integer> TryFrom<StdDuration> for Fixed<Nanosecond, I> {
     type Error = RoundError;
     #[inline]
@@ -79,6 +89,7 @@ impl<I: Integer> TryFrom<StdDuration> for Fixed<Nanosecond, I> {
 
 /// Exact. [`RoundError::Overflow`] for negative counts and for counts past
 /// [`core::time::Duration::MAX`].
+#[cfg(feature = "fixed")]
 impl<I: Integer> TryFrom<Fixed<Nanosecond, I>> for StdDuration {
     type Error = RoundError;
     #[inline]

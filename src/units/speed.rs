@@ -1063,11 +1063,14 @@ impl Speed<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Speed, MeterPerSecond);
 
 /// Units for counting [`Speed`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::speed`](crate::unit::speed).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(MeterPerSecond: Speed, SpeedUnit::MeterPerSecond, base MeterPerSecond, 1 / 1, pi^0, from_meters_per_second, as_meters_per_second, additive);
     fixed_unit!(NanometerPerSecond: Speed, SpeedUnit::NanometerPerSecond, base MeterPerSecond, 1 / 1000000000, pi^0, from_nanometers_per_second, as_nanometers_per_second, additive);

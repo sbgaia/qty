@@ -464,11 +464,14 @@ impl Frequency<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Frequency, Hertz);
 
 /// Units for counting [`Frequency`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::frequency`](crate::unit::frequency).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Hertz: Frequency, FrequencyUnit::Hertz, base Hertz, 1 / 1, pi^0, from_hertz, as_hertz, additive);
     fixed_unit!(Microhertz: Frequency, FrequencyUnit::Microhertz, base Hertz, 1 / 1000000, pi^0, from_microhertz, as_microhertz, additive);

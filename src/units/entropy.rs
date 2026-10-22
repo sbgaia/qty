@@ -327,11 +327,14 @@ impl Entropy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Entropy, JoulePerKelvin);
 
 /// Units for counting [`Entropy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::entropy`](crate::unit::entropy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerKelvin: Entropy, EntropyUnit::JoulePerKelvin, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_kelvin, as_joules_per_kelvin, additive);
     fixed_unit!(KilojoulePerKelvin: Entropy, EntropyUnit::KilojoulePerKelvin, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_kelvin, as_kilojoules_per_kelvin, additive);

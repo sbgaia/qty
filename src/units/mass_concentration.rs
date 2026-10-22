@@ -1532,11 +1532,14 @@ impl MassConcentration<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MassConcentration, KilogramPerCubicMeter);
 
 /// Units for counting [`MassConcentration`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::mass_concentration`](crate::unit::mass_concentration).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GramPerCubicMillimeter: MassConcentration, MassConcentrationUnit::GramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000 / 1, pi^0, from_grams_per_cubic_millimeter, as_grams_per_cubic_millimeter, additive);
     fixed_unit!(KilogramPerCubicMillimeter: MassConcentration, MassConcentrationUnit::KilogramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000000 / 1, pi^0, from_kilograms_per_cubic_millimeter, as_kilograms_per_cubic_millimeter, additive);

@@ -9,7 +9,7 @@
     unused_parens
 )]
 
-use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use qty::*;
 
 #[test]
@@ -69,8 +69,10 @@ fn base_unit_expression() {
     }
 }
 
+#[cfg(feature = "fixed")]
 #[test]
 fn fixed_units() {
+    use super::{check_fixed, check_fixed_rescale};
     check_fixed::<unit::vitamin_a::InternationalUnit>();
     check_fixed_rescale::<unit::vitamin_a::InternationalUnit>();
 }

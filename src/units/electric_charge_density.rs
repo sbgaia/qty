@@ -150,11 +150,14 @@ impl ElectricChargeDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricChargeDensity, CoulombPerCubicMeter);
 
 /// Units for counting [`ElectricChargeDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_charge_density`](crate::unit::electric_charge_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(CoulombPerCubicMeter: ElectricChargeDensity, ElectricChargeDensityUnit::CoulombPerCubicMeter, base CoulombPerCubicMeter, 1 / 1, pi^0, from_coulombs_per_cubic_meter, as_coulombs_per_cubic_meter, additive);
 }

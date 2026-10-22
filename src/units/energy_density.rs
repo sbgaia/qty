@@ -468,11 +468,14 @@ impl EnergyDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(EnergyDensity, JoulePerCubicMeter);
 
 /// Units for counting [`EnergyDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::energy_density`](crate::unit::energy_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::JoulePerCubicMeter, base JoulePerCubicMeter, 1 / 1, pi^0, from_joules_per_cubic_meter, as_joules_per_cubic_meter, additive);
     fixed_unit!(KilojoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::KilojoulePerCubicMeter, base JoulePerCubicMeter, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter, as_kilojoules_per_cubic_meter, additive);

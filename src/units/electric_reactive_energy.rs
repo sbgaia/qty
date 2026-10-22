@@ -224,11 +224,14 @@ impl ElectricReactiveEnergy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricReactiveEnergy, VoltampereReactiveHour);
 
 /// Units for counting [`ElectricReactiveEnergy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_reactive_energy`](crate::unit::electric_reactive_energy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(VoltampereReactiveHour: ElectricReactiveEnergy, ElectricReactiveEnergyUnit::VoltampereReactiveHour, base VoltampereReactiveHour, 1 / 1, pi^0, from_voltampere_reactive_hours, as_voltampere_reactive_hours, additive);
     fixed_unit!(KilovoltampereReactiveHour: ElectricReactiveEnergy, ElectricReactiveEnergyUnit::KilovoltampereReactiveHour, base VoltampereReactiveHour, 1000 / 1, pi^0, from_kilovoltampere_reactive_hours, as_kilovoltampere_reactive_hours, additive);

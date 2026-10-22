@@ -576,11 +576,14 @@ impl ElectricConductance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricConductance, Siemens);
 
 /// Units for counting [`ElectricConductance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_conductance`](crate::unit::electric_conductance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Siemens: ElectricConductance, ElectricConductanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
     fixed_unit!(Nanosiemens: ElectricConductance, ElectricConductanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);

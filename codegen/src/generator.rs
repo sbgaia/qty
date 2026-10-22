@@ -401,6 +401,7 @@ fn delta_unit<'a>(unit: &UnitDef, delta: &'a QuantityDef) -> Option<&'a UnitDef>
 fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     let name = &qty.name;
     w!(out);
+    w!(out, "#[cfg(feature = \"fixed\")]");
     w!(out, "fixed_base!({}, {});", name, qty.base_unit);
     w!(out);
     w!(
@@ -415,6 +416,8 @@ fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
         name.to_snake_case(),
         name.to_snake_case()
     );
+    w!(out, "#[cfg(feature = \"fixed\")]");
+    w!(out, "#[cfg_attr(docsrs, doc(cfg(feature = \"fixed\")))]");
     w!(out, "pub mod unit {{");
     let delta_qty = point_delta(name).map(|d| {
         all.iter()
@@ -1177,6 +1180,9 @@ pub fn generate_cross_type(ops: &[CrossOp], quantities: &[QuantityDef]) -> Strin
     w!(out, "use crate::units::*;");
     w!(out);
 
+    // The same relations between unit enums, with their exact factors, for
+    // `Fixed::mul_to` / `div_to`.
+    let mut relations = String::new();
     for op in ops {
         let factor = op
             .factor
@@ -1206,8 +1212,6 @@ pub fn generate_cross_type(ops: &[CrossOp], quantities: &[QuantityDef]) -> Strin
             }
             w!(out, "{line}");
         }
-        // The same relation between unit enums, with its exact factor, for
-        // `Fixed::mul_to` / `div_to`.
         let relation = match op.kind {
             CrossKind::Mul => Some("UnitMul"),
             CrossKind::Div => Some("UnitDiv"),
@@ -1215,17 +1219,25 @@ pub fn generate_cross_type(ops: &[CrossOp], quantities: &[QuantityDef]) -> Strin
         };
         if let (Some(relation), Some((num, den, pi))) = (relation, op.k.exact_parts()) {
             if !cfg.is_empty() {
-                w!(out, "{cfg}");
+                w!(relations, "    {cfg}");
             }
             w!(
-                out,
-                "fixed_relation!({relation}: {}Unit, {}Unit => {}Unit; {num} / {den}, pi^{pi});",
+                relations,
+                "    fixed_relation!({relation}: {}Unit, {}Unit => {}Unit; {num} / {den}, pi^{pi});",
                 op.lhs,
                 op.rhs,
                 op.output
             );
         }
     }
+
+    w!(out);
+    w!(out, "#[cfg(feature = \"fixed\")]");
+    w!(out, "mod fixed_relations {{");
+    w!(out, "    use crate::units::*;");
+    w!(out);
+    out.push_str(&relations);
+    w!(out, "}}");
 
     out
 }
@@ -1258,7 +1270,7 @@ pub fn generate_quantity_tests(qty: &QuantityDef, all: &[QuantityDef]) -> String
     w!(out);
     w!(
         out,
-        "use super::{{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL}};"
+        "use super::{{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL}};"
     );
     w!(out, "use qty::*;");
     w!(out);
@@ -1275,8 +1287,10 @@ pub fn generate_quantity_tests(qty: &QuantityDef, all: &[QuantityDef]) -> String
         .filter(|u| fixed_parts(qty, u).is_some())
         .collect();
     if !markers.is_empty() {
+        w!(out, "#[cfg(feature = \"fixed\")]");
         w!(out, "#[test]");
         w!(out, "fn fixed_units() {{");
+        w!(out, "    use super::{{check_fixed, check_fixed_rescale}};");
         for unit in markers {
             let path = format!("unit::{}::{}", name.to_snake_case(), unit.singular);
             w!(out, "    check_fixed::<{path}>();");
@@ -1670,7 +1684,7 @@ pub fn generate_cross_type_tests(ops: &[CrossOp], quantities: &[QuantityDef]) ->
         out,
         "/// within half a unit, or an overflow when the result is huge."
     );
-    w!(out, "#[allow(dead_code)]");
+    w!(out, "#[cfg(feature = \"fixed\")]");
     w!(
         out,
         "fn check_fixed_relation(fixed: Result<i64, RoundError>, float: f64) {{"
@@ -1761,6 +1775,7 @@ pub fn generate_cross_type_tests(ops: &[CrossOp], quantities: &[QuantityDef]) ->
                     } else {
                         "div_to"
                     };
+                    w!(out, "    #[cfg(feature = \"fixed\")]");
                     w!(
                         out,
                         "    for (x, y) in [(6_i64, 2_i64), (-1234, 567), (1, 1), (999_999, -3), (7, 1_000_000)] {{"

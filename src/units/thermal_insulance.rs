@@ -342,11 +342,14 @@ impl ThermalInsulance<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ThermalInsulance, SquareMeterKelvinPerKilowatt);
 
 /// Units for counting [`ThermalInsulance`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::thermal_insulance`](crate::unit::thermal_insulance).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(SquareMeterKelvinPerKilowatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt, base SquareMeterKelvinPerKilowatt, 1 / 1, pi^0, from_square_meter_kelvins_per_kilowatt, as_square_meter_kelvins_per_kilowatt, additive);
     fixed_unit!(SquareMeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1000 / 1, pi^0, from_square_meter_kelvins_per_watt, as_square_meter_kelvins_per_watt, additive);

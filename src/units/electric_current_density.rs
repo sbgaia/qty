@@ -218,11 +218,14 @@ impl ElectricCurrentDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricCurrentDensity, AmperePerSquareMeter);
 
 /// Units for counting [`ElectricCurrentDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_current_density`](crate::unit::electric_current_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(AmperePerSquareMeter: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareMeter, base AmperePerSquareMeter, 1 / 1, pi^0, from_amperes_per_square_meter, as_amperes_per_square_meter, additive);
     fixed_unit!(AmperePerSquareInch: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareInch, base AmperePerSquareMeter, 25000000 / 16129, pi^0, from_amperes_per_square_inch, as_amperes_per_square_inch, additive);

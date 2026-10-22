@@ -527,11 +527,14 @@ impl ElectricResistivity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricResistivity, OhmMeter);
 
 /// Units for counting [`ElectricResistivity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_resistivity`](crate::unit::electric_resistivity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(OhmMeter: ElectricResistivity, ElectricResistivityUnit::OhmMeter, base OhmMeter, 1 / 1, pi^0, from_ohm_meters, as_ohm_meters, additive);
     fixed_unit!(PicoohmMeter: ElectricResistivity, ElectricResistivityUnit::PicoohmMeter, base OhmMeter, 1 / 1000000000000, pi^0, from_picoohm_meters, as_picoohm_meters, additive);

@@ -150,11 +150,14 @@ impl LuminousFlux<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(LuminousFlux, Lumen);
 
 /// Units for counting [`LuminousFlux`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::luminous_flux`](crate::unit::luminous_flux).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Lumen: LuminousFlux, LuminousFluxUnit::Lumen, base Lumen, 1 / 1, pi^0, from_lumens, as_lumens, additive);
 }

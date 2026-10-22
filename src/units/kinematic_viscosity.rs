@@ -371,11 +371,14 @@ impl KinematicViscosity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(KinematicViscosity, SquareMeterPerSecond);
 
 /// Units for counting [`KinematicViscosity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::kinematic_viscosity`](crate::unit::kinematic_viscosity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(SquareMeterPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareMeterPerSecond, base SquareMeterPerSecond, 1 / 1, pi^0, from_square_meters_per_second, as_square_meters_per_second, additive);
     fixed_unit!(Stokes: KinematicViscosity, KinematicViscosityUnit::Stokes, base SquareMeterPerSecond, 1 / 10000, pi^0, from_stokes, as_stokes, additive);

@@ -383,11 +383,14 @@ impl VolumePerLength<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(VolumePerLength, CubicMeterPerMeter);
 
 /// Units for counting [`VolumePerLength`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::volume_per_length`](crate::unit::volume_per_length).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(CubicMeterPerMeter: VolumePerLength, VolumePerLengthUnit::CubicMeterPerMeter, base CubicMeterPerMeter, 1 / 1, pi^0, from_cubic_meters_per_meter, as_cubic_meters_per_meter, additive);
     fixed_unit!(LiterPerMeter: VolumePerLength, VolumePerLengthUnit::LiterPerMeter, base CubicMeterPerMeter, 1 / 1000, pi^0, from_liters_per_meter, as_liters_per_meter, additive);

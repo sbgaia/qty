@@ -179,11 +179,14 @@ impl RatioChangeRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(RatioChangeRate, DecimalFractionPerSecond);
 
 /// Units for counting [`RatioChangeRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::ratio_change_rate`](crate::unit::ratio_change_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(PercentPerSecond: RatioChangeRate, RatioChangeRateUnit::PercentPerSecond, base DecimalFractionPerSecond, 1 / 100, pi^0, from_percents_per_second, as_percents_per_second, additive);
     fixed_unit!(DecimalFractionPerSecond: RatioChangeRate, RatioChangeRateUnit::DecimalFractionPerSecond, base DecimalFractionPerSecond, 1 / 1, pi^0, from_decimal_fractions_per_second, as_decimal_fractions_per_second, additive);

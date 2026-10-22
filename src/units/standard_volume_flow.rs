@@ -385,11 +385,14 @@ impl StandardVolumeFlow<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(StandardVolumeFlow, StandardCubicMeterPerSecond);
 
 /// Units for counting [`StandardVolumeFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::standard_volume_flow`](crate::unit::standard_volume_flow).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(StandardCubicMeterPerSecond: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerSecond, base StandardCubicMeterPerSecond, 1 / 1, pi^0, from_standard_cubic_meters_per_second, as_standard_cubic_meters_per_second, additive);
     fixed_unit!(StandardCubicMeterPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerMinute, base StandardCubicMeterPerSecond, 1 / 60, pi^0, from_standard_cubic_meters_per_minute, as_standard_cubic_meters_per_minute, additive);

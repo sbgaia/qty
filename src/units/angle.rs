@@ -559,11 +559,14 @@ impl Angle<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Angle, Radian);
 
 /// Units for counting [`Angle`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::angle`](crate::unit::angle).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(Radian: Angle, AngleUnit::Radian, base Radian, 1 / 1, pi^0, from_radians, as_radians, additive);
     fixed_unit!(Nanoradian: Angle, AngleUnit::Nanoradian, base Radian, 1 / 1000000000, pi^0, from_nanoradians, as_nanoradians, additive);

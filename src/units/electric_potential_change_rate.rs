@@ -696,11 +696,14 @@ impl ElectricPotentialChangeRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ElectricPotentialChangeRate, VoltPerSecond);
 
 /// Units for counting [`ElectricPotentialChangeRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::electric_potential_change_rate`](crate::unit::electric_potential_change_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(VoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerSecond, base VoltPerSecond, 1 / 1, pi^0, from_volts_per_second, as_volts_per_second, additive);
     fixed_unit!(MicrovoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerSecond, base VoltPerSecond, 1 / 1000000, pi^0, from_microvolts_per_second, as_microvolts_per_second, additive);

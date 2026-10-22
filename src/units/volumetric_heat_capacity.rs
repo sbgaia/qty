@@ -433,11 +433,14 @@ impl VolumetricHeatCapacity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(VolumetricHeatCapacity, JoulePerCubicMeterKelvin);
 
 /// Units for counting [`VolumetricHeatCapacity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::volumetric_heat_capacity`](crate::unit::volumetric_heat_capacity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1 / 1, pi^0, from_joules_per_cubic_meter_kelvin, as_joules_per_cubic_meter_kelvin, additive);
     fixed_unit!(KilojoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter_kelvin, as_kilojoules_per_cubic_meter_kelvin, additive);

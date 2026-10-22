@@ -1058,11 +1058,14 @@ impl MassFlow<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MassFlow, GramPerSecond);
 
 /// Units for counting [`MassFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::mass_flow`](crate::unit::mass_flow).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(GramPerSecond: MassFlow, MassFlowUnit::GramPerSecond, base GramPerSecond, 1 / 1, pi^0, from_grams_per_second, as_grams_per_second, additive);
     fixed_unit!(NanogramPerSecond: MassFlow, MassFlowUnit::NanogramPerSecond, base GramPerSecond, 1 / 1000000000, pi^0, from_nanograms_per_second, as_nanograms_per_second, additive);

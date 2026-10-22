@@ -215,11 +215,14 @@ impl MolarEnergy<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(MolarEnergy, JoulePerMole);
 
 /// Units for counting [`MolarEnergy`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::molar_energy`](crate::unit::molar_energy).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(JoulePerMole: MolarEnergy, MolarEnergyUnit::JoulePerMole, base JoulePerMole, 1 / 1, pi^0, from_joules_per_mole, as_joules_per_mole, additive);
     fixed_unit!(KilojoulePerMole: MolarEnergy, MolarEnergyUnit::KilojoulePerMole, base JoulePerMole, 1000 / 1, pi^0, from_kilojoules_per_mole, as_kilojoules_per_mole, additive);

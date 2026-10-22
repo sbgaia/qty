@@ -1222,11 +1222,14 @@ impl ForcePerLength<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(ForcePerLength, NewtonPerMeter);
 
 /// Units for counting [`ForcePerLength`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::force_per_length`](crate::unit::force_per_length).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(NewtonPerMeter: ForcePerLength, ForcePerLengthUnit::NewtonPerMeter, base NewtonPerMeter, 1 / 1, pi^0, from_newtons_per_meter, as_newtons_per_meter, additive);
     fixed_unit!(NanonewtonPerMeter: ForcePerLength, ForcePerLengthUnit::NanonewtonPerMeter, base NewtonPerMeter, 1 / 1000000000, pi^0, from_nanonewtons_per_meter, as_nanonewtons_per_meter, additive);

@@ -427,11 +427,14 @@ impl RadiationEquivalentDoseRate<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(RadiationEquivalentDoseRate, SievertPerSecond);
 
 /// Units for counting [`RadiationEquivalentDoseRate`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::radiation_equivalent_dose_rate`](crate::unit::radiation_equivalent_dose_rate).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(SievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerHour, base SievertPerSecond, 1 / 3600, pi^0, from_sieverts_per_hour, as_sieverts_per_hour, additive);
     fixed_unit!(NanosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerHour, base SievertPerSecond, 1 / 3600000000000, pi^0, from_nanosieverts_per_hour, as_nanosieverts_per_hour, additive);

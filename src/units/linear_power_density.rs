@@ -833,11 +833,14 @@ impl LinearPowerDensity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(LinearPowerDensity, WattPerMeter);
 
 /// Units for counting [`LinearPowerDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::linear_power_density`](crate::unit::linear_power_density).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(WattPerMeter: LinearPowerDensity, LinearPowerDensityUnit::WattPerMeter, base WattPerMeter, 1 / 1, pi^0, from_watts_per_meter, as_watts_per_meter, additive);
     fixed_unit!(MilliwattPerMeter: LinearPowerDensity, LinearPowerDensityUnit::MilliwattPerMeter, base WattPerMeter, 1 / 1000, pi^0, from_milliwatts_per_meter, as_milliwatts_per_meter, additive);

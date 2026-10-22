@@ -150,11 +150,14 @@ impl Magnetization<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Magnetization, AmperePerMeter);
 
 /// Units for counting [`Magnetization`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::magnetization`](crate::unit::magnetization).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(AmperePerMeter: Magnetization, MagnetizationUnit::AmperePerMeter, base AmperePerMeter, 1 / 1, pi^0, from_amperes_per_meter, as_amperes_per_meter, additive);
 }

@@ -498,11 +498,14 @@ impl Impulse<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Impulse, NewtonSecond);
 
 /// Units for counting [`Impulse`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::impulse`](crate::unit::impulse).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(KilogramMeterPerSecond: Impulse, ImpulseUnit::KilogramMeterPerSecond, base NewtonSecond, 1 / 1, pi^0, from_kilogram_meters_per_second, as_kilogram_meters_per_second, additive);
     fixed_unit!(NewtonSecond: Impulse, ImpulseUnit::NewtonSecond, base NewtonSecond, 1 / 1, pi^0, from_newton_seconds, as_newton_seconds, additive);

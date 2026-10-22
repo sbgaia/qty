@@ -6,7 +6,19 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Migrating from 0.4
+
+- `Fixed` and its unit markers in `qty::unit` are behind the new `fixed`
+  feature. Add `features = ["fixed"]` if you use them. `Length<i64>` and
+  other integer storage in the base unit, `round_from`, `Rounding`,
+  `RoundError` and `Ordered` don't need it.
+
 ### Changed
+
+- `Fixed`, `FixedUnit`, `AdditiveUnit`, `PointUnit`, `UnitMul`, `UnitDiv`,
+  `Decimal`, the `qty::unit` markers and the `Fixed` conversions with
+  `std`, `chrono` and `time` durations need the `fixed` feature, which is
+  off by default. Without it the library builds about 20 % faster.
 
 - The library builds about 1 s faster: the generator writes each built-in
   quantity's base unit and dimensions out as literals, so the compiler no

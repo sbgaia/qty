@@ -150,11 +150,14 @@ impl Permittivity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Permittivity, FaradPerMeter);
 
 /// Units for counting [`Permittivity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::permittivity`](crate::unit::permittivity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(FaradPerMeter: Permittivity, PermittivityUnit::FaradPerMeter, base FaradPerMeter, 1 / 1, pi^0, from_farads_per_meter, as_farads_per_meter, additive);
 }

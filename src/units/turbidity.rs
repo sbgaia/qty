@@ -148,11 +148,14 @@ impl Turbidity<f64> {
     }
 }
 
+#[cfg(feature = "fixed")]
 fixed_base!(Turbidity, NTU);
 
 /// Units for counting [`Turbidity`] in integers with [`Fixed`](crate::Fixed).
 ///
 /// Also at [`unit::turbidity`](crate::unit::turbidity).
+#[cfg(feature = "fixed")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
     fixed_unit!(NTU: Turbidity, TurbidityUnit::NTU, base NTU, 1 / 1, pi^0, from_ntu, as_ntu, additive);
 }
