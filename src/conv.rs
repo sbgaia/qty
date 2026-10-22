@@ -202,7 +202,9 @@ mod tests {
     use super::*;
 
     /// A small xorshift generator, so the test needs no dependency.
+    #[cfg(feature = "std")]
     struct Rng(u64);
+    #[cfg(feature = "std")]
     impl Rng {
         fn next(&mut self) -> u64 {
             self.0 ^= self.0 << 13;
