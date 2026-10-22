@@ -123,9 +123,11 @@ let (m, r) = (Mass::from_kilograms(5.972e24), Length::from_kilometers(6371.0));
 let escape: Speed = formula!((2.0 * G * m / r).sqrt());
 assert_eq!(format!("{:.1}", escape.in_unit(SpeedUnit::KilometerPerSecond)), "11.2 km/s");
 
+# #[cfg(feature = "mechanics")] {
 let (force, lever) = (Force::from_newtons(20.0), Length::from_meters(0.5));
 let t: Torque = formula!(force * lever);
 assert_eq!(t.as_newton_meters(), 10.0);
+# }
 ```
 
 A formula whose dimensions don't match the target fails `cargo check`:
