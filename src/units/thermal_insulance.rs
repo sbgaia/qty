@@ -11,13 +11,13 @@ use crate::Number;
 
 /// Thermal insulance (R-value) is a measure of a material's resistance to the heat current. It quantifies how effectively a material can resist the transfer of heat through conduction, convection, and radiation. It has the units square metre kelvins per watt (m2⋅K/W) in SI units or square foot degree Fahrenheit–hours per British thermal unit (ft2⋅°F⋅h/Btu) in imperial units. The higher the thermal insulance, the better a material insulates against heat transfer. It is commonly used in construction to assess the insulation properties of materials such as walls, roofs, and insulation products.
 ///
-/// Stored as a `T` (`f64` by default) in [`ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt`], with the same layout as `T`.
+/// Stored as a `T` (`f64` by default) in [`ThermalInsulanceUnit::SquareMeterKelvinPerWatt`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[repr(transparent)]
 #[must_use]
 pub struct ThermalInsulance<T = f64>(T);
 
-quantity!(arith ThermalInsulance, ThermalInsulanceUnit, SquareMeterKelvinPerKilowatt, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, -1, 3, 0, 1, 0, 0), angle: 0, factor: 0.001 }));
+quantity!(arith ThermalInsulance, ThermalInsulanceUnit, SquareMeterKelvinPerWatt, si: Some(crate::UnitExpr { dimensions: crate::Dimensions::new(0, -1, 3, 0, 1, 0, 0), angle: 0, factor: 1.0 }));
 crate::__qty_formula!(ThermalInsulance, ThermalInsulanceUnit, arith, dim: crate::formula::Dims<0, -1, 3, 0, 1>);
 
 /// The units of [`ThermalInsulance`].
@@ -103,7 +103,7 @@ impl ThermalInsulanceUnit {
         name: "ThermalInsulance",
         description: "Thermal insulance (R-value) is a measure of a material's resistance to the heat current. It quantifies how effectively a material can resist the transfer of heat through conduction, convection, and radiation. It has the units square metre kelvins per watt (m2⋅K/W) in SI units or square foot degree Fahrenheit–hours per British thermal unit (ft2⋅°F⋅h/Btu) in imperial units. The higher the thermal insulance, the better a material insulates against heat transfer. It is commonly used in construction to assess the insulation properties of materials such as walls, roofs, and insulation products.",
         dimensions: crate::Dimensions::new(0, -1, 3, 0, 1, 0, 0),
-        base_unit: &Self::INFOS[0],
+        base_unit: &Self::INFOS[1],
         units: Self::INFOS,
     };
 
@@ -193,16 +193,16 @@ impl<T: Number> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
-            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value * T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value * T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / T::from_f64(10.0),
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value,
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value,
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / T::from_f64(10000.0),
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / T::from_f64(1000000.0),
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                T::mul_ratio(value, 45.0, 523.0)
+                T::mul_ratio(value, 9.0, 104600.0)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                T::mul_ratio(value, 9290304000000.0, 52752792631.0)
+                T::mul_ratio(value, 9290304000.0, 52752792631.0)
             }
         }
     }
@@ -210,16 +210,16 @@ impl<T: Number> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
     #[inline]
     fn value_from_base(self, value: T) -> T {
         match self {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
-            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value / T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value / T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value * T::from_f64(10.0),
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value * T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value * T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value,
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value,
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value * T::from_f64(10000.0),
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value * T::from_f64(1000000.0),
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                T::div_ratio(value, 45.0, 523.0)
+                T::div_ratio(value, 9.0, 104600.0)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                T::div_ratio(value, 9290304000000.0, 52752792631.0)
+                T::div_ratio(value, 9290304000.0, 52752792631.0)
             }
         }
     }
@@ -227,11 +227,11 @@ impl<T: Number> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
 
 impl<T: crate::Float> ThermalInsulance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
-    /// exceed it, in steps of 1000 (`m²K/kW`).
+    /// exceed it, in steps of 1000 (`m²K/W`).
     /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ThermalInsulanceUnit> {
-        self.in_unit(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+        self.in_unit(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
     }
 }
 
@@ -239,85 +239,85 @@ impl<T: Number> ThermalInsulance<T> {
     /// A [`ThermalInsulance`] from a value in `m²K/kW`.
     #[inline]
     pub fn from_square_meter_kelvins_per_kilowatt(value: T) -> Self {
-        Self(value)
+        Self(value / T::from_f64(1000.0))
     }
 
     /// The value in `m²K/kW`.
     #[inline]
     pub fn as_square_meter_kelvins_per_kilowatt(self) -> T {
-        self.0
+        self.0 * T::from_f64(1000.0)
     }
 
     /// A [`ThermalInsulance`] from a value in `m²K/W`.
     #[inline]
     pub fn from_square_meter_kelvins_per_watt(value: T) -> Self {
-        Self(value * T::from_f64(1000.0))
+        Self(value)
     }
 
     /// The value in `m²K/W`.
     #[inline]
     pub fn as_square_meter_kelvins_per_watt(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        self.0
     }
 
     /// A [`ThermalInsulance`] from a value in `m²°C/W`.
     #[inline]
     pub fn from_square_meter_degrees_celsius_per_watt(value: T) -> Self {
-        Self(value * T::from_f64(1000.0))
+        Self(value)
     }
 
     /// The value in `m²°C/W`.
     #[inline]
     pub fn as_square_meter_degrees_celsius_per_watt(self) -> T {
-        self.0 / T::from_f64(1000.0)
+        self.0
     }
 
     /// A [`ThermalInsulance`] from a value in `cm²K/W`.
     #[inline]
     pub fn from_square_centimeter_kelvins_per_watt(value: T) -> Self {
-        Self(value / T::from_f64(10.0))
+        Self(value / T::from_f64(10000.0))
     }
 
     /// The value in `cm²K/W`.
     #[inline]
     pub fn as_square_centimeter_kelvins_per_watt(self) -> T {
-        self.0 * T::from_f64(10.0)
+        self.0 * T::from_f64(10000.0)
     }
 
     /// A [`ThermalInsulance`] from a value in `mm²K/W`.
     #[inline]
     pub fn from_square_millimeter_kelvins_per_watt(value: T) -> Self {
-        Self(value / T::from_f64(1000.0))
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// The value in `mm²K/W`.
     #[inline]
     pub fn as_square_millimeter_kelvins_per_watt(self) -> T {
-        self.0 * T::from_f64(1000.0)
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// A [`ThermalInsulance`] from a value in `cm²Hr°C/kcal`.
     #[inline]
     pub fn from_square_centimeter_hour_degrees_celsius_per_kilocalorie(value: T) -> Self {
-        Self(T::mul_ratio(value, 45.0, 523.0))
+        Self(T::mul_ratio(value, 9.0, 104600.0))
     }
 
     /// The value in `cm²Hr°C/kcal`.
     #[inline]
     pub fn as_square_centimeter_hour_degrees_celsius_per_kilocalorie(self) -> T {
-        T::div_ratio(self.0, 45.0, 523.0)
+        T::div_ratio(self.0, 9.0, 104600.0)
     }
 
     /// A [`ThermalInsulance`] from a value in `Hrft²°F/Btu`.
     #[inline]
     pub fn from_hour_square_feet_degrees_fahrenheit_per_btu(value: T) -> Self {
-        Self(T::mul_ratio(value, 9290304000000.0, 52752792631.0))
+        Self(T::mul_ratio(value, 9290304000.0, 52752792631.0))
     }
 
     /// The value in `Hrft²°F/Btu`.
     #[inline]
     pub fn as_hour_square_feet_degrees_fahrenheit_per_btu(self) -> T {
-        T::div_ratio(self.0, 9290304000000.0, 52752792631.0)
+        T::div_ratio(self.0, 9290304000.0, 52752792631.0)
     }
 }
 
@@ -327,23 +327,23 @@ impl ThermalInsulance<f64> {
     #[inline]
     pub const fn const_new(value: f64, unit: ThermalInsulanceUnit) -> Self {
         Self(match unit {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
-            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value * 1000.0,
-            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value * 1000.0,
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / 10.0,
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / 1000.0,
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value / 1000.0,
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value,
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value,
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / 10000.0,
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / 1000000.0,
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                value * 0.08604206500956023
+                value * 8.604206500956024e-5
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                value * 176.11018368230583
+                value * 0.17611018368230585
             }
         })
     }
 }
 
 #[cfg(feature = "fixed")]
-fixed_base!(ThermalInsulance, SquareMeterKelvinPerKilowatt);
+fixed_base!(ThermalInsulance, SquareMeterKelvinPerWatt);
 
 /// Units for counting [`ThermalInsulance`] in integers with [`Fixed`](crate::Fixed).
 ///
@@ -351,11 +351,11 @@ fixed_base!(ThermalInsulance, SquareMeterKelvinPerKilowatt);
 #[cfg(feature = "fixed")]
 #[cfg_attr(docsrs, doc(cfg(feature = "fixed")))]
 pub mod unit {
-    fixed_unit!(SquareMeterKelvinPerKilowatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt, base SquareMeterKelvinPerKilowatt, 1 / 1, pi^0, from_square_meter_kelvins_per_kilowatt, as_square_meter_kelvins_per_kilowatt, additive);
-    fixed_unit!(SquareMeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1000 / 1, pi^0, from_square_meter_kelvins_per_watt, as_square_meter_kelvins_per_watt, additive);
-    fixed_unit!(SquareMeterDegreeCelsiusPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt, base SquareMeterKelvinPerKilowatt, 1000 / 1, pi^0, from_square_meter_degrees_celsius_per_watt, as_square_meter_degrees_celsius_per_watt, additive);
-    fixed_unit!(SquareCentimeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1 / 10, pi^0, from_square_centimeter_kelvins_per_watt, as_square_centimeter_kelvins_per_watt, additive);
-    fixed_unit!(SquareMillimeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1 / 1000, pi^0, from_square_millimeter_kelvins_per_watt, as_square_millimeter_kelvins_per_watt, additive);
-    fixed_unit!(SquareCentimeterHourDegreeCelsiusPerKilocalorie: ThermalInsulance, ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie, base SquareMeterKelvinPerKilowatt, 45 / 523, pi^0, from_square_centimeter_hour_degrees_celsius_per_kilocalorie, as_square_centimeter_hour_degrees_celsius_per_kilocalorie, additive);
-    fixed_unit!(HourSquareFeetDegreeFahrenheitPerBtu: ThermalInsulance, ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu, base SquareMeterKelvinPerKilowatt, 9290304000000 / 52752792631, pi^0, from_hour_square_feet_degrees_fahrenheit_per_btu, as_hour_square_feet_degrees_fahrenheit_per_btu, additive);
+    fixed_unit!(SquareMeterKelvinPerKilowatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt, base SquareMeterKelvinPerWatt, 1 / 1000, pi^0, from_square_meter_kelvins_per_kilowatt, as_square_meter_kelvins_per_kilowatt, additive);
+    fixed_unit!(SquareMeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerWatt, base SquareMeterKelvinPerWatt, 1 / 1, pi^0, from_square_meter_kelvins_per_watt, as_square_meter_kelvins_per_watt, additive);
+    fixed_unit!(SquareMeterDegreeCelsiusPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt, base SquareMeterKelvinPerWatt, 1 / 1, pi^0, from_square_meter_degrees_celsius_per_watt, as_square_meter_degrees_celsius_per_watt, additive);
+    fixed_unit!(SquareCentimeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt, base SquareMeterKelvinPerWatt, 1 / 10000, pi^0, from_square_centimeter_kelvins_per_watt, as_square_centimeter_kelvins_per_watt, additive);
+    fixed_unit!(SquareMillimeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt, base SquareMeterKelvinPerWatt, 1 / 1000000, pi^0, from_square_millimeter_kelvins_per_watt, as_square_millimeter_kelvins_per_watt, additive);
+    fixed_unit!(SquareCentimeterHourDegreeCelsiusPerKilocalorie: ThermalInsulance, ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie, base SquareMeterKelvinPerWatt, 9 / 104600, pi^0, from_square_centimeter_hour_degrees_celsius_per_kilocalorie, as_square_centimeter_hour_degrees_celsius_per_kilocalorie, additive);
+    fixed_unit!(HourSquareFeetDegreeFahrenheitPerBtu: ThermalInsulance, ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu, base SquareMeterKelvinPerWatt, 9290304000 / 52752792631, pi^0, from_hour_square_feet_degrees_fahrenheit_per_btu, as_hour_square_feet_degrees_fahrenheit_per_btu, additive);
 }

@@ -51,8 +51,6 @@ const PARAMS: [&str; 7] = ["J", "H", "N", "I", "M", "T", "L"];
 struct Operand<'a> {
     name: &'a str,
     dimensions: Dimensions,
-    /// The size of the base unit in coherent SI.
-    factor: String,
 }
 
 /// Whether `qty` has the generic operators: an amount that works in
@@ -77,10 +75,18 @@ pub fn generate_arith_table(all: &[QuantityDef], ops: &[CrossOp], max_exponent: 
     let operands: Vec<Operand> = all
         .iter()
         .filter(|q| has_arith(q, all))
-        .map(|q| Operand {
-            name: &q.name,
-            dimensions: q.dimensions,
-            factor: si::base_unit_size(q, all).map_or_else(|| "1.0".to_owned(), |k| k.to_string()),
+        .map(|q| {
+            // The operators multiply and divide base values as they are.
+            assert!(
+                si::base_unit_size(q, all).is_none_or(|size| size.is_one()),
+                "codegen: {} has operators, so its base unit must be coherent SI; \
+                 list it in parser::COHERENT_BASE_UNITS",
+                q.name
+            );
+            Operand {
+                name: &q.name,
+                dimensions: q.dimensions,
+            }
         })
         .collect();
     let by_name: BTreeMap<&str, &Operand> = operands.iter().map(|o| (o.name, o)).collect();
@@ -176,12 +182,7 @@ pub fn generate_arith_table(all: &[QuantityDef], ops: &[CrossOp], max_exponent: 
     w(&mut out, "use crate::units::*;");
     w(&mut out, "");
 
-    let factors: BTreeMap<&str, &str> = operands
-        .iter()
-        .map(|o| (o.name, o.factor.as_str()))
-        .collect();
-    emit_units(&mut out, &factors);
-    emit_lookup(&mut out, &canonical, &factors, max_exponent);
+    emit_lookup(&mut out, &canonical, max_exponent);
     emit_groups(&mut out, &lhs_mul, &lhs_div, &rhs_mul, &rhs_div, &overrides);
 
     for o in &operands {
@@ -213,12 +214,7 @@ fn combine(a: Dimensions, b: Dimensions, mul: bool) -> Dimensions {
 
 /// `Canon` for `Dim`: a tree with one level per exponent, whose leaves are
 /// the quantities.
-fn emit_lookup(
-    out: &mut String,
-    canonical: &BTreeMap<Dimensions, &str>,
-    factors: &BTreeMap<&str, &str>,
-    max_exponent: i32,
-) {
+fn emit_lookup(out: &mut String, canonical: &BTreeMap<Dimensions, &str>, max_exponent: i32) {
     w(
         out,
         "/// The lookup from dimensions to quantities starts here.",
@@ -267,16 +263,14 @@ fn emit_lookup(
                 if !cfg.is_empty() {
                     w(out, &cfg);
                 }
-                let factor = &factors[q];
-                let unit = coherence(factor);
-                writeln!(out, "impl<D, V> Leaf<D, V> for {node} {{ type Out = {q}<V>; type Unit = {unit}; const FACTOR: f64 = {factor}; #[inline(always)] fn make(value: V) -> {q}<V> {{ {q}::from_base(value) }} }}").unwrap();
+                writeln!(out, "impl<D, V> Leaf<D, V> for {node} {{ type Out = {q}<V>; #[inline(always)] fn make(value: V) -> {q}<V> {{ {q}::from_base(value) }} }}").unwrap();
                 // With the quantity's feature off, the dimensions stay an `Expr`.
                 if let Some(condition) = cfg.strip_prefix("#[cfg(").and_then(|c| c.strip_suffix(")]")) {
                     w(out, &format!("#[cfg(not({condition}))]"));
-                    writeln!(out, "impl<D, V> Leaf<D, V> for {node} {{ type Out = Expr<D, V>; type Unit = Coherent; const FACTOR: f64 = 1.0; #[inline(always)] fn make(value: V) -> Expr<D, V> {{ Expr::new(value) }} }}").unwrap();
+                    writeln!(out, "impl<D, V> Leaf<D, V> for {node} {{ type Out = Expr<D, V>; #[inline(always)] fn make(value: V) -> Expr<D, V> {{ Expr::new(value) }} }}").unwrap();
                 }
             }
-            None => writeln!(out, "impl<D, V> Leaf<D, V> for {node} {{ type Out = V; type Unit = Coherent; const FACTOR: f64 = 1.0; #[inline(always)] fn make(value: V) -> V {{ value }} }}").unwrap(),
+            None => writeln!(out, "impl<D, V> Leaf<D, V> for {node} {{ type Out = V; #[inline(always)] fn make(value: V) -> V {{ value }} }}").unwrap(),
         }
     }
     let mut chain = "Root".to_owned();
@@ -288,7 +282,7 @@ fn emit_lookup(
     bounds.push(format!("{chain}: Leaf<Self, V>"));
     writeln!(
         out,
-        "impl<L, M, T, I, H, N, J, V> Canon<V> for Dim<L, M, T, I, H, N, J>\nwhere\n    {},\n{{\n    type Out = <{chain} as Leaf<Self, V>>::Out;\n    type Unit = <{chain} as Leaf<Self, V>>::Unit;\n    const FACTOR: f64 = <{chain} as Leaf<Self, V>>::FACTOR;\n    #[inline(always)]\n    fn make(value: V) -> Self::Out {{\n        <{chain} as Leaf<Self, V>>::make(value)\n    }}\n}}",
+        "impl<L, M, T, I, H, N, J, V> Canon<V> for Dim<L, M, T, I, H, N, J>\nwhere\n    {},\n{{\n    type Out = <{chain} as Leaf<Self, V>>::Out;\n    #[inline(always)]\n    fn make(value: V) -> Self::Out {{\n        <{chain} as Leaf<Self, V>>::make(value)\n    }}\n}}",
         bounds.join(",\n    ")
     )
     .unwrap();
@@ -377,50 +371,6 @@ fn emit_groups(
     }
 }
 
-/// The `Arith::Unit` marker for a base unit of this size in coherent SI.
-fn coherence(factor: &str) -> String {
-    if factor == "1.0" {
-        "Coherent".to_owned()
-    } else {
-        format!("Size{}", factor.replace(['.', '-'], "_"))
-    }
-}
-
-/// The unit markers and `Rescale` for every combination of them: nothing
-/// to do where the sizes cancel, a multiplication by the factor otherwise.
-fn emit_units(out: &mut String, factors: &BTreeMap<&str, &str>) {
-    let mut sizes: Vec<&str> = factors.values().copied().collect();
-    sizes.push("1.0");
-    sizes.sort_by(|a, b| a.parse::<f64>().unwrap().total_cmp(&b.parse().unwrap()));
-    sizes.dedup();
-    for size in sizes.iter().filter(|s| **s != "1.0") {
-        writeln!(
-            out,
-            "/// A base unit of size {size} in coherent SI.\n#[derive(Debug)]\npub struct {};",
-            coherence(size)
-        )
-        .unwrap();
-    }
-    let size = |s: &str| s.parse::<f64>().unwrap();
-    for a in &sizes {
-        for b in &sizes {
-            for c in &sizes {
-                for (op, k) in [
-                    ("MulOp", size(a) * size(b) / size(c)),
-                    ("DivOp", size(a) / size(b) / size(c)),
-                ] {
-                    let units = format!("({}, {}, {})", coherence(a), coherence(b), coherence(c));
-                    if k == 1.0 {
-                        writeln!(out, "impl<V> Rescale<V, {op}> for {units} {{ #[inline(always)] fn rescale(value: V, _: f64) -> V {{ value }} }}").unwrap();
-                    } else {
-                        writeln!(out, "impl<V: crate::Number> Rescale<V, {op}> for {units} {{ #[inline(always)] fn rescale(value: V, k: f64) -> V {{ value * V::from_f64(k) }} }}").unwrap();
-                    }
-                }
-            }
-        }
-    }
-}
-
 fn relation_name(a: &str, mul: bool, b: &str) -> String {
     format!("Rel{a}{}{b}", if mul { "Times" } else { "Per" })
 }
@@ -446,8 +396,6 @@ fn emit_operand(out: &mut String, o: &Operand, mul_group: &str, div_group: &str,
     type Value = V;
     type Kind = Quantity<{mul_group}, {div_group}>;
     type Dim = Dims<{dims}>;
-    type Unit = {unit};
-    const FACTOR: f64 = {factor};
     #[inline(always)]
     fn into_value(self) -> V {{
         self.into_base()
@@ -456,9 +404,7 @@ fn emit_operand(out: &mut String, o: &Operand, mul_group: &str, div_group: &str,
     fn from_value(value: V) -> Self {{
         {name}::from_base(value)
     }}
-}}",
-        factor = o.factor,
-        unit = coherence(&o.factor)
+}}"
     )
     .unwrap();
     for (op_trait, method, op, dim) in [

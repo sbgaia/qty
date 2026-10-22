@@ -8,6 +8,14 @@ follow [Semantic Versioning](https://semver.org/).
 
 ### Migrating from 0.4
 
+- `MassFlow` is stored in kilograms per second instead of grams per
+  second, and `ThermalInsulance` in m²·K/W instead of m²·K/kW. Their base
+  values, which `as_base`, `from_base`, plain `serde` and the integer
+  storage types use, are 1000 times smaller: `MassFlow::from_base(1.0)` is
+  now 1 kg/s, and a mass flow that serialized as `1500.0` now serializes as
+  `1.5`. Convert stored data by dividing by 1000, or read and write it in a
+  named unit (`from_grams_per_second`, `serde_str`). Values in any named
+  unit are unchanged.
 - `Fixed` and its unit markers in `qty::unit` are behind the new `fixed`
   feature. Add `features = ["fixed"]` if you use them. `Length<i64>` and
   other integer storage in the base unit, `round_from`, `Rounding`,
@@ -15,11 +23,14 @@ follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Every quantity with operators and formulas is stored in coherent SI, so
+  `*` and `/` never rescale. `MassFlow` and `ThermalInsulance` were the
+  two exceptions (see above). Their products and powers no longer need a
+  `Number` storage type for the factor.
 - `Fixed`, `FixedUnit`, `AdditiveUnit`, `PointUnit`, `UnitMul`, `UnitDiv`,
   `Decimal`, the `qty::unit` markers and the `Fixed` conversions with
   `std`, `chrono` and `time` durations need the `fixed` feature, which is
   off by default. Without it the library builds about 20 % faster.
-
 - The library builds about 1 s faster: the generator writes each built-in
   quantity's base unit and dimensions out as literals, so the compiler no
   longer parses the base unit's abbreviation for every quantity. Nothing

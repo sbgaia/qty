@@ -17,10 +17,10 @@ fn grams_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x;
+        let base = ((x) / 1e3);
         assert_close(MassFlow::from_grams_per_second(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x;
+        let back = (x * 1e3);
         assert_close(
             MassFlow::from_base(base).as_grams_per_second(),
             back,
@@ -50,14 +50,14 @@ fn nanograms_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-9);
+        let base = ((x * 1e-9) / 1e3);
         assert_close(
             MassFlow::from_nanograms_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-9);
+        let back = ((x * 1e3) / 1e-9);
         assert_close(
             MassFlow::from_base(base).as_nanograms_per_second(),
             back,
@@ -87,14 +87,14 @@ fn micrograms_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-6);
+        let base = ((x * 1e-6) / 1e3);
         assert_close(
             MassFlow::from_micrograms_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-6);
+        let back = ((x * 1e3) / 1e-6);
         assert_close(
             MassFlow::from_base(base).as_micrograms_per_second(),
             back,
@@ -124,14 +124,14 @@ fn milligrams_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-3);
+        let base = ((x * 1e-3) / 1e3);
         assert_close(
             MassFlow::from_milligrams_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-3);
+        let back = ((x * 1e3) / 1e-3);
         assert_close(
             MassFlow::from_base(base).as_milligrams_per_second(),
             back,
@@ -161,14 +161,14 @@ fn centigrams_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-2);
+        let base = ((x * 1e-2) / 1e3);
         assert_close(
             MassFlow::from_centigrams_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-2);
+        let back = ((x * 1e3) / 1e-2);
         assert_close(
             MassFlow::from_base(base).as_centigrams_per_second(),
             back,
@@ -198,14 +198,14 @@ fn decigrams_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-1);
+        let base = ((x * 1e-1) / 1e3);
         assert_close(
             MassFlow::from_decigrams_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-1);
+        let back = ((x * 1e3) / 1e-1);
         assert_close(
             MassFlow::from_base(base).as_decigrams_per_second(),
             back,
@@ -235,14 +235,14 @@ fn decagrams_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e1);
+        let base = ((x * 1e1) / 1e3);
         assert_close(
             MassFlow::from_decagrams_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e1);
+        let back = ((x * 1e3) / 1e1);
         assert_close(
             MassFlow::from_base(base).as_decagrams_per_second(),
             back,
@@ -272,14 +272,14 @@ fn hectograms_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e2);
+        let base = ((x * 1e2) / 1e3);
         assert_close(
             MassFlow::from_hectograms_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e2);
+        let back = ((x * 1e3) / 1e2);
         assert_close(
             MassFlow::from_base(base).as_hectograms_per_second(),
             back,
@@ -309,14 +309,14 @@ fn kilograms_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e3);
+        let base = ((x * 1e3) / 1e3);
         assert_close(
             MassFlow::from_kilograms_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e3);
+        let back = ((x * 1e3) / 1e3);
         assert_close(
             MassFlow::from_base(base).as_kilograms_per_second(),
             back,
@@ -346,10 +346,10 @@ fn grams_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x / 86400.0;
+        let base = ((x / 86400.0) / 1e3);
         assert_close(MassFlow::from_grams_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 86400.0;
+        let back = (x * 1e3) * 86400.0;
         assert_close(MassFlow::from_base(base).as_grams_per_day(), back, F64_TOL);
         assert_close(
             MassFlow::from_grams_per_day(v).as_grams_per_day(),
@@ -375,10 +375,10 @@ fn nanograms_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-9) / 86400.0;
+        let base = (((x * 1e-9) / 86400.0) / 1e3);
         assert_close(MassFlow::from_nanograms_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = (x / 1e-9) * 86400.0;
+        let back = ((x * 1e3) / 1e-9) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_nanograms_per_day(),
             back,
@@ -408,14 +408,14 @@ fn micrograms_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-6) / 86400.0;
+        let base = (((x * 1e-6) / 86400.0) / 1e3);
         assert_close(
             MassFlow::from_micrograms_per_day(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-6) * 86400.0;
+        let back = ((x * 1e3) / 1e-6) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_micrograms_per_day(),
             back,
@@ -445,14 +445,14 @@ fn milligrams_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-3) / 86400.0;
+        let base = (((x * 1e-3) / 86400.0) / 1e3);
         assert_close(
             MassFlow::from_milligrams_per_day(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-3) * 86400.0;
+        let back = ((x * 1e3) / 1e-3) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_milligrams_per_day(),
             back,
@@ -482,14 +482,14 @@ fn centigrams_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-2) / 86400.0;
+        let base = (((x * 1e-2) / 86400.0) / 1e3);
         assert_close(
             MassFlow::from_centigrams_per_day(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e-2) * 86400.0;
+        let back = ((x * 1e3) / 1e-2) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_centigrams_per_day(),
             back,
@@ -519,10 +519,10 @@ fn decigrams_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e-1) / 86400.0;
+        let base = (((x * 1e-1) / 86400.0) / 1e3);
         assert_close(MassFlow::from_decigrams_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = (x / 1e-1) * 86400.0;
+        let back = ((x * 1e3) / 1e-1) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_decigrams_per_day(),
             back,
@@ -552,10 +552,10 @@ fn decagrams_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e1) / 86400.0;
+        let base = (((x * 1e1) / 86400.0) / 1e3);
         assert_close(MassFlow::from_decagrams_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = (x / 1e1) * 86400.0;
+        let back = ((x * 1e3) / 1e1) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_decagrams_per_day(),
             back,
@@ -585,14 +585,14 @@ fn hectograms_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e2) / 86400.0;
+        let base = (((x * 1e2) / 86400.0) / 1e3);
         assert_close(
             MassFlow::from_hectograms_per_day(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e2) * 86400.0;
+        let back = ((x * 1e3) / 1e2) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_hectograms_per_day(),
             back,
@@ -622,10 +622,10 @@ fn kilograms_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e3) / 86400.0;
+        let base = (((x * 1e3) / 86400.0) / 1e3);
         assert_close(MassFlow::from_kilograms_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = (x / 1e3) * 86400.0;
+        let back = ((x * 1e3) / 1e3) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_kilograms_per_day(),
             back,
@@ -655,10 +655,10 @@ fn megagrams_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e6) / 86400.0;
+        let base = (((x * 1e6) / 86400.0) / 1e3);
         assert_close(MassFlow::from_megagrams_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = (x / 1e6) * 86400.0;
+        let back = ((x * 1e3) / 1e6) * 86400.0;
         assert_close(
             MassFlow::from_base(base).as_megagrams_per_day(),
             back,
@@ -688,10 +688,10 @@ fn grams_per_hour() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x / 3600.0;
+        let base = ((x / 3600.0) / 1e3);
         assert_close(MassFlow::from_grams_per_hour(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 3600.0;
+        let back = (x * 1e3) * 3600.0;
         assert_close(MassFlow::from_base(base).as_grams_per_hour(), back, F64_TOL);
         assert_close(
             MassFlow::from_grams_per_hour(v).as_grams_per_hour(),
@@ -717,14 +717,14 @@ fn kilograms_per_hour() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x / 3.6;
+        let base = ((x / 3.6) / 1e3);
         assert_close(
             MassFlow::from_kilograms_per_hour(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x * 3.6;
+        let back = (x * 1e3) * 3.6;
         assert_close(
             MassFlow::from_base(base).as_kilograms_per_hour(),
             back,
@@ -754,14 +754,14 @@ fn kilograms_per_minute() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x / 0.06;
+        let base = ((x / 0.06) / 1e3);
         assert_close(
             MassFlow::from_kilograms_per_minute(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x * 0.06;
+        let back = (x * 1e3) * 0.06;
         assert_close(
             MassFlow::from_base(base).as_kilograms_per_minute(),
             back,
@@ -791,10 +791,10 @@ fn tonnes_per_hour() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 1000.0 / 3.6;
+        let base = ((x * 1000.0 / 3.6) / 1e3);
         assert_close(MassFlow::from_tonnes_per_hour(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 3.6 / 1000.0;
+        let back = (x * 1e3) * 3.6 / 1000.0;
         assert_close(
             MassFlow::from_base(base).as_tonnes_per_hour(),
             back,
@@ -824,10 +824,10 @@ fn pounds_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 453.59237 / 86400.0;
+        let base = ((x * 453.59237 / 86400.0) / 1e3);
         assert_close(MassFlow::from_pounds_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 86400.0 / 453.59237;
+        let back = (x * 1e3) * 86400.0 / 453.59237;
         assert_close(MassFlow::from_base(base).as_pounds_per_day(), back, F64_TOL);
         assert_close(
             MassFlow::from_pounds_per_day(v).as_pounds_per_day(),
@@ -853,14 +853,14 @@ fn megapounds_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e6) * 453.59237 / 86400.0;
+        let base = (((x * 1e6) * 453.59237 / 86400.0) / 1e3);
         assert_close(
             MassFlow::from_megapounds_per_day(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e6) * 86400.0 / 453.59237;
+        let back = ((x * 1e3) / 1e6) * 86400.0 / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_megapounds_per_day(),
             back,
@@ -890,10 +890,10 @@ fn pounds_per_hour() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 453.59237 / 3600.0;
+        let base = ((x * 453.59237 / 3600.0) / 1e3);
         assert_close(MassFlow::from_pounds_per_hour(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 3600.0 / 453.59237;
+        let back = (x * 1e3) * 3600.0 / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_pounds_per_hour(),
             back,
@@ -923,14 +923,14 @@ fn megapounds_per_hour() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e6) * 453.59237 / 3600.0;
+        let base = (((x * 1e6) * 453.59237 / 3600.0) / 1e3);
         assert_close(
             MassFlow::from_megapounds_per_hour(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e6) * 3600.0 / 453.59237;
+        let back = ((x * 1e3) / 1e6) * 3600.0 / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_megapounds_per_hour(),
             back,
@@ -960,10 +960,10 @@ fn pounds_per_minute() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 453.59237 / 60.0;
+        let base = ((x * 453.59237 / 60.0) / 1e3);
         assert_close(MassFlow::from_pounds_per_minute(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 60.0 / 453.59237;
+        let back = (x * 1e3) * 60.0 / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_pounds_per_minute(),
             back,
@@ -993,14 +993,14 @@ fn megapounds_per_minute() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e6) * 453.59237 / 60.0;
+        let base = (((x * 1e6) * 453.59237 / 60.0) / 1e3);
         assert_close(
             MassFlow::from_megapounds_per_minute(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e6) * 60.0 / 453.59237;
+        let back = ((x * 1e3) / 1e6) * 60.0 / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_megapounds_per_minute(),
             back,
@@ -1030,10 +1030,10 @@ fn pounds_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 453.59237;
+        let base = ((x * 453.59237) / 1e3);
         assert_close(MassFlow::from_pounds_per_second(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x / 453.59237;
+        let back = (x * 1e3) / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_pounds_per_second(),
             back,
@@ -1063,14 +1063,14 @@ fn megapounds_per_second() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = (x * 1e6) * 453.59237;
+        let base = (((x * 1e6) * 453.59237) / 1e3);
         assert_close(
             MassFlow::from_megapounds_per_second(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = (x / 1e6) / 453.59237;
+        let back = ((x * 1e3) / 1e6) / 453.59237;
         assert_close(
             MassFlow::from_base(base).as_megapounds_per_second(),
             back,
@@ -1100,10 +1100,10 @@ fn tonnes_per_day() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x / 0.0864000;
+        let base = ((x / 0.0864000) / 1e3);
         assert_close(MassFlow::from_tonnes_per_day(v).as_base(), base, F64_TOL);
         let x: f64 = base;
-        let back = x * 0.0864000;
+        let back = (x * 1e3) * 0.0864000;
         assert_close(MassFlow::from_base(base).as_tonnes_per_day(), back, F64_TOL);
         assert_close(
             MassFlow::from_tonnes_per_day(v).as_tonnes_per_day(),
@@ -1129,14 +1129,14 @@ fn short_tons_per_hour() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 907.18474 / 3.6;
+        let base = ((x * 907.18474 / 3.6) / 1e3);
         assert_close(
             MassFlow::from_short_tons_per_hour(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x * 3.6 / 907.18474;
+        let back = (x * 1e3) * 3.6 / 907.18474;
         assert_close(
             MassFlow::from_base(base).as_short_tons_per_hour(),
             back,
@@ -1165,10 +1165,10 @@ fn short_tons_per_hour() {
 fn base_unit_expression() {
     let info = <MassFlow<f64> as Quantity>::INFO;
     let expr = <MassFlow<f64> as Quantity>::BASE_UNIT_EXPR;
-    let parsed = UnitExpr::parse("g/s")
+    let parsed = UnitExpr::parse("kg/s")
         .ok()
         .filter(|e| e.dimensions == info.dimensions);
-    let from_data: Option<f64> = Some(0.001);
+    let from_data: Option<f64> = Some(1.0);
     if let (Some(parsed), Some(size)) = (parsed, from_data) {
         assert_close(parsed.factor, size, F64_TOL);
     }
@@ -1271,7 +1271,7 @@ fn unit_metadata() {
         assert_eq!(unit.abbreviation(), unit_info.abbreviation);
         assert_eq!(unit.all_abbreviations(), unit_info.abbreviations);
     }
-    assert_eq!(info.base_unit, MassFlowUnit::GramPerSecond.info());
+    assert_eq!(info.base_unit, MassFlowUnit::KilogramPerSecond.info());
 }
 
 #[test]
@@ -1610,7 +1610,7 @@ fn in_unit_and_auto_unit_round_trip() {
     }
     assert_eq!(
         MassFlow::from_base(0.0).auto_unit().unit,
-        MassFlowUnit::GramPerSecond
+        MassFlowUnit::KilogramPerSecond
     );
 }
 

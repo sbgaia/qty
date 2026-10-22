@@ -76,8 +76,9 @@
 //! number, and a formula compiles to the same code as the arithmetic on
 //! plain floats.
 //!
-//! Quantities whose base unit isn't coherent SI (grams per second for
-//! `MassFlow`) are converted on the way in and out, with
+//! Every built-in quantity is stored in coherent SI, so its value goes in
+//! and out as it is. A custom quantity whose base unit isn't coherent SI
+//! (grams per square metre, say) is converted on the way in and out, with
 //! one multiplication by a constant.
 //!
 //! Quantities with the same dimensions are interchangeable here: `force *

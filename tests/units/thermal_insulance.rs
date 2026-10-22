@@ -17,14 +17,14 @@ fn square_meter_kelvins_per_kilowatt() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x;
+        let base = ((x) / 1e3);
         assert_close(
             ThermalInsulance::from_square_meter_kelvins_per_kilowatt(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x;
+        let back = (x * 1e3);
         assert_close(
             ThermalInsulance::from_base(base).as_square_meter_kelvins_per_kilowatt(),
             back,
@@ -55,14 +55,14 @@ fn square_meter_kelvins_per_watt() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 1000.0;
+        let base = ((x * 1000.0) / 1e3);
         assert_close(
             ThermalInsulance::from_square_meter_kelvins_per_watt(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x / 1000.0;
+        let back = (x * 1e3) / 1000.0;
         assert_close(
             ThermalInsulance::from_base(base).as_square_meter_kelvins_per_watt(),
             back,
@@ -93,14 +93,14 @@ fn square_meter_degrees_celsius_per_watt() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 1000.0;
+        let base = ((x * 1000.0) / 1e3);
         assert_close(
             ThermalInsulance::from_square_meter_degrees_celsius_per_watt(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x / 1000.0;
+        let back = (x * 1e3) / 1000.0;
         assert_close(
             ThermalInsulance::from_base(base).as_square_meter_degrees_celsius_per_watt(),
             back,
@@ -132,14 +132,14 @@ fn square_centimeter_kelvins_per_watt() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 0.1;
+        let base = ((x * 0.1) / 1e3);
         assert_close(
             ThermalInsulance::from_square_centimeter_kelvins_per_watt(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x / 0.1;
+        let back = (x * 1e3) / 0.1;
         assert_close(
             ThermalInsulance::from_base(base).as_square_centimeter_kelvins_per_watt(),
             back,
@@ -170,14 +170,14 @@ fn square_millimeter_kelvins_per_watt() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * 0.001;
+        let base = ((x * 0.001) / 1e3);
         assert_close(
             ThermalInsulance::from_square_millimeter_kelvins_per_watt(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x / 0.001;
+        let back = (x * 1e3) / 0.001;
         assert_close(
             ThermalInsulance::from_base(base).as_square_millimeter_kelvins_per_watt(),
             back,
@@ -208,7 +208,7 @@ fn square_centimeter_hour_degrees_celsius_per_kilocalorie() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * (0.0001 * 3600.0) / 4.184;
+        let base = ((x * (0.0001 * 3600.0) / 4.184) / 1e3);
         assert_close(
             ThermalInsulance::from_square_centimeter_hour_degrees_celsius_per_kilocalorie(v)
                 .as_base(),
@@ -216,7 +216,7 @@ fn square_centimeter_hour_degrees_celsius_per_kilocalorie() {
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x * 4.184 / (0.0001 * 3600.0);
+        let back = (x * 1e3) * 4.184 / (0.0001 * 3600.0);
         assert_close(
             ThermalInsulance::from_base(base)
                 .as_square_centimeter_hour_degrees_celsius_per_kilocalorie(),
@@ -250,14 +250,14 @@ fn hour_square_feet_degrees_fahrenheit_per_btu() {
     for v in [1.0, 0.3, -42.75, 1e6, 123456.789] {
         // Generated conversion vs. the upstream formula, verbatim.
         let x: f64 = v;
-        let base = x * (1000.0 * 0.3048 * 0.3048 * 3600.0) / (1055.05585262 * 1.8);
+        let base = ((x * (1000.0 * 0.3048 * 0.3048 * 3600.0) / (1055.05585262 * 1.8)) / 1e3);
         assert_close(
             ThermalInsulance::from_hour_square_feet_degrees_fahrenheit_per_btu(v).as_base(),
             base,
             F64_TOL,
         );
         let x: f64 = base;
-        let back = x * (1055.05585262 * 1.8) / (1000.0 * 0.3048 * 0.3048 * 3600.0);
+        let back = (x * 1e3) * (1055.05585262 * 1.8) / (1000.0 * 0.3048 * 0.3048 * 3600.0);
         assert_close(
             ThermalInsulance::from_base(base).as_hour_square_feet_degrees_fahrenheit_per_btu(),
             back,
@@ -289,10 +289,10 @@ fn hour_square_feet_degrees_fahrenheit_per_btu() {
 fn base_unit_expression() {
     let info = <ThermalInsulance<f64> as Quantity>::INFO;
     let expr = <ThermalInsulance<f64> as Quantity>::BASE_UNIT_EXPR;
-    let parsed = UnitExpr::parse("m²K/kW")
+    let parsed = UnitExpr::parse("m²K/W")
         .ok()
         .filter(|e| e.dimensions == info.dimensions);
-    let from_data: Option<f64> = Some(0.001);
+    let from_data: Option<f64> = Some(1.0);
     if let (Some(parsed), Some(size)) = (parsed, from_data) {
         assert_close(parsed.factor, size, F64_TOL);
     }
@@ -346,7 +346,7 @@ fn unit_metadata() {
     }
     assert_eq!(
         info.base_unit,
-        ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt.info()
+        ThermalInsulanceUnit::SquareMeterKelvinPerWatt.info()
     );
 }
 
@@ -477,7 +477,7 @@ fn in_unit_and_auto_unit_round_trip() {
     }
     assert_eq!(
         ThermalInsulance::from_base(0.0).auto_unit().unit,
-        ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt
+        ThermalInsulanceUnit::SquareMeterKelvinPerWatt
     );
 }
 

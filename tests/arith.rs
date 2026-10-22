@@ -1,5 +1,5 @@
 //! `*` and `/` between any two quantities: the output types, and the values
-//! where base units aren't coherent SI.
+//! where units aren't coherent SI.
 
 use qty::constants::{GRAVITATIONAL_CONSTANT as G, STANDARD_GRAVITY};
 use qty::formula::{Dims, Expr};
@@ -142,8 +142,8 @@ fn torque_stays_a_torque() {
 
 #[cfg(feature = "fluids")]
 #[test]
-fn base_units_that_are_not_coherent() {
-    // `MassFlow` is stored in grams per second.
+fn units_that_are_not_coherent() {
+    // `MassFlow` is stored in kg/s; grams per second convert as any unit.
     let flow: MassFlow = Mass::from_kilograms(3.0) / Duration::from_seconds(2.0);
     assert_eq!(flow.as_grams_per_second(), 1500.0);
     let m: Mass = flow * Duration::from_seconds(2.0);
@@ -158,6 +158,16 @@ fn base_units_that_are_not_coherent() {
     let doubled: MassFlow = flow * 2.0;
     assert_eq!(doubled.as_grams_per_second(), 3000.0);
     assert_eq!(MassFlow::<i64>::from_base(6) / MassFlow::from_base(2), 3);
+}
+
+#[cfg(all(feature = "fluids", feature = "thermal"))]
+#[test]
+fn every_quantity_with_operators_is_stored_in_coherent_si() {
+    assert_eq!(MassFlow::from_grams_per_second(1500.0).as_base(), 1.5);
+    assert_eq!(
+        ThermalInsulance::from_square_meter_kelvins_per_kilowatt(500.0).as_base(),
+        0.5
+    );
 }
 
 #[test]
@@ -179,8 +189,7 @@ fn whole_powers() {
 
 #[cfg(all(feature = "fluids", feature = "thermal"))]
 #[test]
-fn whole_powers_of_base_units_that_are_not_coherent() {
-    // `MassFlow` is stored in g/s, `ThermalInsulance` in m²·K/kW.
+fn whole_powers_of_units_that_are_not_coherent() {
     let flow = MassFlow::from_grams_per_second(1500.0);
     let sq: Expr<Dims<0, 2, -2>> = flow.powi::<2>();
     close(sq.value(), 2.25);

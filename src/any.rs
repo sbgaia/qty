@@ -1003,7 +1003,7 @@ impl QuantityKind {
                 AnyUnit::MassConcentration(MassConcentrationUnit::KilogramPerCubicMeter)
             }
             #[cfg(feature = "fluids")]
-            Self::MassFlow => AnyUnit::MassFlow(MassFlowUnit::GramPerSecond),
+            Self::MassFlow => AnyUnit::MassFlow(MassFlowUnit::KilogramPerSecond),
             #[cfg(feature = "fluids")]
             Self::MassFlux => AnyUnit::MassFlux(MassFluxUnit::KilogramPerSecondPerSquareMeter),
             #[cfg(feature = "chemistry")]
@@ -1123,7 +1123,7 @@ impl QuantityKind {
             }
             #[cfg(feature = "thermal")]
             Self::ThermalInsulance => {
-                AnyUnit::ThermalInsulance(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+                AnyUnit::ThermalInsulance(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
             }
             #[cfg(feature = "thermal")]
             Self::ThermalResistance => {

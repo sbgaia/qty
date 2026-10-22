@@ -324,9 +324,15 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
         dimensions[i] = *exponent;
     }
 
+    let mut base_unit = raw.base_unit;
+    if let Some(&(_, coherent)) = COHERENT_BASE_UNITS.iter().find(|(q, _)| *q == raw.name) {
+        rebase(&raw.name, &mut units, coherent);
+        base_unit = coherent.to_owned();
+    }
+
     QuantityDef {
         name: raw.name,
-        base_unit: raw.base_unit,
+        base_unit,
         doc: raw.xml_doc_summary,
         units,
         dimensions,
@@ -435,6 +441,68 @@ fn apply_display_abbreviations(raw: &mut RawQuantity) {
             _ => panic!("{quantity}.{unit} no longer has the abbreviation {display:?}"),
         }
     }
+}
+
+/// Quantities that UnitsNet stores in a multiple of their coherent SI unit,
+/// and the unit qty stores them in instead, as `(quantity, unit)`. With a
+/// coherent base unit everywhere, products and quotients of base values
+/// need no rescaling.
+///
+/// - MassFlow is `GramPerSecond` upstream: 1 kg/s is 1000 g/s.
+/// - ThermalInsulance is `SquareMeterKelvinPerKilowatt` upstream: 1 m²·K/W
+///   is 1000 m²·K/kW.
+const COHERENT_BASE_UNITS: &[(&str, &str)] = &[
+    ("MassFlow", "KilogramPerSecond"),
+    ("ThermalInsulance", "SquareMeterKelvinPerWatt"),
+];
+
+/// Re-expresses every conversion of `units` against `base`, one of them:
+/// with 1 `base` = `k` old base units, a value in the old base unit is `k`
+/// times the value in `base`. The oracles get the same rescaling, outside
+/// the upstream formula.
+fn rebase(quantity: &str, units: &mut [UnitDef], base: &str) {
+    let k = match units
+        .iter()
+        .find(|u| u.singular == base)
+        .map(|u| &u.to_base)
+    {
+        Some(Form::Affine { a, b }) if b.is_zero() => a.clone(),
+        _ => panic!("{quantity}: {base} is not a linear unit of it"),
+    };
+    let k_literal = format!("{:e}", k.to_f64());
+    for unit in units {
+        unit.to_base = match &unit.to_base {
+            Form::Affine { a, b } => Form::Affine {
+                a: a.clone() / k.clone(),
+                b: b.clone() / k.clone(),
+            },
+            Form::Reciprocal { k: r } => Form::Reciprocal {
+                k: r.clone() / k.clone(),
+            },
+        };
+        unit.from_base = unit.to_base.inverse();
+        unit.oracle_to_base = format!("(({}) / {k_literal})", unit.oracle_to_base);
+        unit.oracle_from_base = replace_x(&unit.oracle_from_base, &format!("(x * {k_literal})"));
+    }
+}
+
+/// Replaces the variable `x` in a translated oracle, leaving identifiers
+/// that contain an `x` alone.
+fn replace_x(oracle: &str, with: &str) -> String {
+    let ident = |c: char| c.is_ascii_alphanumeric() || c == '_';
+    let chars: Vec<char> = oracle.chars().collect();
+    let mut out = String::with_capacity(oracle.len() + with.len());
+    for (i, &c) in chars.iter().enumerate() {
+        let alone = c == 'x'
+            && (i == 0 || !ident(chars[i - 1]))
+            && chars.get(i + 1).is_none_or(|&n| !ident(n));
+        if alone {
+            out.push_str(with);
+        } else {
+            out.push(c);
+        }
+    }
+    out
 }
 
 /// Removes trailing commas before `}` or `]`. Some UnitsNet files have them,
