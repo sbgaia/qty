@@ -9,8 +9,8 @@
 //! 6. `scale_10k_lengths`: scale 10,000 lengths in place, to see whether the
 //!    wrapper gets in the way of vectorisation.
 //!
-//! Run with `cargo bench -p qty-benches`. The HTML report ends up in
-//! `target/criterion/report/index.html`.
+//! Run with `cargo bench` in `benches/`. The HTML report ends up in
+//! `benches/target/criterion/report/index.html`.
 //!
 //! qty, uom, simple-si-units and measurements store metres, so they multiply
 //! when building from km and just read when asked for metres. ferrunitas and

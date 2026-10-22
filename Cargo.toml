@@ -1,7 +1,9 @@
 [workspace]
-members = [".", "codegen", "benches"]
-# Needs nightly and `cargo fuzz`; see fuzz/README.md.
-exclude = ["fuzz"]
+members = [".", "codegen"]
+# Projects with their own workspace and lockfile: the fuzz targets need nightly
+# and `cargo fuzz` (see fuzz/README.md); the benchmarks pull in criterion and
+# the crates qty is compared with.
+exclude = ["fuzz", "benches"]
 resolver = "2"
 
 [package]

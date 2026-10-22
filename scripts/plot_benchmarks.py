@@ -4,7 +4,7 @@
 # ///
 """Generate a grid of bar charts comparing benchmark results across libraries.
 
-Reads Criterion JSON output from target/criterion/ and produces benchmarks.png.
+Reads Criterion JSON output from benches/target/criterion/ and produces benchmarks.png.
 
 Usage:
     uv run scripts/plot_benchmarks.py
@@ -23,7 +23,7 @@ from matplotlib.figure import Figure
 # Configuration
 # ---------------------------------------------------------------------------
 
-CRITERION_DIR = Path("target/criterion")
+CRITERION_DIR = Path("benches/target/criterion")
 OUTPUT_PATH = Path("benchmarks.png")
 
 # Benchmark groups: (directory name, human-readable title)
@@ -170,7 +170,7 @@ def build_figure(results: dict[str, dict[str, float]]) -> Figure:
 def main() -> None:
     if not CRITERION_DIR.is_dir():
         print(
-            f"Error: {CRITERION_DIR} not found. Run `cargo bench -p qty-benches` first.",
+            f"Error: {CRITERION_DIR} not found. Run `cargo bench` in benches/ first.",
             file=sys.stderr,
         )
         sys.exit(1)

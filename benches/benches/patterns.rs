@@ -13,7 +13,7 @@
 //!    function, run over lengths.
 //!
 //! A units library should take as long as `f64` on all of them. Run with
-//! `cargo bench -p qty-benches --bench patterns`.
+//! `cargo bench --bench patterns` in `benches/`.
 
 use std::ops::{Add, Mul, Sub};
 
