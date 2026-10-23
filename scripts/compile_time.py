@@ -109,9 +109,9 @@ LIBRARY_COMMANDS = [
 # Libraries the program is written with: (name, library, dependency line).
 # `library` picks the version of the program, qty's, uom's or plain `f64`.
 PROGRAM_CONFIGS = [
+    ("f64", "f64", ""),
     ("qty", "qty", 'qty = {{ path = "{qty}", default-features = false, features = ["std", "full"] }}'),
     ("uom", "uom", 'uom = {{ version = "{uom}", default-features = false, features = ["si", "f64", "std"] }}'),
-    ("f64", "f64", ""),
 ]
 # Also measured from scratch: the quantities the program uses are all core.
 CORE_CONFIG = (
@@ -188,7 +188,7 @@ def measure_rebuild(args: argparse.Namespace) -> list[dict]:
             row["times"][command_name] = times
         rows.append(row)
         print_row(name, row, REBUILD_COMMANDS)
-    print()
+    print_speedup(rows, REBUILD_COMMANDS)
     return rows
 
 
@@ -213,7 +213,7 @@ def measure_edit(args: argparse.Namespace) -> list[dict]:
             row["times"][command_name] = times
         rows.append(row)
         print_row(name, row, EDIT_COMMANDS)
-    print()
+    print_speedup(rows, EDIT_COMMANDS)
     return rows
 
 
@@ -222,7 +222,7 @@ def measure_scratch(args: argparse.Namespace) -> list[dict]:
     print(f"## From scratch: library and program, {args.size} functions\n")
     print_header(SCRATCH_COMMANDS)
     rows = []
-    configs = PROGRAM_CONFIGS[:1] + [CORE_CONFIG] + PROGRAM_CONFIGS[1:]
+    configs = PROGRAM_CONFIGS[:2] + [CORE_CONFIG] + PROGRAM_CONFIGS[2:]
     for name, library, dependency in configs:
         project = make_project(f"scratch-{len(rows)}", dependency.format(qty=REPO_ROOT, uom=args.uom_version))
         write_main(project, program(PATTERN, library, args.size))
@@ -236,7 +236,7 @@ def measure_scratch(args: argparse.Namespace) -> list[dict]:
             row["times"][command_name] = times
         rows.append(row)
         print_row(name, row, SCRATCH_COMMANDS)
-    print()
+    print_speedup(rows, SCRATCH_COMMANDS)
     return rows
 
 
@@ -255,6 +255,16 @@ def print_header(commands: list) -> None:
 
 def print_row(name: str, row: dict, commands: list) -> None:
     print(f"| {name} | " + " | ".join(fmt(row["times"][c]) for c, _ in commands) + " |", flush=True)
+
+
+def print_speedup(rows: list[dict], commands: list) -> None:
+    """How many times faster qty (every quantity) is than uom, under the table."""
+    means = {row["library"]: row["times"] for row in rows}
+    ratios = [
+        f"{name} {statistics.mean(means['uom'][name]) / statistics.mean(means['qty'][name]):.1f}×"
+        for name, _ in commands
+    ]
+    print("\nuom time over qty time: " + ", ".join(ratios) + "\n")
 
 
 def measure_library(args: argparse.Namespace) -> list[dict]:
