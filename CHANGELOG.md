@@ -6,6 +6,8 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-23
+
 ### Migrating from 0.4
 
 - `MassFlow` is stored in kilograms per second instead of grams per
@@ -20,6 +22,19 @@ follow [Semantic Versioning](https://semver.org/).
   feature. Add `features = ["fixed"]` if you use them. `Length<i64>` and
   other integer storage in the base unit, `round_from`, `Rounding`,
   `RoundError` and `Ordered` don't need it.
+- On targets with an FMA instruction (every aarch64 target, x86-64 built
+  with `-C target-cpu=x86-64-v3` or `native`), `f32` and `f64` conversions
+  are now correctly rounded, so some results move by one ulp, for example
+  `Length::from_feet(12.0)` is exactly 3.6576 m. Tests that compare
+  converted values exactly may need updating there. `qty!` literals give
+  the same values as the `from_` methods on every target, so some of them
+  move by one ulp too. Other targets give the same `from_` values as 0.4.
+- `UnitExpr::parse` gives the nearest `f64` to each unit's exact size, so
+  a few factors move by one ulp: `psi` is 6894.757293168362 Pa instead of
+  6894.757293168361, and `ng` is exactly `1e-12` kg.
+- A storage type of your own that overrides `Number::mul_ratio` or
+  `div_ratio` now gets every conversion constant that isn't exact in
+  binary through them, not only fractions such as 5/18.
 
 ### Changed
 
