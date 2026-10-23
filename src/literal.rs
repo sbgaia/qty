@@ -1,15 +1,20 @@
 //! Quantities written with a unit, checked at compile time: the machinery
 //! behind [`qty!`](crate::qty!).
 //!
-//! A unit written as tokens, like `m/s^2`, becomes an expression on the
-//! constants in [`sym`]: `sym::m.div(sym::s.powi::<2>())`. Each constant is
-//! a [`Unit`] whose dimensions are in its type, so the compiler works out
-//! the dimensions with the same traits as [`formula!`](crate::formula!), and
+//! A unit written as one symbol, like `km`, is a constant in [`sym`]: a
+//! [`Symbol`] whose dimensions are in its type and whose conversion is the
+//! one the matching `from_` method uses, so that the literal is rounded the
+//! same way. A unit written as tokens, like `m/s^2`, becomes an expression
+//! on the constants in [`unit`](mod@unit),
+//! `unit::m.div(unit::s.powi::<2>())`. Each is a [`Unit`] with its size as
+//! an exact fraction, so the compiler works out the dimensions with the
+//! same traits as [`formula!`](crate::formula!) and the size exactly, and
 //! an unknown symbol is an unknown name. Nothing is parsed at compile time,
 //! which keeps the macro cheap to build.
 
 use core::marker::PhantomData;
 
+pub use crate::factor::{Conversion, Factor};
 use crate::formula::{AddE, Dims, DivDim, Expr, MulDim, MulE, PowDim, SubE, E};
 use crate::{Number, UnitExpr};
 
@@ -19,13 +24,153 @@ use crate::{Number, UnitExpr};
     clippy::excessive_precision,
     clippy::unreadable_literal
 )]
+#[rustfmt::skip] // Generated, one constant per line.
 pub mod sym;
 
+#[allow(
+    non_upper_case_globals,
+    clippy::approx_constant,
+    clippy::excessive_precision,
+    clippy::unreadable_literal
+)]
+#[rustfmt::skip] // Generated, one constant per line.
+pub mod unit;
+
+/// `x · factor`, for [`Conv`].
+pub const MUL: u8 = 0;
+/// `x / divisor`, for [`Conv`].
+pub const DIV: u8 = 1;
+/// [`Number::mul_ratio`], for [`Conv`].
+pub const MUL_RATIO: u8 = 2;
+/// [`Number::div_ratio`], for [`Conv`].
+pub const DIV_RATIO: u8 = 3;
+/// Any of the four, for [`Conv`], chosen by the constants (see
+/// [`Conversion::encoded`]): for units that are only known at compile time.
+pub const ANY: u8 = 4;
+
+/// A conversion to coherent SI units: [`MUL`], [`DIV`], [`MUL_RATIO`] or
+/// [`DIV_RATIO`], with its constants, the way the generated `from_` method
+/// of the unit converts, or [`ANY`] of them.
+#[derive(Debug, Clone, Copy)]
+pub struct Conv<const K: u8>(pub f64, pub f64);
+
+impl<const K: u8> Conv<K> {
+    /// `x` in coherent SI units.
+    #[inline]
+    pub fn apply(self, x: f64) -> f64 {
+        // Most units multiply: a body small enough to inline and fold
+        // before code generation.
+        if K == MUL {
+            x * self.0
+        } else {
+            self.apply_other(x)
+        }
+    }
+
+    #[inline]
+    fn apply_other(self, x: f64) -> f64 {
+        match K {
+            DIV => x / self.0,
+            MUL_RATIO => <f64 as Number>::mul_ratio(x, self.0, self.1),
+            DIV_RATIO => <f64 as Number>::div_ratio(x, self.0, self.1),
+            _ => self.decode().apply(x),
+        }
+    }
+
+    /// `Conv<ANY>` as the conversion it encodes.
+    #[inline(always)]
+    fn decode(self) -> Conversion {
+        let (a, b) = (self.0, self.1);
+        if b > 0.0 {
+            Conversion::MulRatio(a, b)
+        } else if b < 0.0 {
+            Conversion::DivRatio(a, -b)
+        } else if b.is_sign_negative() {
+            Conversion::Div(a)
+        } else {
+            Conversion::Mul(a)
+        }
+    }
+
+    /// The factor, rounded.
+    #[inline]
+    pub fn factor(self) -> f64 {
+        match K {
+            MUL => self.0,
+            DIV => 1.0 / self.0,
+            MUL_RATIO => self.0 / self.1,
+            DIV_RATIO => self.1 / self.0,
+            _ => self.decode().factor(),
+        }
+    }
+}
+
+impl Conversion {
+    /// `x` in coherent SI units.
+    #[inline(always)]
+    fn apply(self, x: f64) -> f64 {
+        match self {
+            Self::Mul(factor) => x * factor,
+            Self::Div(divisor) => x / divisor,
+            Self::MulRatio(numerator, denominator) => {
+                <f64 as Number>::mul_ratio(x, numerator, denominator)
+            }
+            Self::DivRatio(numerator, denominator) => {
+                <f64 as Number>::div_ratio(x, numerator, denominator)
+            }
+        }
+    }
+
+    /// The factor, rounded.
+    fn factor(self) -> f64 {
+        match self {
+            Self::Mul(factor) => factor,
+            Self::Div(divisor) => 1.0 / divisor,
+            Self::MulRatio(numerator, denominator) => numerator / denominator,
+            Self::DivRatio(numerator, denominator) => denominator / numerator,
+        }
+    }
+}
+
+impl Factor {
+    /// `x · self`, rounded like the generated `from_` methods.
+    pub fn apply(self, x: f64) -> f64 {
+        self.conversion().apply(x)
+    }
+}
+
 /// A unit with dimensions `D` (a [`Dim`](crate::formula::Dim)) and `A`
-/// radians (an [`E`]), and its size in coherent SI units.
+/// radians (an [`E`]), converted to coherent SI units by a [`Conv`]: what
+/// [`qty!`](crate::qty!) scales the number by.
+#[derive(Debug)]
+pub struct Symbol<D, A, const K: u8> {
+    conv: Conv<K>,
+    unit: PhantomData<(D, A)>,
+}
+
+impl<D, A, const K: u8> Clone for Symbol<D, A, K> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+impl<D, A, const K: u8> Copy for Symbol<D, A, K> {}
+
+impl<D, A, const K: u8> Symbol<D, A, K> {
+    /// A unit converted by `conv`.
+    pub const fn new(conv: Conv<K>) -> Self {
+        Self {
+            conv,
+            unit: PhantomData,
+        }
+    }
+}
+
+/// A unit with dimensions `D` (a [`Dim`](crate::formula::Dim)) and `A`
+/// radians (an [`E`]), and its exact size in coherent SI units, for unit
+/// expressions.
 #[derive(Debug)]
 pub struct Unit<D, A> {
-    factor: f64,
+    factor: Factor,
     unit: PhantomData<(D, A)>,
 }
 
@@ -37,22 +182,47 @@ impl<D, A> Clone for Unit<D, A> {
 impl<D, A> Copy for Unit<D, A> {}
 
 /// The unit `1`, as in `1/s`.
-pub const ONE: Unit<Dims, E<0>> = Unit::new(1.0);
+pub const ONE: Unit<Dims, E<0>> = Unit::new(Factor::ONE);
 
 // The factors are computed the way `UnitExpr::parse` does, so that a unit
 // written as tokens and the same unit in a string give the same value.
 impl<D, A> Unit<D, A> {
     /// A unit `factor` times the coherent SI unit.
-    pub const fn new(factor: f64) -> Self {
+    pub const fn new(factor: Factor) -> Self {
         Self {
             factor,
             unit: PhantomData,
         }
     }
 
+    /// A unit `numerator / denominator` times the coherent SI unit, with
+    /// `value` the nearest `f64`, as in [`unit`](mod@unit).
+    pub const fn exact(value: f64, numerator: u128, denominator: u128) -> Self {
+        Self::new(Factor::exact(value, numerator, denominator, 0))
+    }
+
+    /// A unit `numerator / denominator · π^pi` times the coherent SI unit,
+    /// with `value` the nearest `f64`, as in [`unit`](mod@unit).
+    pub const fn exact_pi(value: f64, numerator: u128, denominator: u128, pi: i8) -> Self {
+        Self::new(Factor::exact(value, numerator, denominator, pi))
+    }
+
+    /// A unit `factor` times the coherent SI unit, where that isn't kept as
+    /// a fraction, as in [`unit`](mod@unit).
+    pub const fn approx(factor: f64) -> Self {
+        Self::new(Factor::approx(factor))
+    }
+
     /// The size in coherent SI units.
-    pub const fn factor(self) -> f64 {
+    pub const fn factor(self) -> Factor {
         self.factor
+    }
+
+    /// The unit as a [`Symbol`], converted like the generated `from_`
+    /// methods.
+    pub const fn symbol(self) -> Symbol<D, A, ANY> {
+        let (a, b) = self.factor.conversion().encoded();
+        Symbol::new(Conv(a, b))
     }
 
     /// The product of two units.
@@ -61,7 +231,7 @@ impl<D, A> Unit<D, A> {
         D: MulDim<D2>,
         A: AddE<A2>,
     {
-        Unit::new(self.factor * other.factor)
+        Unit::new(self.factor.mul(other.factor))
     }
 
     /// The quotient of two units.
@@ -70,7 +240,7 @@ impl<D, A> Unit<D, A> {
         D: DivDim<D2>,
         A: SubE<A2>,
     {
-        Unit::new(self.factor * (1.0 / other.factor))
+        Unit::new(self.factor.mul(other.factor.recip()))
     }
 
     /// The unit to the power `N`, which is positive.
@@ -79,13 +249,7 @@ impl<D, A> Unit<D, A> {
         D: PowDim<N>,
         A: MulE<N>,
     {
-        let mut factor = 1.0;
-        let mut i = 0;
-        while i < N {
-            factor *= self.factor;
-            i += 1;
-        }
-        Unit::new(factor)
+        Unit::new(self.factor.powi(N))
     }
 
     /// `1 / self`.
@@ -94,7 +258,7 @@ impl<D, A> Unit<D, A> {
         Dims: DivDim<D>,
         E<0>: SubE<A>,
     {
-        Unit::new(1.0 / self.factor)
+        Unit::new(self.factor.recip())
     }
 }
 
@@ -108,27 +272,27 @@ impl<D, A> Unit<D, A> {
     note = "the exponents are of length, mass, time, electric current, temperature, amount of substance and luminous intensity, and the angle counts radians (2 for the steradian)"
 )]
 pub trait FromLiteral<D, A> {
-    /// The value `value · factor` in coherent SI units.
-    fn from_literal(value: f64, factor: f64) -> Self;
+    /// `value` converted to coherent SI units by `conv`.
+    fn from_literal<const K: u8>(value: f64, conv: Conv<K>) -> Self;
 }
 
 impl<D, const A: i8, V: Number> FromLiteral<D, E<A>> for Expr<D, V> {
-    #[inline(always)]
-    fn from_literal(value: f64, factor: f64) -> Self {
-        Self::new(V::from_f64(value * factor))
+    #[inline]
+    fn from_literal<const K: u8>(value: f64, conv: Conv<K>) -> Self {
+        Self::new(V::from_f64(conv.apply(value)))
     }
 }
 
 /// `value` in `unit`, as the type the context expects.
-#[inline(always)]
-pub fn literal<T: FromLiteral<D, A>, D, A>(value: f64, unit: Unit<D, A>) -> T {
-    T::from_literal(value, unit.factor)
+#[inline]
+pub fn literal<T: FromLiteral<D, A>, D, A, const K: u8>(value: f64, unit: Symbol<D, A, K>) -> T {
+    T::from_literal(value, unit.conv)
 }
 
 /// `value` in `unit`, as an [`Expr`], for [`formula!`](crate::formula!).
-#[inline(always)]
-pub fn literal_expr<D, A, V: Number>(value: f64, unit: Unit<D, A>) -> Expr<D, V> {
-    Expr::new(V::from_f64(value * unit.factor))
+#[inline]
+pub fn literal_expr<D, A, const K: u8, V: Number>(value: f64, unit: Symbol<D, A, K>) -> Expr<D, V> {
+    Expr::new(V::from_f64(unit.conv.apply(value)))
 }
 
 /// The radians in a quantity's base unit, for the `FromLiteral` impls.
@@ -156,13 +320,16 @@ macro_rules! __qty_literal_impl {
                 >,
             > for $Q<V>
         {
-            #[inline(always)]
-            fn from_literal(value: f64, factor: f64) -> Self {
-                // Both factors are constants, so this is one multiplication
-                // of the literal.
-                $Q::from_base(V::from_f64(
-                    value * (factor / <$Q<V> as $crate::formula::SiFactor>::FACTOR),
-                ))
+            #[inline]
+            fn from_literal<const K: u8>(value: f64, conv: $crate::literal::Conv<K>) -> Self {
+                const BASE: f64 = <$Q<f64> as $crate::formula::SiFactor>::FACTOR;
+                $Q::from_base(V::from_f64(if BASE == 1.0 {
+                    conv.apply(value)
+                } else {
+                    // Both factors are constants, so this is one
+                    // multiplication of the literal.
+                    value * (conv.factor() / BASE)
+                }))
             }
         }
     };
@@ -224,7 +391,7 @@ macro_rules! __qty_literal_impl {
 /// ```
 ///
 /// ```text
-/// error[E0425]: cannot find value `z` in module `qty::literal::sym`
+/// error[E0425]: cannot find value `z` in module `qty::literal::unit`
 /// ```
 ///
 /// ```rust,compile_fail,E0277
@@ -256,11 +423,11 @@ macro_rules! __qty_literal_impl {
 ///
 /// # Precision and cost
 ///
-/// The value is the number times the unit's size, which is computed at
-/// compile time, so it's within about one ulp of the matching `from_`
-/// method, and exact for units such as `km`, `mm` or `kW`. It's computed in
-/// `f64`, then converted to the storage type. It costs about as much to
-/// build as a `from_` call.
+/// The unit's size is computed at compile time as an exact fraction, and
+/// the number is scaled by it the way the matching `from_` method does, so
+/// `qty!(12 ft)` and `Length::from_feet(12.0)` give the same `f64`. It's
+/// computed in `f64`, then converted to the storage type. It costs about as
+/// much to build as a `from_` call.
 ///
 /// The number is a literal, `-` included. Absolute temperatures and dB
 /// levels aren't unit expressions, so write `Temperature::from_degrees_celsius`
@@ -281,7 +448,7 @@ macro_rules! qty {
         $crate::literal::literal(($value) as f64, $crate::literal::sym::$symbol)
     };
     ($value:literal $($unit:tt)+) => {
-        $crate::literal::literal(($value) as f64, const { $crate::__qty_unit!($($unit)+) })
+        $crate::literal::literal(($value) as f64, const { $crate::__qty_unit!($($unit)+).symbol() })
     };
     ($($t:tt)*) => {
         ::core::compile_error!("qty!: write a number and a unit, like `qty!(9.81 m/s^2)`")
@@ -306,7 +473,7 @@ macro_rules! __qty_expr {
         $crate::literal::literal_expr(($value) as f64, $crate::literal::sym::$symbol)
     };
     ($value:literal $($unit:tt)+) => {
-        $crate::literal::literal_expr(($value) as f64, const { $crate::__qty_unit!($($unit)+) })
+        $crate::literal::literal_expr(($value) as f64, const { $crate::__qty_unit!($($unit)+).symbol() })
     };
     ($($t:tt)*) => {
         ::core::compile_error!("qty!: write a number and a unit, like `qty!(9.81 m/s^2)`")
@@ -320,24 +487,26 @@ macro_rules! __qty_expr {
 #[macro_export]
 macro_rules! __qty_unit {
     (@string $unit:literal) => {{
-        const UNIT: $crate::UnitExpr = match $crate::UnitExpr::parse($unit) {
+        const UNIT: ($crate::UnitExpr, $crate::literal::Factor) = match $crate::UnitExpr::parse_exact($unit) {
             ::core::result::Result::Ok(unit) => unit,
             ::core::result::Result::Err(_) => {
                 ::core::panic!(::core::concat!("qty!: `", $unit, "` is not a unit"))
             }
         };
-        $crate::literal::Unit::<
+        const CONSTANTS: (f64, f64) = UNIT.1.conversion().encoded();
+        $crate::literal::Symbol::<
             $crate::formula::Dims<
-                { UNIT.dimensions.length },
-                { UNIT.dimensions.mass },
-                { UNIT.dimensions.time },
-                { UNIT.dimensions.electric_current },
-                { UNIT.dimensions.temperature },
-                { UNIT.dimensions.amount_of_substance },
-                { UNIT.dimensions.luminous_intensity },
+                { UNIT.0.dimensions.length },
+                { UNIT.0.dimensions.mass },
+                { UNIT.0.dimensions.time },
+                { UNIT.0.dimensions.electric_current },
+                { UNIT.0.dimensions.temperature },
+                { UNIT.0.dimensions.amount_of_substance },
+                { UNIT.0.dimensions.luminous_intensity },
             >,
-            $crate::formula::E<{ UNIT.angle }>,
-        >::new(UNIT.factor)
+            $crate::formula::E<{ UNIT.0.angle }>,
+            { $crate::literal::ANY },
+        >::new($crate::literal::Conv(CONSTANTS.0, CONSTANTS.1))
     }};
 
     (@factor [$($acc:tt)*] [$op:tt] ($($group:tt)+) $($rest:tt)*) => {
@@ -348,13 +517,13 @@ macro_rules! __qty_unit {
     };
     // Keywords need a raw identifier.
     (@factor [$($acc:tt)*] [$op:tt] in $($rest:tt)*) => {
-        $crate::__qty_unit!(@exponent [$($acc)*] [$op] [$crate::literal::sym::r#in] $($rest)*)
+        $crate::__qty_unit!(@exponent [$($acc)*] [$op] [$crate::literal::unit::r#in] $($rest)*)
     };
     (@factor [$($acc:tt)*] [$op:tt] as $($rest:tt)*) => {
-        $crate::__qty_unit!(@exponent [$($acc)*] [$op] [$crate::literal::sym::r#as] $($rest)*)
+        $crate::__qty_unit!(@exponent [$($acc)*] [$op] [$crate::literal::unit::r#as] $($rest)*)
     };
     (@factor [$($acc:tt)*] [$op:tt] $symbol:ident $($rest:tt)*) => {
-        $crate::__qty_unit!(@exponent [$($acc)*] [$op] [$crate::literal::sym::$symbol] $($rest)*)
+        $crate::__qty_unit!(@exponent [$($acc)*] [$op] [$crate::literal::unit::$symbol] $($rest)*)
     };
     (@factor [$($acc:tt)*] [$op:tt] $($rest:tt)*) => {
         ::core::compile_error!(::core::concat!(

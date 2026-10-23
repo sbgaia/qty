@@ -1581,6 +1581,7 @@ pub trait HasFixedBase {
 }
 
 mod conv;
+mod factor;
 mod rounding;
 pub use rounding::{Integer, RoundError, Rounding, ToFloat};
 
