@@ -35,11 +35,13 @@ and uom with `default-features = false, features = ["si", "f64", "std"]`
 
 Each measurement runs in its own throwaway Cargo project under
 `target/compile-time/`, against this checkout of qty and uom from crates.io.
-Times are wall clock; the report gives the median and the fastest of
-`--runs` runs. Run it on an otherwise idle machine:
+Times are wall clock; the report gives the mean and the standard
+deviation of `--runs` runs, and `--json` keeps every time. Rebuilds and
+edits start with one untimed run. `scripts/plot_compile_time.py` draws the
+JSON as a bar chart. Run it on an otherwise idle machine:
 
     python3 scripts/compile_time.py
-    python3 scripts/compile_time.py --runs 5 --json results.json
+    python3 scripts/compile_time.py --runs 10 --json results.json
     python3 scripts/compile_time.py --only program --size 100 --runs 1
 
 It needs network access for the first run, to fetch uom.
@@ -123,6 +125,10 @@ PATTERN = "everyday"
 REBUILD_COMMANDS = [("check", ["check"]), ("debug", ["build"]), ("release", ["build", "--release"])]
 EDIT_COMMANDS = [("check", ["check"]), ("debug", ["build"])]
 SCRATCH_COMMANDS = [("check", ["check"]), ("debug", ["build"])]
+# Untimed runs before the timed ones in the rebuild and edit measurements.
+# The first incremental rebuild after a full build is several times slower
+# than the ones after it, which are what someone editing the code waits for.
+WARMUP_RUNS = 1
 
 
 def main() -> int:
@@ -173,10 +179,12 @@ def measure_rebuild(args: argparse.Namespace) -> list[dict]:
             write_main(project, source)
             cargo(project, command, incremental=False)
             times = []
-            for run in range(args.runs):
+            for run in range(-WARMUP_RUNS, args.runs):
                 # A changed file makes Cargo rebuild the program, and only it.
                 write_main(project, source + f"// run {run} {time.time_ns()}\n")
-                times.append(timed(project, command, incremental=False))
+                elapsed = timed(project, command, incremental=False)
+                if run >= 0:
+                    times.append(elapsed)
             row["times"][command_name] = times
         rows.append(row)
         print_row(name, row, REBUILD_COMMANDS)
@@ -197,9 +205,11 @@ def measure_edit(args: argparse.Namespace) -> list[dict]:
             write_main(project, source)
             cargo(project, command, incremental=True)
             times = []
-            for run in range(args.runs):
+            for run in range(-WARMUP_RUNS, args.runs):
                 write_main(project, edit_one_function(source, args.size // 2, run))
-                times.append(timed(project, command, incremental=True))
+                elapsed = timed(project, command, incremental=True)
+                if run >= 0:
+                    times.append(elapsed)
             row["times"][command_name] = times
         rows.append(row)
         print_row(name, row, EDIT_COMMANDS)
@@ -233,7 +243,7 @@ def measure_scratch(args: argparse.Namespace) -> list[dict]:
 def edit_one_function(source: str, index: int, run: int) -> str:
     """The program with a new statement in the body of function `index`."""
     signature = f"pub fn f{index}(a: f64, b: f64) -> f64 {{\n"
-    edited = source.replace(signature, signature + f"        let a = a + {run + 1}.0e-9;\n", 1)
+    edited = source.replace(signature, signature + f"        let a = a + {run + 2}.0e-9;\n", 1)
     assert edited != source, f"function f{index} not found"
     return edited
 
@@ -315,10 +325,10 @@ def timed(project: Path, arguments: list[str], incremental: bool) -> float:
 
 
 def fmt(times: list[float]) -> str:
-    median = statistics.median(times)
+    mean = statistics.mean(times)
     if len(times) == 1:
-        return f"{median:.1f} s"
-    return f"{median:.1f} s (min {min(times):.1f})"
+        return f"{mean:.1f} s"
+    return f"{mean:.1f} ± {statistics.stdev(times):.1f} s"
 
 
 def describe_machine() -> dict:

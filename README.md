@@ -388,7 +388,8 @@ and its `patterns` benchmark with uom and plain `f64` on common uses.
 plain `f64` on a program of 1,000 functions of everyday arithmetic, unit
 literals and conversions: rebuilding it, editing one function with
 incremental compilation, and building it from scratch with the library,
-then cold builds of each library alone.
+then cold builds of each library alone; `uv run scripts/plot_compile_time.py
+results.json` draws its `--json` output as a bar chart.
 `python3 scripts/scaling.py` generates programs of 10 to 1,000 functions
 (or more, with `--sizes`) in ten patterns, from plain arithmetic to
 `formula!`, unit literals, conversions, generics and serde, and measures
