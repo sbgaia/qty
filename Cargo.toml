@@ -11,15 +11,15 @@ name = "qty"
 version = "0.5.0"
 edition = "2021"
 rust-version = "1.82"
-description = "Zero-overhead, strongly-typed physical quantities and unit conversions, generated from UnitsNet"
+description = "Strongly typed physical quantities and unit conversions: fast to compile, no dependencies, zero runtime overhead"
 license = "MIT"
 repository = "https://github.com/sbgaia/qty"
 documentation = "https://docs.rs/qty"
 readme = "README.md"
 # The generator, its data, benchmarks and CI are not needed by users.
 include = ["src/**/*.rs", "src/**/*.md", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE"]
-keywords = ["units", "measurement", "physics", "conversion", "unitsnet"]
-categories = ["science", "no-std", "no-std::no-alloc"]
+keywords = ["units", "dimensional-analysis", "measurement", "physics", "conversion"]
+categories = ["science", "no-std", "no-std::no-alloc", "embedded", "value-formatting"]
 
 [package.metadata.docs.rs]
 all-features = true
