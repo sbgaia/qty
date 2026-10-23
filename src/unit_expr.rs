@@ -1,9 +1,8 @@
 //! Compound unit expressions such as `kg·m/s²`, `W/(m²·K)` or `kWh`.
 
-use core::f64::consts::PI;
 use core::str::FromStr;
 
-use super::{Dimensions, ParseError, Quantity};
+use super::{factor::Factor, Dimensions, ParseError, Quantity};
 
 /// A unit written as an expression of SI and common units, like
 /// `"kg*m/s^2"`, `"N·m"`, `"W/(m²·K)"`, `"kWh"` or `"rev/min"`.
@@ -60,12 +59,6 @@ pub struct UnitExpr {
 }
 
 impl UnitExpr {
-    const ONE: Self = Self {
-        dimensions: Dimensions::DIMENSIONLESS,
-        angle: 0,
-        factor: 1.0,
-    };
-
     /// Parses an expression. Fails with [`ParseError::UnknownUnit`] if it's
     /// malformed or names a unit it doesn't know.
     ///
@@ -81,14 +74,24 @@ impl UnitExpr {
     /// assert_eq!(KWH.factor, 3.6e6);
     /// ```
     pub const fn parse(s: &str) -> Result<Self, ParseError> {
+        match Self::parse_exact(s) {
+            Ok((expr, _)) => Ok(expr),
+            Err(e) => Err(e),
+        }
+    }
+
+    /// [`parse`](Self::parse), with the size as an exact fraction where it
+    /// has one, for `qty!`.
+    #[doc(hidden)]
+    pub const fn parse_exact(s: &str) -> Result<(Self, Factor), ParseError> {
         let b = s.as_bytes();
         let pos = skip_spaces(b, 0).1;
-        let (expr, pos) = match expr(b, pos) {
+        let (term, pos) = match expr(b, pos) {
             Ok(step) => step,
             Err(e) => return Err(e),
         };
         if skip_spaces(b, pos).1 == b.len() {
-            Ok(expr)
+            Ok((term.unit_expr(), term.factor))
         } else {
             Err(ParseError::UnknownUnit)
         }
@@ -139,23 +142,95 @@ impl FromStr for UnitExpr {
     }
 }
 
+/// A unit expression as the parser builds it, with its exact size.
+#[derive(Clone, Copy)]
+struct Term {
+    dimensions: Dimensions,
+    angle: i8,
+    factor: Factor,
+}
+
+impl Term {
+    const ONE: Self = Self {
+        dimensions: Dimensions::DIMENSIONLESS,
+        angle: 0,
+        factor: Factor::ONE,
+    };
+
+    const fn mul(self, other: Self) -> Self {
+        Self {
+            dimensions: self.dimensions.mul(other.dimensions),
+            angle: self.angle + other.angle,
+            factor: self.factor.mul(other.factor),
+        }
+    }
+
+    const fn powi(self, n: i8) -> Self {
+        Self {
+            dimensions: self.dimensions.powi(n),
+            angle: self.angle * n,
+            factor: self.factor.powi(n),
+        }
+    }
+
+    const fn unit_expr(self) -> UnitExpr {
+        UnitExpr {
+            dimensions: self.dimensions,
+            angle: self.angle,
+            factor: self.factor.value(),
+        }
+    }
+}
+
 struct Atom {
     symbol: &'static str,
     /// L, M, T, I, Θ, N, J.
     dims: [i8; 7],
     angle: i8,
-    factor: f64,
+    factor: Factor,
     /// Accepts SI prefixes.
     prefixed: bool,
 }
 
-const fn atom(symbol: &'static str, dims: [i8; 7], angle: i8, factor: f64, prefixed: bool) -> Atom {
+/// A unit `numerator / denominator` times the coherent SI unit.
+const fn atom(
+    symbol: &'static str,
+    dims: [i8; 7],
+    angle: i8,
+    (numerator, denominator): (u128, u128),
+    prefixed: bool,
+) -> Atom {
     Atom {
         symbol,
         dims,
         angle,
-        factor,
+        factor: Factor::new(numerator, denominator, 0),
         prefixed,
+    }
+}
+
+/// An angle `numerator / denominator · π` radians.
+const fn angle(symbol: &'static str, numerator: u128, denominator: u128) -> Atom {
+    Atom {
+        symbol,
+        dims: ONE,
+        angle: 1,
+        factor: Factor::new(numerator, denominator, 1),
+        prefixed: false,
+    }
+}
+
+/// The fraction for a whole number.
+const fn n(n: u128) -> (u128, u128) {
+    (n, 1)
+}
+
+/// The fraction for `digits · 10^exponent`.
+const fn e(digits: u128, exponent: i32) -> (u128, u128) {
+    if exponent < 0 {
+        (digits, 10u128.pow(exponent.unsigned_abs()))
+    } else {
+        (digits * 10u128.pow(exponent as u32), 1)
     }
 }
 
@@ -170,97 +245,105 @@ const TEMPERATURE: [i8; 7] = [0, 0, 0, 0, 1, 0, 0];
 
 const ATOMS: &[Atom] = &[
     // SI base units. The kilogram is the gram with a prefix.
-    atom("m", L, 0, 1.0, true),
-    atom("g", M, 0, 1e-3, true),
-    atom("s", T, 0, 1.0, true),
-    atom("A", [0, 0, 0, 1, 0, 0, 0], 0, 1.0, true),
-    atom("K", TEMPERATURE, 0, 1.0, true),
-    atom("mol", [0, 0, 0, 0, 0, 1, 0], 0, 1.0, true),
-    atom("cd", [0, 0, 0, 0, 0, 0, 1], 0, 1.0, true),
+    atom("m", L, 0, n(1), true),
+    atom("g", M, 0, e(1, -3), true),
+    atom("s", T, 0, n(1), true),
+    atom("A", [0, 0, 0, 1, 0, 0, 0], 0, n(1), true),
+    atom("K", TEMPERATURE, 0, n(1), true),
+    atom("mol", [0, 0, 0, 0, 0, 1, 0], 0, n(1), true),
+    atom("cd", [0, 0, 0, 0, 0, 0, 1], 0, n(1), true),
     // SI derived units.
-    atom("rad", ONE, 1, 1.0, true),
-    atom("sr", ONE, 2, 1.0, false),
-    atom("Hz", [0, 0, -1, 0, 0, 0, 0], 0, 1.0, true),
-    atom("N", FORCE, 0, 1.0, true),
-    atom("Pa", PRESSURE, 0, 1.0, true),
-    atom("J", ENERGY, 0, 1.0, true),
-    atom("W", [2, 1, -3, 0, 0, 0, 0], 0, 1.0, true),
-    atom("C", [0, 0, 1, 1, 0, 0, 0], 0, 1.0, true),
-    atom("V", [2, 1, -3, -1, 0, 0, 0], 0, 1.0, true),
-    atom("Ω", [2, 1, -3, -2, 0, 0, 0], 0, 1.0, true),
-    atom("ohm", [2, 1, -3, -2, 0, 0, 0], 0, 1.0, true),
-    atom("S", [-2, -1, 3, 2, 0, 0, 0], 0, 1.0, true),
-    atom("F", [-2, -1, 4, 2, 0, 0, 0], 0, 1.0, true),
-    atom("H", [2, 1, -2, -2, 0, 0, 0], 0, 1.0, true),
-    atom("Wb", [2, 1, -2, -1, 0, 0, 0], 0, 1.0, true),
-    atom("T", [0, 1, -2, -1, 0, 0, 0], 0, 1.0, true),
-    atom("lm", [0, 0, 0, 0, 0, 0, 1], 2, 1.0, true),
-    atom("lx", [-2, 0, 0, 0, 0, 0, 1], 2, 1.0, true),
-    atom("Bq", [0, 0, -1, 0, 0, 0, 0], 0, 1.0, true),
-    atom("Gy", [2, 0, -2, 0, 0, 0, 0], 0, 1.0, true),
-    atom("Sv", [2, 0, -2, 0, 0, 0, 0], 0, 1.0, true),
-    atom("kat", [0, 0, -1, 0, 0, 1, 0], 0, 1.0, true),
+    atom("rad", ONE, 1, n(1), true),
+    atom("sr", ONE, 2, n(1), false),
+    atom("Hz", [0, 0, -1, 0, 0, 0, 0], 0, n(1), true),
+    atom("N", FORCE, 0, n(1), true),
+    atom("Pa", PRESSURE, 0, n(1), true),
+    atom("J", ENERGY, 0, n(1), true),
+    atom("W", [2, 1, -3, 0, 0, 0, 0], 0, n(1), true),
+    atom("C", [0, 0, 1, 1, 0, 0, 0], 0, n(1), true),
+    atom("V", [2, 1, -3, -1, 0, 0, 0], 0, n(1), true),
+    atom("Ω", [2, 1, -3, -2, 0, 0, 0], 0, n(1), true),
+    atom("ohm", [2, 1, -3, -2, 0, 0, 0], 0, n(1), true),
+    atom("S", [-2, -1, 3, 2, 0, 0, 0], 0, n(1), true),
+    atom("F", [-2, -1, 4, 2, 0, 0, 0], 0, n(1), true),
+    atom("H", [2, 1, -2, -2, 0, 0, 0], 0, n(1), true),
+    atom("Wb", [2, 1, -2, -1, 0, 0, 0], 0, n(1), true),
+    atom("T", [0, 1, -2, -1, 0, 0, 0], 0, n(1), true),
+    atom("lm", [0, 0, 0, 0, 0, 0, 1], 2, n(1), true),
+    atom("lx", [-2, 0, 0, 0, 0, 0, 1], 2, n(1), true),
+    atom("Bq", [0, 0, -1, 0, 0, 0, 0], 0, n(1), true),
+    atom("Gy", [2, 0, -2, 0, 0, 0, 0], 0, n(1), true),
+    atom("Sv", [2, 0, -2, 0, 0, 0, 0], 0, n(1), true),
+    atom("kat", [0, 0, -1, 0, 0, 1, 0], 0, n(1), true),
     // Units accepted with SI prefixes.
-    atom("L", [3, 0, 0, 0, 0, 0, 0], 0, 1e-3, true),
-    atom("l", [3, 0, 0, 0, 0, 0, 0], 0, 1e-3, true),
-    atom("t", M, 0, 1e3, true),
-    atom("eV", ENERGY, 0, 1.602_176_634e-19, true),
-    atom("Wh", ENERGY, 0, 3600.0, true),
-    atom("Ah", [0, 0, 1, 1, 0, 0, 0], 0, 3600.0, true),
-    atom("bar", PRESSURE, 0, 1e5, true),
-    atom("cal", ENERGY, 0, 4.184, true),
+    atom("L", [3, 0, 0, 0, 0, 0, 0], 0, e(1, -3), true),
+    atom("l", [3, 0, 0, 0, 0, 0, 0], 0, e(1, -3), true),
+    atom("t", M, 0, e(1, 3), true),
+    atom("eV", ENERGY, 0, e(1_602_176_634, -28), true),
+    atom("Wh", ENERGY, 0, n(3600), true),
+    atom("Ah", [0, 0, 1, 1, 0, 0, 0], 0, n(3600), true),
+    atom("bar", PRESSURE, 0, e(1, 5), true),
+    atom("cal", ENERGY, 0, e(4184, -3), true),
     // Other units.
-    atom("min", T, 0, 60.0, false),
-    atom("h", T, 0, 3600.0, false),
-    atom("d", T, 0, 86_400.0, false),
-    atom("ha", [2, 0, 0, 0, 0, 0, 0], 0, 1e4, false),
-    atom("°", ONE, 1, PI / 180.0, false),
-    atom("deg", ONE, 1, PI / 180.0, false),
-    atom("rev", ONE, 1, 2.0 * PI, false),
-    atom("Å", L, 0, 1e-10, false),
-    atom("in", L, 0, 0.0254, false),
-    atom("ft", L, 0, 0.3048, false),
-    atom("yd", L, 0, 0.9144, false),
-    atom("mi", L, 0, 1609.344, false),
-    atom("nmi", L, 0, 1852.0, false),
-    atom("lb", M, 0, 0.453_592_37, false),
-    atom("oz", M, 0, 0.028_349_523_125, false),
-    atom("lbf", FORCE, 0, 4.448_221_615_260_5, false),
-    atom("psi", PRESSURE, 0, 6_894.757_293_168_361, false),
-    atom("atm", PRESSURE, 0, 101_325.0, false),
+    atom("min", T, 0, n(60), false),
+    atom("h", T, 0, n(3600), false),
+    atom("d", T, 0, n(86_400), false),
+    atom("ha", [2, 0, 0, 0, 0, 0, 0], 0, e(1, 4), false),
+    angle("°", 1, 180),
+    angle("deg", 1, 180),
+    angle("rev", 2, 1),
+    atom("Å", L, 0, e(1, -10), false),
+    atom("in", L, 0, e(254, -4), false),
+    atom("ft", L, 0, e(3048, -4), false),
+    atom("yd", L, 0, e(9144, -4), false),
+    atom("mi", L, 0, e(1_609_344, -3), false),
+    atom("nmi", L, 0, n(1852), false),
+    atom("lb", M, 0, e(45_359_237, -8), false),
+    atom("oz", M, 0, e(28_349_523_125, -12), false),
+    atom("lbf", FORCE, 0, e(44_482_216_152_605, -13), false),
+    // lbf/in².
+    atom(
+        "psi",
+        PRESSURE,
+        0,
+        (44_482_216_152_605, 6_451_600_000),
+        false,
+    ),
+    atom("atm", PRESSURE, 0, n(101_325), false),
     // Temperature differences.
-    atom("°C", TEMPERATURE, 0, 1.0, false),
-    atom("°F", TEMPERATURE, 0, 5.0 / 9.0, false),
-    atom("°R", TEMPERATURE, 0, 5.0 / 9.0, false),
+    atom("°C", TEMPERATURE, 0, n(1), false),
+    atom("°F", TEMPERATURE, 0, (5, 9), false),
+    atom("°R", TEMPERATURE, 0, (5, 9), false),
 ];
 
-const PREFIXES: &[(&str, f64)] = &[
-    ("da", 1e1),
-    ("Q", 1e30),
-    ("R", 1e27),
-    ("Y", 1e24),
-    ("Z", 1e21),
-    ("E", 1e18),
-    ("P", 1e15),
-    ("T", 1e12),
-    ("G", 1e9),
-    ("M", 1e6),
-    ("k", 1e3),
-    ("h", 1e2),
-    ("d", 1e-1),
-    ("c", 1e-2),
-    ("m", 1e-3),
-    ("µ", 1e-6),
-    ("μ", 1e-6),
-    ("u", 1e-6),
-    ("n", 1e-9),
-    ("p", 1e-12),
-    ("f", 1e-15),
-    ("a", 1e-18),
-    ("z", 1e-21),
-    ("y", 1e-24),
-    ("r", 1e-27),
-    ("q", 1e-30),
+/// The prefixes and their powers of ten.
+const PREFIXES: &[(&str, i32)] = &[
+    ("da", 1),
+    ("Q", 30),
+    ("R", 27),
+    ("Y", 24),
+    ("Z", 21),
+    ("E", 18),
+    ("P", 15),
+    ("T", 12),
+    ("G", 9),
+    ("M", 6),
+    ("k", 3),
+    ("h", 2),
+    ("d", -1),
+    ("c", -2),
+    ("m", -3),
+    ("µ", -6),
+    ("μ", -6),
+    ("u", -6),
+    ("n", -9),
+    ("p", -12),
+    ("f", -15),
+    ("a", -18),
+    ("z", -21),
+    ("y", -24),
+    ("r", -27),
+    ("q", -30),
 ];
 
 // The parser is `const` so that expressions can be checked at compile time.
@@ -362,20 +445,21 @@ const fn skip_spaces(b: &[u8], mut pos: usize) -> (bool, usize) {
     (pos != start, pos)
 }
 
-const fn lookup(token: &[u8]) -> Option<UnitExpr> {
-    const fn from_atom(a: &Atom, prefix: f64) -> UnitExpr {
-        UnitExpr {
+const fn lookup(token: &[u8]) -> Option<Term> {
+    const fn from_atom(a: &Atom, prefix: i32) -> Term {
+        let (numerator, denominator) = e(1, prefix);
+        Term {
             dimensions: Dimensions::new(
                 a.dims[0], a.dims[1], a.dims[2], a.dims[3], a.dims[4], a.dims[5], a.dims[6],
             ),
             angle: a.angle,
-            factor: a.factor * prefix,
+            factor: a.factor.mul(Factor::new(numerator, denominator, 0)),
         }
     }
     let mut i = 0;
     while i < ATOMS.len() {
         if bytes_eq(ATOMS[i].symbol.as_bytes(), token) {
-            return Some(from_atom(&ATOMS[i], 1.0));
+            return Some(from_atom(&ATOMS[i], 0));
         }
         i += 1;
     }
@@ -399,7 +483,7 @@ const fn lookup(token: &[u8]) -> Option<UnitExpr> {
 }
 
 /// `factor (op factor)*`, where `op` is a multiplication sign, a space or `/`.
-const fn expr(b: &[u8], pos: usize) -> Step<UnitExpr> {
+const fn expr(b: &[u8], pos: usize) -> Step<Term> {
     let (mut acc, mut pos) = match factor(b, pos) {
         Ok(step) => step,
         Err(e) => return Err(e),
@@ -447,7 +531,7 @@ const fn eat_multiplication_sign(b: &[u8], pos: usize) -> (bool, usize) {
 }
 
 /// `primary exponent?`.
-const fn factor(b: &[u8], pos: usize) -> Step<UnitExpr> {
+const fn factor(b: &[u8], pos: usize) -> Step<Term> {
     let (base, pos) = match primary(b, pos) {
         Ok(step) => step,
         Err(e) => return Err(e),
@@ -459,7 +543,7 @@ const fn factor(b: &[u8], pos: usize) -> Step<UnitExpr> {
     }
 }
 
-const fn primary(b: &[u8], pos: usize) -> Step<UnitExpr> {
+const fn primary(b: &[u8], pos: usize) -> Step<Term> {
     if let (true, pos) = eat(b, pos, "(") {
         let pos = skip_spaces(b, pos).1;
         let (inner, pos) = match expr(b, pos) {
@@ -473,7 +557,7 @@ const fn primary(b: &[u8], pos: usize) -> Step<UnitExpr> {
         };
     }
     if let (true, pos) = eat(b, pos, "1") {
-        return Ok((UnitExpr::ONE, pos));
+        return Ok((Term::ONE, pos));
     }
     let start = pos;
     let mut pos = pos;
@@ -567,6 +651,7 @@ const fn exponent(b: &[u8], pos: usize) -> Step<Option<i8>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use core::f64::consts::PI;
 
     fn parse(s: &str) -> UnitExpr {
         UnitExpr::parse(s).unwrap_or_else(|_| panic!("{s:?} should parse"))
@@ -626,9 +711,10 @@ mod tests {
         assert!(UnitExpr::parse("kft").is_err());
     }
 
-    /// `src/literal/sym.rs`: a `literal::Unit` constant for every unit
-    /// symbol that is a Rust identifier, with the value `UnitExpr::parse`
-    /// gives it. `QTY_BLESS=1 cargo test` rewrites the file.
+    /// `src/literal/sym.rs` and `unit.rs`: a `literal::Symbol` and a
+    /// `literal::Unit` constant for every unit symbol that is a Rust
+    /// identifier, with the size `UnitExpr::parse_exact` gives it.
+    /// `QTY_BLESS=1 cargo test` rewrites the files.
     #[cfg(feature = "std")]
     #[test]
     fn literal_symbols_are_up_to_date() {
@@ -651,25 +737,49 @@ mod tests {
         let mut seen = std::collections::BTreeSet::new();
         names.retain(|name| is_ident(name) && seen.insert(name.clone()));
 
-        let mut text = String::from(
-            "// Generated by `QTY_BLESS=1 cargo test literal_symbols` — DO NOT EDIT\n\
-             //! The unit symbols of `qty!`, one constant per symbol that is a Rust\n\
-             //! identifier, with SI prefixes.\n\n\
-             use super::Unit;\n\
-             use crate::formula::{Dims, E};\n",
-        );
+        let header = "// Generated by `QTY_BLESS=1 cargo test literal_symbols` — DO NOT EDIT\n";
+        let mut symbols = String::from(header);
+        symbols += "//! The unit symbols of `qty!`, one constant per symbol that is a Rust\n\
+                    //! identifier, with SI prefixes, converted like the `from_` methods.\n\n\
+                    use super::{Conv, Symbol, DIV, DIV_RATIO, MUL, MUL_RATIO};\n\
+                    use core::marker::PhantomData;\n\
+                    use crate::formula::{Dims, E};\n";
+        let mut units = String::from(header);
+        units += "//! The unit symbols of `qty!` in unit expressions, with their exact\n\
+                  //! sizes.\n\n\
+                  use super::Unit;\n\
+                  use crate::formula::{Dims, E};\n";
+        // Each set of dimensions and angle once, as an alias: the constants'
+        // types then have no const arguments to evaluate, which is most of
+        // the time it takes to compile these files.
+        let mut aliases: Vec<(String, String)> = Vec::new();
+        let mut alias = |ty: String, name: String| {
+            if !aliases.iter().any(|(_, n)| *n == name) {
+                aliases.push((ty, name.clone()));
+            }
+            name
+        };
+        let mut symbol_lines = String::new();
+        let mut unit_lines = String::new();
         for name in &names {
-            let e = parse(name);
+            let (e, factor) = UnitExpr::parse_exact(name).unwrap();
             let mut dims = e.dimensions.to_array().to_vec();
             while dims.last() == Some(&0) {
                 dims.pop();
             }
-            let dims: Vec<String> = dims.iter().map(|d| format!("{d}")).collect();
+            let dims_name: String = dims
+                .iter()
+                .zip(["L", "M", "T", "I", "K", "N", "J"])
+                .filter(|(d, _)| **d != 0)
+                .map(|(d, letter)| format!("{letter}{}", format!("{d}").replace('-', "m")))
+                .collect();
+            let dims_ty: Vec<String> = dims.iter().map(|d| format!("{d}")).collect();
             let dims = if dims.is_empty() {
-                String::from("Dims")
+                alias(String::from("Dims"), String::from("Dimensionless"))
             } else {
-                format!("Dims<{}>", dims.join(", "))
+                alias(format!("Dims<{}>", dims_ty.join(", ")), dims_name)
             };
+            let angle = alias(format!("E<{}>", e.angle), format!("A{}", e.angle));
             let ident = if KEYWORDS.contains(&name.as_str()) {
                 format!("r#{name}")
             } else {
@@ -679,20 +789,40 @@ mod tests {
                 ));
                 name.clone()
             };
-            text += &format!(
-                "pub const {ident}: Unit<{dims}, E<{}>> = Unit::new({:?});\n",
-                e.angle, e.factor,
+            let conversion = factor.conversion();
+            let kind = ["MUL", "DIV", "MUL_RATIO", "DIV_RATIO"][conversion.kind() as usize];
+            let (a, b) = conversion.constants();
+            symbol_lines += &format!(
+                "pub const {ident}: Symbol<{dims}, {angle}, {kind}> = \
+                 Symbol {{ conv: Conv({a:?}, {b:?}), unit: PhantomData }};\n"
+            );
+            let value = factor.value();
+            let unit = match factor.parts() {
+                Some((n, d, 0)) => format!("Unit::exact({value:?}, {n}, {d})"),
+                Some((n, d, pi)) => format!("Unit::exact_pi({value:?}, {n}, {d}, {pi})"),
+                None => format!("Unit::approx({value:?})"),
+            };
+            unit_lines += &format!("pub const {ident}: Unit<{dims}, {angle}> = {unit};\n");
+        }
+        let aliases: String = aliases
+            .iter()
+            .map(|(ty, name)| format!("type {name} = {ty};\n"))
+            .collect();
+        symbols += &aliases;
+        symbols += &symbol_lines;
+        units += &aliases;
+        units += &unit_lines;
+        for (file, text) in [("sym.rs", symbols), ("unit.rs", units)] {
+            let path = format!("{}/src/literal/{file}", env!("CARGO_MANIFEST_DIR"));
+            if std::env::var_os("QTY_BLESS").is_some() {
+                std::fs::write(&path, &text).unwrap();
+            }
+            let current = std::fs::read_to_string(&path).unwrap_or_default();
+            assert!(
+                current == text,
+                "src/literal/{file} is out of date: run `QTY_BLESS=1 cargo test`"
             );
         }
-        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/src/literal/sym.rs");
-        if std::env::var_os("QTY_BLESS").is_some() {
-            std::fs::write(path, &text).unwrap();
-        }
-        let current = std::fs::read_to_string(path).unwrap_or_default();
-        assert!(
-            current == text,
-            "src/literal/sym.rs is out of date: run `QTY_BLESS=1 cargo test`"
-        );
     }
 
     #[test]

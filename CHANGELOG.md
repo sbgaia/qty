@@ -52,6 +52,15 @@ follow [Semantic Versioning](https://semver.org/).
   to kilometres `div_ratio(1000.0, 1.0)`. Rational and decimal storage give
   the same values as before. `Complex` storage scales both parts like real
   storage.
+- `qty!` literals give the same `f64` as the matching `from_` method on
+  every target: `qty!(12 ft) == Length::from_feet(12.0)` and
+  `qty!(60 rev/min) == RotationalSpeed::from_revolutions_per_minute(60.0)`.
+  The unit's size is computed at compile time as an exact fraction (with π
+  kept apart), and the literal is scaled by it with the same multiplication,
+  division or two-part constant as the conversion. `UnitExpr::parse` gives
+  the nearest `f64` to the exact size: `psi` is 6894.757293168362 Pa
+  (lbf/in²) instead of 6894.757293168361, and prefixed units such as `ng`
+  are exactly `1e-12` kg.
 
 ## [0.4.0] - 2026-10-22
 

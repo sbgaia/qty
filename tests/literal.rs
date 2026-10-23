@@ -24,11 +24,17 @@ fn gives_the_quantity_the_context_expects() {
 #[test]
 fn matches_the_from_methods() {
     assert_eq!(Length::from_miles(3.0), qty!(3 mi));
-    // `qty!` multiplies by the rounded factor (0.3048, 0.0254). Where the
-    // target has an FMA instruction, the `from_` methods round once instead,
-    // to exactly 3.6576 m and 0.0762 m, so the two are within an ulp.
-    assert!(Length::from_feet(12.0).approx_eq_rel(qty!(12 ft), 1e-15));
-    assert!(Length::from_inches(3.0).approx_eq_rel(qty!(3 in), 1e-15));
+    // Exactly 3.6576 m and 0.0762 m where the target has an FMA instruction.
+    assert_eq!(Length::from_feet(12.0), qty!(12 ft));
+    assert_eq!(Length::from_inches(3.0), qty!(3 in));
+    assert_eq!(Length::from_feet(12.0), qty!(12 "ft"));
+    assert_eq!(Length::from_inches(3.0), qty!(3 "in"));
+    assert_eq!(Speed::from_miles_per_hour(55.0), qty!(55 mi/h));
+    assert_eq!(
+        Pressure::from_pounds_force_per_square_inch(32.0),
+        qty!(32 psi)
+    );
+    assert_eq!(Mass::from_pounds(180.0), qty!(180 lb));
     assert_eq!(Length::from_millimeters(2.5), qty!(2.5 mm));
     assert_eq!(Mass::from_kilograms(70.0), qty!(70 kg));
     assert_eq!(Mass::from_grams(250.0), qty!(250 g));
@@ -48,9 +54,8 @@ fn matches_the_from_methods_in_groups() {
     assert_eq!(Torque::from_newton_meters(5.0), qty!(5 N*m));
     assert_eq!(ElectricResistance::from_kiloohms(10.0), qty!(10 kΩ));
     assert_eq!(ElectricResistance::from_kiloohms(10.0), qty!(10 kohm));
-    // Within an ulp where the factor isn't exact.
     let rpm = RotationalSpeed::from_revolutions_per_minute(60.0);
-    assert!(rpm.approx_eq_rel(qty!(60 rev/min), 1e-15));
+    assert_eq!(rpm, qty!(60 rev/min));
     // A base unit that isn't coherent SI: grams per second.
     assert_eq!(MassFlow::from_kilograms_per_second(3.0), qty!(3 kg/s));
 }
@@ -140,4 +145,72 @@ fn decimal_storage() {
 
     let d: Length<Decimal> = qty!(1.5 km);
     assert_eq!(d, Length::from_kilometers(Decimal::new(15, 1)));
+}
+
+/// Every listed unit whose abbreviation is a unit expression gives the same
+/// bits as the `from_` methods, for many values.
+#[cfg(feature = "dynamic")]
+#[test]
+fn every_unit_expression_matches_its_unit() {
+    let mut values = vec![0.1, 0.3, 1.0, 3.0, 7.25, 12.0, 100.0, 123.456, 1e-3, 9.81];
+    let mut state = 0x9E37_79B9_7F4A_7C15u64;
+    for _ in 0..300 {
+        state ^= state << 13;
+        state ^= state >> 7;
+        state ^= state << 17;
+        // Decimals with a few digits, as written in code, at many scales.
+        let digits = (state % 100_000) as f64;
+        let scale = 10f64.powi((state >> 32) as i32 % 12 - 6);
+        values.push(digits * scale);
+    }
+    let mut checked = 0;
+    let mut mismatches = Vec::new();
+    for kind in QuantityKind::all() {
+        let base = kind.base_unit();
+        for info in kind.info().units {
+            let Ok(unit) = AnyUnit::parse_in(kind, info.abbreviation) else {
+                continue;
+            };
+            // Units with an offset aren't unit expressions.
+            if AnyQuantity::new(0.0, unit).convert_to(base).unwrap() != 0.0 {
+                continue;
+            }
+            let Ok((expr, factor)) = UnitExpr::parse_exact(info.abbreviation) else {
+                continue;
+            };
+            // Quantities whose base unit isn't coherent SI aren't checked.
+            let Ok((base_expr, base_factor)) = UnitExpr::parse_exact(base.abbreviation()) else {
+                continue;
+            };
+            if expr.dimensions != base_expr.dimensions
+                || expr.angle != base_expr.angle
+                || base_factor.value() != 1.0
+            {
+                continue;
+            }
+            // UnitsNet defines the inverse psi with the psi rounded to
+            // 6894.757293168361 Pa, not as lbf/in².
+            if info.abbreviation == "psi⁻¹" {
+                continue;
+            }
+            checked += 1;
+            for &v in &values {
+                let expected = AnyQuantity::new(v, unit).convert_to(base).unwrap();
+                let got = factor.apply(v);
+                if got.to_bits() != expected.to_bits() {
+                    mismatches.push(format!(
+                        "{v} {}: {got:e} vs {expected:e} ({kind:?})",
+                        info.abbreviation
+                    ));
+                    break;
+                }
+            }
+        }
+    }
+    assert!(checked > 100, "{checked}");
+    assert!(
+        mismatches.is_empty(),
+        "{checked} units, mismatches:\n{}",
+        mismatches.join("\n")
+    );
 }

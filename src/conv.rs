@@ -101,6 +101,34 @@ pub(crate) const fn fma(a: f64, b: f64, c: f64) -> f64 {
     round(sum, exponent, negative)
 }
 
+/// `numerator / denominator` rounded to the nearest `f64`, for a
+/// denominator that isn't zero and both below 2^127.
+pub(crate) const fn ratio(numerator: u128, denominator: u128) -> f64 {
+    const TWO_53: u128 = 1 << 53;
+    if numerator <= TWO_53 && denominator <= TWO_53 {
+        // Both are exact, so the division rounds once.
+        return numerator as f64 / denominator as f64;
+    }
+    if numerator == 0 {
+        return 0.0;
+    }
+    // Long division until the quotient has 56 bits; the remainder only
+    // matters as a sticky bit below the rounding position.
+    let mut quotient = numerator / denominator;
+    let mut remainder = numerator % denominator;
+    let mut exponent = 0;
+    while quotient < 1 << 55 {
+        quotient <<= 1;
+        remainder <<= 1;
+        exponent -= 1;
+        if remainder >= denominator {
+            remainder -= denominator;
+            quotient |= 1;
+        }
+    }
+    round(quotient | (remainder != 0) as u128, exponent, false)
+}
+
 /// `f64::is_finite`, which isn't `const` before Rust 1.83. False for NaN.
 const fn is_finite(x: f64) -> bool {
     x >= -f64::MAX && x <= f64::MAX
@@ -258,6 +286,22 @@ mod tests {
         let tiny = f64::MIN_POSITIVE;
         assert_eq!(fma(tiny, 0.5, tiny / 4.0), tiny.mul_add(0.5, tiny / 4.0));
         assert_eq!(fma(tiny, -1.0, tiny), 0.0);
+    }
+
+    #[test]
+    fn ratio_rounds_once() {
+        assert_eq!(ratio(381, 1250), 0.3048);
+        assert_eq!(ratio(1_602_176_634, 10u128.pow(28)), 1.602_176_634e-19);
+        assert_eq!(ratio(10u128.pow(30), 1), 1e30);
+        assert_eq!(ratio(1, 10u128.pow(30)), 1e-30);
+        assert_eq!(ratio(1 << 100, 3 << 100), 1.0 / 3.0);
+        // Halfway between two floats: ties to even, unless anything is left.
+        // Floats near 2^54 are 4 apart.
+        let two_54 = 1u128 << 54;
+        let float = two_54 as f64;
+        assert_eq!(ratio(two_54 + 2, 1), float);
+        assert_eq!(ratio(two_54 + 6, 1), float + 8.0);
+        assert_eq!(ratio(2 * two_54 + 5, 2), float + 4.0);
     }
 
     #[test]

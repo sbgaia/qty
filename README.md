@@ -99,8 +99,10 @@ assert_eq!(fall.as_meters(), 19.62);
 Like `parse`, it needs that type: on its own, write `let g: Acceleration =
 qty!(9.81 m/s^2)` rather than `let g = qty!(9.81 m/s^2)`. A misspelt unit,
 or one with the wrong dimensions (`let g: Acceleration = qty!(9.81 m/s)`),
-doesn't compile. The units are constants whose dimensions are in their
-types, so a literal costs about as much to compile as a `from_` call.
+doesn't compile. A literal is rounded like the matching `from_` method:
+`qty!(12 ft)` is `Length::from_feet(12.0)`, to the bit. The units are
+constants whose dimensions and conversions are in their types, so a literal
+costs about as much to compile as a `from_` call.
 
 ## Formulas
 
