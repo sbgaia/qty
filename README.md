@@ -17,9 +17,10 @@ let speed: Speed = distance / time;
 assert_eq!(format!("{:.1}", speed.in_unit(SpeedUnit::MilePerHour)), "12.4 mph");
 ```
 
-A quantity stores one number, in its base unit (metres, kilograms,
-seconds, ...). It has the same size as that number and compiles to the same
-code; converting to another unit is a single multiplication.
+Each quantity stores a single number in its base unit (metres, kilograms,
+seconds and so on). It takes the same space as that number and compiles to
+the same code. Converting to another unit is usually a single
+multiplication.
 
 ```toml
 [dependencies]
@@ -28,9 +29,9 @@ qty = "0.5"
 
 ## Compile times
 
-Units cost compile time, because the compiler checks every operation. With
-qty, rebuilding 1,000 functions takes 5 to 6 seconds more than with plain
-`f64` numbers, and 4 to 5 times less than with
+Checking units costs compile time, because the compiler has to check every
+operation. With qty, rebuilding 1,000 functions takes 5 to 6 seconds longer
+than with plain `f64` numbers, and 4 to 5 times less time than with
 [uom](https://crates.io/crates/uom):
 
 ![Compile times of 1,000 functions of unit code with plain f64, qty and uom](https://raw.githubusercontent.com/sbgaia/qty/main/docs/compile-times.svg)
@@ -43,13 +44,14 @@ qty, rebuilding 1,000 functions takes 5 to 6 seconds more than with plain
 | Edit one function, debug build | 0.7 s | 1.9 s | 6.5 s |
 | From scratch, debug build | 2.1 s | 20.0 s | 52.5 s |
 
-Each function has the arithmetic, unit literals and conversions of everyday
-code. qty and uom are built with every quantity and `f64` storage; with
-only its core quantities, which is all this program needs, qty builds from
-scratch in 10.9 s. Mean of 10 runs on 8 cores, rustc 1.99; the data is in
+Each function contains the kind of arithmetic, unit literals and
+conversions you find in everyday code. Both libraries are built with every
+quantity and `f64` storage. This program only needs qty's core quantities,
+and with just those, qty builds from scratch in 10.9 s. The times are the
+mean of 10 runs on 8 cores with rustc 1.99. The raw data is in
 [`docs/compile-times.json`](https://github.com/sbgaia/qty/blob/main/docs/compile-times.json),
 and [`scripts/compile_time.py`](https://github.com/sbgaia/qty/blob/main/scripts/compile_time.py)
-measures it on your machine.
+runs the same measurement on your machine.
 
 ## Units and arithmetic
 
@@ -64,10 +66,10 @@ assert!((tyre.as_pounds_force_per_square_inch() - 34.8).abs() < 0.1);
 assert_eq!(Pressure::new(2.4, PressureUnit::Bar), tyre);
 ```
 
-`*` and `/` work between any two quantities, and the result is the
-quantity with the dimensions of the product or quotient. Steps in between
-don't need a type of their own, and at run time it's the arithmetic on
-plain floats:
+`*` and `/` work between any two quantities, and the result has the
+dimensions of the product or quotient. Intermediate steps don't need a type
+of their own, and at run time the code is the same arithmetic as on plain
+floats:
 
 ```rust
 use qty::*;
@@ -88,26 +90,27 @@ let energy: Energy = 0.5 * person * v.powi::<2>();
 assert_eq!(energy.as_joules(), 315.0);
 ```
 
-Where several quantities have the same dimensions, the relations between
-quantities decide (power over angular speed is a `Torque`, force times
-length an `Energy`), and otherwise the common one: an `Energy` rather than
-a `Torque`, a `Frequency` rather than a `RotationalSpeed`. Dimensions that
-no quantity has, like those of `person * person`, give a
-[`formula::Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html),
-which keeps multiplying, prints in SI units and converts with `into()`.
-`.powi::<N>()` follows the same rules: `side.powi::<2>()` is an `Area`.
+Sometimes several quantities share the same dimensions. Then the relations
+between quantities decide: power over angular speed is a `Torque`, and force
+times length is an `Energy`. Otherwise you get the more common one, so an
+`Energy` rather than a `Torque`, and a `Frequency` rather than a
+`RotationalSpeed`. When no quantity has the dimensions of a result, as with
+`person * person`, you get a
+[`formula::Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html).
+It keeps multiplying, prints in SI units and converts with `into()`.
+`.powi::<N>()` follows the same rules, so `side.powi::<2>()` is an `Area`.
 
 Adding a length to a duration is a compile error, and so is asking for the
 wrong type: `let f: Force = mass * speed` reports that it found an
-`Impulse`. Operations that only make sense for some quantities exist only
-there: `Area::sqrt` gives a `Length`, `Angle` has `sin` and `cos`.
+`Impulse`. Operations that only make sense for some quantities only exist
+on those. `Area::sqrt` gives a `Length`, and `Angle` has `sin` and `cos`.
 
 ## Unit literals
 
-`qty!` writes a quantity as a number and a unit. The unit is checked at
-compile time, by `cargo check` too, and the result is the quantity the
-code around it expects, from a `let` with a type, an argument, or the other
-side of `+` or `==`:
+`qty!` writes a quantity as a number followed by a unit. The unit is
+checked at compile time, even by `cargo check`. The result is whatever
+quantity the surrounding code expects, whether that comes from a typed
+`let`, a function argument, or the other side of a `+` or `==`:
 
 ```rust
 use qty::*;
@@ -121,26 +124,29 @@ let fall: Length = formula!(0.5 * qty!(9.81 m/s^2) * qty!(2 s).powi::<2>());
 assert_eq!(fall.as_meters(), 19.62);
 ```
 
-Like `parse`, it needs that type: on its own, write `let g: Acceleration =
-qty!(9.81 m/s^2)` rather than `let g = qty!(9.81 m/s^2)`. A misspelt unit,
-or one with the wrong dimensions (`let g: Acceleration = qty!(9.81 m/s)`),
-doesn't compile. A literal is rounded like the matching `from_` method:
-`qty!(12 ft)` is `Length::from_feet(12.0)`, to the bit. The units are
-constants whose dimensions and conversions are in their types, so a literal
-costs about as much to compile as a `from_` call.
+Like `parse`, it needs to know the target type. On a line of its own,
+write `let g: Acceleration = qty!(9.81 m/s^2)`, not
+`let g = qty!(9.81 m/s^2)`. A misspelt unit doesn't compile, and neither
+does one with the wrong dimensions, such as
+`let g: Acceleration = qty!(9.81 m/s)`. A literal is rounded exactly like
+the matching `from_` method, so `qty!(12 ft)` is `Length::from_feet(12.0)`
+down to the last bit. Units are constants that carry their dimensions and
+conversions in their types, so a literal costs about as much to compile as
+a `from_` call.
 
 ## Formulas
 
-The operators cover most formulas. `formula!` computes the same arithmetic
-and converts the result to the type you ask for, which helps where the
-operators don't:
+The operators cover most formulas. `formula!` does the same arithmetic and
+then converts the result to the type you ask for. That helps in the cases
+the operators don't handle:
 
-- The target isn't the quantity the dimensions pick: `force * lever` is an
-  `Energy`, and `let t: Torque = formula!(force * lever)` a torque.
-- Plain numbers work with every storage type: `formula!(0.5 * m * v * v)`
-  with `f32` too, where the operators only take `f64` numbers on the left.
-- `.sqrt()`, `.cbrt()` and `.powi::<N>()` work on any step, and an error
-  names the dimensions in SI base units.
+- The target isn't the quantity the dimensions pick. `force * lever` is an
+  `Energy`, but `let t: Torque = formula!(force * lever)` gives a torque.
+- Plain numbers work with every storage type. `formula!(0.5 * m * v * v)`
+  also works with `f32`, while the operators only accept `f64` numbers on
+  the left.
+- `.sqrt()`, `.cbrt()` and `.powi::<N>()` work on any intermediate step, and
+  errors name the dimensions in SI base units.
 
 ```rust
 use qty::*;
@@ -157,14 +163,15 @@ assert_eq!(t.as_newton_meters(), 10.0);
 # }
 ```
 
-A formula whose dimensions don't match the target fails `cargo check`:
-``this formula gives `(kg, m<2>, s<-2>)`, not a `Force` `` for an energy,
-kg·m²·s⁻². At run time it's the same code as the arithmetic on plain
-floats. `qty::constants` has the physical constants.
+If a formula's dimensions don't match the target, `cargo check` fails. For
+an energy, kg·m²·s⁻², it says
+``this formula gives `(kg, m<2>, s<-2>)`, not a `Force` ``. At run time the
+code is the same as the arithmetic on plain floats. The physical constants
+are in `qty::constants`.
 
 `expr!` computes a formula and keeps the
-[`Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html), even
-where a quantity has its dimensions:
+[`Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html), even when
+a quantity with those dimensions exists:
 
 ```rust
 use qty::*;
@@ -192,17 +199,17 @@ assert_eq!("5 kilometres".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
 assert_eq!("3 kg*m/s^2".parse::<Force>(), Ok(Force::from_newtons(3.0)));
 ```
 
-With the `serde` feature, quantities serialize as plain numbers in the base
-unit; `#[serde(with = "qty::serde_str")]` reads and writes text such as
-`"30 s"` or `"60 km/h"` instead, which suits configuration files.
-Quantities implement `FromStr`, so they also work as command-line
-arguments: with clap's derive, a field `distance: Length` takes
+With the `serde` feature, quantities serialize as plain numbers in their
+base unit. With `#[serde(with = "qty::serde_str")]` they read and write text
+such as `"30 s"` or `"60 km/h"` instead, which is handy for configuration
+files. Quantities implement `FromStr`, so they also work as command-line
+arguments. With clap's derive, a field `distance: Length` accepts
 `--distance "12 km"` and rejects `"12 kg"` with an error.
 
 ## Temperatures
 
-A temperature is a position on a scale, so two temperatures can't be added.
-Subtracting them gives a `TemperatureDelta`, which can:
+A temperature is a point on a scale, so you can't add two temperatures.
+Subtracting them gives a `TemperatureDelta`, which you can add:
 
 ```rust
 use qty::*;
@@ -218,11 +225,11 @@ Decibel levels (dBm, dBV) work the same way.
 
 ## Storage types
 
-The storage type is `f64` unless you pick another: `Length<f32>`,
-`Mass<i64>`, complex numbers, decimals and rationals behind features, or
+Quantities store an `f64` unless you choose something else: `Length<f32>`,
+`Mass<i64>`, complex numbers, decimals or rationals (behind features), or
 your own type through the `Number` and `Float` traits. With decimals and
-rationals the conversions are exact, fractions such as km/h to m/s (5/18)
-included:
+rationals, conversions are exact, including fractions such as km/h to m/s
+(5/18):
 
 ```rust
 # #[cfg(feature = "num-rational")] {
@@ -235,19 +242,20 @@ assert_eq!(Length::from_feet(Ratio::from_integer(1)).as_meters(), Ratio::new(381
 # }
 ```
 
-With `f32` and `f64`, a conversion is one or two operations and no
-division where the target has an FMA instruction (every aarch64 target,
-x86-64 with `-C target-cpu=x86-64-v3` or `native`). It is then correctly
-rounded: `Length::from_feet(12.0)` is exactly 3.6576 m. Elsewhere it
-multiplies or divides once by the rounded constant, which is within an ulp.
+With `f32` and `f64`, a conversion takes one or two operations and no
+division on targets with an FMA instruction. That's every aarch64 target,
+and x86-64 with `-C target-cpu=x86-64-v3` or `native`. The result is then
+correctly rounded, so `Length::from_feet(12.0)` is exactly 3.6576 m. On other
+targets it multiplies or divides once by the rounded constant, which stays
+within one ulp.
 
-Complex storage suits AC circuits: a current phasor times a complex
-impedance, `ElectricCurrent<Complex64> * ElectricResistance<Complex64>`, is
-the voltage phasor.
+Complex storage is useful for AC circuits. A current phasor times a complex
+impedance, `ElectricCurrent<Complex64> * ElectricResistance<Complex64>`,
+gives the voltage phasor.
 
 ## Your own units and quantities
 
-Units missing from UnitsNet can be added in your own crate:
+You can add units that UnitsNet doesn't have in your own crate:
 
 ```rust
 use qty::*;
@@ -266,7 +274,7 @@ let race = Length::new(5.0, Furlong);
 assert_eq!(format!("{:.2}", race.in_unit(LengthUnit::Kilometer)), "1.01 km");
 ```
 
-and so can whole quantities, with their own units:
+You can also add whole quantities, with their own units:
 
 ```rust
 use qty::*;
@@ -287,12 +295,11 @@ assert_eq!(format!("{:.1}", order.in_unit(PaperUnit::Ream)), "3.1 rm");
 # Ok::<(), ParseError>(())
 ```
 
-A custom quantity can also declare its physical dimensions
-(`dimensions { mass: 1, length: -2 }`), so that unit expressions such as
-`"80 g/m^2"` parse as it, it works in `formula!`, and `relation!` connects it
-to other quantities.
-The conversion factor is worked out at compile time, and a relation whose
-dimensions don't add up doesn't compile:
+A custom quantity can also declare its physical dimensions, like
+`dimensions { mass: 1, length: -2 }`. Unit expressions such as `"80 g/m^2"`
+then parse as that quantity, it works in `formula!`, and `relation!` can
+connect it to other quantities. The conversion factor is computed at compile
+time, and a relation whose dimensions don't add up doesn't compile:
 
 ```rust
 use qty::*;
@@ -317,8 +324,9 @@ assert_eq!(format!("{:.1}", ream.in_unit(MassUnit::Kilogram)), "2.5 kg");
 ## Integers in a fixed unit
 
 With the `fixed` feature, `Fixed<U, I>` counts whole units of `U` in an
-integer, which is what most sensors and file formats deliver. Operations
-that are exact just work; anything that would round asks how:
+integer, which is what most sensors and file formats produce. Exact
+operations just work, and anything that would need rounding asks you how to
+round:
 
 ```rust
 # #[cfg(feature = "fixed")] {
@@ -338,10 +346,10 @@ assert_eq!(reading.display_in::<DegreeCelsius>().to_string(), "21.375 °C");
 # }
 ```
 
-Mixing units where the result would not be exact, such as
-`Fixed<Meter> + Fixed<Millimeter>`, does not compile. Without the feature,
-integer storage in the base unit (`Length<i64>`) and `round_from` are
-still there.
+Mixing units where the result wouldn't be exact, such as
+`Fixed<Meter> + Fixed<Millimeter>`, doesn't compile. Without the feature you
+still have integer storage in the base unit (`Length<i64>`) and
+`round_from`.
 
 ## Also included
 
@@ -377,17 +385,17 @@ still there.
 | `num-rational` | | Rational storage, `Length<Ratio<i64>>` |
 
 The 18 core quantities (length, mass, duration, speed, force, energy,
-pressure, temperature, angle and a few more) are always there. Building
-only those takes about a fifth of the time of `full`, so if you need few
-groups, list them:
+pressure, temperature, angle and a few more) are always available. Building
+only those takes about a quarter of the time `full` takes, so if you only
+need a few groups, list them:
 
 ```toml
 qty = { version = "0.5", default-features = false, features = ["std", "electrical"] }
 ```
 
-Without default features the crate is `no_std` and never allocates; add
-`libm` for the math functions. No feature is required, and the defaults pull
-in no dependencies.
+Without default features the crate is `no_std` and never allocates. Add
+`libm` for the math functions. No feature is required, and the default
+features pull in no dependencies.
 
 The minimum supported Rust version is 1.82.
 
@@ -408,19 +416,24 @@ fuzz targets cover parsing and `Fixed` (see `fuzz/README.md`). The examples
 in [`examples/`](https://github.com/sbgaia/qty/tree/main/examples) run in CI.
 
 `cargo bench` in `benches/` compares run-time speed with other unit crates,
-and its `patterns` benchmark with uom and plain `f64` on common uses.
-`python3 scripts/compile_time.py` compares compile times with uom and with
-plain `f64` on a program of 1,000 functions of everyday arithmetic, unit
-literals and conversions: rebuilding it, editing one function with
-incremental compilation, and building it from scratch with the library,
-then cold builds of each library alone; `uv run scripts/plot_compile_time.py
-results.json` draws its `--json` output as a bar chart.
-`python3 scripts/scaling.py` generates programs of 10 to 1,000 functions
-(or more, with `--sizes`) in ten patterns, from plain arithmetic to
-`formula!`, unit literals, conversions, generics and serde, and measures
-how long they take to compile and to run with qty, with uom and with plain
-`f64`. Both scripts build qty and uom with the same features. Run them on
-an idle machine; `compile_time.py` takes about 20 minutes on four cores,
+and its `patterns` benchmark compares qty with uom and plain `f64` on common
+uses.
+
+`python3 scripts/compile_time.py` compares compile times with uom and plain
+`f64`. It uses a program of 1,000 functions of everyday arithmetic, unit
+literals and conversions, and times rebuilding it, editing one function with
+incremental compilation, and building it from scratch together with the
+library. Then it times cold builds of each library on its own.
+`uv run scripts/plot_compile_time.py results.json` draws its `--json` output
+as a bar chart.
+
+`python3 scripts/scaling.py` generates programs of 10 to 1,000 functions (or
+more, with `--sizes`) in ten patterns, from plain arithmetic to `formula!`,
+unit literals, conversions, generics and serde. It measures how long they
+take to compile and to run with qty, uom and plain `f64`.
+
+Both scripts build qty and uom with the same features. Run them on an idle
+machine. `compile_time.py` takes about 20 minutes on four cores, and
 `scaling.py` about an hour.
 
 ## License
