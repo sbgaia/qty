@@ -26,6 +26,31 @@ code; converting to another unit is a single multiplication.
 qty = "0.5"
 ```
 
+## Compile times
+
+Units cost compile time, because the compiler checks every operation. With
+qty, rebuilding 1,000 functions takes 5 to 6 seconds more than with plain
+`f64` numbers, and 4 to 5 times less than with
+[uom](https://crates.io/crates/uom):
+
+![Compile times of 1,000 functions of unit code with plain f64, qty and uom](https://raw.githubusercontent.com/sbgaia/qty/main/docs/compile-times.svg)
+
+| 1,000 functions | `f64` | qty | uom |
+| --- | ---: | ---: | ---: |
+| Rebuild, `cargo check` | 1.6 s | 6.3 s | 27.9 s |
+| Rebuild, debug build | 2.0 s | 7.9 s | 39.5 s |
+| Edit one function, `cargo check` | 0.5 s | 1.4 s | 1.4 s |
+| Edit one function, debug build | 0.7 s | 1.9 s | 6.5 s |
+| From scratch, debug build | 2.1 s | 20.0 s | 52.5 s |
+
+Each function has the arithmetic, unit literals and conversions of everyday
+code. qty and uom are built with every quantity and `f64` storage; with
+only its core quantities, which is all this program needs, qty builds from
+scratch in 10.9 s. Mean of 10 runs on 8 cores, rustc 1.99; the data is in
+[`docs/compile-times.json`](https://github.com/sbgaia/qty/blob/main/docs/compile-times.json),
+and [`scripts/compile_time.py`](https://github.com/sbgaia/qty/blob/main/scripts/compile_time.py)
+measures it on your machine.
+
 ## Units and arithmetic
 
 Each quantity has a `from_` and an `as_` method per unit, and `new` and
