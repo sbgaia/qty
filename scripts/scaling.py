@@ -32,6 +32,8 @@ of the pattern. The patterns:
 - `serde`: a struct of quantities per block, with `Serialize` and
   `Deserialize` derived, written to JSON and read back.
 - `mixed`: `arith`, `formula`, `literal` and `convert` in each function.
+- `everyday`: `arith`, `operators`, `literal` and `convert` in each
+  function: the code most programs write, with plain operators.
 
 Both libraries are built with the same features: every quantity, `f64`
 storage, `std`, and serde for the `serde` pattern only. That is qty with
@@ -438,14 +440,21 @@ PATTERNS = {
     "generic": (GENERIC, GENERIC_ITEMS, False),
     "serde": (SERDE, SERDE_ITEMS, True),
     "mixed": (None, None, False),
+    "everyday": (None, None, False),
+}
+
+# Patterns that put several others in each function.
+COMBINED = {
+    "mixed": [ARITH, FORMULA, LITERAL, CONVERT],
+    "everyday": [ARITH, OPERATORS, LITERAL, CONVERT],
 }
 
 
 def body(pattern: str, library: str, index: int) -> str:
     if pattern == "types":
         template = types_body(library, index)
-    elif pattern == "mixed":
-        parts = [ARITH, FORMULA, LITERAL, CONVERT]
+    elif pattern in COMBINED:
+        parts = COMBINED[pattern]
         template = "(" + "\n    + ".join("{\n" + part[library] + "\n}" for part in parts) + ")"
     else:
         template = PATTERNS[pattern][0][library]
@@ -784,7 +793,9 @@ def describe_machine() -> dict:
     return {
         "rustc": output(["rustc", "--version"]),
         "cpu": cpu,
-        "cores": os.cpu_count(),
+        # The cores this process may use, which Cargo uses too: fewer than
+        # the machine has under `taskset`.
+        "cores": len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else os.cpu_count(),
         "os": platform.platform(),
         "qty commit": output(["git", "-C", str(REPO_ROOT), "rev-parse", "--short", "HEAD"]),
     }
