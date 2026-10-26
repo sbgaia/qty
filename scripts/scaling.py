@@ -793,7 +793,9 @@ def describe_machine() -> dict:
     return {
         "rustc": output(["rustc", "--version"]),
         "cpu": cpu,
-        "cores": os.cpu_count(),
+        # The cores this process may use, which Cargo uses too: fewer than
+        # the machine has under `taskset`.
+        "cores": len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else os.cpu_count(),
         "os": platform.platform(),
         "qty commit": output(["git", "-C", str(REPO_ROOT), "rev-parse", "--short", "HEAD"]),
     }
