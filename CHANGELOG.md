@@ -6,6 +6,22 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-26
+
+### Changed
+
+- The README, which is also the crates.io page and the crate docs, has a
+  new section on compile times. A chart and a table show how long 1,000
+  functions of unit code take to build with qty, with plain `f64` and with
+  uom. The rest of the README reads more easily, with shorter sentences.
+- A clearer crates.io description, and keywords and categories that match
+  what the crate does (`dimensional-analysis`, `embedded`,
+  `value-formatting`).
+- `scripts/compile_time.py` measures a realistic program of 1,000
+  functions instead of a synthetic one, compares it with plain `f64` as
+  well as uom, and saves its results for `scripts/plot_compile_time.py`,
+  which draws the README chart. The library code is unchanged.
+
 ## [0.5.0] - 2026-10-23
 
 ### Migrating from 0.4
