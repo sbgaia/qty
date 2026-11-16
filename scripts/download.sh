@@ -25,7 +25,7 @@ RELATIONS_DIR="${REPO_ROOT}/data/relations"
 # up to date). To upgrade: set a new commit here, run
 # `./scripts/download.sh --current && cargo run -p codegen`, and review the diff.
 # Override for one run with `UNITSNET_REF=<commit-or-branch> ./scripts/download.sh`.
-UNITSNET_REF="${UNITSNET_REF:-3bf1ef4b3c4d82c05c7a2667b25e0867358f9a62}"
+UNITSNET_REF="${UNITSNET_REF:-a7ef2f3118789fcac23f4d0abd91cddbbe2bb617}"
 
 BASE_URL="https://raw.githubusercontent.com/angularsen/UnitsNet/${UNITSNET_REF}/Common/UnitDefinitions"
 API_URL="https://api.github.com/repos/angularsen/UnitsNet/contents/Common/UnitDefinitions?ref=${UNITSNET_REF}"
